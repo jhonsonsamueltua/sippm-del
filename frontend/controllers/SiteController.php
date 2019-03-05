@@ -11,6 +11,7 @@ use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
+use common\models\User;
 use frontend\models\ContactForm;
 
 /**
@@ -26,7 +27,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'about', 'contact'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -38,6 +39,22 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['contact'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserStudent(Yii::$app->user->identity->username);
+                            }
+                   ],
+                   [
+                    'actions' => ['about'],
+                    'allow' => true,
+                    'roles' => ['@'],
+                    'matchCallback' => function ($rule, $action) {
+                        return User::isUserLecturer(Yii::$app->user->identity->username);
+                        }
+               ],
                 ],
             ],
             'verbs' => [
@@ -87,7 +104,7 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->loginStudent()) {
             return $this->goBack();
         } else {
             $model->password = '';

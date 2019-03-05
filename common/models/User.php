@@ -26,6 +26,9 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    const ROLE_STUDENT = 1;
+    const ROLE_LECTURER = 2;
+    const ROLE_ADMIN = 3;
 
     /**
      * {@inheritdoc}
@@ -51,11 +54,39 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            ['role_id', 'default', 'value' => 1],
+            ['role_id', 'in', 'range' => [self::ROLE_STUDENT, self::ROLE_LECTURER, self::ROLE_ADMIN]],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
+    public static function isUserAdmin($username)
+    {
+        if (static::findOne(['username' => $username, 'role_id' => self::ROLE_ADMIN])){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function isUserStudent($username)
+    {
+        if (static::findOne(['username' => $username, 'role_id' => self::ROLE_STUDENT])){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function isUserLecturer($username)
+    {
+        if (static::findOne(['username' => $username, 'role_id' => self::ROLE_LECTURER])){
+            return true;
+        }else{
+            return false;
+        }
+    }
     /**
      * {@inheritdoc}
      */
