@@ -17,4 +17,8 @@ return [
             'useFileTransport' => true,
         ],
     ],
+    'modules' => [
+        'redactor' => 'yii\redactor\RedactorModule',
+    ],
+    'params' => $params
 ];
