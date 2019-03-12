@@ -7,7 +7,7 @@ use backend\assets\AdminLteAsset;
 /* @var $content string */
 
 // AdminLteAsset::register($this);
-$bundle = yiister\gentelella\assets\Asset::register($this);
+// $bundle = yiister\gentelella\assets\Asset::register($this);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -22,11 +22,10 @@ AppAsset::register($this);
 </head>
 <body class="login-page">
 
-<?php $this->beginBody() ?>
+
 
     <?= $content ?>
 
-<?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>

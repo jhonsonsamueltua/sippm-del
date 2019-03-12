@@ -38,7 +38,7 @@ AppAsset::register($this);
             <div class="left_col scroll-view">
 
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
+                    <a href="/" class="site_title"><i class="fa fa-file"></i> <span>SIPPM DEL</span></a>
                 </div>
                 <div class="clearfix"></div>
 
@@ -65,7 +65,7 @@ AppAsset::register($this);
                         \yiister\gentelella\widgets\Menu::widget(
                             [
                                 "items" => [
-                                    ["label" => "Home", "url" => "/", "icon" => "home"],
+                                    ["label" => "Dashboard", "url" => ["/"], "icon" => "dashboard"],
                                     ["label" => "Layout", "url" => ["site/layout"], "icon" => "files-o"],
                                     ["label" => "Error page", "url" => ["site/error-page"], "icon" => "close"],
                                     [

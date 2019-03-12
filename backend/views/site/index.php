@@ -1,53 +1,119 @@
 <?php
 
 /* @var $this yii\web\View */
-
+use yiister\gentelella\widgets\Panel;
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
+    <?php
+        Panel::begin(
+            [
+                'header' => 'Dashboard',
+                'icon' => 'dashboard',
+            ]
+        )
+    ?>
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+            <div class="col-xs-12 col-md-4">
+                <a href="<?= Yii::$app->urlManager->createUrl(['site/konten1']) ?>">
+                    <?=
+                    \yiister\gentelella\widgets\StatsTile::widget(
+                        [
+                            'icon' => 'users',
+                            'header' => 'Mahasiswa',
+                            'text' => "Mahasiswa yang terdaftar",
+                            'number' => '1807',
+                        ]
+                    )
+                    ?>
+                </a>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+            <div class="col-xs-12 col-md-4">
+                <a href="<?= Yii::$app->urlManager->createUrl(['site/konten2']) ?>">
+                    <?=
+                    \yiister\gentelella\widgets\StatsTile::widget(
+                        [
+                            'icon' => 'user',
+                            'header' => 'Pengajar',
+                            'text' => 'Dosen dan asisten akademik yang terdaftar',
+                            'number' => '150',
+                        ]
+                    )
+                    ?>
+                </a>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="col-xs-12 col-md-4">
+                <a href="<?= Yii::$app->urlManager->createUrl(['site/konten3']) ?>">
+                    <?=
+                    \yiister\gentelella\widgets\StatsTile::widget(
+                        [
+                            'icon' => 'list-alt',
+                            'header' => 'Proyek',
+                            'text' => 'Semua proyek mahasiswa',
+                            'number' => '120',
+                        ]
+                    )
+                    ?>
+                </a>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-7">
+                <?php
+                    Panel::begin(
+                        [
+                            'header' => 'Grafik Pengunjung',
+                            'icon' => 'bar-chart',
+                        ]
+                    )
+                ?>
+                <?=
+                    \dosamigos\highcharts\HighCharts::widget([
+                    'clientOptions' => [
+                        'chart' => [
+                            'type' => 'bar'
+                        ],
+                        'title' => [
+                            'text' => 'Grafik Pengunjung Tahun 20..'
+                        ],
+                        'xAxis' => [
+                            'categories' => [
+                                'Januari',
+                                'Februari',
+                                'Maret', 
+                                '....',
 
-    </div>
+                            ]
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Pengunjung'
+                            ]
+                        ],
+                        'series' => [
+                            ['name' => 'Mahasiswa', 'data' => [1, 6, 4, 10]],
+                            ['name' => 'Pengajar', 'data' => [5, 7, 3,10]]
+                        ]
+                    ]
+                    ]);
+                ?>
+                <?php Panel::end() ?>
+            </div>
+            <div class="col-xs-12 col-md-5">
+                <?php
+                    Panel::begin(
+                        [
+                            'header' => 'Top 10 Proyek Mahasiswa',
+                            'icon' => 'star',
+                        ]
+                    )
+                ?>
+
+                <?php Panel::end() ?>
+            </div>
+        </div>
+    <?php Panel::end() ?>
+
+    
 </div>
