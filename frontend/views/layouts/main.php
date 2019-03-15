@@ -17,31 +17,41 @@ AppAsset::register($this);
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <!--  <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php $this->registerCsrfMetaTags() ?>
+    <!-- <?php $this->registerCsrfMetaTags() ?>
+    <?php $this->head() ?> -->
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
+<div class="min-jumbotron">
+  <div class="container text-left">
+  
+<img src="images/logo.jpg" style="height:100px; width:90px;" align="left">
+    <b><h1>SISTEM INFORMASI PENGELOLAAN PROYEK MAHASISWA</h1></b>      
+</div>
+</div>
+<div clas="gilak">
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => 'SIPPM <b>Institut Teknologi Del</b>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+            'class' => 'navbar-inverse navbar-fixed-',
+            ]
+   
+    // 'label' => 'Penugasan', 'url' =>'/site/login';
+    // 'label' => 'Request Penggunaan', 'url' =>'/site/login';
+     ]);
+   
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Masuk', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -60,23 +70,26 @@ AppAsset::register($this);
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
+        <!-- <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        ]) ?> -->
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 </body>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-left">
+        <b>Sistem Infomasi Pengelolaan Proyek Mahasiswa </b>
+        </p>
+        <p class="pull-right"><?= date ('Y') ?></p>
+        
+    </div>
+</footer>
 </html>
 <?php $this->endPage() ?>
