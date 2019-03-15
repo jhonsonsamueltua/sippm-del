@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2019 at 07:02 AM
+-- Generation Time: Mar 11, 2019 at 12:27 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -51,7 +51,14 @@ CREATE TABLE `sippm_admin` (
   `adm_id` int(11) NOT NULL,
   `adm_fullname` varchar(100) DEFAULT NULL,
   `adm_email` varchar(100) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL
+  `user_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -66,20 +73,54 @@ CREATE TABLE `sippm_assignment` (
   `asg_description` varchar(500) DEFAULT NULL,
   `asg_start_time` datetime DEFAULT NULL,
   `asg_end_time` datetime DEFAULT NULL,
-  `asg_tahun_ajaran` varchar(32) DEFAULT NULL,
-  `cls_id` int(11) DEFAULT NULL,
-  `sts_asg_id` int(11) DEFAULT NULL
+  `asg_year` varchar(32) DEFAULT NULL,
+  `class` varchar(32) DEFAULT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `cat_proj_id` int(11) DEFAULT NULL,
+  `sts_asg_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sippm_category`
+-- Table structure for table `sippm_category_project`
 --
 
-CREATE TABLE `sippm_category` (
-  `cat_id` int(11) NOT NULL,
-  `cat_name` varchar(32) DEFAULT NULL
+CREATE TABLE `sippm_category_project` (
+  `cat_proj_id` int(11) NOT NULL,
+  `cat_proj_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sippm_category_usage`
+--
+
+CREATE TABLE `sippm_category_usage` (
+  `cat_usg_id` int(11) NOT NULL,
+  `cat_usg_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -91,7 +132,33 @@ CREATE TABLE `sippm_category` (
 CREATE TABLE `sippm_class` (
   `cls_id` int(11) NOT NULL,
   `cls_name` varchar(32) DEFAULT NULL,
-  `prod_id` int(11) DEFAULT NULL
+  `prod_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sippm_course`
+--
+
+CREATE TABLE `sippm_course` (
+  `course_id` int(11) NOT NULL,
+  `course_name` varchar(100) DEFAULT NULL,
+  `course_alias` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -104,7 +171,14 @@ CREATE TABLE `sippm_file` (
   `file_id` int(11) NOT NULL,
   `file_name` varchar(100) DEFAULT NULL,
   `file_path` varchar(100) DEFAULT NULL,
-  `proj_id` int(11) DEFAULT NULL
+  `proj_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -119,7 +193,14 @@ CREATE TABLE `sippm_lecturer` (
   `lec_email` varchar(100) DEFAULT NULL,
   `lec_nip` varchar(32) DEFAULT NULL,
   `lec_nidn` varchar(32) DEFAULT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -131,7 +212,14 @@ CREATE TABLE `sippm_lecturer` (
 CREATE TABLE `sippm_prodi` (
   `prod_id` int(11) NOT NULL,
   `prod_name` varchar(32) DEFAULT NULL,
-  `prod_alias` varchar(32) DEFAULT NULL
+  `prod_alias` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -144,11 +232,17 @@ CREATE TABLE `sippm_project` (
   `proj_id` int(11) NOT NULL,
   `proj_title` varchar(100) DEFAULT NULL,
   `proj_description` varchar(500) DEFAULT NULL,
-  `proj_abstract` varchar(500) DEFAULT NULL,
   `proj_downloaded` int(11) DEFAULT NULL,
+  `asg_id` int(11) NOT NULL,
   `sts_win_id` int(11) DEFAULT NULL,
   `sts_proj_id` int(11) DEFAULT NULL,
-  `cat_id` int(11) DEFAULT NULL
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -161,7 +255,15 @@ CREATE TABLE `sippm_project_usage` (
   `proj_usg_id` int(11) NOT NULL,
   `proj_usg_usage` varchar(500) DEFAULT NULL,
   `proj_id` int(11) DEFAULT NULL,
-  `sts_proj_usg_id` int(11) DEFAULT NULL
+  `sts_proj_usg_id` int(11) DEFAULT NULL,
+  `cat_usg_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -172,8 +274,24 @@ CREATE TABLE `sippm_project_usage` (
 
 CREATE TABLE `sippm_role` (
   `role_id` int(11) NOT NULL,
-  `role_name` varchar(32) DEFAULT NULL
+  `role_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sippm_role`
+--
+
+INSERT INTO `sippm_role` (`role_id`, `role_name`, `deleted`, `deleted_at`, `deleted_by`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+(1, 'Student', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'Lecturer', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'Admin', 0, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -183,7 +301,14 @@ CREATE TABLE `sippm_role` (
 
 CREATE TABLE `sippm_status_assignment` (
   `sts_asg_id` int(11) NOT NULL,
-  `sts_asg_name` varchar(32) DEFAULT NULL
+  `sts_asg_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -194,7 +319,14 @@ CREATE TABLE `sippm_status_assignment` (
 
 CREATE TABLE `sippm_status_project` (
   `sts_proj_id` int(11) NOT NULL,
-  `sts_proj_name` varchar(32) DEFAULT NULL
+  `sts_proj_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -205,7 +337,14 @@ CREATE TABLE `sippm_status_project` (
 
 CREATE TABLE `sippm_status_project_usage` (
   `sts_proj_usg_id` int(11) NOT NULL,
-  `sts_proj_usg_name` varchar(32) DEFAULT NULL
+  `sts_proj_usg_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -216,7 +355,14 @@ CREATE TABLE `sippm_status_project_usage` (
 
 CREATE TABLE `sippm_status_win` (
   `sts_win_id` int(11) NOT NULL,
-  `sts_win_name` varchar(32) DEFAULT NULL
+  `sts_win_name` varchar(32) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -231,7 +377,14 @@ CREATE TABLE `sippm_student` (
   `stu_email` varchar(100) DEFAULT NULL,
   `stu_nim` varchar(32) DEFAULT NULL,
   `cls_id` int(11) DEFAULT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -243,7 +396,14 @@ CREATE TABLE `sippm_student` (
 CREATE TABLE `sippm_student_assignment` (
   `stu_asg_id` int(11) NOT NULL,
   `stu_id` int(11) DEFAULT NULL,
-  `asg_id` int(11) DEFAULT NULL
+  `asg_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -255,7 +415,14 @@ CREATE TABLE `sippm_student_assignment` (
 CREATE TABLE `sippm_student_project` (
   `stu_proj_id` int(11) NOT NULL,
   `stu_id` int(11) DEFAULT NULL,
-  `proj_id` int(11) DEFAULT NULL
+  `proj_id` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -271,6 +438,7 @@ CREATE TABLE `user` (
   `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password_reset_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `role_id` int(11) NOT NULL,
   `status` smallint(6) NOT NULL DEFAULT '10',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL
@@ -280,8 +448,9 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'jhonson', 'NhKgVWO-4Rmd8LG7MM-7qG4HY75_XnSk', '$2y$13$UbR2dcftxs3PYO6.PVNGeOsYRJ06.uUkD3MFqjwVHw3G6FWtND6WS', NULL, 'jhonson@jh.ds', 10, 1551088038, 1551088038);
+INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `role_id`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'jhonson', 'e2YzYnjsPfe3Rr75sWGx2B0OF8wPk0pB', '$2y$13$MCL8BVQpMqeZaQVFk.4bx.JkYns21OXR7d97s8Jg5Ts4oSYQrrmXG', NULL, 'jhonson@jh.ds', 1, 10, 1551664731, 1551664731),
+(3, 'admin', 'yfZ3Z-e5VRqOVqCn_dTTxUYeGXWiow-J', '$2y$13$K65jNmZ8fOI70AKOHw/sm.YXh5WzJgHZuwybGij6tNPork/WVeU5a', NULL, 'admin@kj.d', 3, 10, 1551667878, 1551667878);
 
 --
 -- Indexes for dumped tables
@@ -305,14 +474,21 @@ ALTER TABLE `sippm_admin`
 --
 ALTER TABLE `sippm_assignment`
   ADD PRIMARY KEY (`asg_id`),
-  ADD KEY `fk_class_assignment` (`cls_id`),
-  ADD KEY `fk_status_assignment` (`sts_asg_id`);
+  ADD KEY `fk_status_assignment` (`sts_asg_id`),
+  ADD KEY `fk_course_assignment` (`course_id`),
+  ADD KEY `fk_category_project_assignment` (`cat_proj_id`);
 
 --
--- Indexes for table `sippm_category`
+-- Indexes for table `sippm_category_project`
 --
-ALTER TABLE `sippm_category`
-  ADD PRIMARY KEY (`cat_id`);
+ALTER TABLE `sippm_category_project`
+  ADD PRIMARY KEY (`cat_proj_id`);
+
+--
+-- Indexes for table `sippm_category_usage`
+--
+ALTER TABLE `sippm_category_usage`
+  ADD PRIMARY KEY (`cat_usg_id`);
 
 --
 -- Indexes for table `sippm_class`
@@ -320,6 +496,12 @@ ALTER TABLE `sippm_category`
 ALTER TABLE `sippm_class`
   ADD PRIMARY KEY (`cls_id`),
   ADD KEY `fk_prodi_class` (`prod_id`);
+
+--
+-- Indexes for table `sippm_course`
+--
+ALTER TABLE `sippm_course`
+  ADD PRIMARY KEY (`course_id`);
 
 --
 -- Indexes for table `sippm_file`
@@ -346,16 +528,17 @@ ALTER TABLE `sippm_prodi`
 --
 ALTER TABLE `sippm_project`
   ADD PRIMARY KEY (`proj_id`),
-  ADD KEY `fk_category_project` (`cat_id`),
   ADD KEY `fk_status_win_project` (`sts_win_id`),
-  ADD KEY `fk_status_project_project` (`sts_proj_id`);
+  ADD KEY `fk_status_project_project` (`sts_proj_id`),
+  ADD KEY `fk_project_assignment` (`asg_id`);
 
 --
 -- Indexes for table `sippm_project_usage`
 --
 ALTER TABLE `sippm_project_usage`
   ADD PRIMARY KEY (`proj_usg_id`),
-  ADD KEY `fk_status_project_usage` (`sts_proj_usg_id`);
+  ADD KEY `fk_status_project_usage` (`sts_proj_usg_id`),
+  ADD KEY `fk_category_usage_project` (`cat_usg_id`);
 
 --
 -- Indexes for table `sippm_role`
@@ -418,7 +601,8 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `password_reset_token` (`password_reset_token`);
+  ADD UNIQUE KEY `password_reset_token` (`password_reset_token`),
+  ADD KEY `fk_user_role` (`role_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -437,16 +621,28 @@ ALTER TABLE `sippm_assignment`
   MODIFY `asg_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `sippm_category`
+-- AUTO_INCREMENT for table `sippm_category_project`
 --
-ALTER TABLE `sippm_category`
-  MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sippm_category_project`
+  MODIFY `cat_proj_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sippm_category_usage`
+--
+ALTER TABLE `sippm_category_usage`
+  MODIFY `cat_usg_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sippm_class`
 --
 ALTER TABLE `sippm_class`
   MODIFY `cls_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sippm_course`
+--
+ALTER TABLE `sippm_course`
+  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sippm_file`
@@ -482,7 +678,7 @@ ALTER TABLE `sippm_project_usage`
 -- AUTO_INCREMENT for table `sippm_role`
 --
 ALTER TABLE `sippm_role`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sippm_status_assignment`
@@ -530,7 +726,7 @@ ALTER TABLE `sippm_student_project`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -546,7 +742,8 @@ ALTER TABLE `sippm_admin`
 -- Constraints for table `sippm_assignment`
 --
 ALTER TABLE `sippm_assignment`
-  ADD CONSTRAINT `fk_class_assignment` FOREIGN KEY (`cls_id`) REFERENCES `sippm_class` (`cls_id`),
+  ADD CONSTRAINT `fk_category_project_assignment` FOREIGN KEY (`cat_proj_id`) REFERENCES `sippm_category_project` (`cat_proj_id`),
+  ADD CONSTRAINT `fk_course_assignment` FOREIGN KEY (`course_id`) REFERENCES `sippm_course` (`course_id`),
   ADD CONSTRAINT `fk_status_assignment` FOREIGN KEY (`sts_asg_id`) REFERENCES `sippm_status_assignment` (`sts_asg_id`);
 
 --
@@ -571,7 +768,7 @@ ALTER TABLE `sippm_lecturer`
 -- Constraints for table `sippm_project`
 --
 ALTER TABLE `sippm_project`
-  ADD CONSTRAINT `fk_category_project` FOREIGN KEY (`cat_id`) REFERENCES `sippm_category` (`cat_id`),
+  ADD CONSTRAINT `fk_project_assignment` FOREIGN KEY (`asg_id`) REFERENCES `sippm_assignment` (`asg_id`),
   ADD CONSTRAINT `fk_status_project_project` FOREIGN KEY (`sts_proj_id`) REFERENCES `sippm_status_project` (`sts_proj_id`),
   ADD CONSTRAINT `fk_status_win_project` FOREIGN KEY (`sts_win_id`) REFERENCES `sippm_status_win` (`sts_win_id`);
 
@@ -579,6 +776,7 @@ ALTER TABLE `sippm_project`
 -- Constraints for table `sippm_project_usage`
 --
 ALTER TABLE `sippm_project_usage`
+  ADD CONSTRAINT `fk_category_usage_project` FOREIGN KEY (`cat_usg_id`) REFERENCES `sippm_category_usage` (`cat_usg_id`),
   ADD CONSTRAINT `fk_status_project_usage` FOREIGN KEY (`sts_proj_usg_id`) REFERENCES `sippm_status_project_usage` (`sts_proj_usg_id`);
 
 --
@@ -601,6 +799,12 @@ ALTER TABLE `sippm_student_assignment`
 ALTER TABLE `sippm_student_project`
   ADD CONSTRAINT `fk_project_student` FOREIGN KEY (`proj_id`) REFERENCES `sippm_project` (`proj_id`),
   ADD CONSTRAINT `fk_student` FOREIGN KEY (`stu_id`) REFERENCES `sippm_student` (`stu_id`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `sippm_role` (`role_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
