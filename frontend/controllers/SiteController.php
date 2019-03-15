@@ -45,14 +45,14 @@ class SiteController extends Controller
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return User::isUserStudent(Yii::$app->user->identity->username);
-                            }
+                        }
                    ],
                    [
-                    'actions' => ['about'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                    'matchCallback' => function ($rule, $action) {
-                        return User::isUserLecturer(Yii::$app->user->identity->username);
+                        'actions' => ['about'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserLecturer(Yii::$app->user->identity->username);
                         }
                ],
                 ],

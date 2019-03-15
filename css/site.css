@@ -1,6 +1,13 @@
 html,
 body {
     height: 100%;
+	background-color: #F8F8FF;
+}
+.panel .panel-primary{
+    background-color: #32CD32;
+}
+.login-button{
+    background-color: #32CD32;
 }
 
 .wrap {
@@ -9,21 +16,30 @@ body {
     margin: 0 auto -60px;
     padding: 0 0 60px;
 }
+.gilak{
+	margin-top:100px;
+    background-color: #32CD32;
 
+	
+}
 .wrap > .container {
     padding: 70px 15px 20px;
+    background: #F8F8FF;
 }
 
 .footer {
     height: 60px;
-    background-color: #f5f5f5;
+    background-color: #32CD32;
     border-top: 1px solid #ddd;
     padding-top: 20px;
 }
 
 .jumbotron {
-    text-align: center;
+    text-align: left;
     background-color: transparent;
+}
+.min-jumbotron{
+    align-content: left;
 }
 
 .jumbotron .btn {
@@ -49,11 +65,11 @@ a.asc:after, a.desc:after {
 }
 
 a.asc:after {
-    content: /*"\e113"*/ "\e151";
+    content: "\e151";
 }
 
 a.desc:after {
-    content: /*"\e114"*/ "\e152";
+    content: "\e152";
 }
 
 .sort-numerical a.asc:after {
@@ -85,6 +101,7 @@ a.desc:after {
     display: block;
     margin-top: 5px;
     color: #999;
+    background-color: #32CD32; 
 }
 
 .error-summary {
@@ -97,6 +114,7 @@ a.desc:after {
 
 /* align the logout "link" (button in form) of the navbar */
 .nav li > form > button.logout {
+    color: #32CD32;
     padding: 15px;
     border: none;
 }
@@ -117,4 +135,21 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+.bColor{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 50%;
+    line-height: 10;
+
+}
+.headingf{
+    background-color: #32CD32;
 }

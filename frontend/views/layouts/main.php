@@ -39,10 +39,12 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
+        'brandLabel' => 'SIPPM <b>Institut Teknologi Del</b>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-',
             ]
+
      ]);
          $menuItems = [
             ['label' => 'Beranda', 'url' => ['/site/index']],
