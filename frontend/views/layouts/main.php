@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -11,6 +10,8 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+$session = Yii::$app->session;
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -38,6 +39,8 @@ AppAsset::register($this);
 <div clas="gilak">
 <div class="wrap">
     <?php
+    
+
     NavBar::begin([
         'brandLabel' => 'SIPPM <b>Institut Teknologi Del</b>',
         'brandUrl' => Yii::$app->homeUrl,
@@ -52,20 +55,21 @@ AppAsset::register($this);
             ['label' => 'Request Penggunaan', 'url' => ['/site/contact']],
         ];
     
-    if (Yii::$app->user->isGuest) {
-        // $rMenuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+    // if (Yii::$app->user->isGuest) {
+    if(!isset($session["role"])){
         $rMenuItems[] = ['label' => 'Masuk', 'url' => ['/site/login']];
     } else {
         $rMenuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                // 'Logout (' . Yii::$app->user->identity->username . ')',
+                'Logout (' . $session['nama'] . ')',
                 ['class' => 'btn btn-link logout']
             )
                 . Html::endForm()
                 . '</li>';
     }
-     echo Nav::widget([
+    echo Nav::widget([
              'options' => ['class' => 'navbar-nav navbar-left'],
             'items' => $menuItems,
         ]);
