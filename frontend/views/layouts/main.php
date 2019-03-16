@@ -42,10 +42,10 @@ $session = Yii::$app->session;
     
 
     NavBar::begin([
-        'brandLabel' => 'SIPPM <b>Institut Teknologi Del</b>',
+        // 'brandLabel' => 'SIPPM <b>Institut Teknologi Del</b>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-',
+            'class' => ' navbar-inverse navbar-fixed-1',
             ]
 
      ]);
