@@ -48,13 +48,13 @@ class SiteController extends Controller
                             }
                    ],
                    [
-                    'actions' => ['about'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                    'matchCallback' => function ($rule, $action) {
-                        return User::isUserLecturer(Yii::$app->user->identity->username);
-                        }
-               ],
+                        'actions' => ['about'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserLecturer(Yii::$app->user->identity->username);
+                            }
+                    ],
                 ],
             ],
             'verbs' => [
@@ -104,7 +104,9 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+        
         if ($model->load(Yii::$app->request->post()) && $model->loginStudent()) {
+            // die($model->password);
             return $this->goBack();
         } else {
             $model->password = '';

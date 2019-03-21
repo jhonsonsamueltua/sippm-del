@@ -25,10 +25,10 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmCategoryProject $catProj
- * @property SippmCourse $course
- * @property SippmStatusAssignment $stsAsg
- * @property SippmStudentAssignment[] $sippmStudentAssignments
+ * @property CategoryProject $catProj
+ * @property Course $course
+ * @property StatusAssignment $stsAsg
+ * @property StudentAssignment[] $sippmStudentAssignments
  */
 class Assignment extends \yii\db\ActiveRecord
 {
@@ -88,7 +88,7 @@ class Assignment extends \yii\db\ActiveRecord
      */
     public function getCatProj()
     {
-        return $this->hasOne(SippmCategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
+        return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 
     /**
@@ -96,7 +96,7 @@ class Assignment extends \yii\db\ActiveRecord
      */
     public function getCourse()
     {
-        return $this->hasOne(SippmCourse::className(), ['course_id' => 'course_id']);
+        return $this->hasOne(Course::className(), ['course_id' => 'course_id']);
     }
 
     /**
@@ -104,14 +104,22 @@ class Assignment extends \yii\db\ActiveRecord
      */
     public function getStsAsg()
     {
-        return $this->hasOne(SippmStatusAssignment::className(), ['sts_asg_id' => 'sts_asg_id']);
+        return $this->hasOne(StatusAssignment::className(), ['sts_asg_id' => 'sts_asg_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSippmStudentAssignments()
+    public function getStudents()
     {
-        return $this->hasMany(SippmStudentAssignment::className(), ['asg_id' => 'asg_id']);
+        return $this->hasMany(StudentAssignment::className(), ['asg_id' => 'asg_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClasses()
+    {
+        return $this->hasMany(ClassAssignment::className(), ['asg_id' => 'asg_id']);
     }
 }

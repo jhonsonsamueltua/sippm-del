@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form-dinamis', [
         'modelAsg' => $modelAsg,
 
         'modelsClsAsg' => (empty($modelsClsAsg)) ? [new ClassAssignment] : $modelsClsAsg,
