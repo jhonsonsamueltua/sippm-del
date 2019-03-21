@@ -18,13 +18,14 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
+ * @property SippmAssignment[] $sippmAssignments
  * @property SippmProdi $prod
  * @property SippmStudent[] $sippmStudents
  */
 class SippmClass extends \yii\db\ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tableName()
     {
@@ -32,7 +33,7 @@ class SippmClass extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
@@ -46,7 +47,7 @@ class SippmClass extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function attributeLabels()
     {
@@ -62,6 +63,14 @@ class SippmClass extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSippmAssignments()
+    {
+        return $this->hasMany(SippmAssignment::className(), ['cls_id' => 'cls_id']);
     }
 
     /**
