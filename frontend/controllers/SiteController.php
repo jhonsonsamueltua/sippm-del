@@ -127,6 +127,7 @@ class SiteController extends Controller
 
                     $datas = $response->data['data'];
                     $role = $datas['role'];
+                    
                     if($role == "Mahasiswa"){
                         $dimId = $datas['dimId'];
                         $nama = $datas['nama'];
@@ -144,6 +145,7 @@ class SiteController extends Controller
                         $session->set('email', $email);
                         $session->set('nip', $nip);
                     }
+
                     $session->set('role', $role);
                     $session->close();
                     // echo $session['dimId'] . "<br>";
@@ -151,6 +153,7 @@ class SiteController extends Controller
                     // echo $session['email'] . "<br>";
                     // echo $session['kelas'] . "<br>";
                     // echo $session['role'];
+
                     return $this->goBack();
                 }else{
                     Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');

@@ -29,77 +29,70 @@ $session = Yii::$app->session;
 <body>
 <?php $this->beginBody() ?>
 
-<div class="min-jumbotron">
-  <div class="container text-left">
-  
-<img src="images/logo.jpg" style="height:100px; width:90px;" align="left">
-    <b><h1>SISTEM INFORMASI PENGELOLAAN PROYEK MAHASISWA</h1></b>      
-</div>
-</div>
-<div clas="gilak">
-<div class="wrap">
-    <?php
-    
+    <div class="min-jumbotron">
+        <div class="container text-left">
+            <img src="images/logo.jpg" style="height:100px; width:90px;" align="left">
+            <b><h1>SISTEM INFORMASI PENGELOLAAN PROYEK MAHASISWA</h1></b>      
+        </div>
+    </div>
 
-    NavBar::begin([
-        // 'brandLabel' => 'SIPPM <b>Institut Teknologi Del</b>',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => ' navbar-inverse navbar-fixed-1',
-            ]
+    <div class="wrap">
+        <?php
+            NavBar::begin([
+                'brandUrl' => Yii::$app->homeUrl,
+                'options' => [
+                    'class' => ' navbar-inverse navbar-fixed-1',
+                    ]
 
-     ]);
-         $menuItems = [
-            ['label' => 'Beranda', 'url' => ['/site/index']],
-            ['label' => 'Penugasan', 'url' => ['/site/login']],
-            ['label' => 'Request Penggunaan', 'url' => ['/site/contact']],
-        ];
-    
-    // if (Yii::$app->user->isGuest) {
-    if(!isset($session["role"])){
-        $rMenuItems[] = ['label' => 'Masuk', 'url' => ['/site/login']];
-    } else {
-        $rMenuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                // 'Logout (' . Yii::$app->user->identity->username . ')',
-                'Logout (' . $session['nama'] . ')',
-                ['class' => 'btn btn-link logout']
-            )
-                . Html::endForm()
-                . '</li>';
-    }
-    echo Nav::widget([
-             'options' => ['class' => 'navbar-nav navbar-left'],
-            'items' => $menuItems,
-        ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $rMenuItems,
-    ]);
-    NavBar::end();
-    ?>
+            ]);
+                $menuItems = [
+                    ['label' => 'Beranda', 'url' => ['/site/index']],
+                    ['label' => 'Penugasan', 'url' => ['/site/login']],
+                    ['label' => 'Request Penggunaan', 'url' => ['/site/contact']],
+                ];
+            
+            // if (Yii::$app->user->isGuest) {
+            if(!isset($session["role"])){
+                $rMenuItems[] = ['label' => 'Masuk', 'url' => ['/site/login']];
+            } else {
+                $rMenuItems[] = '<li>'
+                    . Html::beginForm(['/site/logout'], 'post')
+                    . Html::submitButton(
+                        // 'Logout (' . Yii::$app->user->identity->username . ')',
+                        'Logout (' . $session['nama'] . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                        . Html::endForm()
+                        . '</li>';
+            }
+            echo Nav::widget([
+                    'options' => ['class' => 'navbar-nav navbar-left'],
+                    'items' => $menuItems,
+                ]);
+            echo Nav::widget([
+                'options' => ['class' => 'navbar-nav navbar-right'],
+                'items' => $rMenuItems,
+            ]);
+            NavBar::end();
+        ?>
 
-    <div class="container">
+        <div class="container">
             <!-- <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?> -->
             <?= Alert::widget() ?>
             <?= $content ?>
         </div>
-</div>
-
-
+    </div> 
 
 <?php $this->endBody() ?>
 </body>
 <footer class="footer">
     <div class="container">
         <p class="pull-left">
-        <b>Sistem Infomasi Pengelolaan Proyek Mahasiswa </b>
+            <b>Sistem Infomasi Pengelolaan Proyek Mahasiswa </b>
         </p>
         <p class="pull-right"><?= date ('Y') ?></p>
-        
     </div>
 </footer>
 </html>
