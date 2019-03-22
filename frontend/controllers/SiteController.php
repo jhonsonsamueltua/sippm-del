@@ -53,13 +53,8 @@ class SiteController extends Controller
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             return User::isUserLecturer(Yii::$app->user->identity->username);
-<<<<<<< HEAD
                             }
                     ],
-=======
-                        }
-               ],
->>>>>>> 266bbde5c69cf07b44b7f140edd70912280d6f3e
                 ],
             ],
             'verbs' => [
