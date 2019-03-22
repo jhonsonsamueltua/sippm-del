@@ -26,11 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'asg_id',
-            'asg_title',
-            'asg_description',
-            'asg_start_time',
-            'asg_end_time',
+            ['attribute' => 'asg_id', 
+                'label' => 'ID'],
+            ['attribute' => 'asg_title', 
+                'label' => 'Penugasan'],
+            ['attribute' => 'asg_description', 
+                'label' => 'Deskripsi'],
+            ['attribute' => 'asg_start_time', 
+                'label' => 'Batas Awal'],
+            ['attribute' => 'asg_end_time', 
+                'label' => 'Batas Akhir'],
             //'asg_year',
             //'class',
             //'course_id',
@@ -44,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',],
         ],
     ]); ?>
 
