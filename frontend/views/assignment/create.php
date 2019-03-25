@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
     
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'modelAsg' => $modelAsg,
+
+        'modelsClsAsg' => (empty($modelsClsAsg)) ? [new ClassAssignment] : $modelsClsAsg,
+
+        'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new StudentAssignment]] : $modelsStuAsg,
     ]) ?>
 
 </div>

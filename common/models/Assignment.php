@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "sippm_assignment".
@@ -13,7 +14,7 @@ use Yii;
  * @property string $asg_start_time
  * @property string $asg_end_time
  * @property string $asg_year
- * @property string $class
+ * @property int $cls_id
  * @property int $course_id
  * @property int $cat_proj_id
  * @property int $sts_asg_id
@@ -26,14 +27,14 @@ use Yii;
  * @property string $updated_by
  *
  * @property SippmCategoryProject $catProj
- * @property SippmCourse $course
+ * @property SippmClass $cls
  * @property SippmStatusAssignment $stsAsg
  * @property SippmStudentAssignment[] $sippmStudentAssignments
  */
-class Assignment extends \yii\db\ActiveRecord
+class Assignment extends ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tableName()
     {
@@ -41,35 +42,36 @@ class Assignment extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
             [['asg_start_time', 'asg_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['course_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
+            [['cls_id', 'course_id', 'cat_proj_id', 'sts_asg_id'], 'integer'],
             [['asg_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['asg_description'], 'string', 'max' => 500],
-            [['asg_year', 'class'], 'string', 'max' => 32],
+            [['asg_year'], 'string', 'max' => 32],
+            [['deleted'], 'string', 'max' => 1],
             [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
-            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Course::className(), 'targetAttribute' => ['course_id' => 'course_id']],
+            [['cls_id'], 'exist', 'skipOnError' => true, 'targetClass' => SippmClass::className(), 'targetAttribute' => ['cls_id' => 'cls_id']],
             [['sts_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusAssignment::className(), 'targetAttribute' => ['sts_asg_id' => 'sts_asg_id']],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
             'asg_id' => 'Asg ID',
-            'asg_title' => 'Asg Title',
-            'asg_description' => 'Asg Description',
-            'asg_start_time' => 'Asg Start Time',
-            'asg_end_time' => 'Asg End Time',
-            'asg_year' => 'Asg Year',
-            'class' => 'Class',
+            'asg_title' => 'Title',
+            'asg_description' => 'Description',
+            'asg_start_time' => 'Start Time',
+            'asg_end_time' => 'End Time',
+            'asg_year' => 'Year',
+            'cls_id' => 'Cls ID',
             'course_id' => 'Course ID',
             'cat_proj_id' => 'Cat Proj ID',
             'sts_asg_id' => 'Sts Asg ID',
@@ -88,15 +90,15 @@ class Assignment extends \yii\db\ActiveRecord
      */
     public function getCatProj()
     {
-        return $this->hasOne(SippmCategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
+        return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCourse()
+    public function getCls()
     {
-        return $this->hasOne(SippmCourse::className(), ['course_id' => 'course_id']);
+        return $this->hasOne(SippmClass::className(), ['cls_id' => 'cls_id']);
     }
 
     /**
@@ -104,7 +106,7 @@ class Assignment extends \yii\db\ActiveRecord
      */
     public function getStsAsg()
     {
-        return $this->hasOne(SippmStatusAssignment::className(), ['sts_asg_id' => 'sts_asg_id']);
+        return $this->hasOne(StatusAssignment::className(), ['sts_asg_id' => 'sts_asg_id']);
     }
 
     /**
@@ -112,6 +114,6 @@ class Assignment extends \yii\db\ActiveRecord
      */
     public function getSippmStudentAssignments()
     {
-        return $this->hasMany(SippmStudentAssignment::className(), ['asg_id' => 'asg_id']);
+        return $this->hasMany(StudentAssignment::className(), ['asg_id' => 'asg_id']);
     }
 }
