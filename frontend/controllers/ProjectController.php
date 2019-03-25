@@ -3,9 +3,11 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\SippmProject;
+use common\models\Project;
 use common\models\search\ProjectSearch;
+use common\models\File;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -64,10 +66,41 @@ class ProjectController extends Controller
      */
     public function actionCreate()
     {
-        $model = new SippmProject();
+        $model = new Project();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->proj_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->asg_id = 47;
+            $model->proj_downloaded = 0;
+
+            if($model->save()){
+                $model->files = UploadedFile::getInstancesByName('files');
+
+                if($model->files != null){
+                    foreach($model->files as $file){
+                        $fileModel = new File();
+                        $fileDir = Yii::getAlias('@uploadDirTemplate') . "/" . $model->proj_title . "/";        
+
+                        if(!is_dir($fileDir)){
+                            mkdir($fileDir, 0777, true);
+                        }
+
+                        $fileDir .= $file->baseName . '.' . $file->extension;
+                        $fileModel->file_name = $file->baseName;
+                        $fileModel->file_path = $fileDir;
+                        $fileModel->proj_id = $model->proj_id;
+
+                        if($fileModel->save()){
+                            $file->saveAs($fileDir);
+                        }else{
+                            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
+                        }
+                    }
+                }
+
+                return $this->redirect(['view', 'id' => $model->proj_id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
+            }
         }
 
         return $this->render('create', [
@@ -85,6 +118,7 @@ class ProjectController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $fileModel = $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->proj_id]);
@@ -92,6 +126,7 @@ class ProjectController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'fileModel' => $fileModel,
         ]);
     }
 
@@ -118,7 +153,7 @@ class ProjectController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = SippmProject::findOne($id)) !== null) {
+        if (($model = Project::findOne($id)) !== null) {
             return $model;
         }
 

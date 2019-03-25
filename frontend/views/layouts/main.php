@@ -49,6 +49,8 @@ $session = Yii::$app->session;
                     ['label' => 'Beranda', 'url' => ['/site/index']],
                     ['label' => 'Penugasan', 'url' => ['/site/login']],
                     ['label' => 'Request Penggunaan', 'url' => ['/site/contact']],
+                    ['label' => 'List Proyek', 'url' => ['/project/index']],
+                    ['label' => 'Submit Proyek', 'url' => ['/project/create']],
                 ];
             
             // if (Yii::$app->user->isGuest) {

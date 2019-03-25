@@ -4,12 +4,12 @@ namespace common\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\SippmProject;
+use common\models\Project;
 
 /**
  * ProjectSearch represents the model behind the search form of `common\models\SippmProject`.
  */
-class ProjectSearch extends SippmProject
+class ProjectSearch extends Project
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class ProjectSearch extends SippmProject
     public function rules()
     {
         return [
-            [['proj_id', 'proj_downloaded', 'sts_win_id', 'sts_proj_id', 'deleted'], 'integer'],
+            [['proj_id', 'proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['proj_title', 'proj_description', 'deleted_at', 'deleted_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
@@ -40,7 +40,7 @@ class ProjectSearch extends SippmProject
      */
     public function search($params)
     {
-        $query = SippmProject::find();
+        $query = Project::find();
 
         // add conditions that should always apply here
 
@@ -61,7 +61,6 @@ class ProjectSearch extends SippmProject
             'proj_id' => $this->proj_id,
             'proj_downloaded' => $this->proj_downloaded,
             'sts_win_id' => $this->sts_win_id,
-            'sts_proj_id' => $this->sts_proj_id,
             'deleted' => $this->deleted,
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,

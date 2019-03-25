@@ -21,12 +21,12 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmFile[] $sippmFiles
- * @property SippmStatusProject $stsProj
- * @property SippmStatusWin $stsWin
- * @property SippmStudentProject[] $sippmStudentProjects
+ * @property File[] $sippmFiles
+ * @property StatusWin $stsWin
+ * @property StudentProject[] $sippmStudentProjects
+ * @property CategoryProject $catProj
  */
-class SippmProject extends \yii\db\ActiveRecord
+class Project extends \yii\db\ActiveRecord
 {
     public $files;
 
@@ -44,13 +44,13 @@ class SippmProject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['proj_downloaded', 'sts_win_id', 'sts_proj_id', 'deleted'], 'integer'],
+            [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_description'], 'string', 'max' => 500],
             [['files'], 'file', 'maxFiles' => 0],
-            [['sts_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => SippmStatusProject::className(), 'targetAttribute' => ['sts_proj_id' => 'sts_proj_id']],
-            [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => SippmStatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
+            [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
+            [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
     }
 
@@ -60,13 +60,13 @@ class SippmProject extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'proj_id' => 'Proj ID',
-            'proj_title' => 'Project Title',
-            'proj_description' => 'Project Description',
-            'proj_downloaded' => 'Proj Downloaded',
-            'sts_win_id' => 'Win Status',
-            'sts_proj_id' => 'Project Status',
-            'files' => 'Upload proyek',
+            'proj_id' => 'ID Proyek',
+            'proj_title' => 'Judul Proyek',
+            'proj_description' => 'Deskripsi Proyek',
+            'proj_downloaded' => 'Jumlah Diunduh',
+            'sts_win_id' => 'Status Menang',
+            'cat_proj_id' => 'Kategori Proyek',
+            'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -82,15 +82,7 @@ class SippmProject extends \yii\db\ActiveRecord
      */
     public function getSippmFiles()
     {
-        return $this->hasMany(SippmFile::className(), ['proj_id' => 'proj_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStsProj()
-    {
-        return $this->hasOne(SippmStatusProject::className(), ['sts_proj_id' => 'sts_proj_id']);
+        return $this->hasMany(File::className(), ['proj_id' => 'proj_id']);
     }
 
     /**
@@ -98,7 +90,15 @@ class SippmProject extends \yii\db\ActiveRecord
      */
     public function getStsWin()
     {
-        return $this->hasOne(SippmStatusWin::className(), ['sts_win_id' => 'sts_win_id']);
+        return $this->hasOne(StatusWin::className(), ['sts_win_id' => 'sts_win_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCatProject()
+    {
+        return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 
     /**
@@ -106,6 +106,6 @@ class SippmProject extends \yii\db\ActiveRecord
      */
     public function getSippmStudentProjects()
     {
-        return $this->hasMany(SippmStudentProject::className(), ['proj_id' => 'proj_id']);
+        return $this->hasMany(StudentProject::className(), ['proj_id' => 'proj_id']);
     }
 }

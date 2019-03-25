@@ -28,17 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'proj_id',
             'proj_title',
-            'proj_description',
+            'proj_description:html',
             'proj_downloaded',
-            'sts_win_id',
-            //'sts_proj_id',
-            //'deleted',
-            //'deleted_at',
-            //'deleted_by',
-            //'created_at',
-            //'created_by',
-            //'updated_at',
-            //'updated_by',
+            [
+                'label' => 'Status Menang',
+                'value' => 'stsWin.sts_win_name'
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

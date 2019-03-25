@@ -5,10 +5,10 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "sippm_category_project".
+ * This is the model class for table "sippm_status_project".
  *
- * @property int $cat_proj_id
- * @property string $cat_proj_name
+ * @property int $sts_proj_id
+ * @property string $sts_proj_name
  * @property int $deleted
  * @property string $deleted_at
  * @property string $deleted_by
@@ -17,39 +17,39 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmAssignment[] $sippmAssignments
+ * @property SippmProject[] $sippmProjects
  */
-class SippmCategoryProject extends \yii\db\ActiveRecord
+class StatusProject extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'sippm_category_project';
+        return 'sippm_status_project';
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            [['deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['cat_proj_name'], 'string', 'max' => 32],
-            [['deleted'], 'string', 'max' => 1],
+            [['sts_proj_name'], 'string', 'max' => 32],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
-            'cat_proj_id' => 'Cat Proj ID',
-            'cat_proj_name' => 'Cat Proj Name',
+            'sts_proj_id' => 'Sts Proj ID',
+            'sts_proj_name' => 'Sts Proj Name',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -63,8 +63,8 @@ class SippmCategoryProject extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSippmAssignments()
+    public function getSippmProjects()
     {
-        return $this->hasMany(SippmAssignment::className(), ['cat_proj_id' => 'cat_proj_id']);
+        return $this->hasMany(SippmProject::className(), ['sts_proj_id' => 'sts_proj_id']);
     }
 }

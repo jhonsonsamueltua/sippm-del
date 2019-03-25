@@ -5,10 +5,12 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "sippm_status_project".
+ * This is the model class for table "sippm_file".
  *
- * @property int $sts_proj_id
- * @property string $sts_proj_name
+ * @property int $file_id
+ * @property string $file_name
+ * @property string $file_path
+ * @property int $proj_id
  * @property int $deleted
  * @property string $deleted_at
  * @property string $deleted_by
@@ -17,16 +19,16 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmProject[] $sippmProjects
+ * @property SippmProject $proj
  */
-class SippmStatusProject extends \yii\db\ActiveRecord
+class File extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'sippm_status_project';
+        return 'sippm_file';
     }
 
     /**
@@ -35,10 +37,10 @@ class SippmStatusProject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['deleted'], 'integer'],
+            [['proj_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['sts_proj_name'], 'string', 'max' => 32],
-            [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['file_name', 'file_path', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['proj_id' => 'proj_id']],
         ];
     }
 
@@ -48,8 +50,10 @@ class SippmStatusProject extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'sts_proj_id' => 'Sts Proj ID',
-            'sts_proj_name' => 'Sts Proj Name',
+            'file_id' => 'File ID',
+            'file_name' => 'File Name',
+            'file_path' => 'File Path',
+            'proj_id' => 'Proj ID',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -63,8 +67,8 @@ class SippmStatusProject extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSippmProjects()
+    public function getProj()
     {
-        return $this->hasMany(SippmProject::className(), ['sts_proj_id' => 'sts_proj_id']);
+        return $this->hasOne(Project::className(), ['proj_id' => 'proj_id']);
     }
 }

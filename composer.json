@@ -25,7 +25,8 @@
         "yiisoft/yii2-httpclient": "^2.0@dev",
         "perminder-klair/yii2-dropzone": "dev-master",
         "2amigos/yii2-file-upload-widget": "~1.0",
-        "wbraganca/yii2-dynamicform": "dev-master"
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "yiidoc/yii2-redactor": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

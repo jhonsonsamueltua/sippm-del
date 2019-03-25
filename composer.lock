@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc4391639c3c2cedaaa6e7c09ad0460f",
+    "content-hash": "d5bbf9e34c8aaf9bf8cf1db83bc00a76",
     "packages": [
         {
             "name": "2amigos/yii2-file-upload-widget",
@@ -933,12 +933,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "a7eb054083599802e9a48acc85b9746c7c650599"
+                "reference": "aba16d68e2099a01fcb2e1127cbabd258713eb8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/a7eb054083599802e9a48acc85b9746c7c650599",
-                "reference": "a7eb054083599802e9a48acc85b9746c7c650599",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/aba16d68e2099a01fcb2e1127cbabd258713eb8a",
+                "reference": "aba16d68e2099a01fcb2e1127cbabd258713eb8a",
                 "shasum": ""
             },
             "require": {
@@ -987,7 +987,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2019-02-27T08:53:38+00:00"
+            "time": "2019-03-10T07:53:21+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -1393,6 +1393,54 @@
             "time": "2019-02-06T07:57:58+00:00"
         },
         {
+            "name": "wbraganca/yii2-dynamicform",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wbraganca/yii2-dynamicform.git",
+                "reference": "75c4271d85f97549ed1a5aea1a27851eb4f29916"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wbraganca/yii2-dynamicform/zipball/75c4271d85f97549ed1a5aea1a27851eb4f29916",
+                "reference": "75c4271d85f97549ed1a5aea1a27851eb4f29916",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/css-selector": "~2.8|~3.0",
+                "symfony/dom-crawler": "~2.8|~3.0",
+                "yiisoft/yii2": "~2.0.5"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "wbraganca\\dynamicform\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Wanderson Bragança",
+                    "email": "wanderson.wbc@gmail.com",
+                    "homepage": "http://wbraganca.com"
+                }
+            ],
+            "description": "It is widget to yii2 framework to clone form elements in a nested manner, maintaining accessibility.",
+            "keywords": [
+                "copy DOM element",
+                "extension",
+                "wbraganca",
+                "widget",
+                "yii2",
+                "yii2 dynamic form",
+                "yii2-dynamicform"
+            ],
+            "time": "2018-10-09T13:40:03+00:00"
+        },
+        {
             "name": "yiidoc/yii2-redactor",
             "version": "dev-master",
             "source": {
@@ -1437,65 +1485,17 @@
             "time": "2016-01-07T06:45:09+00:00"
         },
         {
-            "name": "wbraganca/yii2-dynamicform",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wbraganca/yii2-dynamicform.git",
-                "reference": "75c4271d85f97549ed1a5aea1a27851eb4f29916"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wbraganca/yii2-dynamicform/zipball/75c4271d85f97549ed1a5aea1a27851eb4f29916",
-                "reference": "75c4271d85f97549ed1a5aea1a27851eb4f29916",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/css-selector": "~2.8|~3.0",
-                "symfony/dom-crawler": "~2.8|~3.0",
-                "yiisoft/yii2": "~2.0.5"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "wbraganca\\dynamicform\\": "src"
-                    }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Wanderson Bragança",
-                    "email": "wanderson.wbc@gmail.com",
-                    "homepage": "http://wbraganca.com"
-                }
-            ],
-            "description": "It is widget to yii2 framework to clone form elements in a nested manner, maintaining accessibility.",
-            "keywords": [
-                "copy DOM element",
-                "extension",
-                "wbraganca",
-                "widget",
-                "yii2",
-                "yii2 dynamic form",
-                "yii2-dynamicform"
-            ],
-            "time": "2018-10-09T13:40:03+00:00"
-        },
-        {
             "name": "yiisoft/yii2",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "a50a31b3487dbb4102dc9a8fc7194225eba0112d"
+                "reference": "2d451d972588f6a8d016549ba08a6557de97a9a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/a50a31b3487dbb4102dc9a8fc7194225eba0112d",
-                "reference": "a50a31b3487dbb4102dc9a8fc7194225eba0112d",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/2d451d972588f6a8d016549ba08a6557de97a9a2",
+                "reference": "2d451d972588f6a8d016549ba08a6557de97a9a2",
                 "shasum": ""
             },
             "require": {
@@ -1582,7 +1582,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2019-02-28T10:09:27+00:00"
+            "time": "2019-03-20T18:48:19+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -1866,68 +1866,6 @@
     ],
     "packages-dev": [
         {
-            "name": "2amigos/yii2-date-time-picker-widget",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/2amigos/yii2-date-time-picker-widget.git",
-                "reference": "721a23e245b3b2a5ca2669e9a35a4ebdab321c8c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/2amigos/yii2-date-time-picker-widget/zipball/721a23e245b3b2a5ca2669e9a35a4ebdab321c8c",
-                "reference": "721a23e245b3b2a5ca2669e9a35a4ebdab321c8c",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/smalot-bootstrap-datetimepicker": "2.4.4",
-                "yiisoft/yii2": "~2.0",
-                "yiisoft/yii2-bootstrap": "~2.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "scrutinizer/ocular": "~1.1"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                },
-                "asset-installer-paths": {
-                    "bower-asset-library": "vendor/bower"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "dosamigos\\datetimepicker\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "2amigOS! Consulting Group",
-                    "email": "hola@2amigos.us",
-                    "homepage": "http://2amigos.us",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Bootstrap DateTimePicker widget for Yii2.",
-            "homepage": "http://yiiwheels.com/extension/bootstrap-datetimepicker",
-            "keywords": [
-                "2amigos",
-                "DateTimePicker",
-                "extension",
-                "widget",
-                "yii",
-                "yii 2",
-                "yii2"
-            ],
-            "time": "2017-07-05T05:38:36+00:00"
-        },
-        {
             "name": "behat/gherkin",
             "version": "v4.6.0",
             "source": {
@@ -1985,21 +1923,6 @@
                 "parser"
             ],
             "time": "2019-01-16T14:22:17+00:00"
-        },
-        {
-            "name": "bower-asset/smalot-bootstrap-datetimepicker",
-            "version": "2.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/smalot/bootstrap-datetimepicker.git",
-                "reference": "32143c8b45575e51c92a8e29997cbe556d1bbba3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/smalot/bootstrap-datetimepicker/zipball/32143c8b45575e51c92a8e29997cbe556d1bbba3",
-                "reference": "32143c8b45575e51c92a8e29997cbe556d1bbba3"
-            },
-            "type": "bower-asset"
         },
         {
             "name": "codeception/base",
@@ -2212,19 +2135,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "2145e8cd1f6f6a7cef8d4f8c8c4b4e08529e8a8d"
+                "reference": "a2c590166b2133a4633738648b6b064edae0814a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/2145e8cd1f6f6a7cef8d4f8c8c4b4e08529e8a8d",
-                "reference": "2145e8cd1f6f6a7cef8d4f8c8c4b4e08529e8a8d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/a2c590166b2133a4633738648b6b064edae0814a",
+                "reference": "a2c590166b2133a4633738648b6b064edae0814a",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^5.0",
+                "doctrine/coding-standard": "^6.0",
                 "ext-pdo": "*",
                 "ext-phar": "*",
                 "phpbench/phpbench": "^0.13",
@@ -2260,7 +2183,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2019-03-12T22:46:11+00:00"
+            "time": "2019-03-17T17:37:11+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -3891,12 +3814,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "122a9f0a0c653ecba733ce3b330b27035042d9c6"
+                "reference": "91def169ece5712be974336fdbd6f1954e798f98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/122a9f0a0c653ecba733ce3b330b27035042d9c6",
-                "reference": "122a9f0a0c653ecba733ce3b330b27035042d9c6",
+                "url": "https://api.github.com/repos/symfony/console/zipball/91def169ece5712be974336fdbd6f1954e798f98",
+                "reference": "91def169ece5712be974336fdbd6f1954e798f98",
                 "shasum": ""
             },
             "require": {
@@ -3907,6 +3830,7 @@
             },
             "conflict": {
                 "symfony/dependency-injection": "<3.4",
+                "symfony/event-dispatcher": "<4.3",
                 "symfony/process": "<3.3"
             },
             "provide": {
@@ -3916,7 +3840,7 @@
                 "psr/log": "~1.0",
                 "symfony/config": "~3.4|~4.0",
                 "symfony/dependency-injection": "~3.4|~4.0",
-                "symfony/event-dispatcher": "~3.4|~4.0",
+                "symfony/event-dispatcher": "^4.3",
                 "symfony/lock": "~3.4|~4.0",
                 "symfony/process": "~3.4|~4.0"
             },
@@ -3956,7 +3880,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:22:31+00:00"
+            "time": "2019-03-14T07:32:46+00:00"
         },
         {
             "name": "symfony/contracts",
@@ -3964,12 +3888,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "fb450641fd0e43647ddc5415f3132276545933ec"
+                "reference": "a4f68e9d0d5eebd8ccf520eed67304f8a4efdd22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/fb450641fd0e43647ddc5415f3132276545933ec",
-                "reference": "fb450641fd0e43647ddc5415f3132276545933ec",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/a4f68e9d0d5eebd8ccf520eed67304f8a4efdd22",
+                "reference": "a4f68e9d0d5eebd8ccf520eed67304f8a4efdd22",
                 "shasum": ""
             },
             "require": {
@@ -4026,7 +3950,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-03-14T07:32:36+00:00"
+            "time": "2019-03-19T18:41:07+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -4034,12 +3958,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "1618e06da6f04285cc8701bf07fe6b0be5c61b9b"
+                "reference": "1a30b070a1dc2338d769df7a76ae68ca9704d181"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/1618e06da6f04285cc8701bf07fe6b0be5c61b9b",
-                "reference": "1618e06da6f04285cc8701bf07fe6b0be5c61b9b",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/1a30b070a1dc2338d769df7a76ae68ca9704d181",
+                "reference": "1a30b070a1dc2338d769df7a76ae68ca9704d181",
                 "shasum": ""
             },
             "require": {
@@ -4090,7 +4014,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:22:31+00:00"
+            "time": "2019-03-14T07:32:46+00:00"
         },
         {
             "name": "symfony/finder",
@@ -4355,12 +4279,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "88cf5bf2a26c1248f20b89a63fe2e3a1ab941c57"
+                "reference": "0380db2170d5667bf5355b5fbf963802866a1a28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/88cf5bf2a26c1248f20b89a63fe2e3a1ab941c57",
-                "reference": "88cf5bf2a26c1248f20b89a63fe2e3a1ab941c57",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/0380db2170d5667bf5355b5fbf963802866a1a28",
+                "reference": "0380db2170d5667bf5355b5fbf963802866a1a28",
                 "shasum": ""
             },
             "require": {
@@ -4404,7 +4328,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2019-03-11T09:25:26+00:00"
+            "time": "2019-03-17T17:47:24+00:00"
         },
         {
             "name": "yiisoft/yii2-faker",
@@ -4462,12 +4386,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-gii.git",
-                "reference": "7139eb83b7856070c3c29007ec191eef5fe59f2d"
+                "reference": "e1671784144e378a7391d6d8063bd3e53e19b78a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/7139eb83b7856070c3c29007ec191eef5fe59f2d",
-                "reference": "7139eb83b7856070c3c29007ec191eef5fe59f2d",
+                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/e1671784144e378a7391d6d8063bd3e53e19b78a",
+                "reference": "e1671784144e378a7391d6d8063bd3e53e19b78a",
                 "shasum": ""
             },
             "require": {
@@ -4505,7 +4429,7 @@
                 "gii",
                 "yii2"
             ],
-            "time": "2019-02-19T14:41:50+00:00"
+            "time": "2019-03-17T19:23:56+00:00"
         }
     ],
     "aliases": [],
@@ -4513,7 +4437,8 @@
     "stability-flags": {
         "ramosisw/yii2-material-dashboard": 20,
         "yiisoft/yii2-httpclient": 20,
-        "perminder-klair/yii2-dropzone": 20
+        "perminder-klair/yii2-dropzone": 20,
+        "wbraganca/yii2-dynamicform": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

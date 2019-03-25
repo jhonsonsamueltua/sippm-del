@@ -9,7 +9,7 @@ use kartik\datetime\DateTimePicker;
 ?>
  <br><br><br>
 <div class="person-form">
-    <table class="table table-bordered table-striped">
+    <!-- <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Data Penugasan</th>
@@ -18,7 +18,7 @@ use kartik\datetime\DateTimePicker;
  
         <tbody class="container-items">
             <tr class="class-item">
-                <td class="vcenter">
+                <td class="vcenter"> -->
                     <?php $form = ActiveForm::begin(['options' => [
                         'enctype' => 'multipart/form-data',],
                         'layout' => 'horizontal',

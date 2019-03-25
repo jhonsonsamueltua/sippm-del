@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\models\File;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\SippmProject */
 
-$this->title = $model->proj_id;
+$this->title = $model->proj_title;
 $this->params['breadcrumbs'][] = ['label' => 'Sippm Projects', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -15,6 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'proj_title',
+            'proj_description:html',
+            'proj_downloaded',
+            'sts_win_id',
+        ],
+    ]) ?>
+
+    <p>File proyek:</p>
+    <?php
+        $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
+        
+        foreach($files as $file){
+            echo "<p>" . $file->file_name . "</p>";
+        }
+    ?>
+
+    <?php
+    /**
+     * Tambah kondisi untuk mengecek hanya role tertentu yang dapat mengupdate proyek
+     */
+    ?>
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->proj_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->proj_id], [
@@ -25,24 +50,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'proj_id',
-            'proj_title',
-            'proj_description',
-            'proj_downloaded',
-            'sts_win_id',
-            'sts_proj_id',
-            'deleted',
-            'deleted_at',
-            'deleted_by',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
-        ],
-    ]) ?>
 
 </div>

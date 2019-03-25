@@ -5,10 +5,10 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "sippm_status_win".
+ * This is the model class for table "sippm_status_assignment".
  *
- * @property int $sts_win_id
- * @property string $sts_win_name
+ * @property int $sts_asg_id
+ * @property string $sts_asg_name
  * @property int $deleted
  * @property string $deleted_at
  * @property string $deleted_by
@@ -17,39 +17,39 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmProject[] $sippmProjects
+ * @property Assignment[] $sippmAssignments
  */
-class SippmStatusWin extends \yii\db\ActiveRecord
+class StatusAssignment extends \yii\db\ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tableName()
     {
-        return 'sippm_status_win';
+        return 'sippm_status_assignment';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['sts_win_name'], 'string', 'max' => 32],
+            [['sts_asg_name'], 'string', 'max' => 32],
+            [['deleted'], 'string', 'max' => 1],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
-            'sts_win_id' => 'Sts Win ID',
-            'sts_win_name' => 'Sts Win Name',
+            'sts_asg_id' => 'Sts Asg ID',
+            'sts_asg_name' => 'Sts Asg Name',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -63,8 +63,8 @@ class SippmStatusWin extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSippmProjects()
+    public function getSippmAssignments()
     {
-        return $this->hasMany(SippmProject::className(), ['sts_win_id' => 'sts_win_id']);
+        return $this->hasMany(Assignment::className(), ['sts_asg_id' => 'sts_asg_id']);
     }
 }
