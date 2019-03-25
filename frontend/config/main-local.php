@@ -11,7 +11,7 @@ $config = [
                 'wbraganca\dynamicform\DynamicFormAsset' => [
                     'sourcePath' => '@app/web/js',
                     'js' => [
-                        'yii2-dynamic-form.js'
+                        '..\..\frontend\web\js\yii2-dynamic-form.js'
                     ],
                 ],
             ],

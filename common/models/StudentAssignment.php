@@ -37,10 +37,10 @@ class StudentAssignment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['stu_id', 'asg_id', 'deleted'], 'integer'],
+            [['stu_id', 'cls_asg_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
-            [['asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => Assignment::className(), 'targetAttribute' => ['asg_id' => 'asg_id']],
+            [['cls_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => ClassAssignment::className(), 'targetAttribute' => ['cls_asg_id' => 'cls_asg_id']],
             [['stu_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['stu_id' => 'stu_id']],
         ];
     }
@@ -53,7 +53,7 @@ class StudentAssignment extends \yii\db\ActiveRecord
         return [
             'stu_asg_id' => 'Stu Asg ID',
             'stu_id' => 'Stu ID',
-            'asg_id' => 'Asg ID',
+            'cls_asg_id' => 'Cls Asg ID',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -67,9 +67,9 @@ class StudentAssignment extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAsg()
+    public function getCLasses()
     {
-        return $this->hasOne(SippmAssignment::className(), ['asg_id' => 'asg_id']);
+        return $this->hasOne(ClassAssignment::className(), ['cls_asg_id' => 'cls_asg_id']);
     }
 
     /**
@@ -77,6 +77,6 @@ class StudentAssignment extends \yii\db\ActiveRecord
      */
     public function getStu()
     {
-        return $this->hasOne(SippmStudent::className(), ['stu_id' => 'stu_id']);
+        return $this->hasOne(Student::className(), ['stu_id' => 'stu_id']);
     }
 }

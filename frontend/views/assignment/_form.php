@@ -7,7 +7,6 @@ use common\models\CategoryProject;
 use common\models\Course;
 use kartik\datetime\DateTimePicker;
 ?>
- <br><br><br>
 <div class="person-form">
     <table class="table table-bordered table-striped">
         <thead>
@@ -41,7 +40,7 @@ use kartik\datetime\DateTimePicker;
 
                     <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label("Matakuliah") ?>
 
-                    <?= $form->field($modelAsg, 'asg_title')->textInput(['maxlength' => true])->label("Judul Proyek") ?>
+                    <?= $form->field($modelAsg, 'asg_title')->textInput(['maxlength' => true])->label("Subjek Penugasan") ?>
                     
                     <?php 
                         // $dateNow = date("Y-m-d H:i:s");
@@ -69,12 +68,8 @@ use kartik\datetime\DateTimePicker;
                             ])->label("Batas akhir");
                     ?>
                     <?= $form->field($modelAsg, 'asg_description')->textarea(['rows' => 6])->hint('Max 500 characters.')->label("Deskripsi")?>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                
     
-
     <div class="padding-v-md">
         <div class="line line-dashed"></div>
     </div>
@@ -99,7 +94,7 @@ use kartik\datetime\DateTimePicker;
             <tr>
                 <th>Kelas</th>
                 <th style="width: 450px;">Mahasiswa</th>
-                <th class="text-center" style="width: 90px;">
+                <th class="text-center">
                 <button type="button" class="add-class btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
                 </th>
             </tr>
@@ -112,7 +107,7 @@ use kartik\datetime\DateTimePicker;
                     <?php
                         // necessary for update action.
                         if (! $modelClsAsg->isNewRecord) {
-                            echo Html::activeHiddenInput($modelClsAsg, "[{$indexClsAsg}]asg_id");
+                            echo Html::activeHiddenInput($modelClsAsg, "[{$indexClsAsg}]cls_asg_id");
                         }
                     ?>
  
@@ -126,7 +121,7 @@ use kartik\datetime\DateTimePicker;
                     ]) ?>
                 </td>
  
-                <td class="text-center vcenter" style="width: 90px; verti">
+                <td class="text-center vcenter" >
                 <button type="button" class="remove-class btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
                 </td>
  
@@ -134,10 +129,14 @@ use kartik\datetime\DateTimePicker;
          <?php endforeach; ?>
         </tbody>
     </table>
- 
+    
     <?php DynamicFormWidget::end(); ?>
-    <div class="form-group">
+    <div class="form-group col-md-1">
         <?= Html::submitButton($modelAsg->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
     </div>
     <?php ActiveForm::end(); ?>
+    </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

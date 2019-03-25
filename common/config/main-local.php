@@ -16,6 +16,16 @@ return [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'assetManager' => [
+            'bundles' => [
+                'wbraganca\dynamicform\DynamicFormAsset' => [
+                    'sourcePath' => '@app/web/js',
+                    'js' => [
+                        '..\..\frontend\web\js\yii2-dynamic-form.js'
+                    ],
+                ],
+            ],
+        ],
     ],
     'modules' => [
         'redactor' => 'yii\redactor\RedactorModule',
