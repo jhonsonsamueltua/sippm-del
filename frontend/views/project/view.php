@@ -22,17 +22,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'proj_title',
             'proj_description:html',
             'proj_downloaded',
-            'sts_win_id',
+            'stsWin.sts_win_name',
         ],
     ]) ?>
-
+    <?= Html::a("Unduh semua file proyek", ['download-project', 'proj_id' => $model->proj_id]) . "<br>"; ?>
     <p>File proyek:</p>
     <?php
         $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
         
+        echo("<div class='form-group'>");
         foreach($files as $file){
-            echo "<p>" . $file->file_name . "</p>";
+            echo Html::a($file->file_name, ['download-attachment', 'file_id' => $file->file_id]) . "<br>";
         }
+        echo("</div>");
     ?>
 
     <?php
@@ -41,14 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
      */
     ?>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->proj_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->proj_id], [
+        <?= Html::a('Ubah', ['update', 'id' => $model->proj_id], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Hapus', ['delete', 'id' => $model->proj_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Kembali', ['index'], ['class' => 'btn btn-primary']) ?>
     </p>
 
 </div>

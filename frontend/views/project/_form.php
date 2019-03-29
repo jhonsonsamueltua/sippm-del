@@ -18,12 +18,12 @@ use common\models\CategoryProject;
         'options' => ['enctype' => 'multipart/form-data']
     ]); ?>
 
-    <?= $form->field($model, 'proj_title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'proj_title')->textInput(['readOnly' => !$model->isNewRecord,'maxlength' => true]) ?>
 
     <?= $form->field($model, 'proj_description')->widget(Redactor::classname(), [
         'options' => [
             'minHeight' => 500,
-        ],
+        ]
     ]) ?>
 
     <?= $form->field($model, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'), [
@@ -41,10 +41,10 @@ use common\models\CategoryProject;
             if(count($files) != 0){
                 echo("
                     <label>File Proyek</label>
-                    <div class='row'>
+                    <div class='form-group'>
                 ");
                 foreach($files as $file){
-                    echo "<p class='col-sm-3'>" . $file->file_name . "</p>" . "<p class='col-sm-9'>" . Html::a('-', ['#'], ['class' => 'btn btn-danger']) . "</p>";
+                    echo "<p class='col-sm-3'>" . $file->file_name . "</p>" . "<p class='col-sm-9'>" . Html::a('-', ['remove-attachment', 'file_id' => $file->file_id], ['class' => 'btn btn-danger']) . "</p>";
                 }
                 echo("
                     </div>
@@ -64,7 +64,12 @@ use common\models\CategoryProject;
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
+        <?php
+            if(!$model->isNewRecord){
+                echo Html::a("Kembali", ['view', 'id' => $model->proj_id], ['class' => 'btn btn-primary']);
+            }
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>

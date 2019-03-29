@@ -58,20 +58,14 @@ class ProjectSearch extends Project
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'proj_id' => $this->proj_id,
             'proj_downloaded' => $this->proj_downloaded,
             'sts_win_id' => $this->sts_win_id,
             'deleted' => $this->deleted,
-            'deleted_at' => $this->deleted_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'proj_title', $this->proj_title])
             ->andFilterWhere(['like', 'proj_description', $this->proj_description])
-            ->andFilterWhere(['like', 'deleted_by', $this->deleted_by])
-            ->andFilterWhere(['like', 'created_by', $this->created_by])
-            ->andFilterWhere(['like', 'updated_by', $this->updated_by]);
+            ->andFilterWhere(['not', ['deleted' => 1]]);
 
         return $dataProvider;
     }
