@@ -17,12 +17,12 @@ use Yii;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmAssignment[] $sippmAssignments
+ * @property Assignment[] $sippmAssignments
  */
 class CategoryProject extends \yii\db\ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tableName()
     {
@@ -30,20 +30,20 @@ class CategoryProject extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['cat_proj_name'], 'string', 'max' => 32],
+            [['deleted'], 'string', 'max' => 1],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function attributeLabels()
     {
@@ -65,6 +65,6 @@ class CategoryProject extends \yii\db\ActiveRecord
      */
     public function getSippmAssignments()
     {
-        return $this->hasMany(SippmAssignment::className(), ['cat_proj_id' => 'cat_proj_id']);
+        return $this->hasMany(Assignment::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 }

@@ -22,7 +22,11 @@
         "yiister/yii2-gentelella": "~1.0",
         "2amigos/yii2-highcharts-widget": "~1.0",
         "kartik-v/yii2-widget-datetimepicker": "*",
-        "wbraganca/yii2-dynamicform": "dev-master"
+        "yiisoft/yii2-httpclient": "^2.0@dev",
+        "perminder-klair/yii2-dropzone": "dev-master",
+        "2amigos/yii2-file-upload-widget": "~1.0",
+        "wbraganca/yii2-dynamicform": "dev-master",
+        "yiidoc/yii2-redactor": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

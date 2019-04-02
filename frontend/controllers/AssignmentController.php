@@ -3,7 +3,9 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\httpclient\Client;
 use common\models\Assignment;
+use common\models\Student;
 use common\models\ClassAssignment;
 use common\models\StudentAssignment;
 use common\models\search\AssignmentSearch;
@@ -82,9 +84,10 @@ class AssignmentController extends Controller
             'model' => $model,
         ]);
     }
-
+    
     public function actionCreate()
     {   
+        
         $modelAsg = new Assignment;
         
         $modelsClsAsg = [new ClassAssignment];
@@ -92,11 +95,10 @@ class AssignmentController extends Controller
         $modelsStuAsg = [[new StudentAssignment]];
 
         if ($modelAsg->load(Yii::$app->request->post())) {
-            
+ 
             $modelsClsAsg = Model::createMultiple(ClassAssignment::classname());
             Model::loadMultiple($modelsClsAsg, Yii::$app->request->post());
             
-            // validate person and houses models
             $valid = $modelAsg->validate();
             // $valid = Model::validateMultiple($modelsClsAsg) && $valid;
             
@@ -135,12 +137,10 @@ class AssignmentController extends Controller
                                     if($modelStudent->stu_id == ''){   
                                         //Tempat insert semua mahasiswa by kelas. (Jika mahasiswa tidak ada yang dibuat) 
                                         // die("Insert data Mahasiswa by Kelas ".$modelClass->class);
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                        
                                         $modelStudent->stu_id = 3;
-                                    }else{
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
                                     }
-                                    
+                                    $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
                                     if (!($flag = $modelStudent->save(false))) {
                                         break;
                                     }
@@ -163,12 +163,29 @@ class AssignmentController extends Controller
             }
         }
 
-
         return $this->render('create', [
             'modelAsg' => $modelAsg,
             'modelsClsAsg' => (empty($modelsClsAsg)) ? [new ClassAssignment] : $modelsClsAsg,
             'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new StudentAssignment]] : $modelsStuAsg,
         ]);
+    }
+
+    public function actionLists($id){
+        $countStudents = Student::find()
+        ->where(['cls_id' => $id])
+        ->count();
+        
+        $students = Student::find()
+        ->where(['cls_id' => $id])
+        ->orderBy('stu_fullname DESC')
+        ->all();
+        
+        echo "<option value=''>Pilih Mahasiswaa ..</option>";
+        if($countStudents>0){
+            foreach($students as $student){
+                echo "<option value='".$student->stu_id."'>".$student->stu_fullname."</option>";
+            }
+        }
     }
 
     /**
@@ -194,13 +211,12 @@ class AssignmentController extends Controller
         }
 
         if ($modelAsg->load(Yii::$app->request->post())) {
-
+            
             // reset
             $modelsStuAsg = [];
-            
             $oldClassIDs = ArrayHelper::map($modelsClsAsg, 'cls_asg_id', 'cls_asg_id');
-            // $modelsClsAsg = Model::createMultiple(ClassAssignment::classname());
-            $modelsClsAsg = Model::createMultiple(ClassAssignment::classname(), $modelsClsAsg);
+            $modelsClsAsg = Model::createMultiple(ClassAssignment::classname());
+            // $modelsClsAsg = Model::createMultiple(ClassAssignment::classname(), $modelsClsAsg);
             Model::loadMultiple($modelsClsAsg, Yii::$app->request->post());
             $deletedClassIDs = array_diff($oldClassIDs, array_filter(ArrayHelper::map($modelsClsAsg, 'cls_asg_id', 'cls_asg_id')));
             
@@ -222,7 +238,6 @@ class AssignmentController extends Controller
                 }
             }
 
-            //LANJUT DISINI BRAYYYYYYY
             $oldStudentsIDs = ArrayHelper::getColumn($oldStudents, 'stu_asg_id');
             $deletedStudentsIDs = array_diff($oldStudentsIDs, $studentsIDs);
 
@@ -266,12 +281,6 @@ class AssignmentController extends Controller
                                     if (!($flag = $modelStudent->save(false))) {
                                         break;
                                     }
-
-
-                                    // $modelStudent->cls_asg_id = $modelHouse->cls_asg_id;
-                                    // if (!($flag = $modelStudent->save(false))) {
-                                    //     break;
-                                    // }
                                 }
                             }
                         }
@@ -294,6 +303,27 @@ class AssignmentController extends Controller
             'modelsClsAsg' => (empty($modelsClsAsg)) ? [new House] : $modelsClsAsg,
             'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new Room]] : $modelsStuAsg
         ]);
+    }
+
+    public function getAllClass(){
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                $listKelas = array();
+
+                foreach($response->data['data'] as $kelas){
+                    // array_push($listKelas[$kelas['nama']], $kelas['nama']);
+                    $listKelas += [$kelas['nama'] => $kelas['nama']];
+                }
+                // sort($listKelas);
+            }
+        }
+        return $listKelas;
     }
 
     /**
