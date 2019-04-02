@@ -17,7 +17,7 @@ AppAsset::register($this);
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
-   <!--  <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <?php $this->registerCsrfMetaTags() ?>
     <?php $this->head() ?> -->
@@ -51,6 +51,8 @@ AppAsset::register($this);
    
     if (Yii::$app->user->isGuest) {
         //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Request Pengunduhan', 'url' => ['/project-usage/create']];
+        $menuItems[] = ['label' => 'Penugasan', 'url' => ['/sippm-assignment/index']];
         $menuItems[] = ['label' => 'Masuk', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
