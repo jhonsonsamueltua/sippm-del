@@ -6,7 +6,18 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'Eu06OjsprvlBNaBPPYyu0ET2bXNZnzZK',
         ],
+        'assetManager' => [
+            'bundles' => [
+                'wbraganca\dynamicform\DynamicFormAsset' => [
+                    'sourcePath' => '@app/web/js',
+                    'js' => [
+                        'yii2-dynamic-form.js'
+                    ],
+                ],
+            ],
+        ],
     ],
+    
 ];
 
 if (!YII_ENV_TEST) {

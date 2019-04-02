@@ -38,10 +38,9 @@ class SippmClass extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['prod_id'], 'integer'],
+            [['prod_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['cls_name'], 'string', 'max' => 32],
-            [['deleted'], 'string', 'max' => 1],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['prod_id'], 'exist', 'skipOnError' => true, 'targetClass' => SippmProdi::className(), 'targetAttribute' => ['prod_id' => 'prod_id']],
         ];
