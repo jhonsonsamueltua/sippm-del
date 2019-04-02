@@ -189,7 +189,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Deletes an existing SippmProject model.
+     * Deletes an existing SippmProject model.  
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
