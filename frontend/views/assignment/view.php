@@ -2,11 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\models\ClassAssignment;
+use common\models\StudentAssignment;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Assignment */
 
-$this->title = $model->asg_id;
+$this->title = $model->asg_title;
 $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -48,7 +50,37 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'stsAsg.sts_asg_name',
                 'label' => 'Status'],
             ['attribute' => 'class',
-                'label' => 'Kelas']
+                'label' => 'Kelas',
+                'format' => 'raw',
+                'value' => function($model){
+                    $cls = "";
+                    $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->all();
+                    foreach($modelClass as $key => $data){
+                        if($key == 0){
+                            $cls = ($key+1)." ".$data->class;
+                        }else{
+                            $cls = $cls.'<br>'.($key+1).' '.$data->class;
+                        }
+                    }
+                        return $cls;
+                    }
+                ],
+                // ['attribute' => '',
+                // 'label' => 'Mahasiswa',
+                // 'format' => 'raw',
+                // 'value' => function($model){
+                //     $stu = "";
+                //     $modelStudent = StudentAssignment::find()->where(['asg_id' => $model->asg_id])->all();
+                //     foreach($modelStudent as $key => $data){
+                //         if($key == 0){
+                //             $stu = ($key+1)." ".$data->stu->stu_fullname;
+                //         }else{
+                //             $stu = $stu.'<br>'.($key+1)." ".$data->stu->stu_fullname;
+                //         }
+                //     }
+                //         return $stu;
+                //     }
+                // ]
         ],
     ]) ?>
 

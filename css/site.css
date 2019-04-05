@@ -20,8 +20,8 @@ body {
 	
 }
 .wrap > .container {
-    padding: 70px 15px 20px;
-    background: #F8F8FF;
+    /* padding: 0px 15px 20px; */
+    /* background: #F8F8FF; */
 }
 
 .footer {
@@ -117,7 +117,7 @@ a.desc:after {
 }
 
 @media(max-width:767px) {
-    .nav li > form > button.logout {
+    .nav li > form > button.login {
         display:block;
         text-align: left;
         width: 100%;

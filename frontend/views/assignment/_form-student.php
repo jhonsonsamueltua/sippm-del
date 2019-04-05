@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use wbraganca\dynamicform\DynamicFormWidget;
+use yii\helpers\ArrayHelper;
+use common\models\Student;
 
 ?>
 
@@ -35,12 +37,15 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 <?php
                     // necessary for update action.
                     if (! $modelStuAsg->isNewRecord) {
-                        echo Html::activeHiddenInput($modelStuAsg, "[{$indexStuAsg}][{$indexStuAsg}]asg-id");
+                        echo Html::activeHiddenInput($modelStuAsg, "[{$indexStuAsg}][{$indexStuAsg}]cls_asg_id");
                     }
                 ?>
-                <?= $form->field($modelStuAsg, "[{$indexClsAsg}][{$indexStuAsg}]stu_id")->label(false)->textInput(['maxlength' => true]) ?>
+                <?php
+                    $dataStudent=ArrayHelper::map(Student::find()->asArray()->all(), 'stu_id', 'stu_fullname');
+                ?>
+                <?= $form->field($modelStuAsg, "[{$indexClsAsg}][{$indexStuAsg}]stu_id")->label(false)->dropDownList($dataStudent, ['prompt' => 'Pilih Mahasiswa..', 'id' => 'stu_id']) ?>
             </td>
-            <td class="text-center vcenter" style="width: 90px;">
+            <td class="text-center vcenter" >
                 <button type="button" class="remove-student btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
             </td>
         </tr>

@@ -55,4 +55,12 @@ class ClassAssignment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SippmAssignment::className(), ['asg_id' => 'asg_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStudents()
+    {
+        return $this->hasMany(StudentAssignment::className(), ['cls_asg_id' => 'cls_asg_id']);
+    }
 }

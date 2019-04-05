@@ -6,19 +6,21 @@ use yii\helpers\ArrayHelper;
 use common\models\CategoryProject;
 use common\models\Course;
 use kartik\datetime\DateTimePicker;
+use yii\helpers\Url;
+use common\models\Student;
 ?>
- <br><br><br>
+ 
 <div class="person-form">
-    <!-- <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Data Penugasan</th>
             </tr>
         </thead>
  
-        <tbody class="container-items">
-            <tr class="class-item">
-                <td class="vcenter"> -->
+        <tbody >
+            <tr >
+                <td class="vcenter">
                     <?php $form = ActiveForm::begin(['options' => [
                         'enctype' => 'multipart/form-data',],
                         'layout' => 'horizontal',
@@ -69,75 +71,124 @@ use kartik\datetime\DateTimePicker;
                             ])->label("Batas akhir");
                     ?>
                     <?= $form->field($modelAsg, 'asg_description')->textarea(['rows' => 6])->hint('Max 500 characters.')->label("Deskripsi")?>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                
     
 
-    <div class="padding-v-md">
-        <div class="line line-dashed"></div>
-    </div>
- 
-    <?php DynamicFormWidget::begin([
-        'widgetContainer' => 'dynamicform_wrapper',
-        'widgetBody' => '.container-items',
-        'widgetItem' => '.class-item',
-        'limit' => 10,
-        'min' => 1,
-        'insertButton' => '.add-class',
-        'deleteButton' => '.remove-class',
-        'model' => $modelsClsAsg[0],
-        'formId' => 'dynamic-form',
-        'formFields' => [
-            'description',
-        ],
-    ]); ?>
- 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Kelas</th>
-                <th style="width: 450px;">Mahasiswa</th>
-                <th class="text-center" style="width: 90px;">
-                <button type="button" class="add-class btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
-                </th>
+                    <div class="padding-v-md">
+                        <div class="line line-dashed"></div>
+                    </div>
+                
+                    <?php DynamicFormWidget::begin([
+                        'widgetContainer' => 'dynamicform_wrapper',
+                        'widgetBody' => '.container-items',
+                        'widgetItem' => '.class-item',
+                        'limit' => 10,
+                        'min' => 1,
+                        'insertButton' => '.add-class',
+                        'deleteButton' => '.remove-class',
+                        'model' => $modelsClsAsg[0],
+                        'formId' => 'dynamic-form',
+                        'formFields' => [
+                            'description',
+                        ],
+                    ]); ?>
+                
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Kelas</th>
+                                <th style="width: 450px;">Mahasiswa</th>
+                                <th class="text-center" style="width: 90px;">
+                                <button type="button" class="add-class btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+                                </th>
+                            </tr>
+                        </thead>
+                
+                        <tbody class="container-items">
+                        <?php foreach ($modelsClsAsg as $indexClsAsg => $modelClsAsg): ?>
+                            <tr class="class-item">
+                                <td class="vcenter">
+                                    <?php
+                                        // necessary for update action.
+                                        if (! $modelClsAsg->isNewRecord) {
+                                            echo Html::activeHiddenInput($modelClsAsg, "[{$indexClsAsg}]asg_id");
+                                        }
+                                    ?>
+                                
+                                <?= $form->field($modelClsAsg, "[{$indexClsAsg}]class")->label(false)->dropDownList($listKelas, 
+                                        ['prompt' => 'Pilih kelas ...', 
+                                        'onchange' => '
+                                            $.post( "index.php?r=assignment/lists&id='.'"+$(this).val(), function( data ) {
+                                            $( "select#stu_id" ).html( data );
+                                            });
+                                            ']);
+                                         ?>
+                                </td>
+                                <td>
+                                <?php DynamicFormWidget::begin([
+                                        'widgetContainer' => 'dynamicform_inner',
+                                        'widgetBody' => '.container-students',
+                                        'widgetItem' => '.student-item',
+                                        'limit' => 3,
+                                        'min' => 1,
+                                        'insertButton' => '.add-student',
+                                        'deleteButton' => '.remove-student',
+                                        'model' => $modelsStuAsg[$indexClsAsg][0],
+                                        'formId' => 'dynamic-form',
+                                        'formFields' => [
+                                            'Student'
+                                        ],
+                                    ]); ?>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>NIM</th>
+                                                <th class="text-center">
+                                                    <button type="button" class="add-student btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="container-students">
+                                        <?php foreach ($modelsStuAsg[$indexClsAsg] as $indexStuAsg => $modelStuAsg): ?>
+                                            <tr class="student-item">
+                                                <td class="vcenter">
+                                                    <?php
+                                                        // necessary for update action.
+                                                        if (! $modelStuAsg->isNewRecord) {
+                                                            echo Html::activeHiddenInput($modelStuAsg, "[{$indexStuAsg}][{$indexStuAsg}]cls_asg_id");
+                                                        }
+                                                    ?>
+                                                    <?php
+                                                        $dataStudent=ArrayHelper::map(Student::find()->asArray()->all(), 'stu_id', 'stu_fullname');
+                                                    ?>
+                                                    <?= $form->field($modelStuAsg, "[{$indexClsAsg}][{$indexStuAsg}]stu_id")->label(false)->dropDownList($dataStudent, ['prompt' => 'Pilih Mahasiswa..', 'id' => 'stu_id']) ?>
+                                                </td>
+                                                <td class="text-center vcenter" >
+                                                    <button type="button" class="remove-student btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                    <?php DynamicFormWidget::end(); ?>
+                                </td>
+                
+                                <td class="text-center vcenter" style="width: 90px; verti">
+                                <button type="button" class="remove-class btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
+                                </td>
+                
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                
+                    <?php DynamicFormWidget::end(); ?>
+                    <div class="form-group">
+                        <?= Html::submitButton($modelAsg->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+                    </div>
+                    <?php ActiveForm::end(); ?>
+                </td>
             </tr>
-        </thead>
- 
-        <tbody class="container-items">
-        <?php foreach ($modelsClsAsg as $indexClsAsg => $modelClsAsg): ?>
-            <tr class="class-item">
-                <td class="vcenter">
-                    <?php
-                        // necessary for update action.
-                        if (! $modelClsAsg->isNewRecord) {
-                            echo Html::activeHiddenInput($modelClsAsg, "[{$indexClsAsg}]asg_id");
-                        }
-                    ?>
- 
-                    <?= $form->field($modelClsAsg, "[{$indexClsAsg}]class")->label(false)->textInput(['maxlength' => true]) ?>
-                </td>
-                <td>
-                    <?= $this->render('_form-student', [
-                        'form' => $form,
-                        'indexClsAsg' => $indexClsAsg,
-                        'modelsStuAsg' => $modelsStuAsg[$indexClsAsg],
-                    ]) ?>
-                </td>
- 
-                <td class="text-center vcenter" style="width: 90px; verti">
-                <button type="button" class="remove-class btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
-                </td>
- 
-            </tr>
-         <?php endforeach; ?>
         </tbody>
     </table>
- 
-    <?php DynamicFormWidget::end(); ?>
-    <div class="form-group">
-        <?= Html::submitButton($modelAsg->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
-    </div>
-    <?php ActiveForm::end(); ?>
 </div>

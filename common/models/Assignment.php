@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "sippm_assignment".
@@ -14,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property string $asg_start_time
  * @property string $asg_end_time
  * @property string $asg_year
- * @property int $cls_id
+ * @property string $class
  * @property int $course_id
  * @property int $cat_proj_id
  * @property int $sts_asg_id
@@ -26,15 +25,15 @@ use yii\db\ActiveRecord;
  * @property string $updated_at
  * @property string $updated_by
  *
- * @property SippmCategoryProject $catProj
- * @property SippmClass $cls
- * @property SippmStatusAssignment $stsAsg
- * @property SippmStudentAssignment[] $sippmStudentAssignments
+ * @property CategoryProject $catProj
+ * @property Course $course
+ * @property StatusAssignment $stsAsg
+ * @property StudentAssignment[] $sippmStudentAssignments
  */
-class Assignment extends ActiveRecord
+class Assignment extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -42,36 +41,35 @@ class Assignment extends ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['asg_start_time', 'asg_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['cls_id', 'course_id', 'cat_proj_id', 'sts_asg_id'], 'integer'],
+            [['course_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
             [['asg_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['asg_description'], 'string', 'max' => 500],
-            [['asg_year'], 'string', 'max' => 32],
-            [['deleted'], 'string', 'max' => 1],
+            [['asg_year', 'class'], 'string', 'max' => 32],
             [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
-            [['cls_id'], 'exist', 'skipOnError' => true, 'targetClass' => SippmClass::className(), 'targetAttribute' => ['cls_id' => 'cls_id']],
+            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Course::className(), 'targetAttribute' => ['course_id' => 'course_id']],
             [['sts_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusAssignment::className(), 'targetAttribute' => ['sts_asg_id' => 'sts_asg_id']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
             'asg_id' => 'Asg ID',
-            'asg_title' => 'Title',
-            'asg_description' => 'Description',
-            'asg_start_time' => 'Start Time',
-            'asg_end_time' => 'End Time',
-            'asg_year' => 'Year',
-            'cls_id' => 'Cls ID',
+            'asg_title' => 'Asg Title',
+            'asg_description' => 'Asg Description',
+            'asg_start_time' => 'Asg Start Time',
+            'asg_end_time' => 'Asg End Time',
+            'asg_year' => 'Asg Year',
+            'class' => 'Class',
             'course_id' => 'Course ID',
             'cat_proj_id' => 'Cat Proj ID',
             'sts_asg_id' => 'Sts Asg ID',
@@ -96,9 +94,9 @@ class Assignment extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCls()
+    public function getCourse()
     {
-        return $this->hasOne(SippmClass::className(), ['cls_id' => 'cls_id']);
+        return $this->hasOne(Course::className(), ['course_id' => 'course_id']);
     }
 
     /**
@@ -112,8 +110,16 @@ class Assignment extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSippmStudentAssignments()
+    public function getStudents()
     {
         return $this->hasMany(StudentAssignment::className(), ['asg_id' => 'asg_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClasses()
+    {
+        return $this->hasMany(ClassAssignment::className(), ['asg_id' => 'asg_id']);
     }
 }
