@@ -12,18 +12,26 @@ $css = ['css/site.css'
 $this->title = 'Masuk';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<!-- <body class="login-page"> -->
 <div class="site-login">
 <div class="col-md-5 col-md-offset-4">
 <div class="panel panel-primary">
-<div class="panel-heading" align="center" style="background-color: #32CD32">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="login-box-body" align="center" style="background-color: #fff;">
+<br>
+<p class="login-box-msg" align="center", style="color:black;">
+        <img src="images/logo.jpg" width="70px">
+        <br>
+<br>
+        Institut Teknologi Del
+        </p>
+        <hr>
 </div>
 <div class="panel-body">
    <!--  <p>Please fill out the following fields to login:</p> -->
 
     <div class="row">
         <div class="col-lg-12">
+        
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
                 <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ->label('Nama Pengguna')?>
@@ -38,8 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
                 </div> -->
 
-                <div class="form-group" align="center">
-                    <?= Html::submitButton('Masuk', ['class' => 'bColor btn btn-primary ', 'name' => 'login-button']) ?>
+                <div class="form-group" align="right">
+                    <?= Html::submitButton('Masuk', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
@@ -50,4 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 </div>
-</div>
+
+
+<!-- </body> -->
+<!-- <?php $this->endPage() ?> -->

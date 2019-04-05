@@ -10,4 +10,8 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'modules' => [
+        'redactor' => 'yii\redactor\RedactorModule',
+    ],
+
 ];
