@@ -29,20 +29,13 @@ $session = Yii::$app->session;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <style>
-        sidebar {
-            float: right;
-            width: 20%;
-            /* height: 300px;  */
-            /* background: #ccc; */
-            padding: 35px 0px 0px 0px;
-            }
-
             article {
             float: left;
             padding: 0px 10px 10px 0px;
-            width: 80%;
+            width: 100%;
             /* background-color: #f1f1f1; */
             }
+
 
             /* Clear floats after the columns */
             section:after {
@@ -124,6 +117,10 @@ $session = Yii::$app->session;
         .navbar-brand {
             color: white;
         }
+        
+        .navbar-right a {
+            color: white;
+        }
 
         .navbar-toggle .icon-bar {
             display: block;
@@ -146,31 +143,11 @@ $session = Yii::$app->session;
             border-radius: 4px;
         }
         
-        a {
-            color: #ffffff;
-            text-decoration: none;
-        }
-
         .navbar {
             position: relative;
             min-height: 50px;
             margin-bottom: -10px;
             border: 1px solid transparent;
-        }
-
-        .navbar-collapse ul li a:hover { 
-            color: #b2bdc7;
-            background-color: transparent;
-        }
-
-        .navbar-collapse .active{
-            color: #000;
-            /* background: #d65c14; */
-        }
-
-        .navbar-collapse .active > a:focus {
-            color: #b2bdc7;
-            background: transparent;
         }
 
         @media(min-width: 768px){
@@ -376,45 +353,19 @@ $session = Yii::$app->session;
                             <span class="glyphicon glyphicon-user"></span>
                             <span class="icon-bar"></span>                       
                         </button>
+                        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-home"></span> Beranda</a>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span>  Beranda</a></li>
-                            <li class="active"><a href="#"> Penugasan</a></li>
-                            <li class="active"><a href="#"> Penggunaan Proyek </a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-about"></span> About</a></li>
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#"><span class="glyphicon glyphicon-about"></span> About</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
                         </ul>
                     </div>
                 </div>
             </nav>
         </div>
 
-        <div class="container">
-            <section>
-                <sidebar>
-                    <div class="collapse navbar-collapse" id="myNavbar2">
-                        <div class="panel-group">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">Panel</div>
-                                <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
-                            </div>
-
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">Panel</div>
-                                <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
-                            </div>
-
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">Panel</div>
-                                <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
-                            </div>
-                        </div>
-                    </div>
-                </sidebar>
-                
+        <div class="container">        
                 <article>
                     <?= Alert::widget() ?>
                     <?= $content ?>

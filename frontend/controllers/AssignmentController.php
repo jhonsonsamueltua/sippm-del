@@ -42,7 +42,8 @@ class AssignmentController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
+    {   
+        $this->layout = 'main-2';
         $searchModel = new AssignmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -60,34 +61,17 @@ class AssignmentController extends Controller
      */
     public function actionView($id)
     {   
+        $this->layout = 'main-2';
         $modelClass = ClassAssignment::find()->where(['asg_id' => $id])->all();
         // $modelStudent = StudentAssignment::find()->where(['asg_id' => $id])->all();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
-
-    /**
-     * Creates a new Assignment model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreateBackup()
-    {
-        $model = new Assignment();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->asg_id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
     
     public function actionCreate()
     {   
-        
+        $this->layout = 'main-2';
         $modelAsg = new Assignment;
         
         $modelsClsAsg = [new ClassAssignment];
@@ -196,7 +180,8 @@ class AssignmentController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
-    {
+    {   
+        $this->layout = 'main-2';
         $modelAsg = $this->findModel($id);
         $modelsClsAsg = $modelAsg->classes;
         $modelsStuAsg = [];
