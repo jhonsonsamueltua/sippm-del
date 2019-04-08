@@ -22,8 +22,6 @@ AppAsset::register($this);
 </head>
 <body class="login-page">
 
-
-
     <?= $content ?>
 
 </body>
