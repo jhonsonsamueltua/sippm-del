@@ -60,13 +60,13 @@ class ProjectUsage extends \yii\db\ActiveRecord
                             
             'proj_usg_usage' => 'Deskripsi Penggunaan',
 
-            'proj_id' => 'Proj ID',
+            'proj_id' => 'Id Proyek',
             'sts_proj_usg_id' => 'Sts Proj Usg ID',
-            'cat_usg_id' => 'Cat Usg ID',
+            'cat_usg_id' => 'Kategori Tujuan Pengunduhan',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
-            'created_at' => 'Created At',
+            'created_at' => 'Tanggal Request',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',

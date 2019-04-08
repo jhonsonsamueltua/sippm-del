@@ -11,54 +11,43 @@ $css = ['css/site.css'
                 ];
 
 ?>
-
+<!-- <div class="request-form"> -->
+<div id="reqsub" class="section">
 <div class="project-usage-form">
-
-<div class="col-md-12 col" align:"center">
-<div class="panel panel-primary">
-<div class="panel-heading" align="center" style="background-color: #ADD8E6">
-    <h1><?= Html::encode($this->title) ?></h1>
-</div>
-<div class="panel-body">
-
-<div class="row">
 <div class="container">
-    <?php $form = ActiveForm::begin(); ?>
-<div class="col-md-10">
-    <form class="form-horizontal">
+	<div class="row">
+		<div class="reqsub-form">
+        <div class="reqsub-bg">
+        <div class="form-header">
+        <h2>Request Penggunaan Proyek</h2>
+            <p>Silahkan melakukan <b>request</b> untuk dapat mengunduh proyek.</p>
+            <br>
+            <br>
+            <!-- <h4>Hal yang wajib diketahui : </h4>
+            <p><b>*</b>Proyek yang direquest untuk diunduh akan di teruskan kepada koordinator proyek</p>
+            <p><b>*</b>Ketika request dikirim, notifikasi akan masuk kepada koordinator</p>
+            <p><b>*</b>Kordinator dapat menolak dan menerima request penggunaan</p>
+            <p><b>*</b>Apabila request diterima atau ditolak, notifikasi akan masuk kepada perequest</p>
+            <p><b>*</b>Ketika request diterima proyek baru dapat diunduh</p> -->
 
-
-<div class="form-group">    
-    <label class="control-label col-xs-3">Id Proyek :</label> 
-    <div class="col-xs-9"> 
-        <?= $form->field($model, 'proj_id')->textInput() ->label(false) ?>
+        </div>
     </div>
-</div> 
-
-<div class="form-group">
-    <label class="control-label col-xs-3" for="Nama" >Judul Proyek :</label>
-    <div class="col-xs-9">
-
-       <input type="text" class="form-control" name="name" value="'.$item['proj_title'].'" required>
-         <br>
-    </div>
-</div>
-
- <div class="form-group">    
-    <label class="control-label col-xs-3">Tujuan :</label> 
-    <div class="col-xs-9">    
-        <?= $form->field($model, 'cat_usg_id')->textInput() ->dropDownList([ 'Referensi KP' => 'Referensi KP', 'Kompetisi' => 'Kompetisi', 'Referensi PA' => 'Referensi PA', 'Proyek Mata Kuliah' => 'Proyek Mata Kuliah', 'Lainnya' => 'Lainnya ..',], 
-        ['prompt' => 'Tujuan Pengunduhan Proyek ..'])->label(false) ?>
-    </div>
-</div>
-
-<div class="form-group">   
-    <label class="lab control-label col-xs-3">Deskripsi Penggunaan :</label>
-    <div class="col-xs-9">
-            <!-- <?= $form->field($model, 'proj_usg_usage')->textarea(['rows' => '6'])->label(false)?>  -->
-            <?= $form->field($model, 'proj_usg_usage')->widget(Redactor::className())->label(false)  ?>
+    <form>
+<?php $form = ActiveForm::begin([
+        'options' => ['enctype' => 'multipart/form-data']
+ ]); ?>
+<div class="row">
+<div class="col-md-6">
+    <div class="form-group">
+    <?= $form->field($model, 'proj_id')->textInput() ?>
     </div> 
-</div>
+</div>  
+</div>     
+    <?= $form->field($model, 'cat_usg_id')->textInput() ->dropDownList([ 'Referensi KP' => 'Referensi KP', 'Kompetisi' => 'Kompetisi', 'Referensi PA' => 'Referensi PA', 'Proyek Mata Kuliah' => 'Proyek Mata Kuliah', 'Lainnya' => 'Lainnya ..',], 
+        ['prompt' => 'Tujuan Pengunduhan Proyek ..'])?>
+    
+    <?= $form->field($model, 'proj_usg_usage')->widget(Redactor::className())  ?>
+   
 
    <!--  <?= $form->field($model, 'sts_proj_usg_id')->textInput() ?>
 
@@ -68,13 +57,7 @@ $css = ['css/site.css'
  
    <!--  <?= $form->field($model, 'deleted_by')->textInput(['maxlength' => true]) ?>
         -->
-
-<div class="form-group">    
-    <label class="control-label col-xs-3">Tanggal Request :</label>
-    <div class="col-xs-9">
-        <?= $form->field($model, 'created_at')->textInput() ->widget(\kartik\datetime\DateTimePicker::className(), ['pluginOptions' => ['format' => 'yyyy-mm-d hh:ii:s', 'pickerPosition' => 'bottom-right']]) ->label(false) ?>
-    </div>
-</div> 
+    <?= $form->field($model, 'created_at')->textInput() ->widget(\kartik\datetime\DateTimePicker::className(), ['pluginOptions' => ['format' => 'yyyy-mm-d hh:ii:s', 'pickerPosition' => 'bottom-right']])?>
 
 <!-- <div class="form-group">    
     <label class="control-label col-xs-3">Pembuat Request :</label>
@@ -97,23 +80,25 @@ $css = ['css/site.css'
     </div>
 </div>
  -->
+ <div class="form-btn" align="center">
+        <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn submit-btn' : 'btn btn-primary']) ?>
+    </div>
     </div>
     
-
-<div class="col-md-12">
-    <div class="form-group" align="center">
-        <?= Html::submitButton('Kirim', ['class' => 'btn btn-success']) ?>
-    </div>
 </div>
 </form>
 </div>
-
+</div>
+</div>
+</div>
+</div>
     <?php ActiveForm::end(); ?>
-
 </div>
 </div>
 </div>
 </div>
+</div>
+<!-- </div> -->
 
 
 

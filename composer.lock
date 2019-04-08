@@ -309,12 +309,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/puikinsh/gentelella/zipball/310a3d92048173b03fdfdf2ad940334b4f2d6b39",
                 "reference": "310a3d92048173b03fdfdf2ad940334b4f2d6b39",
-                "shasum": null
+                "shasum": null,
             },
             "type": "bower-asset",
             "license": [
                 "MIT"
-            ]
+            ],
+            "time": "2019-03-30T19:42:03+00:00"
         },
         {
             "name": "bower-asset/highcharts-release",
@@ -1500,12 +1501,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "ed9264b593b372e79b49ccddf4c9473f9256c4b1"
+                "reference": "53b53fb405e1c48382b1dde84b01e927688a0d39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ed9264b593b372e79b49ccddf4c9473f9256c4b1",
-                "reference": "ed9264b593b372e79b49ccddf4c9473f9256c4b1",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/53b53fb405e1c48382b1dde84b01e927688a0d39",
+                "reference": "53b53fb405e1c48382b1dde84b01e927688a0d39",
                 "shasum": ""
             },
             "require": {
@@ -1592,7 +1593,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2019-04-02T17:25:40+00:00"
+            "time": "2019-03-29T15:26:31+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -3768,12 +3769,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "62c667bb62cc341e300697b3c3c1e0a9351b1826"
+                "reference": "a7359d8e78f14832aa9d095ba5b9730de2eb4349"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/62c667bb62cc341e300697b3c3c1e0a9351b1826",
-                "reference": "62c667bb62cc341e300697b3c3c1e0a9351b1826",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/a7359d8e78f14832aa9d095ba5b9730de2eb4349",
+                "reference": "a7359d8e78f14832aa9d095ba5b9730de2eb4349",
                 "shasum": ""
             },
             "require": {
@@ -3819,7 +3820,7 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2019-04-02T11:11:42+00:00"
+            "time": "2019-04-01T16:52:57+00:00"
         },
         {
             "name": "symfony/console",
@@ -3902,12 +3903,14 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "a4b5e697e24544ddeaf9f9255cdda6e4c2c32659"
+
+                "reference": "99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/a4b5e697e24544ddeaf9f9255cdda6e4c2c32659",
-                "reference": "a4b5e697e24544ddeaf9f9255cdda6e4c2c32659",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea",
+                "reference": "99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea",
+
                 "shasum": ""
             },
             "require": {
@@ -3965,7 +3968,9 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-04-03T09:22:57+00:00"
+
+            "time": "2019-03-31T13:49:16+00:00"
+
         },
         {
             "name": "symfony/event-dispatcher",
@@ -3973,12 +3978,14 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "96212e1684326fa95be877f4560e2ff47f6dc748"
+
+                "reference": "d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/96212e1684326fa95be877f4560e2ff47f6dc748",
-                "reference": "96212e1684326fa95be877f4560e2ff47f6dc748",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7",
+                "reference": "d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7",
+
                 "shasum": ""
             },
             "require": {
@@ -4034,7 +4041,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2019-04-02T10:04:04+00:00"
+            "time": "2019-04-02T10:04:04+00:00",
         },
         {
             "name": "symfony/finder",

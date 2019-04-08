@@ -337,7 +337,7 @@ $session = Yii::$app->session;
                 <img src="images/logo.png" style="height:auto; width:55px;padding-top:5px" align="left">
                 <form class="example" action="/action_page.php" style="margin:auto;max-width:500px">
                     <input type="text" placeholder="Cari di SIPPM Del ..." name="search2">
-                    <button type="submit"><span class="glyphicon glyphicon-search"></span></i></button>
+                    <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
                 </form>
             </div>
             <nav class="navbar navbar-fixed" role="navigation">
@@ -364,58 +364,54 @@ $session = Yii::$app->session;
                 </div>
             </nav>
         </div>
-
         <div class="container">        
-                <article>
-                    <?= Alert::widget() ?>
-                    <?= $content ?>
-                </article>
-            </section>
+            <article>
+                <?= Alert::widget() ?>
+                <?= $content ?>
+            </article>
         </div>
     </div> 
-      <!-- Site footer -->
-      <footer class="site-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <h6>Cara mendapatkan artefak proyek</h6>
-            <p class="text-justify">Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative  to help the upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or snippets as the code wants to be simple. We will help programmers build up concepts in different programming languages that include C, C++, Java, HTML, CSS, Bootstrap, JavaScript, PHP, Android, SQL and Algorithm.</p>
-          </div>
 
-          <div class="col-xs-6 col-md-3">
-            <h6>Bantuan</h6>
-            <ul class="footer-links">
-              <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
-              <li><a href="http://scanfcode.com/category/front-end-development/">UI Design</a></li>
-              <li><a href="http://scanfcode.com/category/back-end-development/">PHP</a></li>
-              <li><a href="http://scanfcode.com/category/java-programming-language/">Java</a></li>
-              <li><a href="http://scanfcode.com/category/android/">Android</a></li>
-              <li><a href="http://scanfcode.com/category/templates/">Templates</a></li>
-            </ul>
-          </div>
-
-          <div class="col-xs-6 col-md-3">
-            <h6>Quick Links</h6>
-            <ul class="footer-links">
-              <li><a href="http://scanfcode.com/about/">About Us</a></li>
-              <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
-              <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
-              <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
-              <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
-            </ul>
-          </div>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h6>Cara mendapatkan artefak proyek</h6>
+                    <p class="text-justify">Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative  to help the upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or snippets as the code wants to be simple. We will help programmers build up concepts in different programming languages that include C, C++, Java, HTML, CSS, Bootstrap, JavaScript, PHP, Android, SQL and Algorithm.</p>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h6>Bantuan</h6>
+                    <ul class="footer-links">
+                        <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
+                        <li><a href="http://scanfcode.com/category/front-end-development/">UI Design</a></li>
+                        <li><a href="http://scanfcode.com/category/back-end-development/">PHP</a></li>
+                        <li><a href="http://scanfcode.com/category/java-programming-language/">Java</a></li>
+                        <li><a href="http://scanfcode.com/category/android/">Android</a></li>
+                        <li><a href="http://scanfcode.com/category/templates/">Templates</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h6>Quick Links</h6>
+                    <ul class="footer-links">
+                    <li><a href="http://scanfcode.com/about/">About Us</a></li>
+                    <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+                    <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
+                    <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
+                    <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
         </div>
-        <hr>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <p class="copyright-text">Copyright &copy; 2019 All Rights Reserved by 
-         <a href="#">PA3-01-ITDEL</a>.
-            </p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p class="copyright-text">Copyright &copy; 2019 All Rights Reserved by 
+                        <a href="#">PA3-01-ITDEL</a>.
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     </footer>
 <?php $this->endBody() ?>
 </body>
