@@ -37,13 +37,18 @@ class AssignmentController extends Controller
         ];
     }
 
+    public function beforeAction($action){
+        $this->layout = "main-2";
+
+        return parent::beforeAction($action);
+    }
+
     /**
      * Lists all Assignment models.
      * @return mixed
      */
     public function actionIndex()
     {   
-        $this->layout = 'main-2';
         $searchModel = new AssignmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -61,7 +66,6 @@ class AssignmentController extends Controller
      */
     public function actionView($id)
     {   
-        $this->layout = 'main-2';
         $modelClass = ClassAssignment::find()->where(['asg_id' => $id])->all();
         // $modelStudent = StudentAssignment::find()->where(['asg_id' => $id])->all();
         return $this->render('view', [
@@ -71,7 +75,6 @@ class AssignmentController extends Controller
     
     public function actionCreate()
     {   
-        $this->layout = 'main-2';
         $modelAsg = new Assignment;
         
         $modelsClsAsg = [new ClassAssignment];
@@ -181,7 +184,6 @@ class AssignmentController extends Controller
      */
     public function actionUpdate($id)
     {   
-        $this->layout = 'main-2';
         $modelAsg = $this->findModel($id);
         $modelsClsAsg = $modelAsg->classes;
         $modelsStuAsg = [];
@@ -318,8 +320,7 @@ class AssignmentController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id){
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
