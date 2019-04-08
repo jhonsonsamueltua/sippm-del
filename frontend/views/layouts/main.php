@@ -146,7 +146,7 @@ $session = Yii::$app->session;
             border-radius: 4px;
         }
         
-        a {
+        .navbar-collapse ul li a {
             color: #ffffff;
             text-decoration: none;
         }

@@ -46,10 +46,9 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['proj_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_title', 'proj_cat_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_description'], 'string', 'max' => 500],
             [['files'], 'file', 'maxFiles' => 0],
-            [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
     }
@@ -64,8 +63,8 @@ class Project extends \yii\db\ActiveRecord
             'proj_title' => 'Judul Proyek',
             'proj_description' => 'Deskripsi Proyek',
             'proj_downloaded' => 'Jumlah Diunduh',
+            'proj_cat_name' => 'Kategori proyek',
             'sts_win_id' => 'Status Menang',
-            'cat_proj_id' => 'Kategori Proyek',
             'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
@@ -91,14 +90,6 @@ class Project extends \yii\db\ActiveRecord
     public function getStsWin()
     {
         return $this->hasOne(StatusWin::className(), ['sts_win_id' => 'sts_win_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCatProject()
-    {
-        return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 
     /**

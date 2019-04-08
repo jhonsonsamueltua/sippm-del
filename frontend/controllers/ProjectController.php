@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use common\models\Assignment;
 use common\models\Project;
 use common\models\search\ProjectSearch;
 use common\models\File;
@@ -65,12 +66,14 @@ class ProjectController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($asg_id)
     {
         $model = new Project();
+        $assignmentModel = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->asg_id = 47;
+            $model->asg_id = $asg_id;
+            $model->proj_cat_name = "";
             $model->proj_downloaded = 0;
 
             if($model->save()){
@@ -135,6 +138,7 @@ class ProjectController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'assignment' => $assignmentModel,
         ]);
     }
 
