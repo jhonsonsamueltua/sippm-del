@@ -25,10 +25,7 @@ use common\models\CategoryProject;
             'minHeight' => 500,
         ]
     ]) ?>
-
-    <?= $form->field($model, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'), [
-        "id" => "cat_proj",
-    ]) ?>    
+ 
 
     <div id="sts_win">
         <?= $form->field($model, 'sts_win_id')->dropDownList(ArrayHelper::map(StatusWin::find()->all(), 'sts_win_id', 'sts_win_name'), [

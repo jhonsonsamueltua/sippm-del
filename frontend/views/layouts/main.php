@@ -146,8 +146,8 @@ $session = Yii::$app->session;
             border-radius: 4px;
         }
         
-        a {
-            color: #ffffff;
+        .navbar-collapse ul li a {
+            color: white;
             text-decoration: none;
         }
 
@@ -379,13 +379,32 @@ $session = Yii::$app->session;
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span>  Beranda</a></li>
-                            <li class="active"><a href="#"> Penugasan</a></li>
-                            <li class="active"><a href="#"> Penggunaan Proyek </a></li>
+                            <li class="active"><?= Html::a('<span class="glyphicon glyphicon-home"></span> Beranda', ['site/index']) ?></li>
+                            
+                            
+                            <?php
+                                if($session["role"] == "Mahasiswa"){?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                            <?php
+                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                            <?php
+                                }
+                            ?>
+                            <li class="active"><?= Html::a('Penggunaan Proyek', ['#']) ?></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-about"></span> About</a></li>
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                            <li class="active"><?= Html::a('Tentang', ['site/about']) ?></li>
+                            <?php
+                                if(!isset($session["role"])){?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Masuk', ['site/login']) ?></li>
+                            <?php
+                                }else{?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Keluar ('.$session["nama"].')', ['site/logout']) ?></li>
+                            <?php
+                                }
+                            ?>
+                            
                         </ul>
                     </div>
                 </div>

@@ -48,8 +48,8 @@ class Project extends \yii\db\ActiveRecord
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_description'], 'string', 'max' => 500],
+            [['proj_cat_name'], 'string', 'max' => 100],
             [['files'], 'file', 'maxFiles' => 0],
-            [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
     }
@@ -65,7 +65,7 @@ class Project extends \yii\db\ActiveRecord
             'proj_description' => 'Deskripsi Proyek',
             'proj_downloaded' => 'Jumlah Diunduh',
             'sts_win_id' => 'Status Menang',
-            'cat_proj_id' => 'Kategori Proyek',
+            'proj_cat_name' => 'Kategori Proyek',
             'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
@@ -93,13 +93,6 @@ class Project extends \yii\db\ActiveRecord
         return $this->hasOne(StatusWin::className(), ['sts_win_id' => 'sts_win_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCatProject()
-    {
-        return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
