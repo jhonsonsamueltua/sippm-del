@@ -26,10 +26,6 @@ use common\models\CategoryProject;
         ]
     ]) ?>
 
-    <?= $form->field($model, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'), [
-        "id" => "cat_proj",
-    ]) ?>    
-
     <div id="sts_win">
         <?= $form->field($model, 'sts_win_id')->dropDownList(ArrayHelper::map(StatusWin::find()->all(), 'sts_win_id', 'sts_win_name'), [
             "prompt" => "Pilih Status",
@@ -78,19 +74,7 @@ use common\models\CategoryProject;
         $this->registerJs("
 
             $(document).ready(function(){
-                var category = $('#cat_proj').val();
-
-                if(category == 1) $('#sts_win').hide();
-            });
-            
-            $(document.body).on('change', '#cat_proj', function(){
-                var value = $('#cat_proj').val();
-
-                if(value != 1){
-                    $('#sts_win').show();
-                }else{
-                    $('#sts_win').hide();
-                }
+                if($assignment->cat_proj_id == 1) $('#sts_win').hide();
             });
 
             function addMoreFile(){
