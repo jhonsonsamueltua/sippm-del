@@ -8,7 +8,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-
+$css = ['css/site.css'
+                ];
 AppAsset::register($this);
 $session = Yii::$app->session;
 
@@ -32,7 +33,7 @@ $session = Yii::$app->session;
     <div class="min-jumbotron">
         <div class="container text-left">
             <img src="images/logo.jpg" style="height:100px; width:90px;" align="left">
-            <b><h1>SISTEM INFORMASI PENGELOLAAN PROYEK MAHASISWA</h1></b>      
+            <b style= "color:#fff"><h1>SISTEM INFORMASI PENGELOLAAN PROYEK MAHASISWA</h1></b>      
         </div>
     </div>
 
@@ -89,7 +90,7 @@ $session = Yii::$app->session;
 
 <?php $this->endBody() ?>
 </body>
-<footer class="footer">
+<footer class="footer" style="background-color:#222; color:#fff; width:100%;">
     <div class="container">
         <p class="pull-left">
             <b>Sistem Infomasi Pengelolaan Proyek Mahasiswa </b>

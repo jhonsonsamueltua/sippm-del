@@ -10,10 +10,32 @@ use common\models\CategoryProject;
 /* @var $this yii\web\View */
 /* @var $model common\models\SippmProject */
 /* @var $form yii\widgets\ActiveForm */
+$css = ['css/site.css'
+                ];
+
 ?>
-
+<div id="reqsub" class="section">
 <div class="sippm-project-form">
+<div class="container">
+	<div class="row">
+		<div class="reqsub-form">
+        <div class="reqsub-bg">
+        <div class="form-header">
+        <h2>Submit Proyek</h2>
+            <p>Silahkan melakukan <b>Unggah proyek</b> pada form Submit proyek ini.</p>
+            <br>
+            <br>
+            <!-- <h4>Hal yang wajib diketahui : </h4>
+            <p><b>*</b>Proyek yang direquest untuk diunduh akan di teruskan kepada koordinator proyek</p>
+            <p><b>*</b>Ketika request dikirim, notifikasi akan masuk kepada koordinator</p>
+            <p><b>*</b>Kordinator dapat menolak dan menerima request penggunaan</p>
+            <p><b>*</b>Apabila request diterima atau ditolak, notifikasi akan masuk kepada perequest</p>
+            <p><b>*</b>Ketika request diterima proyek baru dapat diunduh</p> -->
 
+        </div>
+    </div>
+
+<form>
     <?php $form = ActiveForm::begin([
         'options' => ['enctype' => 'multipart/form-data']
     ]); ?>
@@ -56,18 +78,28 @@ use common\models\CategoryProject;
     <div class="form-group">
         <label>Upload Proyek</label>
         <div class="row">
-            <div id="file_field" class="col-md-4">
+            <div id="file_field" class="col-md-6">
                 <input type="file" class="form-control" name="files[]">
             </div>
             <a href="#" onclick="addMoreFile()">Add More File</a>
         </div>
     </div>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="form-group" align="center">
+        <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn btn-submit' : 'btn btn-primary']) ?>
     </div>
-
+    </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
     <?php ActiveForm::end(); ?>
+</div>
+</div>
+</div>
+</div>
 
     <?php
         $this->registerJs("

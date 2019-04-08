@@ -3,6 +3,8 @@
 /* @var $this yii\web\View */
 
 $this->title = 'SIPPM Del';
+$css = ['css/site.css'
+                ];
 ?>
 <div class="site-index">
 
@@ -33,24 +35,24 @@ $this->title = 'SIPPM Del';
             </div>
            
              <div class="col-md-4">
-                     <div class="panel panel-primary">
-                        <div class="panel-heading"><i class='fa fa-file-text-o fa-fw'></i> Semua Repository</div>
+                     <div class="panel panel-primary" style= "background-color:#193b52;">
+                        <div class="panel-heading" style= "background-color:#193b52;"><i class='fa fa-file-text-o fa-fw'></i> Semua Repository</div>
                                 <a href="sejarah.html" class="list-group-item">Judul</a>
                                 <a href="fasilitas.html" class="list-group-item">Jenis</a>
                                 <a href="visi.html" class="list-group-item">Dosen Penugas</a>
                                 <a href="prestasi.html" class="list-group-item">Tahun Ajaran</a>
                     </div>
 
-                           <div class="panel panel-primary">
-                        <div class="panel-heading"><i class='fa fa-file-text-o fa-fw'></i> Judul</div>
+                           <div class="panel panel-primary" style= "background-color:#193b52;">
+                        <div class="panel-heading" style= "background-color:#193b52;"><i class='fa fa-file-text-o fa-fw'></i> Judul</div>
 
                     <a href="sejarah.html" class="list-group-item">Sejarah</a>
                     <a href="fasilitas.html" class="list-group-item">Fasilitas</a>
                     <a href="visi.html" class="list-group-item">Visi Misi</a>
                     <a href="prestasi.html" class="list-group-item">Prestasi</a>
                 </div>
-                 <div class="panel panel-primary">
-                   <div class="panel-heading"><i class='fa fa-file-text-o fa-fw'></i> Jenis</div>
+                 <div class="panel panel-primary" style= "background-color:#193b52;">
+                   <div class="panel-heading" style= "background-color:#193b52;"><i class='fa fa-file-text-o fa-fw'></i> Jenis</div>
 
                     <a href="sejarah.html" class="list-group-item">Sejarah</a>
                     <a href="fasilitas.html" class="list-group-item">Fasilitas</a>
