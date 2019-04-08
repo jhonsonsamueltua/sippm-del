@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\SippmProject */
 
-$this->title = 'Submit Proyek';
+// $this->title = 'Submit Proyek';
 $this->params['breadcrumbs'][] = ['label' => 'Sippm Projects', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

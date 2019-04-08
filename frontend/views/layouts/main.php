@@ -8,23 +8,20 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-
+$css = ['css/site.css'];
 AppAsset::register($this);
 $session = Yii::$app->session;
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+    <?php $this->head() ?>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <?php $this->registerCsrfMetaTags() ?>
-    <?php $this->head() ?> -->
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -147,7 +144,7 @@ $session = Yii::$app->session;
         }
         
         .navbar-collapse ul li a {
-            color: #ffffff;
+            color: white;
             text-decoration: none;
         }
 
@@ -379,13 +376,32 @@ $session = Yii::$app->session;
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span>  Beranda</a></li>
-                            <li class="active"><a href="#"> Penugasan</a></li>
-                            <li class="active"><a href="#"> Penggunaan Proyek </a></li>
+                            <li class="active"><?= Html::a('<span class="glyphicon glyphicon-home"></span> Beranda', ['site/index']) ?></li>
+                            
+                            
+                            <?php
+                                if($session["role"] == "Mahasiswa"){?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                            <?php
+                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                            <?php
+                                }
+                            ?>
+                            <li class="active"><?= Html::a('Penggunaan Proyek', ['#']) ?></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-about"></span> About</a></li>
-                            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                            <li class="active"><?= Html::a('Tentang', ['site/about']) ?></li>
+                            <?php
+                                if(!isset($session["role"])){?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Masuk', ['site/login']) ?></li>
+                            <?php
+                                }else{?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Keluar ('.$session["nama"].')', ['site/logout']) ?></li>
+                            <?php
+                                }
+                            ?>
+                            
                         </ul>
                     </div>
                 </div>
@@ -401,12 +417,10 @@ $session = Yii::$app->session;
                                 <div class="panel-heading">Panel</div>
                                 <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
                             </div>
-
                             <div class="panel panel-primary">
                                 <div class="panel-heading">Panel</div>
                                 <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
                             </div>
-
                             <div class="panel panel-primary">
                                 <div class="panel-heading">Panel</div>
                                 <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
@@ -422,49 +436,47 @@ $session = Yii::$app->session;
             </section>
         </div>
     </div> 
-      <!-- Site footer -->
-      <footer class="site-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <h6>Cara mendapatkan artefak proyek</h6>
-            <p class="text-justify">Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative  to help the upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or snippets as the code wants to be simple. We will help programmers build up concepts in different programming languages that include C, C++, Java, HTML, CSS, Bootstrap, JavaScript, PHP, Android, SQL and Algorithm.</p>
-          </div>
 
-          <div class="col-xs-6 col-md-3">
-            <h6>Bantuan</h6>
-            <ul class="footer-links">
-              <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
-              <li><a href="http://scanfcode.com/category/front-end-development/">UI Design</a></li>
-              <li><a href="http://scanfcode.com/category/back-end-development/">PHP</a></li>
-              <li><a href="http://scanfcode.com/category/java-programming-language/">Java</a></li>
-              <li><a href="http://scanfcode.com/category/android/">Android</a></li>
-              <li><a href="http://scanfcode.com/category/templates/">Templates</a></li>
-            </ul>
-          </div>
-
-          <div class="col-xs-6 col-md-3">
-            <h6>Quick Links</h6>
-            <ul class="footer-links">
-              <li><a href="http://scanfcode.com/about/">About Us</a></li>
-              <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
-              <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
-              <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
-              <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
-            </ul>
-          </div>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h6>Cara mendapatkan artefak proyek</h6>
+                    <p class="text-justify">Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative  to help the upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or snippets as the code wants to be simple. We will help programmers build up concepts in different programming languages that include C, C++, Java, HTML, CSS, Bootstrap, JavaScript, PHP, Android, SQL and Algorithm.</p>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h6>Bantuan</h6>
+                    <ul class="footer-links">
+                        <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
+                        <li><a href="http://scanfcode.com/category/front-end-development/">UI Design</a></li>
+                        <li><a href="http://scanfcode.com/category/back-end-development/">PHP</a></li>
+                        <li><a href="http://scanfcode.com/category/java-programming-language/">Java</a></li>
+                        <li><a href="http://scanfcode.com/category/android/">Android</a></li>
+                        <li><a href="http://scanfcode.com/category/templates/">Templates</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h6>Quick Links</h6>
+                    <ul class="footer-links">
+                    <li><a href="http://scanfcode.com/about/">About Us</a></li>
+                    <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+                    <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
+                    <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
+                    <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
         </div>
-        <hr>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <p class="copyright-text">Copyright &copy; 2019 All Rights Reserved by 
-         <a href="#">PA3-01-ITDEL</a>.
-            </p>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <p class="copyright-text">Copyright &copy; 2019 All Rights Reserved by 
+                        <a href="#">PA3-01-ITDEL</a>.
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     </footer>
 <?php $this->endBody() ?>
 </body>

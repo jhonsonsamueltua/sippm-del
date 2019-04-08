@@ -196,10 +196,10 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/9f3deb2e710d39c72a988559609d9dc9a319de0b",
-                "reference": "9f3deb2e710d39c72a988559609d9dc9a319de0b"
+                "reference": "9f3deb2e710d39c72a988559609d9dc9a319de0b",
+                "shasum": null
             },
-            "type": "bower-asset",
-            "time": "2017-08-27T22:53:19+00:00"
+            "type": "bower-asset"
         },
         {
             "name": "bower-asset/blueimp-file-upload",
@@ -212,7 +212,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/ee54fc3f57418edc6c86532cfe124a9e2c70deed",
-                "reference": "ee54fc3f57418edc6c86532cfe124a9e2c70deed"
+                "reference": "ee54fc3f57418edc6c86532cfe124a9e2c70deed",
+                "shasum": null
             },
             "require": {
                 "bower-asset/blueimp-canvas-to-blob": ">=2.1.1",
@@ -236,7 +237,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/Gallery/zipball/8336bb5934cb623608808601129db3fbf9201a09",
-                "reference": "8336bb5934cb623608808601129db3fbf9201a09"
+                "reference": "8336bb5934cb623608808601129db3fbf9201a09",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -251,7 +253,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/62798db8c32cc8744792bb8d645f9295c090382f",
-                "reference": "62798db8c32cc8744792bb8d645f9295c090382f"
+                "reference": "62798db8c32cc8744792bb8d645f9295c090382f",
+                "shasum": null
             },
             "type": "bower-asset",
             "time": "2019-02-26T13:52:20+00:00"
@@ -267,10 +270,10 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/da7647cb93fff2030e73a701db22c66de76a9919",
-                "reference": "da7647cb93fff2030e73a701db22c66de76a9919"
+                "reference": "da7647cb93fff2030e73a701db22c66de76a9919",
+                "shasum": null
             },
-            "type": "bower-asset",
-            "time": "2017-08-27T22:51:02+00:00"
+            "type": "bower-asset"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -283,7 +286,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/twbs/bootstrap/zipball/68b0d231a13201eb14acd3dc84e51543d16e5f7e",
-                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
+                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.9.1,<4.0"
@@ -304,7 +308,12 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/puikinsh/gentelella/zipball/310a3d92048173b03fdfdf2ad940334b4f2d6b39",
+<<<<<<< HEAD
                 "reference": "310a3d92048173b03fdfdf2ad940334b4f2d6b39"
+=======
+                "reference": "310a3d92048173b03fdfdf2ad940334b4f2d6b39",
+                "shasum": null,
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
             },
             "type": "bower-asset",
             "license": [
@@ -323,7 +332,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/highcharts/highcharts-dist/zipball/4f89cf3f98a557a9512f7ba63f727998d21f3b79",
-                "reference": "4f89cf3f98a557a9512f7ba63f727998d21f3b79"
+                "reference": "4f89cf3f98a557a9512f7ba63f727998d21f3b79",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -338,7 +348,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/RobinHerbots/Inputmask/zipball/5e670ad62f50c738388d4dcec78d2888505ad77b",
-                "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
+                "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -359,7 +370,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/9e8ec3d10fad04748176144f108d7355662ae75e",
-                "reference": "9e8ec3d10fad04748176144f108d7355662ae75e"
+                "reference": "9e8ec3d10fad04748176144f108d7355662ae75e",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -377,7 +389,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
+                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
+                "shasum": null
             },
             "type": "bower-asset"
         },
@@ -392,7 +405,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/aef7b953107264f00234902a3880eb50dafc48be",
-                "reference": "aef7b953107264f00234902a3880eb50dafc48be"
+                "reference": "aef7b953107264f00234902a3880eb50dafc48be",
+                "shasum": null
             },
             "require": {
                 "bower-asset/jquery": ">=1.8"
@@ -1491,12 +1505,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
+<<<<<<< HEAD
                 "reference": "ed9264b593b372e79b49ccddf4c9473f9256c4b1"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ed9264b593b372e79b49ccddf4c9473f9256c4b1",
                 "reference": "ed9264b593b372e79b49ccddf4c9473f9256c4b1",
+=======
+                "reference": "53b53fb405e1c48382b1dde84b01e927688a0d39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/53b53fb405e1c48382b1dde84b01e927688a0d39",
+                "reference": "53b53fb405e1c48382b1dde84b01e927688a0d39",
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
                 "shasum": ""
             },
             "require": {
@@ -1583,7 +1606,11 @@
                 "framework",
                 "yii2"
             ],
+<<<<<<< HEAD
             "time": "2019-04-02T17:25:40+00:00"
+=======
+            "time": "2019-03-29T15:26:31+00:00"
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -3758,12 +3785,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
+<<<<<<< HEAD
                 "reference": "62c667bb62cc341e300697b3c3c1e0a9351b1826"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/browser-kit/zipball/62c667bb62cc341e300697b3c3c1e0a9351b1826",
                 "reference": "62c667bb62cc341e300697b3c3c1e0a9351b1826",
+=======
+                "reference": "a7359d8e78f14832aa9d095ba5b9730de2eb4349"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/a7359d8e78f14832aa9d095ba5b9730de2eb4349",
+                "reference": "a7359d8e78f14832aa9d095ba5b9730de2eb4349",
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
                 "shasum": ""
             },
             "require": {
@@ -3809,7 +3845,11 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2019-04-02T11:11:42+00:00"
+=======
+            "time": "2019-04-01T16:52:57+00:00"
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
         },
         {
             "name": "symfony/console",
@@ -3892,12 +3932,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
+<<<<<<< HEAD
                 "reference": "a4b5e697e24544ddeaf9f9255cdda6e4c2c32659"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/contracts/zipball/a4b5e697e24544ddeaf9f9255cdda6e4c2c32659",
                 "reference": "a4b5e697e24544ddeaf9f9255cdda6e4c2c32659",
+=======
+
+                "reference": "99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea",
+                "reference": "99c07379e2ad7b4df43acfe6c7bcd4b6a1ec9bea",
+
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
                 "shasum": ""
             },
             "require": {
@@ -3955,7 +4006,13 @@
                 "interoperability",
                 "standards"
             ],
+<<<<<<< HEAD
             "time": "2019-04-03T09:22:57+00:00"
+=======
+
+            "time": "2019-03-31T13:49:16+00:00"
+
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
         },
         {
             "name": "symfony/event-dispatcher",
@@ -3963,12 +4020,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
+<<<<<<< HEAD
                 "reference": "96212e1684326fa95be877f4560e2ff47f6dc748"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/96212e1684326fa95be877f4560e2ff47f6dc748",
                 "reference": "96212e1684326fa95be877f4560e2ff47f6dc748",
+=======
+
+                "reference": "d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7",
+                "reference": "d3fe4ea1baf29643cc73c03d1aaf545b2f6259e7",
+
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
                 "shasum": ""
             },
             "require": {
@@ -4024,7 +4092,11 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2019-04-02T10:04:04+00:00"
+=======
+            "time": "2019-04-02T10:04:04+00:00",
+>>>>>>> 2737a4ca654845af905a6e782681b14712e6e147
         },
         {
             "name": "symfony/finder",

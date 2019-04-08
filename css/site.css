@@ -1,34 +1,64 @@
 html,
+
 body {
     height: 100%;
-	background-color: #F8F8FF;
+    margin: 0;
+    padding: 0;
 }
+
 .panel .panel-primary{
     background-color: #32CD32;
 }
-
+.wrap-wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px; 
+    height: 400px;
+    background: url('../images/coba.jpg') no-repeat center center;
+    min-height:100%;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-filter: blur(10px);
+    width: 100%;
+    -o-background-size: cover;  
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px); 
+}
 .wrap {
     min-height: 100%;
     height: auto;
     margin: 0 auto -60px;
-    padding: 0 0 60px;
+    padding: 0 0 60px; 
+    background-color: #fff;    
 }
 .gilak{
 	margin-top:100px;
-    background-color: #FAF0E6;
 
 	
 }
 .wrap > .container {
-    /* padding: 0px 15px 20px; */
-    /* background: #F8F8FF; */
+    /* padding: 120px 15px 2020px; */
+    padding-top: 120px;
 }
 
 .footer {
     height: 60px;
-    background-color: #FAF0E6;
-    border-top: 1px solid #ddd;
+    width: 100%;
+    background-color:#222;
+    border-top: 1px solid #222;
     padding-top: 20px;
+    color: #fff;
+}
+.footer .container{
+    height: 60px;
+    width: 100%;
+    background-color:#222;
+    border-top: 1px solid #222;
+    padding-top: 20px;
+    color: #fff;
 }
 
 .jumbotron {
@@ -36,9 +66,19 @@ body {
     background-color: transparent;
 }
 .min-jumbotron{
-    align-content: left;
+    margin: 0 auto -60px;
+    padding: 0 0 60px; 
+    background: url('../images/1.jpg') no-repeat center center; 
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-filter: blur(10px);
+    width: 100%;
+    -o-background-size: cover;  
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);  
 }
-
 .jumbotron .btn {
     font-size: 21px;
     padding: 14px 24px;
@@ -147,4 +187,317 @@ a.desc:after {
 }
 .headingf{
     background-color: #32CD32;
+}
+
+.contact-form
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 400px;
+    height: 500px;
+    padding: 80px 40px;
+    box-sizing: border-box;
+    background: rgba(65, 89, 116, 0.5);
+}
+.request-form
+{
+    position: absolute;
+    top: 65%;
+    left: 30%;
+    transform: translate(-50%,-50%);
+    width: 650px;
+    height: 500px;
+    padding: 80px 40px;
+    box-sizing: border-box;
+    background: rgba(65, 89, 116, 0.5);
+}
+.avatar {
+    position: absolute;
+    width: 95px;
+    height: 95px;
+    border-radius: 20%;
+    overflow: hidden;
+    top: calc(-80px/2);
+    left: calc(50% - 40px);
+}
+.contact-form h2 {
+    margin: 0;
+    padding: 0 0 20px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+.contact-form p
+{
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    color: #fff;
+}
+.contact-form input
+{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.contact-form input[type="text"],
+.contact-form input[type="password"]
+{
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+}
+.btn-submit{
+    height: 30px;
+    width: 200px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    margin-top: 5%;
+    color: #fff;
+	background-color: rgba(42, 66, 173, 0.9);
+}
+.contact-form .btn-submit:hover,
+.contact-form .btn-submit:focus {
+    background-color: rgb(32, 23, 161);
+    color: #fff;
+}
+.contact-form a
+{
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+input[type="checkbox"] {
+    width: 20%;
+}
+.reqsub-form {
+	position: relative;
+	max-width: 912px;
+	width: 100%;
+	margin: auto;
+	background: #fff;
+	border-radius: 6px;
+	-webkit-box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+}
+/*request penggunaan & Submit form*/
+.section {
+	position: relative;
+	height: 100vh;
+}
+
+.section .section-center {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+/* #reqsub {
+	font-family: 'Alice', serif;
+	background: rgba(133, 104, 73, 0.33);
+} */
+
+.reqsub-form {
+	position: relative;
+	max-width: 100%;
+	width: 100%;
+	margin: auto;
+	background: rgb(245, 243, 243);
+	border-radius: 2px;
+	-webkit-box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+.reqsub-form .reqsub-bg {
+	position: absolute;
+	left: 25px;
+	top: -25px;
+	bottom: -25px;
+	width: 400px;
+	background-image: url('../images/1.jpg');
+	background-size: cover;
+	background-position: center;
+	padding: 25px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 5px 10px -5px rgba(247, 247, 250, 0.137);
+	overflow: hidden;
+}
+
+.reqsub-form .reqsub-bg::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	background: rgba(65, 91, 209, 0.24);
+}
+
+.reqsub-form>form {
+	margin-left: 425px;
+	padding: 30px;
+}
+
+.reqsub-form .form-header {
+	margin-bottom: 30px;
+	margin-top: 60px;
+	position: relative;
+	z-index: 20;
+}
+
+.reqsub-form .form-header h2 {
+	font-family: 'Playfair Display', serif;
+	margin-top: 0;
+	margin-bottom: 15px;
+	font-weight: 900;
+	color: #fff;
+	font-size: 42px;
+	text-transform: capitalize;
+}
+
+.reqsub-form .form-header p {
+	color: #fff;
+	font-size: 18px;
+}
+
+.reqsub-form .form-group {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.reqsub-form .form-control {
+	background-color: #fff;
+	height: 40px;
+	padding: 0px 15px;
+	color: #030303;
+	border: 1px solid #e5e5e5;
+	font-size: 16px;
+	font-weight: 700;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border-radius: 6px;
+	-webkit-transition: 0.2s all;
+	transition: 0.2s all;
+}
+.reqsub-form .redaktor {
+        background-color: rgba(241, 244, 248, 0.753);
+}
+
+
+.reqsub-form .form-control::-webkit-input-placeholder {
+	color: #e5e5e5;
+}
+
+.reqsub-form .form-control:-ms-input-placeholder {
+	color: #e5e5e5;
+}
+
+.reqsub-form .form-control::placeholder {
+	color: #e5e5e5;
+}
+
+.reqsub-form .form-control:focus {
+	background: #f8f8f8;
+}
+
+.reqsub-form input[type="date"].form-control:invalid {
+	color: #e5e5e5;
+}
+
+.reqsub-form select.form-control {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.reqsub-form select.form-control:invalid {
+	color: #e5e5e5;
+}
+
+.reqsub-form select.form-control option {
+	color: #151515;
+}
+
+.reqsub-form select.form-control+.select-arrow {
+	position: absolute;
+	right: 3px;
+	bottom: 5px;
+	width: 32px;
+	line-height: 32px;
+	height: 32px;
+	text-align: center;
+	pointer-events: none;
+	color: #e5e5e5;
+	font-size: 14px;
+}
+
+.reqsub-form select.form-control+.select-arrow:after {
+	content: '\279C';
+	display: block;
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.reqsub-form .form-label {
+	color: #856849;
+	text-transform: uppercase;
+	line-height: 24px;
+	height: 24px;
+	font-size: 14px;
+	font-weight: 400;
+	margin-left: 20px;
+}
+
+.reqsub-form .form-btn {
+	margin-top: 30px;
+}
+
+.reqsub-form .submit-btn {
+	display: block;
+	width: 200px;
+	color: #fff;
+	background-color: rgba(74, 97, 197, 0.9);
+	font-weight: 700;
+	font-size: 16px;
+	border: none;
+	border-radius: 6px;
+	height: 30px;
+	-webkit-transition: 0.2s all;
+	transition: 0.2s all;
+}
+.reqsub-form b {
+    font-size: 20px;
+}
+
+.reqsub-form .submit-btn:hover,
+.reqsub-form .submit-btn:focus {
+	background-color: rgb(81, 72, 211);
+}
+
+@media only screen and (max-width: 768px) {
+	.reqsub-form .reqsub-bg {
+		position: relative;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: -15px;
+		width: 95%;
+		margin: auto;
+	}
+	.reqsub-form>form {
+		margin-left: 0px;
+	}
 }

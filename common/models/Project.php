@@ -48,6 +48,7 @@ class Project extends \yii\db\ActiveRecord
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_title', 'proj_cat_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_description'], 'string', 'max' => 500],
+            [['proj_cat_name'], 'string', 'max' => 100],
             [['files'], 'file', 'maxFiles' => 0],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];

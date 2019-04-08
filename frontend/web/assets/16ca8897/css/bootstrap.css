@@ -1086,8 +1086,26 @@ body {
   font-size: 14px;
   line-height: 1.42857143;
   color: #333333;
-  background-color: #fff;
 }
+
+
+::before{
+  content: '';
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("images/4.jpeg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  -webkit-filter: blur(10px);
+  -moz-filter: blur(10px);
+  -o-filter: blur(10px);
+  -ms-filter: blur(10px);
+  filter: blur(10px);
+}
+
 input,
 button,
 select,
@@ -2896,6 +2914,10 @@ select[multiple].input-lg {
   line-height: 34px;
   text-align: center;
   pointer-events: none;
+  align-items: flex-start;
+  align-content: left;
+  position: relative;
+    left: 14px;
 }
 .input-lg + .form-control-feedback,
 .input-group-lg + .form-control-feedback,
@@ -2937,6 +2959,7 @@ select[multiple].input-lg {
   color: #3c763d;
   background-color: #dff0d8;
   border-color: #3c763d;
+  align-content: left;
 }
 .has-success .form-control-feedback {
   color: #3c763d;
@@ -3003,6 +3026,9 @@ select[multiple].input-lg {
 }
 .has-feedback label ~ .form-control-feedback {
   top: 25px;
+  align-content: left;
+  position: relative;
+    left: 14px;
 }
 .has-feedback label.sr-only ~ .form-control-feedback {
   top: 0;
@@ -5777,22 +5803,22 @@ button.list-group-item-danger.active:focus {
   border-bottom-color: #ddd;
 }
 .panel-primary {
-  border-color: #337ab7;
+  border-color: #193b52;
 }
 .panel-primary > .panel-heading {
   color: #fff;
-  background-color: #337ab7;
+  background-color: #193b52;
   border-color: #337ab7;
 }
 .panel-primary > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #337ab7;
+  border-top-color: #193b52;
 }
 .panel-primary > .panel-heading .badge {
   color: #337ab7;
   background-color: #fff;
 }
 .panel-primary > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #337ab7;
+  border-bottom-color: #193b52;
 }
 .panel-success {
   border-color: #d6e9c6;

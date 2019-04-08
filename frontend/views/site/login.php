@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
@@ -12,17 +11,15 @@ $css = ['css/site.css'
 $this->title = 'Masuk';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<!-- <body class="login-page"> -->
-<div class="site-login">
-<div class="col-md-5 col-md-offset-4">
-<div class="panel panel-primary">
-<div class="login-box-body" align="center" style="background-color: #fff;">
+<div class="site-login">  
+        <div class="contact-form">
+<!-- <div class="col-md-5 col-md-offset-4"> -->
+<!-- <div class="panel panel-primary"> -->
+    <div class="login-box-body" align="center">
 <br>
 <p class="login-box-msg" align="center", style="color:black;">
-        <img src="images/logo.jpg" width="70px">
-        <br>
-<br>
-        Institut Teknologi Del
+        <img src="images/login.jpg" width="70px" class="avatar">
+        <h2>SIPPM IT Del</h2>
         </p>
         <hr>
 </div>
@@ -31,14 +28,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-12">
+            
+            <?php 
+            $form = ActiveForm::begin(['id' => 'login-form']); 
+            $fieldOptions3 = [
+                'options' => ['class' => 'form-group has-feedback'],
+                'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
+            ];
+            $fieldOptions4 = [
+                'options' => ['class' => 'form-group has-feedback'],
+                'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
+            ];
+                    ?>
+           
+            
+                <?= $form->field($model, 'username', $fieldOptions4)->textInput(['autofocus' => true]) ->label('Nama Pengguna')?>          
         
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ->label('Nama Pengguna')?>
-
-                 
-                <?= $form->field($model, 'password')->passwordInput() ->label('Kata Sandi') ?>
-
+                <?= $form->field($model, 'password', $fieldOptions3)->passwordInput() ->label('Kata Sandi') ?>
+            
               
                <!--  <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
@@ -46,8 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
                 </div> -->
 
-                <div class="form-group" align="right">
-                    <?= Html::submitButton('Masuk', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
+                <div class="form-group" align="center">
+                    <?= Html::submitButton('Masuk', ['class' => 'btn btn-submit', 'name' => 'login-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
@@ -55,10 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     </div>
     </div>
+            </div>
+            
+        </div>
     </div>
-
-</div>
-
-
-<!-- </body> -->
+</div>       
+            
 <!-- <?php $this->endPage() ?> -->
