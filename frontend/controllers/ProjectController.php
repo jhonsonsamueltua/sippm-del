@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Assignment;
+use common\models\CategoryProject;
 use common\models\Project;
 use common\models\search\ProjectSearch;
 use common\models\File;
@@ -73,7 +74,7 @@ class ProjectController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->asg_id = $asg_id;
-            $model->proj_cat_name = "";
+            $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
             $model->proj_downloaded = 0;
 
             if($model->save()){
@@ -152,6 +153,7 @@ class ProjectController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $assignmentModel = Assignment::find()->where(['asg_id' => $model->asg_id])->andWhere('deleted!=1')->one();
         $fileModel = $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -189,6 +191,7 @@ class ProjectController extends Controller
         return $this->render('update', [
             'model' => $model,
             'fileModel' => $fileModel,
+            'assignment' => $assignmentModel,
         ]);
     }
 
@@ -206,22 +209,6 @@ class ProjectController extends Controller
         $project->save();
 
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the SippmProject model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return SippmProject the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Project::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
     }
 
     public function actionDownloadProject($proj_id){
@@ -269,6 +256,29 @@ class ProjectController extends Controller
         $fileModel->delete();
 
         return $this->redirect(['update', 'id' => $projectId]);
+    }
+
+
+    /**
+     * Finds the SippmProject model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return SippmProject the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Project::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function getCategory($cat_proj_id){
+        $category = CategoryProject::find()->where(['cat_proj_id' => $cat_proj_id])->andWhere('deleted!=1')->one();
+
+        return $category->cat_proj_name;
     }
 
 }
