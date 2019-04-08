@@ -19,6 +19,8 @@ Thumbs.db
 
 # composer vendor dir
 /vendor
+composer.lock
+composer.json
 
 # Mac DS_Store Files
 .DS_Store
