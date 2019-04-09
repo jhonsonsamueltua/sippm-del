@@ -377,18 +377,16 @@ $session = Yii::$app->session;
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
                             <li class="active"><?= Html::a('<span class="glyphicon glyphicon-home"></span> Beranda', ['site/index']) ?></li>
-                            
-                            
                             <?php
-                                if($session["role"] == "Mahasiswa"){?>
+                                if($session["role"] == "Mahasiswa"){ ?>
                                     <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
                             <?php
-                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
+                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){ ?>
                                     <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
                             <?php
                                 }
                             ?>
-                            <li class="active"><?= Html::a('Penggunaan Proyek', ['#']) ?></li>
+                            <li class="active"><?= Html::a('Penggunaan Proyek', ['project-usage/index']) ?></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
                             <li class="active"><?= Html::a('Tentang', ['site/about']) ?></li>
@@ -401,7 +399,6 @@ $session = Yii::$app->session;
                             <?php
                                 }
                             ?>
-                            
                         </ul>
                     </div>
                 </div>

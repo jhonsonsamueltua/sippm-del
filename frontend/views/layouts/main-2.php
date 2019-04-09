@@ -353,12 +353,32 @@ $session = Yii::$app->session;
                             <span class="glyphicon glyphicon-user"></span>
                             <span class="icon-bar"></span>                       
                         </button>
-                        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-home"></span> Beranda</a>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="#"><span class="glyphicon glyphicon-about"></span> About</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                        <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
+                            <li class="active"><?= Html::a('<span class="glyphicon glyphicon-home"></span> Beranda', ['site/index']) ?></li>
+                            <?php
+                                if($session["role"] == "Mahasiswa"){ ?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                            <?php
+                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){ ?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                            <?php
+                                }
+                            ?>
+                            <li class="active"><?= Html::a('Penggunaan Proyek', ['project-usage/index']) ?></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
+                            <li class="active"><?= Html::a('Tentang', ['site/about']) ?></li>
+                            <?php
+                                if(!isset($session["role"])){?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Masuk', ['site/login']) ?></li>
+                            <?php
+                                }else{?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Keluar ('.$session["nama"].')', ['site/logout']) ?></li>
+                            <?php
+                                }
+                            ?>
                         </ul>
                     </div>
                 </div>

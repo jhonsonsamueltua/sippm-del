@@ -292,7 +292,7 @@ input[type="checkbox"] {
 /*request penggunaan & Submit form*/
 .section {
 	position: relative;
-	height: 100vh;
+	padding-bottom: 100px;
 }
 
 .section .section-center {

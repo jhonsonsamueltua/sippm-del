@@ -125,7 +125,6 @@ class SiteController extends Controller
                 if($response->data['result'] == "true"){
                     $session = Yii::$app->session;
                     $session->open();
-                    $session->close();
 
                     $datas = $response->data['data'];
                     $role = $datas['role'];

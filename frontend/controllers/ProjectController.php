@@ -143,10 +143,12 @@ class ProjectController extends Controller
             }
         }
 
-        return $this->render('create', [
-            'model' => $model,
-            'assignment' => $assignmentModel,
-        ]);
+        if($this->findAssignment($asg_id)){
+            return $this->render('create', [
+                'model' => $model,
+                'assignment' => $assignmentModel,
+            ]);
+        }
     }
 
     /**
@@ -279,6 +281,14 @@ class ProjectController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function findAssignment($asg_id){
+        if(($model = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one() !== null)){
+            return $model;
+        }
+
+        throw new NotFoundHttpException('Penugasan tidak ditemukan atau telah dihapus.');
     }
 
     private function getCategory($cat_proj_id){
