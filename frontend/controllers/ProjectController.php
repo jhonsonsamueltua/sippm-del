@@ -68,6 +68,29 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function actionViewDetail($proj_id)
+    {   
+        return $this->render('view-detail', [
+            'model' => $this->findModel($proj_id),
+        ]);
+    }
+
+    public function actionViewProject($proj_id)
+    {   
+        return $this->render('view-project', [
+            'model' => $this->findModel($proj_id),
+        ]);
+    }
+
+    public function actionListProject()
+    {   
+        $model = Project::find()->where(["created_by" => 1])->all();
+        
+        return $this->render('list-project', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Creates a new SippmProject model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -122,7 +145,7 @@ class ProjectController extends Controller
                         $fileModel->file_path = $fileDir;
                         $fileModel->proj_id = $model->proj_id;
 
-                        if($fileModel->save()){
+                        if($fileModel->save(false)){
                             $file->saveAs($fileDir);
                         }else{
                             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');

@@ -8,34 +8,29 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-
+$css = ['css/site.css'];
 AppAsset::register($this);
 $session = Yii::$app->session;
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+    <?php $this->head() ?>
     <meta charset="<?= Yii::$app->charset ?>">
-   <!--  <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <?php $this->registerCsrfMetaTags() ?>
-    <?php $this->head() ?> -->
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <style>
             article {
-            float: left;
-            padding: 0px 10px 10px 0px;
-            width: 100%;
-            /* background-color: #f1f1f1; */
+                float: left;
+                padding: 0px 10px 10px 0px;
+                width: 100%;
             }
-
 
             /* Clear floats after the columns */
             section:after {
@@ -117,10 +112,6 @@ $session = Yii::$app->session;
         .navbar-brand {
             color: white;
         }
-        
-        .navbar-right a {
-            color: white;
-        }
 
         .navbar-toggle .icon-bar {
             display: block;
@@ -143,11 +134,31 @@ $session = Yii::$app->session;
             border-radius: 4px;
         }
         
+        .navbar-collapse ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
         .navbar {
             position: relative;
             min-height: 50px;
             margin-bottom: -10px;
             border: 1px solid transparent;
+        }
+
+        .navbar-collapse ul li a:hover { 
+            color: #b2bdc7;
+            background-color: transparent;
+        }
+
+        .navbar-collapse .active{
+            color: #000;
+            /* background: #d65c14; */
+        }
+
+        .navbar-collapse .active > a:focus {
+            color: #b2bdc7;
+            background: transparent;
         }
 
         @media(min-width: 768px){
@@ -337,38 +348,59 @@ $session = Yii::$app->session;
                 <img src="images/logo.png" style="height:auto; width:55px;padding-top:5px" align="left">
                 <form class="example" action="/action_page.php" style="margin:auto;max-width:500px">
                     <input type="text" placeholder="Cari di SIPPM Del ..." name="search2">
-                    <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                    <button type="submit"><span class="glyphicon glyphicon-search"></span></i></button>
                 </form>
             </div>
             <nav class="navbar navbar-fixed" role="navigation">
                 <div class="container">
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar2">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>                        
-                        </button>
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                             <span class="glyphicon glyphicon-user"></span>
                             <span class="icon-bar"></span>                       
                         </button>
-                        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-home"></span> Beranda</a>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="#"><span class="glyphicon glyphicon-about"></span> About</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                        <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
+                            <li class="active"><?= Html::a('<span class="glyphicon glyphicon-home"></span> Beranda', ['site/index']) ?></li>
+                            <?php
+                                if($session["role"] == "Mahasiswa"){?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
+                                    <li class="active"><?= Html::a('List Proyek', ['project/list-project']) ?></li>
+                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['project/project-usage']) ?></li>
+                            <?php
+                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/assignment-dosen']) ?></li>
+                                    <li class="active"><?= Html::a('Request Penugasan', ['assignment/request-assignment']) ?></li>
+                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['project/project-usage']) ?></li>
+                            <?php
+                                }
+                            ?>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
+                            <li class="active"><?= Html::a('Tentang', ['site/about']) ?></li>
+                            <?php
+                                if(!isset($session["role"])){?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Masuk', ['site/login']) ?></li>
+                            <?php
+                                }else{?>
+                                    <li class="active"><?= Html::a('<span class="glyphicon glyphicon-user"></span> Keluar ('.$session["nama"].')', ['site/logout']) ?></li>
+                            <?php
+                                }
+                            ?>
+                            
                         </ul>
                     </div>
                 </div>
             </nav>
         </div>
-        <div class="container">        
-            <article>
-                <?= Alert::widget() ?>
-                <?= $content ?>
-            </article>
+
+        <div class="container">
+            <section>
+                <article>
+                    <?= Alert::widget() ?>
+                    <?= $content ?>
+                </article>
+            </section>
         </div>
     </div> 
 

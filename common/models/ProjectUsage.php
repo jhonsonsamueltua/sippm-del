@@ -43,6 +43,7 @@ class ProjectUsage extends \yii\db\ActiveRecord
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_usg_usage'], 'string', 'max' => 500],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['proj_id' => 'proj_id']],
             [['cat_usg_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryUsage::className(), 'targetAttribute' => ['cat_usg_id' => 'cat_usg_id']],
             [['sts_proj_usg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusProjectUsage::className(), 'targetAttribute' => ['sts_proj_usg_id' => 'sts_proj_usg_id']],
         ];
@@ -53,8 +54,6 @@ class ProjectUsage extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-   
-
         return [
             'proj_usg_id' => 'Proj Usg ID',
                             
@@ -71,7 +70,14 @@ class ProjectUsage extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
         ];
+    }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProj()
+    {
+        return $this->hasOne(Project::className(), ['proj_id' => 'proj_id']);
     }
 
     /**
@@ -79,7 +85,7 @@ class ProjectUsage extends \yii\db\ActiveRecord
      */
     public function getCatUsg()
     {
-        return $this->hasOne(SippmCategoryUsage::className(), ['cat_usg_id' => 'cat_usg_id']);
+        return $this->hasOne(CategoryUsage::className(), ['cat_usg_id' => 'cat_usg_id']);
     }
 
     /**
@@ -87,6 +93,6 @@ class ProjectUsage extends \yii\db\ActiveRecord
      */
     public function getStsProjUsg()
     {
-        return $this->hasOne(SippmStatusProjectUsage::className(), ['sts_proj_usg_id' => 'sts_proj_usg_id']);
+        return $this->hasOne(StatusProjectUsage::className(), ['sts_proj_usg_id' => 'sts_proj_usg_id']);
     }
 }

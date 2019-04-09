@@ -67,7 +67,7 @@ class StudentAssignment extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCLasses()
+    public function getClasses()
     {
         return $this->hasOne(ClassAssignment::className(), ['cls_asg_id' => 'cls_asg_id']);
     }

@@ -84,7 +84,7 @@ class SippmClass extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSippmStudents()
+    public function getStudents()
     {
         return $this->hasMany(SippmStudent::className(), ['cls_id' => 'cls_id']);
     }

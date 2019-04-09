@@ -15,7 +15,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use common\models\User;
 use frontend\models\ContactForm;
-
+use common\models\Project;
 /**
  * Site controller
  */
@@ -91,12 +91,19 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
+    // public function actionIndex()
+    // {
        
-        return $this->render('index');
+    //     return $this->render('index');
+    // }
+    public function actionIndex()
+    {   
+        $model = Project::find()->where(["created_by" => 1])->all();
+        
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
-
     /**
      * Logs in a user.
      *
@@ -140,6 +147,8 @@ class SiteController extends Controller
                         $session->set('nama', $nama);
                         $session->set('email', $email);
                         $session->set('kelas', $kelas);
+
+                        // $role = "Dosen";
                     }else{
                         $nip = $datas['nip'];
 
