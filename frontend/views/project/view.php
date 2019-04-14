@@ -22,9 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'proj_title',
             'proj_description:html',
             'proj_downloaded',
-            'stsWin.sts_win_name',
+            [
+                'attribute' => 'stsWin.sts_win_name',
+                'label' => 'Status menang',
+            ],
         ],
     ]) ?>
+    <?php
+        
+    ?>
     <?= Html::a("Unduh semua file proyek", ['download-project', 'proj_id' => $model->proj_id]) . "<br>"; ?>
     <p>File proyek:</p>
     <?php
@@ -43,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
      */
     ?>
     <p>
+        <?= Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Ubah', ['update', 'id' => $model->proj_id], ['class' => 'btn btn-warning']) ?>
         <?= Html::a('Hapus', ['delete', 'id' => $model->proj_id], [
             'class' => 'btn btn-danger',

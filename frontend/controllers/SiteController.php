@@ -132,23 +132,22 @@ class SiteController extends Controller
                 if($response->data['result'] == "true"){
                     $session = Yii::$app->session;
                     $session->open();
-                    $session->close();
 
                     $datas = $response->data['data'];
                     $role = $datas['role'];
-                    
+                    $session['username'] = $model->username;
+
                     if($role == "Mahasiswa"){
                         $dimId = $datas['dimId'];
                         $nama = $datas['nama'];
                         $email = $datas['email'];
                         $kelas = $datas['kelas'];
-                        
+                        $role = "Dosen";
+
                         $session->set('dimId', $dimId);
                         $session->set('nama', $nama);
                         $session->set('email', $email);
                         $session->set('kelas', $kelas);
-
-                        // $role = "Dosen";
                     }else{
                         $nip = $datas['nip'];
 
@@ -159,16 +158,12 @@ class SiteController extends Controller
 
                     $session->set('role', $role);
                     $session->close();
-                    // echo $session['dimId'] . "<br>";
-                    // echo $session['nama'] . "<br>";
-                    // echo $session['email'] . "<br>";
-                    // echo $session['kelas'] . "<br>";
-                    // echo $session['role'];
 
                     return $this->goBack();
                 }else{
                     Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
-                    return $this->goBack();
+                    
+                    return $this->redirect(['login']);
                 }
             }else{
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
@@ -191,7 +186,6 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        // Yii::$app->user->logout();
         $session = Yii::$app->session;
 
         if(isset($session['role'])){

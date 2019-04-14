@@ -103,7 +103,7 @@ class AssignmentController extends Controller
         //             }
         //         ])
         //         ->all();
-        $sql = "SELECT *  FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
+        $sql = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
         $model = Yii::$app->db->createCommand($sql)->queryAll();
         // echo '<pre>';
         // var_dump($model);die();
@@ -360,7 +360,7 @@ class AssignmentController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id){
-        $this->findModel($id)->delete();
+        $this->findModel($id)->softDelete();
 
         return $this->redirect(['index']);
     }

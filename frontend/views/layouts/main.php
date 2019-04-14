@@ -388,12 +388,12 @@ $session = Yii::$app->session;
                                 if($session["role"] == "Mahasiswa"){?>
                                     <li class="active"><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
                                     <li class="active"><?= Html::a('List Proyek', ['project/list-project']) ?></li>
-                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['project/project-usage']) ?></li>
+                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                             <?php
                                 }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
                                     <li class="active"><?= Html::a('Penugasan', ['assignment/assignment-dosen']) ?></li>
-                                    <li class="active"><?= Html::a('Request Penggunaan Proyek', ['assignment/request-assignment']) ?></li>
-                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['project/project-usage']) ?></li>
+                                    <li class="active"><?= Html::a('Request Penggunaan Proyek', ['project-usage/list-project-usage-request']) ?></li>
+                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                             <?php
                                 }
                             ?>

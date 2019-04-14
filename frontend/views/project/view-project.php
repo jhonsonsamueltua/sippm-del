@@ -23,35 +23,40 @@ $this->title = 'SIPPM Del';
             <div class = "col-md-3">
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <h4>File</h4>
-                    <?= Html::a('Sistem Informasi Parna Ulos', ['project/view']) ?>
+                    <?php
+                        $session = Yii::$app->session;
 
+                        if(!isset($session['role'])){
+                            echo Html::a('Permohonan Penggunaan', ['/site/login', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']);
+                        }else{
+                            if($usageModel == null || $usageModel->sts_proj_usg_id == 3){
+                                echo Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']);
+                            }else if($usageModel->sts_proj_usg_id == 1){
+                                echo Html::a('Ubah Permohonan Penggunaan', ['/project-usage/update', 'proj_id' => $model->proj_id], ['class' => 'btn btn-primary']);
+                            }else{
+                                echo Html::a("Unduh semua file proyek", ['download-project', 'proj_id' => $model->proj_id]) . "<br>";
+                            }
+                        }
+                    ?>
                 </div>
 
                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <h4>Tanggal</h4>
-                    <p>9/9/2016</p>
+                    <?php 
+                        $date = date_create($model->created_at);
+                        echo ("<p>". date_format($date, "d M Y") ."</p>"); 
+                    ?>
                 </div>
 
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <h4>Dosen Penugas</h4>
-                    <p>Mukhammad Solkhin</p>
+                    <?= "<p>". $assignmentModel->created_by ."</p>" ?>
                  </div>
 
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <h4>Diunggah oleh</h4>
-                    <p>Detola Simanjuntak</p>
+                    <?= "<p>". $model->created_by ."</p>" ?>
                 </div>
-
-                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Kata Kunci</h4>
-                    <p>UKM</p>
-                    <p>Apul</p>
-                    <p>Sistem Informasi</p>
-                    <p>Balige</p>
-                </div>
-
-                
-
         </div>
 
         <div class ="col-md-9">

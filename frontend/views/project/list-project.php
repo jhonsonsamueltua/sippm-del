@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr style="border-top: 2px solid #d9dada;">
     <?php
         foreach($model as $data){?>
-        <?= Html::a($data->proj_title, ['project/view-detail', 'proj_id' => $data->proj_id]) ?>
+        <?= Html::a($data->proj_title, ['view-project', 'proj_id' => $data->proj_id]) ?>
     <?php
         }
     ?>
