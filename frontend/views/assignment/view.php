@@ -84,4 +84,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <h2>
+        Project
+    </h2>    
+
 </div>

@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
+use yii\redactor\widgets\Redactor;
 use common\models\CategoryProject;
 use common\models\Course;
 use kartik\datetime\DateTimePicker;
@@ -11,10 +12,10 @@ use common\models\Student;
 ?>
  
 <div class="person-form">
-    <table class="table table-bordered table-striped">
+    <table class="table table-hover table-striped">
         <thead>
             <tr>
-                <th>Data Penugasan</th>
+                <th style="font-size: 25px;">Penugasan</th>
             </tr>
         </thead>
  
@@ -23,57 +24,67 @@ use common\models\Student;
                 <td class="vcenter">
                     <?php $form = ActiveForm::begin(['options' => [
                         'enctype' => 'multipart/form-data',],
-                        'layout' => 'horizontal',
                         'id' => 'dynamic-form',
+                        'enableClientValidation' => true,
                         'fieldConfig' => [
                             'template' => "{label}\n{beginWrapper}\n{input}\n{error}\n{endWrapper}\n{hint}",
-                            'horizontalCssClasses' => [
-                                'label' => 'col-sm-3',
-                                'wrapper' => 'col-sm-6',
-                                'error' => '',
-                                'hint' => '',
-                            ],
                         ],
                     ]); ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
+                                        ['prompt' => "Pilih Kategori", 'onchange' => 'java_script_:show(this.options[this.selectedIndex].value)'])->label("Kategori")?>    
+                        </div>
+                        <div class="col-md-6">
+                            <!-- <?= $form->field($modelAsg, 'asg_year')->textInput(['maxlength' => true])->label("Tahun") ?> -->
+                            <!-- <div id='hiddenDiv' hidden> -->
+                                <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label("Matakuliah") ?>
+                            <!-- </div> -->
+                        </div>
+                    </div>
                     
-                    <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
-                                    ['prompt' => "Pilih Kategori"])->label("Kategori")?>
-                    
-                    <?= $form->field($modelAsg, 'asg_year')->textInput(['maxlength' => true])->label("Tahun") ?>
+                    <?= $form->field($modelAsg, 'asg_title')->textInput(['maxlength' => true])->label("Judul Penugasan") ?>
 
-                    <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label("Matakuliah") ?>
-
-                    <?= $form->field($modelAsg, 'asg_title')->textInput(['maxlength' => true])->label("Judul Proyek") ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php 
+                                // $dateNow = date("Y-m-d H:i:s");
+                            ?>
+                            <?= 
+                                $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class,[
+                                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                    'options' => ['placeholder' => 'Pilih batas awal ...'],
+                                    // 'value' => $dateNow,
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                                    ]
+                                    ])->label("Batas awal");
+                            ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= 
+                                $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class,[
+                                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                    // 'value' => $dateNow,
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                                    ]
+                                    ])->label("Batas akhir");
+                            ?>
+                        </div>
+                    </div>
                     
-                    <?php 
-                        // $dateNow = date("Y-m-d H:i:s");
-                    ?>
-                    <?= 
-                        $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class,[
-                            'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                            'options' => ['placeholder' => 'Pilih batas awal ...'],
-                            // 'value' => $dateNow,
-                            'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'yyyy-mm-dd hh:ii:ss'
+                    <?= $form->field($modelAsg, 'asg_description')->widget(Redactor::classname(), [
+                            'options' => [
+                                'minHeight' => 500,
                             ]
-                            ])->label("Batas awal");
-                    ?>
-                    <?= 
-                        $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class,[
-                            'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                            'options' => ['placeholder' => 'Pilih batas akhir ...'],
-                            // 'value' => $dateNow,
-                            'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'yyyy-mm-dd hh:ii:ss'
-                            ]
-                            ])->label("Batas akhir");
-                    ?>
-                    <?= $form->field($modelAsg, 'asg_description')->textarea(['rows' => 6])->hint('Max 500 characters.')->label("Deskripsi")?>
+                        ]) ?>
+
+                    <!-- <?= $form->field($modelAsg, 'asg_description')->textarea(['rows' => 6])->hint('Max 500 characters.')->label("Deskripsi")?> -->
                 
-    
-
                     <div class="padding-v-md">
                         <div class="line line-dashed"></div>
                     </div>
@@ -93,11 +104,11 @@ use common\models\Student;
                         ],
                     ]); ?>
                 
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>Kelas</th>
-                                <th style="width: 450px;">Mahasiswa</th>
+                                <th style="font-size: 18px;">Kelas</th>
+                                <th style="width: 60%; font-size: 17px;">Mahasiswa</th>
                                 <th class="text-center" style="width: 90px;">
                                 <button type="button" class="add-class btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
                                 </th>
@@ -139,10 +150,10 @@ use common\models\Student;
                                             'Student'
                                         ],
                                     ]); ?>
-                                    <table class="table table-bordered">
+                                    <table class="table table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th>NIM</th>
+                                                <th style="font-size: 15px;">NIM</th>
                                                 <th class="text-center">
                                                     <button type="button" class="add-student btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
                                                 </th>
@@ -184,7 +195,9 @@ use common\models\Student;
                 
                     <?php DynamicFormWidget::end(); ?>
                     <div class="form-group">
-                        <?= Html::submitButton($modelAsg->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary']) ?>
+                        <center>
+                            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Update', ['class' => 'btn btn-primary', 'style' => 'width:100px;font-style: bold;']) ?>
+                        </center>
                     </div>
                     <?php ActiveForm::end(); ?>
                 </td>
@@ -192,3 +205,19 @@ use common\models\Student;
         </tbody>
     </table>
 </div>
+
+<?php
+     $this->registerJs("
+        function show(select_item) {
+            if (select_item == 1) {
+                hiddenDiv.style.visibility='visible';
+                hiddenDiv.style.display='block';
+                Form.fileURL.focus();
+            } 
+            else{
+                hiddenDiv.style.visibility='hidden';
+                hiddenDiv.style.display='none';
+            }
+        }
+     ", $this::POS_END);
+?>

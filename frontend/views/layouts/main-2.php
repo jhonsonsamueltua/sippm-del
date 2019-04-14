@@ -28,7 +28,7 @@ $session = Yii::$app->session;
     <style>
             article {
                 float: left;
-                padding: 0px 10px 10px 0px;
+                /* padding: 0px 10px 10px 0px; */
                 width: 100%;
             }
 
