@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\behaviors\TimestampBehavior;
+use common\behaviors\BlameableBehavior;
+use common\behaviors\DeleteBehavior;
 
 /**
  * This is the model class for table "sippm_class_assignment".
@@ -15,6 +18,20 @@ use Yii;
  */
 class ClassAssignment extends \yii\db\ActiveRecord
 {
+    public function behaviors(){
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+            'delete' => [
+                'class' => DeleteBehavior::className(),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -29,7 +46,7 @@ class ClassAssignment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['class', 'asg_id'], 'required'],
+            [['class', 'asg_id'], 'required', 'message' => "{attribute} tidak boleh kosong."],
             [['asg_id'], 'integer'],
             [['class'], 'string', 'max' => 100],
             [['asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => Assignment::className(), 'targetAttribute' => ['asg_id' => 'asg_id']],
@@ -43,7 +60,7 @@ class ClassAssignment extends \yii\db\ActiveRecord
     {
         return [
             'cls_asg_id' => 'Cls Asg ID',
-            'class' => 'Class',
+            'class' => 'Kelas',
             'asg_id' => 'Asg ID',
         ];
     }
@@ -53,7 +70,7 @@ class ClassAssignment extends \yii\db\ActiveRecord
      */
     public function getAsg()
     {
-        return $this->hasOne(SippmAssignment::className(), ['asg_id' => 'asg_id']);
+        return $this->hasOne(Assignment::className(), ['asg_id' => 'asg_id']);
     }
 
     /**

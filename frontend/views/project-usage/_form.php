@@ -18,8 +18,19 @@ $css = ['css/site.css'];
                 <div class="reqsub-form">
                     <div class="reqsub-bg">
                         <div class="form-header">
-                            <h2>Request Penggunaan Proyek</h2>
-                            <p>Silahkan melakukan <b>request</b> untuk dapat mengunduh proyek.</p>
+                            <?php
+                            if($model->isNewRecord){
+                                echo('
+                                    <h2>Request Penggunaan Proyek</h2>
+                                    <p>Silahkan melakukan <b>request</b> untuk dapat mengunduh proyek.</p>
+                                ');
+                            }else{
+                                echo('
+                                    <h2>Ubah Request Penggunaan Proyek</h2>
+                                    <p>Silahkan mengubah <b>request</b> penggunaan proyek.</p>
+                                ');
+                            }
+                            ?>
                             <br><br>
                         </div>
                     </div>

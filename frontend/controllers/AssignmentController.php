@@ -6,6 +6,7 @@ use Yii;
 use yii\httpclient\Client;
 use common\models\Assignment;
 use common\models\Student;
+use common\models\Project;
 use common\models\ClassAssignment;
 use common\models\StudentAssignment;
 use common\models\search\AssignmentSearch;
@@ -36,7 +37,7 @@ class AssignmentController extends Controller
             ],
         ];
     }
-
+    
     public function beforeAction($action){
         $this->layout = "main-2";
 
@@ -66,10 +67,81 @@ class AssignmentController extends Controller
      */
     public function actionView($id)
     {   
-        $modelClass = ClassAssignment::find()->where(['asg_id' => $id])->all();
-        // $modelStudent = StudentAssignment::find()->where(['asg_id' => $id])->all();
+        $model = $this->findModel($id);
+        $projects = Project::find()->where(['asg_id' => $id])->count();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+        ]);
+    }
+
+    public function actionViewDetailAssignment($asg_id)
+    {   
+        $model = $this->findModel($asg_id);
+        $modelProject = Project::find()->where(['asg_id' => $asg_id])->one();
+        return $this->render('view-detail-assignment', [
+            'model' => $model,
+            'modelProject' => $modelProject,
+        ]);
+    }
+
+    public function actionAssignmentStudent(){
+        // $modelAll = StudentAssignment::find()->where(['stu_id' => 1])->all();
+        // $modelRequest = StudentAssignment::find()->where(['stu_id' => 1])->andWhere([''])->all();
+        // $model = Assignment::find()
+        //         ->select('
+        //             sippm_assignment.asg_title, 
+        //             sippm_assignment.asg_start_time,
+        //             sippm_assignment.asg_end_time,
+        //             sippm_assignment.sts_asg_id,
+        //         ')
+        //         ->joinWith([
+        //             'classes' => function($query) {
+        //                 $query->where('sippm_class_assignment.asg_id' != '0')
+        //                 ->joinWith([
+        //                     'students' => function($query){
+        //                         $query->where('sippm_student_assignment.stu_id' == 2);
+        //                     }
+        //                 ]);
+        //             }
+        //         ])
+        //         ->all();
+        $sql = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
+        $model = Yii::$app->db->createCommand($sql)->queryAll();
+        // echo '<pre>';
+        // var_dump($model);die();
+        return $this->render('assignment-student',[
+            'model' => $model,
+        ]);
+    }
+
+    public function actionAssignmentDosen(){
+        // $modelAll = StudentAssignment::find()->where(['stu_id' => 1])->all();
+        // $modelRequest = StudentAssignment::find()->where(['stu_id' => 1])->andWhere([''])->all();
+        // $model = Assignment::find()
+        //         ->select('
+        //             sippm_assignment.asg_title, 
+        //             sippm_assignment.asg_start_time,
+        //             sippm_assignment.asg_end_time,
+        //             sippm_assignment.sts_asg_id,
+        //         ')
+        //         ->joinWith([
+        //             'classes' => function($query) {
+        //                 $query->where('sippm_class_assignment.asg_id' != '0')
+        //                 ->joinWith([
+        //                     'students' => function($query){
+        //                         $query->where('sippm_student_assignment.stu_id' == 2);
+        //                     }
+        //                 ]);
+        //             }
+        //         ])
+        //         ->all();
+        $sql = "SELECT *  FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
+        $model = Yii::$app->db->createCommand($sql)->queryAll();
+        // echo '<pre>';
+        // var_dump($model);die();
+        return $this->render('assignment-dosen',[
+            'model' => $model,
         ]);
     }
     
@@ -99,8 +171,6 @@ class AssignmentController extends Controller
                         $valid = $modelStuAsg->validate();
                     }
                 }
-            }else{
-                die($valid);
             }
 
             if ($valid) {
@@ -140,12 +210,12 @@ class AssignmentController extends Controller
                         $transaction->commit();
                         return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
                     } else {
-                        die("Gagal Insert");
                         $transaction->rollBack();
+                        die("Gagal Insert");
                     }
                 } catch (Exception $e) {
-                    die("Tidak Valid");
                     $transaction->rollBack();
+                    die("Tidak Valid");
                 }
             }
         }
@@ -313,6 +383,16 @@ class AssignmentController extends Controller
         return $listKelas;
     }
 
+    public function getProject($id){
+        $model = Project::find()->where(['asg_id' => $id, 'created_by' => 1])->one();
+        // echo '<pre>';
+        // var_dump($model);
+        // die();
+        return isset($model) ? $model : false ;
+
+    }
+
+
     /**
      * Deletes an existing Assignment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -321,7 +401,7 @@ class AssignmentController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id){
-        $this->findModel($id)->delete();
+        $this->findModel($id)->softDelete();
 
         return $this->redirect(['index']);
     }

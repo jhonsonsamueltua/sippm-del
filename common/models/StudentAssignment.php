@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\behaviors\TimestampBehavior;
+use common\behaviors\BlameableBehavior;
+use common\behaviors\DeleteBehavior;
 
 /**
  * This is the model class for table "sippm_student_assignment".
@@ -23,6 +26,20 @@ use Yii;
  */
 class StudentAssignment extends \yii\db\ActiveRecord
 {
+    public function behaviors(){
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+            'delete' => [
+                'class' => DeleteBehavior::className(),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -67,7 +84,7 @@ class StudentAssignment extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCLasses()
+    public function getClasses()
     {
         return $this->hasOne(ClassAssignment::className(), ['cls_asg_id' => 'cls_asg_id']);
     }

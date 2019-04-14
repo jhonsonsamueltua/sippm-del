@@ -1,8 +1,11 @@
 <?php
 
 namespace common\models;
-
+use kop\y2cv\ConditionalValidator;
 use Yii;
+use common\behaviors\TimestampBehavior;
+use common\behaviors\BlameableBehavior;
+use common\behaviors\DeleteBehavior;
 
 /**
  * This is the model class for table "sippm_assignment".
@@ -32,6 +35,20 @@ use Yii;
  */
 class Assignment extends \yii\db\ActiveRecord
 {
+    public function behaviors(){
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+            'delete' => [
+                'class' => DeleteBehavior::className(),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,17 +63,42 @@ class Assignment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['cat_proj_id', 'asg_title', 'asg_start_time', 'asg_end_time', 'asg_description'], 'required', 'message' => "{attribute} tidak boleh kosong."],
+            // ['course_id', 'required', 'when' => function($model) {
+            //     return $model->cat_proj_id == 1;
+            // }, 'enableClientValidation' => false],
+
+            // ['course_id', 'required', 'when' => function ($model) {
+            //     return $model->cat_proj_id == 1;
+            //   }, 'whenClient' => "function (attribute, value) {
+            //     return $('#cat_proj_id').val() == 1;
+            //   }"],
+
+            // ['course_id', 'required', 'whenClient' => function($model) {
+            //         return $model->cat_proj_id == 1;
+            // }, 'enableClientValidation' => false],
             [['asg_start_time', 'asg_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['course_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
+            ['asg_start_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
+            ['asg_end_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
+            [['sts_asg_id'], 'default', 'value' => 1],
             [['asg_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['asg_description'], 'string', 'max' => 500],
             [['asg_year', 'class'], 'string', 'max' => 32],
             [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
             [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Course::className(), 'targetAttribute' => ['course_id' => 'course_id']],
             [['sts_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusAssignment::className(), 'targetAttribute' => ['sts_asg_id' => 'sts_asg_id']],
+            ['asg_end_time', 'compare', 'compareAttribute' => 'asg_start_time', 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari Batas Awal."],
+            // [['cat_proj_id'], 'ext.YiiConditionalValidator',
+            //     'if' => [
+            //         [['cat_proj_id'], 'compare', 'compareValue' => 1]
+            //     ],
+            //     'then' => [
+            //         [['course_id'], 'required']
+            //     ]
+            // ]
         ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -64,15 +106,15 @@ class Assignment extends \yii\db\ActiveRecord
     {
         return [
             'asg_id' => 'Asg ID',
-            'asg_title' => 'Asg Title',
-            'asg_description' => 'Asg Description',
-            'asg_start_time' => 'Asg Start Time',
-            'asg_end_time' => 'Asg End Time',
+            'asg_title' => 'Judul Penugasan',
+            'asg_description' => 'Deskripsi',
+            'asg_start_time' => 'Batas Awal',
+            'asg_end_time' => 'Batas Akhir',
             'asg_year' => 'Asg Year',
-            'class' => 'Class',
-            'course_id' => 'Course ID',
-            'cat_proj_id' => 'Cat Proj ID',
-            'sts_asg_id' => 'Sts Asg ID',
+            'class' => 'Kelas',
+            'course_id' => 'Matakuliah',
+            'cat_proj_id' => 'Kategori',
+            'sts_asg_id' => 'Status',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',

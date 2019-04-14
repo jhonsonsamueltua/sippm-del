@@ -15,7 +15,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use common\models\User;
 use frontend\models\ContactForm;
-
+use common\models\Project;
 /**
  * Site controller
  */
@@ -91,12 +91,21 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
+    // public function actionIndex()
+    // {
        
-        return $this->render('index');
+    //     return $this->render('index');
+    // }
+    public function actionIndex()
+    {   
+        $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(3)->all();
+        $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+        
+        return $this->render('index', [
+            'model' => $model,
+            'modelNews' => $modelNews,
+        ]);
     }
-
     /**
      * Logs in a user.
      *
@@ -128,13 +137,15 @@ class SiteController extends Controller
 
                     $datas = $response->data['data'];
                     $role = $datas['role'];
-                    
+                    $session['username'] = $model->username;
+
                     if($role == "Mahasiswa"){
                         $dimId = $datas['dimId'];
                         $nama = $datas['nama'];
                         $email = $datas['email'];
                         $kelas = $datas['kelas'];
-                        
+                        $role = "Dosen";
+
                         $session->set('dimId', $dimId);
                         $session->set('nama', $nama);
                         $session->set('email', $email);
@@ -149,16 +160,12 @@ class SiteController extends Controller
 
                     $session->set('role', $role);
                     $session->close();
-                    // echo $session['dimId'] . "<br>";
-                    // echo $session['nama'] . "<br>";
-                    // echo $session['email'] . "<br>";
-                    // echo $session['kelas'] . "<br>";
-                    // echo $session['role'];
 
                     return $this->goBack();
                 }else{
                     Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
-                    return $this->goBack();
+                    
+                    return $this->redirect(['login']);
                 }
             }else{
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
@@ -181,7 +188,6 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        // Yii::$app->user->logout();
         $session = Yii::$app->session;
 
         if(isset($session['role'])){

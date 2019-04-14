@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\models\File;
 use common\models\ClassAssignment;
 use common\models\StudentAssignment;
 
@@ -17,16 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->asg_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->asg_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -57,9 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->all();
                     foreach($modelClass as $key => $data){
                         if($key == 0){
-                            $cls = ($key+1)." ".$data->class;
+                            $cls = ($key+1).". ".$data->class;
                         }else{
-                            $cls = $cls.'<br>'.($key+1).' '.$data->class;
+                            $cls = $cls.'<br>'.($key+1).'. '.$data->class;
                         }
                     }
                         return $cls;
@@ -83,9 +74,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 // ]
         ],
     ]) ?>
+    
+    <h2>Proyek</h2>
+    <?= DetailView::widget([
+        'model' => $modelProject,
+        'attributes' => [
+            'proj_title',
+            'proj_description:html',
+            'proj_downloaded',
+            'stsWin.sts_win_name',
+        ],
+    ]) ?>
+    <?= Html::a("Unduh semua file proyek", ['download-project', 'proj_id' => $modelProject->proj_id]) . "<br>"; ?>
+    <p>File proyek:</p>
+    <?php
+        $files = File::find()->where(['proj_id' => $modelProject->proj_id])->andWhere('deleted!=1')->all();
+        
+        echo("<div class='form-group'>");
+        foreach($files as $file){
+            echo Html::a($file->file_name, ['download-attachment', 'file_id' => $file->file_id]) . "<br>";
+        }
+        echo("</div>");
+    ?>
 
-    <h2>
-        Project
-    </h2>    
+    <?php
+    /**
+     * Tambah kondisi untuk mengecek hanya role tertentu yang dapat mengupdate proyek
+     */
+    ?>
+    <p>
+        <?= Html::a('Ubah', ['update', 'id' => $modelProject->proj_id], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Hapus', ['delete', 'id' => $modelProject->proj_id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
+        <?= Html::a('Kembali', ['index'], ['class' => 'btn btn-primary']) ?>
+    </p>
 
 </div>

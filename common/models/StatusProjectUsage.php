@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\behaviors\TimestampBehavior;
+use common\behaviors\BlameableBehavior;
+use common\behaviors\DeleteBehavior;
 
 /**
  * This is the model class for table "sippm_status_project_usage".
@@ -21,6 +24,20 @@ use Yii;
  */
 class StatusProjectUsage extends \yii\db\ActiveRecord
 {
+    public function behaviors(){
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+            'delete' => [
+                'class' => DeleteBehavior::className(),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -67,4 +84,5 @@ class StatusProjectUsage extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SippmProjectUsage::className(), ['sts_proj_usg_id' => 'sts_proj_usg_id']);
     }
+
 }
