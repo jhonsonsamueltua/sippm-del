@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\behaviors\TimestampBehavior;
+use common\behaviors\BlameableBehavior;
+use common\behaviors\DeleteBehavior;
 
 /**
  * This is the model class for table "sippm_project".
@@ -29,6 +32,20 @@ use Yii;
 class Project extends \yii\db\ActiveRecord
 {
     public $files;
+
+    public function behaviors(){
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+            'delete' => [
+                'class' => DeleteBehavior::className(),
+            ],
+        ];
+    }
 
     /**
      * {@inheritdoc}

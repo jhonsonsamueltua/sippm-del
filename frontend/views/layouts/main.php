@@ -64,6 +64,13 @@ $session = Yii::$app->session;
             }
         }
         
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 2px solid #d9dada;
+        }
+
         /* search */
         * {
             box-sizing: border-box;
@@ -377,18 +384,19 @@ $session = Yii::$app->session;
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav navbar-left" style="margin-left: -25px;">
                             <li class="active"><?= Html::a('<span class="glyphicon glyphicon-home"></span> Beranda', ['site/index']) ?></li>
-                            
-                            
                             <?php
                                 if($session["role"] == "Mahasiswa"){?>
-                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
+                                    <li class="active"><?= Html::a('List Proyek', ['project/list-project']) ?></li>
+                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                             <?php
                                 }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
-                                    <li class="active"><?= Html::a('Penugasan', ['assignment/index']) ?></li>
+                                    <li class="active"><?= Html::a('Penugasan', ['assignment/assignment-dosen']) ?></li>
+                                    <li class="active"><?= Html::a('Request Penggunaan Proyek', ['project-usage/list-project-usage-request']) ?></li>
+                                    <li class="active"><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                             <?php
                                 }
                             ?>
-                            <li class="active"><?= Html::a('Penggunaan Proyek', ['#']) ?></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right" style="margin-left: -25px;">
                             <li class="active"><?= Html::a('Tentang', ['site/about']) ?></li>
@@ -410,21 +418,53 @@ $session = Yii::$app->session;
 
         <div class="container">
             <section>
-                <sidebar>
+            <sidebar>
                     <div class="collapse navbar-collapse" id="myNavbar2">
                         <div class="panel-group">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Panel</div>
-                                <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
+                                <div class="panel-heading">Semua Repository</div>
+                                <a href="sejarah.html" class="list-group-item">Judul</a>
+                                 <a href="fasilitas.html" class="list-group-item">Jenis</a>
+                                   <a href="visi.html" class="list-group-item">Dosen Penugas</a>
+                                <a href="prestasi.html" class="list-group-item">Tahun Ajaran</a>
+                    
                             </div>
+
+                            <!-- <div class="panel panel-primary">
+                                <div class="panel-heading">Judul</div>
+                                <a href="sejarah.html" class="list-group-item">Aplikasi Toba Bakery</a>
+                                 <a href="fasilitas.html" class="list-group-item">Aplikasi Pewarnaan Ulos</a>
+                                   <a href="visi.html" class="list-group-item">Sistem 
+                                   informasi Apul Ulos</a>
+                            </div> -->
+
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Panel</div>
-                                <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
+                                <div class="panel-heading">Jenis</div>
+                                <a href="sejarah.html" class="list-group-item">Kompetisi</a>
+                                 <a href="fasilitas.html" class="list-group-item">Proyek Akhir</a>
+                                  <a href="fasilitas.html" class="list-group-item">Tugas Akhir</a>
+                                  <a href="fasilitas.html" class="list-group-item">PKM</a>
+                                  <a href="fasilitas.html" class="list-group-item">Mata Kuliah</a>
+
                             </div>
+
+                            <!-- <div class="panel panel-primary">
+                                <div class="panel-heading">Dosen Penugas</div>
+                                <a href="sejarah.html" class="list-group-item">Sejarah</a>
+                                 <a href="fasilitas.html" class="list-group-item">Fasilitas</a>
+                                   <a href="visi.html" class="list-group-item">Visi Misi</a>
+                                <a href="prestasi.html" class="list-group-item">Prestasi</a>
+                            </div> -->
+
                             <div class="panel panel-primary">
-                                <div class="panel-heading">Panel</div>
-                                <div class="panel-body">Panel Content<br>Panel Content<br>Panel Content</div>
+                                <div class="panel-heading">Tahun Ajaran</div>
+                                <a href="sejarah.html" class="list-group-item">2016</a>
+                                 <a href="fasilitas.html" class="list-group-item">2017</a>
+                                   <a href="visi.html" class="list-group-item">2018</a>
+                                
                             </div>
+
+                           
                         </div>
                     </div>
                 </sidebar>

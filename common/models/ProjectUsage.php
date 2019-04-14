@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\behaviors\TimestampBehavior;
+use common\behaviors\BlameableBehavior;
+use common\behaviors\DeleteBehavior;
 
 /**
  * This is the model class for table "sippm_project_usage".
@@ -25,6 +28,20 @@ use Yii;
  */
 class ProjectUsage extends \yii\db\ActiveRecord
 {
+    public function behaviors(){
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+            'delete' => [
+                'class' => DeleteBehavior::className(),
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,8 +58,9 @@ class ProjectUsage extends \yii\db\ActiveRecord
         return [
             [['proj_id', 'sts_proj_usg_id', 'cat_usg_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['proj_usg_usage'], 'string', 'max' => 500],
-            [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_usg_usage'], 'string', 'max' => 300],
+            [['user_email', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['proj_id' => 'proj_id']],
             [['cat_usg_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryUsage::className(), 'targetAttribute' => ['cat_usg_id' => 'cat_usg_id']],
             [['sts_proj_usg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusProjectUsage::className(), 'targetAttribute' => ['sts_proj_usg_id' => 'sts_proj_usg_id']],
         ];
@@ -53,16 +71,13 @@ class ProjectUsage extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-   
-
         return [
             'proj_usg_id' => 'Proj Usg ID',
-                            
             'proj_usg_usage' => 'Deskripsi Penggunaan',
-
             'proj_id' => 'Id Proyek',
             'sts_proj_usg_id' => 'Sts Proj Usg ID',
             'cat_usg_id' => 'Kategori Tujuan Pengunduhan',
+            'user_email' => 'Email Pemohon',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -71,7 +86,14 @@ class ProjectUsage extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
         ];
+    }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProj()
+    {
+        return $this->hasOne(Project::className(), ['proj_id' => 'proj_id']);
     }
 
     /**
@@ -79,7 +101,7 @@ class ProjectUsage extends \yii\db\ActiveRecord
      */
     public function getCatUsg()
     {
-        return $this->hasOne(SippmCategoryUsage::className(), ['cat_usg_id' => 'cat_usg_id']);
+        return $this->hasOne(CategoryUsage::className(), ['cat_usg_id' => 'cat_usg_id']);
     }
 
     /**
@@ -87,6 +109,6 @@ class ProjectUsage extends \yii\db\ActiveRecord
      */
     public function getStsProjUsg()
     {
-        return $this->hasOne(SippmStatusProjectUsage::className(), ['sts_proj_usg_id' => 'sts_proj_usg_id']);
+        return $this->hasOne(StatusProjectUsage::className(), ['sts_proj_usg_id' => 'sts_proj_usg_id']);
     }
 }

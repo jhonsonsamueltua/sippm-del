@@ -40,8 +40,7 @@ body {
 	
 }
 .wrap > .container {
-    /* padding: 120px 15px 2020px; */
-    padding-top: 120px;
+    padding-top: 50px;
 }
 
 .footer {
@@ -67,7 +66,7 @@ body {
 }
 .min-jumbotron{
     margin: 0 auto -60px;
-    padding: 0 0 60px; 
+    /*padding: 0 0 60px; */
     background: url('../images/1.jpg') no-repeat center center; 
     background-size: cover;
     -webkit-background-size: cover;
@@ -500,4 +499,10 @@ input[type="checkbox"] {
 	.reqsub-form>form {
 		margin-left: 0px;
 	}
+}
+hr {
+    margin-top: 10px;
+    margin-bottom: 15x;
+    border: 0;
+    border-top: 3px solid #d9dada;
 }

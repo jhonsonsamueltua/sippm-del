@@ -24,7 +24,6 @@ $css = ['css/site.css'];
                             <br><br>
                         </div>
                     </div>
-                    <form>
                         <?php $form = ActiveForm::begin([
                             'options' => ['enctype' => 'multipart/form-data']
                         ]); ?>
@@ -80,7 +79,6 @@ $css = ['css/site.css'];
                         </div>
 
                         <?php ActiveForm::end(); ?>
-                    </form>
                 </div>
             </div>
         </div>
