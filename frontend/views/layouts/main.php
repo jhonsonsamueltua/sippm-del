@@ -36,7 +36,7 @@ $session = Yii::$app->session;
 
             article {
             float: left;
-            padding: 0px 10px 10px 0px;
+            /* padding: 0px 10px 10px 0px; */
             width: 80%;
             /* background-color: #f1f1f1; */
             }

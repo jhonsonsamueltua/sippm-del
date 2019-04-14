@@ -98,10 +98,12 @@ class SiteController extends Controller
     // }
     public function actionIndex()
     {   
-        $model = Project::find()->where(["created_by" => 1])->all();
+        $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(3)->all();
+        $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
         
         return $this->render('index', [
             'model' => $model,
+            'modelNews' => $modelNews,
         ]);
     }
     /**

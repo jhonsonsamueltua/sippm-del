@@ -46,9 +46,11 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['proj_title', 'proj_cat_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
-            [['proj_description'], 'string', 'max' => 500],
+            [['proj_cat_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_description', 'proj_author'], 'string', 'max' => 1000],
+            [['proj_title'], 'string', 'max' => 1000],
             [['proj_cat_name'], 'string', 'max' => 100],
+            ['proj_author', 'match', 'pattern'=> '/^[A-Za-z; ]+$/u', 'message'=> 'Penulis hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
             [['files'], 'file', 'maxFiles' => 0],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
@@ -65,6 +67,7 @@ class Project extends \yii\db\ActiveRecord
             'proj_description' => 'Deskripsi Proyek',
             'proj_downloaded' => 'Jumlah Diunduh',
             'proj_cat_name' => 'Kategori proyek',
+            'proj_author' => 'Penulis',
             'sts_win_id' => 'Status Menang',
             'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',
@@ -75,6 +78,11 @@ class Project extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
         ];
+    }
+
+    public function getAsg()
+    {
+        return $this->hasOne(Assignment::className(), ['asg_id' => 'asg_id']);
     }
 
     /**

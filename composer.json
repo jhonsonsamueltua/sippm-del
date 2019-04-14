@@ -26,7 +26,8 @@
         "perminder-klair/yii2-dropzone": "dev-master",
         "2amigos/yii2-file-upload-widget": "~1.0",
         "wbraganca/yii2-dynamicform": "dev-master",
-        "yiidoc/yii2-redactor": "*"
+        "yiidoc/yii2-redactor": "*",
+        "kop/yii2-conditional-validator": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
