@@ -343,7 +343,7 @@ $session = Yii::$app->session;
 <body>
 <?php $this->beginBody() ?>
     <div class="wrap">
-        <div class="min-jumbotron" style="background-image: url(https://drncvpyikhjv3.cloudfront.net/sites/131/2016/09/21101909/blue-background-header-1.png);">
+        <div class="min-jumbotron">
             <div class="container text-left">
                 <img src="images/logo.png" style="height:auto; width:55px;padding-top:5px" align="left">
                 <form class="example" action="/action_page.php" style="margin:auto;max-width:500px">

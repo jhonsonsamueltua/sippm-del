@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\bootstrap\Modal;
 use yii\bootstrap\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
@@ -9,6 +10,7 @@ use common\models\Course;
 use kartik\datetime\DateTimePicker;
 use yii\helpers\Url;
 use common\models\Student;
+
 ?>
  
 <div class="person-form">
@@ -83,7 +85,7 @@ use common\models\Student;
                             ]
                         ]) ?>
 
-                    <!-- <?= $form->field($modelAsg, 'asg_description')->textarea(['rows' => 6])->hint('Max 500 characters.')->label("Deskripsi")?> -->
+                    <!-- <?= $form->field($modelAsg, 'asg_description')->textarea(['rows' => 6])->hint('Max 500 karakter.')->label("Deskripsi")?> -->
                 
                     <div class="padding-v-md">
                         <div class="line line-dashed"></div>
@@ -121,19 +123,19 @@ use common\models\Student;
                                 <td class="vcenter">
                                     <?php
                                         // necessary for update action.
-                                        if (! $modelClsAsg->isNewRecord) {
+                                        if (!$modelClsAsg->isNewRecord) {
                                             echo Html::activeHiddenInput($modelClsAsg, "[{$indexClsAsg}]asg_id");
                                         }
                                     ?>
-                                
-                                <?= $form->field($modelClsAsg, "[{$indexClsAsg}]class")->label(false)->dropDownList($listKelas, 
-                                        ['prompt' => 'Pilih kelas ...', 
+                                    
+                                    <?= $form->field($modelClsAsg, "[{$indexClsAsg}]class")->label(false)->dropDownList($listKelas, [
+                                        'prompt' => 'Pilih kelas ...', 
                                         'onchange' => '
-                                            $.post( "index.php?r=assignment/lists&id='.'"+$(this).val(), function( data ) {
-                                            $( "select#stu_id" ).html( data );
+                                            $.get("index.php?r=assignment/lists&id='.'"+$(this).val(), function(data) {
+                                                $("select[id^=studentassignment-'. $indexClsAsg .']").html(data);
                                             });
-                                            ']);
-                                         ?>
+                                        ']);
+                                    ?>
                                 </td>
                                 <td>
                                 <?php DynamicFormWidget::begin([
@@ -169,10 +171,8 @@ use common\models\Student;
                                                             echo Html::activeHiddenInput($modelStuAsg, "[{$indexStuAsg}][{$indexStuAsg}]cls_asg_id");
                                                         }
                                                     ?>
-                                                    <?php
-                                                        $dataStudent=ArrayHelper::map(Student::find()->asArray()->all(), 'stu_id', 'stu_fullname');
-                                                    ?>
-                                                    <?= $form->field($modelStuAsg, "[{$indexClsAsg}][{$indexStuAsg}]stu_id")->label(false)->dropDownList($dataStudent, ['prompt' => 'Pilih Mahasiswa..', 'id' => 'stu_id']) ?>
+                                                    
+                                                    <?= $form->field($modelStuAsg, "[{$indexClsAsg}][{$indexStuAsg}]stu_id")->label(false)->dropDownList(['prompt' => 'Pilih Mahasiswa..']) ?>
                                                 </td>
                                                 <td class="text-center vcenter" >
                                                     <button type="button" class="remove-student btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
@@ -198,6 +198,33 @@ use common\models\Student;
                         <center>
                             <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Update', ['class' => 'btn btn-primary', 'style' => 'width:100px;font-style: bold;']) ?>
                         </center>
+
+                        <?php
+                            if($modelAsg->sts_asg_id == 2){
+                                Modal::begin([
+                                    'header' => '<h2>Buka penugasan kembali?</h2>',
+                                    'toggleButton' => ['label' => 'Perpanjang Penugasan', 'class' => 'btn btn-success'],
+                                ]);
+
+                                $form = ActiveForm::begin(['action' => Url::to(['testtest', 'id' => $modelAsg->asg_id])]);
+                                
+                                echo $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class,[
+                                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                                    ]
+                                ])->label("Batas akhir");
+
+                                echo Html::submitButton('Buka', ['class' => 'btn btn-success']);
+                                
+                                ActiveForm::end();
+
+                                Modal::end();
+                            }
+                        ?>
+
                     </div>
                     <?php ActiveForm::end(); ?>
                 </td>

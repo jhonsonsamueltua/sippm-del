@@ -11,8 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="assignment-create">
 
-    
-
     <?= $this->render('_form-dinamis', [
         'modelAsg' => $modelAsg,
 

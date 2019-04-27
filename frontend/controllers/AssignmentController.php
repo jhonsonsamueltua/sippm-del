@@ -15,6 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use backend\models\SippmClass;
 
 
@@ -42,6 +43,10 @@ class AssignmentController extends Controller
         $this->layout = "main-2";
 
         return parent::beforeAction($action);
+    }
+
+    public function actionTesttest($id){
+        echo "test"; die;
     }
 
     /**
@@ -138,8 +143,7 @@ class AssignmentController extends Controller
         //         ->all();
         $sql = "SELECT *  FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
         $model = Yii::$app->db->createCommand($sql)->queryAll();
-        // echo '<pre>';
-        // var_dump($model);die();
+        
         return $this->render('assignment-dosen',[
             'model' => $model,
         ]);
@@ -147,222 +151,195 @@ class AssignmentController extends Controller
     
     public function actionCreate()
     {   
-        $modelAsg = new Assignment;
-        
-        $modelsClsAsg = [new ClassAssignment];
+        $modelAsg = new Assignment();
 
-        $modelsStuAsg = [[new StudentAssignment]];
-
-        if ($modelAsg->load(Yii::$app->request->post())) {
- 
-            $modelsClsAsg = Model::createMultiple(ClassAssignment::classname());
-            Model::loadMultiple($modelsClsAsg, Yii::$app->request->post());
+        if($modelAsg->load(Yii::$app->request->post())){
+            $transaction = Yii::$app->db->beginTransaction();
             
-            $valid = $modelAsg->validate();
-            // $valid = Model::validateMultiple($modelsClsAsg) && $valid;
-            
-            if (isset($_POST['StudentAssignment'][0][0])) { 
-                foreach ($_POST['StudentAssignment'] as $indexClass => $students) {
-                    foreach ($students as $indexStudent => $student) {
-                        $data['StudentAssignment'] = $student;
-                        $modelStuAsg = new StudentAssignment;
-                        $modelStuAsg->load($data);
-                        $modelsStuAsg[$indexClass][$indexStudent] = $modelStuAsg;
-                        $valid = $modelStuAsg->validate();
-                    }
-                }
-            }
+            try{
+                $modelAsg->save();
 
-            if ($valid) {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $modelAsg->save(false)) {
-                        foreach ($modelsClsAsg as $indexClass => $modelClass) {
+                foreach($_POST['Class'] as $i => $class){
+                    $modelClass = new ClassAssignment();
+                    
+                    $modelClass->class = $class;
+                    $modelClass->asg_id = $modelAsg->asg_id;
+                    
 
-                            if ($flag === false) {
-                                break;
-                            }
+                    if($_POST['Student'][$i][0] == "empty"){
+                        $modelClass->partial = 0;
+                        $modelClass->save();
 
-                            $modelClass->asg_id = $modelAsg->asg_id;
+                        $client = new Client();
+                        $response = $client->createRequest()
+                                            ->setMethod('GET')
+                                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                            ->send();
 
-                            if (!($flag = $modelClass->save(false))) {
-                                break;
-                            }
-
-                            if (isset($modelsStuAsg[$indexClass]) && is_array($modelsStuAsg[$indexClass])) {
-                                foreach ($modelsStuAsg[$indexClass] as $indexStudent => $modelStudent) {
-                                    if($modelStudent->stu_id == ''){   
-                                        //Tempat insert semua mahasiswa by kelas. (Jika mahasiswa tidak ada yang dibuat) 
-                                        // die("Insert data Mahasiswa by Kelas ".$modelClass->class);
-                                        
-                                        $modelStudent->stu_id = 3;
-                                    }
+                        if($response->isOk){
+                            if($response->data['result'] == "OK"){
+                                foreach($response->data['data'] as $student){
+                                    $modelStudent = new StudentAssignment();
+                                    
+                                    $modelStudent->stu_id = $student['nim'];
                                     $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                    if (!($flag = $modelStudent->save(false))) {
-                                        break;
-                                    }
+                                    $modelStudent->save();
                                 }
                             }
                         }
-                    }
 
-                    if ($flag) {
-                        $transaction->commit();
-                        return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
-                    } else {
-                        $transaction->rollBack();
-                        die("Gagal Insert");
+                    }else{
+                        $modelClass->partial = 1;
+                        $modelClass->save();
+
+                        foreach($_POST['Student'][$i] as $student){
+                            $modelStudent = new StudentAssignment();
+                    
+                            $modelStudent->stu_id = $student;
+                            $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                            $modelStudent->save();
+                        }
                     }
-                } catch (Exception $e) {
-                    $transaction->rollBack();
-                    die("Tidak Valid");
                 }
+                
+                $transaction->commit();
+
+                return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
+            }catch(Exception $e){
+                Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuka penugasan.');
+
+                $transaction->rollBack();
             }
         }
 
         return $this->render('create', [
             'modelAsg' => $modelAsg,
-            'modelsClsAsg' => (empty($modelsClsAsg)) ? [new ClassAssignment] : $modelsClsAsg,
-            'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new StudentAssignment]] : $modelsStuAsg,
         ]);
     }
 
-    public function actionLists($id){
-        $countStudents = Student::find()
-        ->where(['cls_id' => $id])
-        ->count();
-        
-        $students = Student::find()
-        ->where(['cls_id' => $id])
-        ->orderBy('stu_fullname DESC')
-        ->all();
-        
-        echo "<option value=''>Pilih Mahasiswaa ..</option>";
-        if($countStudents>0){
-            foreach($students as $student){
-                echo "<option value='".$student->stu_id."'>".$student->stu_fullname."</option>";
-            }
-        }
-    }
-
-    /**
-     * Updates an existing Assignment model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {   
         $modelAsg = $this->findModel($id);
-        $modelsClsAsg = $modelAsg->classes;
-        $modelsStuAsg = [];
-        $oldStudents = [];
+        $modelClass = ClassAssignment::find()->where(['asg_id' => $id])->andWhere('deleted!=1')->all();
 
-        if (!empty($modelsClsAsg)) {
-            foreach ($modelsClsAsg as $indexClass => $modelClass) {
-                $students = $modelClass->students;
-                $modelsStuAsg[$indexClass] = $students;
-                $oldStudents = ArrayHelper::merge(ArrayHelper::index($students, 'stu_asg_id'), $oldStudents);
-            }
-        }
+        if($modelAsg->load(Yii::$app->request->post())){
+            $transaction = Yii::$app->db->beginTransaction();
+            
+            try{
+                $modelAsg->save();
 
-        if ($modelAsg->load(Yii::$app->request->post())) {
-            
-            // reset
-            $modelsStuAsg = [];
-            $oldClassIDs = ArrayHelper::map($modelsClsAsg, 'cls_asg_id', 'cls_asg_id');
-            $modelsClsAsg = Model::createMultiple(ClassAssignment::classname());
-            // $modelsClsAsg = Model::createMultiple(ClassAssignment::classname(), $modelsClsAsg);
-            Model::loadMultiple($modelsClsAsg, Yii::$app->request->post());
-            $deletedClassIDs = array_diff($oldClassIDs, array_filter(ArrayHelper::map($modelsClsAsg, 'cls_asg_id', 'cls_asg_id')));
-            
-            // validate person and houses models
-            $valid = $modelAsg->validate();
-            $valid = Model::validateMultiple($modelsClsAsg) && $valid;
-            
-            $studentsIDs = [];
-            if (isset($_POST['StudentAssignment'][0][0])) {
-                foreach ($_POST['StudentAssignment'] as $indexClass => $students) {
-                    $studentsIDs = ArrayHelper::merge($studentsIDs, array_filter(ArrayHelper::getColumn($students, 'stu_id')));
-                    foreach ($students as $indexStudent => $student) {
-                        $data['StudentAssignment'] = $student;
-                        $modelStudent = (isset($student['stu_asg_id']) && isset($oldStudents[$student['stu_asg_id']])) ? $oldStudents[$student['stu_asg_id']] : new StudentAssignment;
-                        $modelStudent->load($data);
-                        $modelsStuAsg[$indexClass][$indexStudent] = $modelStudent;
-                        $valid = $modelStudent->validate();
+                foreach($_POST['Class'] as $i => $class){
+                    $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $id])->one();
+
+                    if($checkClass == null){
+                        $modelClass = new ClassAssignment();
+                        
+                        $modelClass->class = $class;
+                        $modelClass->asg_id = $modelAsg->asg_id;
                     }
-                }
-            }
 
-            $oldStudentsIDs = ArrayHelper::getColumn($oldStudents, 'stu_asg_id');
-            $deletedStudentsIDs = array_diff($oldStudentsIDs, $studentsIDs);
+                    if($_POST['Student'][$i][0] == "empty"){
+                        if($checkClass == null){ //Kalau kelas belum pernah ditugaskan secara non-partial
+                            $modelClass->partial = 0;
+                            $modelClass->save();
 
-            if ($valid) {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $modelAsg->save(false)) {
+                            $client = new Client();
+                            $response = $client->createRequest()
+                                                ->setMethod('GET')
+                                                ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                                ->send();
 
-                        if (! empty($deletedStudentsIDs)) {
-                            StudentAssignment::deleteAll(['stu_asg_id' => $deletedStudentsIDs]);
-                        }
-
-                        if (! empty($deletedClassIDs)) {
-                            ClassAssignment::deleteAll(['cls_asg_id' => $deletedClassIDs]);
-                        }
-
-                        foreach ($modelsClsAsg as $indexClass => $modelClass) {
-
-                            if ($flag === false) {
-                                break;
-                            }
-
-                            $modelClass->asg_id = $modelAsg->asg_id;
-
-                            if (!($flag = $modelClass->save(false))) {
-                                break;
-                            }
-
-                            if (isset($modelsStuAsg[$indexClass]) && is_array($modelsStuAsg[$indexClass])) {
-                                foreach ($modelsStuAsg[$indexClass] as $indexStudent => $modelStudent) {
-
-                                    if($modelStudent->stu_id == ''){   
-                                        //Tempat insert semua mahasiswa by kelas. (Jika mahasiswa tidak ada yang dibuat) 
-                                        // die("Insert data Mahasiswa by Kelas ".$modelClass->class);
+                            if($response->isOk){
+                                if($response->data['result'] == "OK"){
+                                    foreach($response->data['data'] as $student){
+                                        $modelStudent = new StudentAssignment();
+                                        
+                                        $modelStudent->stu_id = $student['nim'];
                                         $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                        $modelStudent->stu_id = 3;
-                                    }else{
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                    }
-                                    
-                                    if (!($flag = $modelStudent->save(false))) {
-                                        break;
+                                        $modelStudent->save();
                                     }
                                 }
                             }
                         }
-                    }
+                    }else{
+                        if($checkClass == null){
+                            $modelClass->partial = 1;
+                            $modelClass->save();
+                        }
 
-                    if ($flag) {
-                        $transaction->commit();
-                        return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
-                    } else {
-                        $transaction->rollBack();
+                        foreach($_POST['Student'][$i] as $student){
+                            if($checkClass != null){ //Kalau kelas sudah pernah ditugaskan tapi secara partial
+                                $checkStudent = StudentAssignment::find()->where(['cls_asg_id' => $checkClass->cls_asg_id])->andWhere(['stu_id' => $student])->one();
+                                
+                                if($checkStudent == null){ //Jika mahasiswa/i belum pernah ditugaskan
+                                    $modelStudent = new StudentAssignment();
+                            
+                                    $modelStudent->stu_id = $student;
+                                    $modelStudent->cls_asg_id = $checkClass->cls_asg_id;
+                                    $modelStudent->save();
+                                }
+                            }else{ //Kalau kelas belum pernah ditugaskan secara parsial
+                                $modelStudent = new StudentAssignment();
+                        
+                                $modelStudent->stu_id = $student;
+                                $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                $modelStudent->save();
+                            }
+                        }
                     }
-                } catch (Exception $e) {
-                    $transaction->rollBack();
                 }
+
+                $transaction->commit();
+
+                return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
+            }catch(Exception $e){
+                Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat mengubah penugasan.');
+
+                $transaction->rollBack();
             }
         }
 
         return $this->render('update', [
             'modelAsg' => $modelAsg,
-            'modelsClsAsg' => (empty($modelsClsAsg)) ? [new House] : $modelsClsAsg,
-            'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new Room]] : $modelsStuAsg
+            'modelClass' => $modelClass,    
         ]);
     }
 
-    public function getAllClass(){
+    /**
+     * Deletes an existing Assignment model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id){
+        $modelAsg = $this->findModel($id);
+        $modelClass = ClassAssignment::find()->where(['asg_id' => $modelAsg->asg_id])->andWhere('deleted!=1')->all();
+
+        foreach($modelClass as $class){
+            $students = StudentAssignment::find()->where(['cls_asg_id' => $class->cls_asg_id])->andWhere('deleted!=1')->all();
+
+            foreach($students as $student){
+                $student->softDelete();
+            }
+
+            $class->softDelete();
+        }
+
+        $modelAsg->softDelete();
+
+        return $this->redirect(['index']);
+    }
+
+    public function getProject($id){
+        $model = Project::find()->where(['asg_id' => $id, 'created_by' => 1])->one();
+
+        return isset($model) ? $model : false ;
+    }
+
+    public function actionGetAllClass(){
+        $session = Yii::$app->session;
+
         $client = new Client();
         $response = $client->createRequest()
                             ->setMethod('GET')
@@ -374,36 +351,52 @@ class AssignmentController extends Controller
                 $listKelas = array();
 
                 foreach($response->data['data'] as $kelas){
-                    // array_push($listKelas[$kelas['nama']], $kelas['nama']);
-                    $listKelas += [$kelas['nama'] => $kelas['nama']];
+                    array_push($listKelas, array('kelas_id' => $kelas['kelas_id'], 'nama' => $kelas['nama']));
                 }
-                // sort($listKelas);
             }
         }
-        return $listKelas;
+
+        echo Json::encode($listKelas);
     }
 
-    public function getProject($id){
-        $model = Project::find()->where(['asg_id' => $id, 'created_by' => 1])->one();
-        // echo '<pre>';
-        // var_dump($model);
-        // die();
-        return isset($model) ? $model : false ;
+    public function actionRemoveStudentsInClass($asg_id, $cls_asg_id){
+        $class = ClassAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere('deleted!=1')->one();
+        $students = StudentAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere('deleted!=1')->all();
 
+        $class->softDelete();
+        foreach($students as $student){
+            $student->softDelete();
+        }
+
+        return $this->redirect(['update', 'id' => $asg_id]);
     }
 
+    public function actionRemoveStudent($asg_id, $cls_asg_id, $nim){
+        $student = StudentAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere(['stu_id' => $nim])->andWhere('deleted!=1')->one();
 
-    /**
-     * Deletes an existing Assignment model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id){
-        $this->findModel($id)->softDelete();
+        $student->softDelete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['update', 'id' => $asg_id]);
+    }
+
+    public function actionGetAllStudents($kelas_id){
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $kelas_id)
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                $students = array();
+
+                foreach($response->data['data'] as $student){
+                    array_push($students, array('nim' => $student['nim'], 'nama' => $student['nama']));
+                }
+            }
+        }
+    
+        echo Json::encode($students);
     }
 
     /**

@@ -10,22 +10,11 @@ $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?php
-    $listKelas = array();
-    $listKelas = $this->context->getAllClass();
-?>
-
 <div class="assignment-create">
     <br><br>
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form-experiment', [
         'modelAsg' => $modelAsg,
-
-        'modelsClsAsg' => (empty($modelsClsAsg)) ? [new ClassAssignment] : $modelsClsAsg,
-
-        'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new StudentAssignment]] : $modelsStuAsg,
-
-        'listKelas' => $listKelas,
     ]) ?>
 
 </div>

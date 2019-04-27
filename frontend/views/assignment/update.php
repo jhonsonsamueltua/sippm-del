@@ -11,23 +11,13 @@ $this->params['breadcrumbs'][] = ['label' => $modelAsg->asg_id, 'url' => ['view'
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 
-<?php
-    $listKelas = array();
-    $listKelas = $this->context->getAllClass();
-?>
-
 <div class="assignment-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form-experiment', [
         'modelAsg' => $modelAsg,
-
-        'modelsClsAsg' => (empty($modelsClsAsg)) ? [new ClassAssignment] : $modelsClsAsg,
-
-        'modelsStuAsg' => (empty($modelsStuAsg)) ? [[new StudentAssignment]] : $modelsStuAsg,
-
-        'listKelas' => $listKelas,
+        'modelClass' => $modelClass,
     ]) ?>
     
 </div>

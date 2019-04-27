@@ -144,7 +144,9 @@ class SiteController extends Controller
                         $nama = $datas['nama'];
                         $email = $datas['email'];
                         $kelas = $datas['kelas'];
-                        $role = "Dosen";
+                        if($model->username == "if416004"){
+                            $role = "Dosen";
+                        }
 
                         $session->set('dimId', $dimId);
                         $session->set('nama', $nama);
