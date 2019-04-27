@@ -56,7 +56,8 @@ class File extends \yii\db\ActiveRecord
         return [
             [['proj_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['file_name', 'file_path', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['file_name', 'file_path'], 'string', 'max' => 1000],
             [['proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['proj_id' => 'proj_id']],
         ];
     }

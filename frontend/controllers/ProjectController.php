@@ -36,7 +36,7 @@ class ProjectController extends Controller
     }
 
     public function beforeAction($action){
-        $this->layout = 'main-2';
+        $this->layout = 'main';
 
         return parent::beforeAction($action);
     }
@@ -62,7 +62,7 @@ class ProjectController extends Controller
         
         $project = $this->findModel($proj_id);
         $assignmentModel = Assignment::find()->where(['asg_id' => $project->asg_id])->andWhere('deleted!=1')->one();
-        $usageModel = ProjectUsage::find()->where(['proj_id' => $proj_id])->andWhere(['created_by' => $session['nama']])->andWhere('deleted!=1')->one();
+        $usageModel = ProjectUsage::find()->where(['proj_id' => $proj_id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
         $files = File::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->all();
 
         return $this->render('view-project', [
@@ -288,6 +288,7 @@ class ProjectController extends Controller
                 
                 header('Content-type: application/zip');
                 header('Content-Disposition: attachment; filename=' . $project->proj_title);
+                header('Content-Transfer-Encoding: chunked');
                 header('Pragma: no-cache');
                 header('Expires: 0');
                 readfile($project->proj_title);
@@ -299,17 +300,17 @@ class ProjectController extends Controller
         }
     }
 
-    // public function actionDownloadAttachment($file_id){
-    //     $fileModel = File::find()->where(['file_id' => $file_id])->one();
-    //     $path = Yii::getAlias('@webroot').'/';
-    //     $file = $fileModel->file_path;
+    public function actionDownloadAttachment($file_id){
+        $fileModel = File::find()->where(['file_id' => $file_id])->one();
+        $path = Yii::getAlias('@webroot').'/';
+        $file = $fileModel->file_path;
 
-    //     if(file_exists($file)){
-    //         Yii::$app->response->sendFile($file);
-    //     }else{
-    //         Yii::$app->session->setFlash('error', 'Maaf, file tidak ditemukan atau telah dihapus dari sistem');
-    //     }
-    // }
+        if(file_exists($file)){
+            Yii::$app->response->sendFile($file);
+        }else{
+            Yii::$app->session->setFlash('error', 'Maaf, file tidak ditemukan atau telah dihapus dari sistem');
+        }
+    }
 
     public function actionRemoveAttachment($file_id){
         $fileModel = File::find()->where(['file_id' => $file_id])->one();
@@ -340,6 +341,14 @@ class ProjectController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function findAssignment($asg_id){
+        if(($model = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one() !== null)){
+            return $model;
+        }
+
+        throw new NotFoundHttpException('Penugasan tidak ditemukan atau telah dihapus.');
     }
 
     private function getCategory($cat_proj_id){

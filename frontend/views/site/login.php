@@ -6,59 +6,35 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$css = ['css/site.css'
-                ];
+$css = ['css/login.css'];
 $this->title = 'Masuk';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
-<div class="site-login">  
-        <div class="contact-form">
-<!-- <div class="col-md-5 col-md-offset-4"> -->
-<!-- <div class="panel panel-primary"> -->
-    <div class="login-box-body" align="center">
-<br>
-<p class="login-box-msg" align="center", style="color:black;">
-        <img src="images/login.jpg" width="70px" class="avatar">
-        <h2>SIPPM IT Del</h2>
-        </p>
-        <hr>
-</div>
-<div class="panel-body">
-   <!--  <p>Please fill out the following fields to login:</p> -->
 
-    <div class="row">
-        <div class="col-lg-12">
-            
-            <?php 
-            $form = ActiveForm::begin(['id' => 'login-form']); 
-            $fieldOptions3 = [
-                'options' => ['class' => 'form-group has-feedback'],
-                'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
-            ];
-            $fieldOptions4 = [
-                'options' => ['class' => 'form-group has-feedback'],
-                'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
-            ];
-                    ?>
-           
-            
-                <?= $form->field($model, 'username', $fieldOptions4)->textInput(['autofocus' => true]) ->label('Nama Pengguna')?>          
-        
-                <?= $form->field($model, 'password', $fieldOptions3)->passwordInput() ->label('Kata Sandi') ?>
-            
-                <div class="form-group" align="center">
-                    <?= Html::submitButton('Masuk', ['class' => 'btn btn-submit', 'name' => 'login-button']) ?>
-                </div>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <div class="fadeIn first">
+        <img src="images/logo.jpg" id="icon" alt="Del Logo" />
+    </div>
+    
+    <h2 class="active"> Sign In </h2>
 
-            <?php ActiveForm::end(); ?>
-        </div>
+    <?php 
+        $form = ActiveForm::begin(['id' => 'login-form']); 
+    ?>
+
+    <?= $form->field($model, 'username')->textInput(['id' => 'login', 'class' => 'fadeIn second', 'autofocus' => true, 'placeholder' => 'Username'])->label(false) ?>
+
+    <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'placeholder' => 'Password'])->label(false) ?>
+
+    <div class="form-group" align="center">
+        <?= Html::submitButton('Sign In', ['class' => 'fadeIn fourth', 'name' => 'login-button']) ?>
     </div>
-    </div>
-    </div>
-            </div>
+
+    <?php ActiveForm::end(); ?>
+
+  </div>
+</div> 
             
-        </div>
-    </div>
-</div>       
-            
-<!-- <?php $this->endPage() ?> -->
+<?php $this->endPage() ?>

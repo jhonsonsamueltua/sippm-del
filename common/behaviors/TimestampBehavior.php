@@ -101,6 +101,7 @@ class TimestampBehavior extends AttributeBehavior
      */
     protected function getValue($event)
     {
+        date_default_timezone_set("Asia/Bangkok");
         if ($this->value instanceof Expression) {
             return $this->value;
         } else {
