@@ -22,7 +22,6 @@ use common\behaviors\DeleteBehavior;
  * @property string $updated_by
  *
  * @property SippmAssignment $asg
- * @property SippmStudent $stu
  */
 class StudentAssignment extends \yii\db\ActiveRecord
 {

@@ -6,18 +6,28 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\ProjectUsage */
 
-$this->title = $projectTitle['proj_title'];
+$this->title = $model->proj->proj_title;
 $this->params['breadcrumbs'][] = ['label' => 'Project Usages', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$css = ['css/site.css'];
 ?>
 <div class="project-usage-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<br>
+    <h2 class="text-h2">Detail Penggunaan Proyek <b> <?= Html::encode($this->title) ?> </b> </h2>
+    <hr class="hr-custom">
     
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            [
+                'attribute' => 'proj_id',
+                'label' => 'Judul Proyek',
+                'format' => 'raw',
+                'value' => function($model){
+                        return Html::a($model->proj->proj_title, ['project/view-project', 'proj_id' => $model->proj->proj_id]);
+                },
+            ],
             [
                 'attribute' => 'catUsg.cat_usg_name',
                 'label' => 'Kategori Penggunaan'
@@ -32,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->proj_usg_id], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Update', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn btn-warning']) ?>
         <?= Html::a('Cancel', ['delete', 'id' => $model->proj_usg_id], [
             'class' => 'btn btn-danger',
             'data' => [

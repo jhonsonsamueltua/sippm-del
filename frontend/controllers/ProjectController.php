@@ -36,7 +36,7 @@ class ProjectController extends Controller
     }
 
     public function beforeAction($action){
-        $this->layout = 'main-2';
+        $this->layout = 'main';
 
         return parent::beforeAction($action);
     }

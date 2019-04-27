@@ -1,0 +1,23 @@
+
+.site-proyek{
+    line-height: 1.5em;
+    font-size: 14px;
+}
+
+p{
+    font-size: 15px !important;
+}
+
+.col-md-4{
+    /* width: 30% !important; */
+}
+
+.col-md-8{
+    /* width: 70% !important; */
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0px !important;
+}

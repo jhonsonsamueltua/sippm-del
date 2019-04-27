@@ -2,24 +2,38 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\search\ProjectSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'List Proyek';
 $this->params['breadcrumbs'][] = $this->title;
+$css = ['css/site.css'];
 ?>
 <div class="sippm-project-index">
-
-    <h2><?= Html::encode($this->title) ?></h2>
-    <hr style="border-top: 2px solid #d9dada;">
+<br>
+    <h2 class="text-h2"><?= Html::encode($this->title) ?></h2>
+    <hr class="hr-custom">
+    
     <?php
-        foreach($model as $data){?>
-        <?= Html::a($data->proj_title, ['view-project', 'proj_id' => $data->proj_id]) ?>
-    <?php
+        $tempContent = "";
+        foreach($model as $data){
+            $tempContent = $tempContent . '
+            <tr>
+                <td>'.$data->proj_author.'</td>
+                <td>'.Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id]).'</td>
+            </tr>
+            ';
         }
     ?>
 
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Author</th>
+            <th>Proyek</th>
+        </tr>
+        </thead>
+        <tbody>
+            <?= $tempContent ?>
+        </tbody>
+    </table>
 
 </div>
+<br>

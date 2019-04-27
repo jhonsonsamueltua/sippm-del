@@ -31,7 +31,7 @@ $css = ['css/site.css'];
                             
                             <p><?php
                                 $status = AssignmentController::getProject($assignment["asg_id"]);
-                                if($model->isNewRecord){
+                                if(!$model->isNewRecord){
                                     echo "Sudah submit";
                                 }else{
                                     echo "Belum submit";
@@ -51,7 +51,6 @@ $css = ['css/site.css'];
                             <?php
                                 date_default_timezone_set("Asia/Bangkok");
                                 $asg_end_time = new DateTime($assignment->asg_end_time);
-
                                 if(!$model->isNewRecord){
                                     $updated_at = new DateTime($model->updated_at);
                                     $interval = $updated_at->diff($asg_end_time);

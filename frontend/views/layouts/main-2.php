@@ -343,7 +343,7 @@ $session = Yii::$app->session;
 <body>
 <?php $this->beginBody() ?>
     <div class="wrap">
-        <div class="min-jumbotron">
+        <div class="min-jumbotron"  >
             <div class="container text-left">
                 <img src="images/logo.png" style="height:auto; width:55px;padding-top:5px" align="left">
                 <form class="example" action="/action_page.php" style="margin:auto;max-width:500px">

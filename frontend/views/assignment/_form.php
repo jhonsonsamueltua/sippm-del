@@ -39,9 +39,9 @@ use common\models\Student;
                         </div>
                         <div class="col-md-6">
                             <!-- <?= $form->field($modelAsg, 'asg_year')->textInput(['maxlength' => true])->label("Tahun") ?> -->
-                            <!-- <div id='hiddenDiv' hidden> -->
+                            <div id='hiddenDiv' hidden>
                                 <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label("Matakuliah") ?>
-                            <!-- </div> -->
+                            </div>
                         </div>
                     </div>
                     

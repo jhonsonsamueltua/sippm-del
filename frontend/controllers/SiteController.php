@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\data\Pagination;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -86,24 +87,54 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
-    // public function actionIndex()
-    // {
-       
-    //     return $this->render('index');
-    // }
     public function actionIndex()
     {   
-        $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(3)->all();
+        $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
         $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
-        
+
+        $modelCount = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->count();
+        $modelNewsCount = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->count();
+
+        $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
+        $modelCompCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
         return $this->render('index', [
             'model' => $model,
             'modelNews' => $modelNews,
+            'modelComp' => $modelComp,
+            'modelCount' => $modelCount,
+            'modelNewsCount' => $modelNewsCount,
+            'modelCompCount' => $modelCompCount,
+        ]);
+    }
+
+    public function actionLihatLainnya($type)
+    {   
+        if($type == 1){
+            $modelCount = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->count();
+            $pagination = new Pagination(['totalCount' => $modelCount, 'pageSize' => 2]);
+
+            $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(3)->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        }else if($type == 2){
+            $modelCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
+            $pagination = new Pagination(['totalCount' => $modelCount, 'pageSize' => 2]);
+
+            $model = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->limit(3)->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        }else if($type == 3){
+            $modelCount = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->count();
+            $pagination = new Pagination(['totalCount' => $modelCount, 'pageSize' => 2]);
+
+            $model = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->limit(3)->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        }
+        return $this->render('lihat-lainnya', [
+            'model' => $model,
+            'type' => $type,
+            'pagination' => $pagination,
         ]);
     }
     /**
@@ -141,14 +172,16 @@ class SiteController extends Controller
 
                     if($role == "Mahasiswa"){
                         $dimId = $datas['dimId'];
+                        echo $nim = $datas['nim'];
                         $nama = $datas['nama'];
                         $email = $datas['email'];
                         $kelas = $datas['kelas'];
-                        if($model->username == "if416004"){
+                        if($session['username'] == 'if416004'){
                             $role = "Dosen";
                         }
 
                         $session->set('dimId', $dimId);
+                        $session->set('nim', $nim);
                         $session->set('nama', $nama);
                         $session->set('email', $email);
                         $session->set('kelas', $kelas);
@@ -167,7 +200,10 @@ class SiteController extends Controller
                 }else{
                     Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
                     
-                    return $this->redirect(['login']);
+                    return $this->render('login', [
+                        'model' => $model,
+                        'error' => true,
+                    ]);
                 }
             }else{
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
@@ -175,10 +211,10 @@ class SiteController extends Controller
 
             return $this->goHome();
         } else {
-            $model->password = '';
 
             return $this->render('login', [
                 'model' => $model,
+                'error' => false,
             ]);
         }
     }
