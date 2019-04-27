@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\data\Pagination;
 use yii\httpclient\Client;
 use common\models\Assignment;
 use common\models\Student;
@@ -39,7 +40,7 @@ class AssignmentController extends Controller
     }
     
     public function beforeAction($action){
-        $this->layout = "main-2";
+        $this->layout = "main";
 
         return parent::beforeAction($action);
     }
@@ -59,6 +60,14 @@ class AssignmentController extends Controller
         ]);
     }
 
+    public function actionManagemenProyek(){
+        $session = Yii::$app->session;
+
+        return $this->render('managemen-proyek',[
+
+        ]);
+    }
+
     /**
      * Displays a single Assignment model.
      * @param integer $id
@@ -68,10 +77,12 @@ class AssignmentController extends Controller
     public function actionView($id)
     {   
         $model = $this->findModel($id);
-        $projects = Project::find()->where(['asg_id' => $id])->count();
-
+        $projects = Project::find()->where(['asg_id' => $id])->andWhere('deleted' != 1)->all();
+        $countProject = Project::find()->where(['asg_id' => $id])->count();
         return $this->render('view', [
             'model' => $model,
+            'projects' => $projects,
+            'countProject' => $countProject,
         ]);
     }
 
@@ -86,67 +97,97 @@ class AssignmentController extends Controller
     }
 
     public function actionAssignmentStudent(){
-        // $modelAll = StudentAssignment::find()->where(['stu_id' => 1])->all();
-        // $modelRequest = StudentAssignment::find()->where(['stu_id' => 1])->andWhere([''])->all();
-        // $model = Assignment::find()
-        //         ->select('
-        //             sippm_assignment.asg_title, 
-        //             sippm_assignment.asg_start_time,
-        //             sippm_assignment.asg_end_time,
-        //             sippm_assignment.sts_asg_id,
-        //         ')
-        //         ->joinWith([
-        //             'classes' => function($query) {
-        //                 $query->where('sippm_class_assignment.asg_id' != '0')
-        //                 ->joinWith([
-        //                     'students' => function($query){
-        //                         $query->where('sippm_student_assignment.stu_id' == 2);
-        //                     }
-        //                 ]);
-        //             }
-        //         ])
-        //         ->all();
-        $sql = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
-        $model = Yii::$app->db->createCommand($sql)->queryAll();
-        // echo '<pre>';
-        // var_dump($model);die();
+        $this->openCloseAssignment();
+
+        $session = Yii::$app->session;
+        $username = $session['nim'];
+
+        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = $username AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3)";
+        $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
+        $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
+
+        // $pagination = new Pagination(['totalCount' => $modelPenugasanSaatIniCount, 'pageSize' => 5]);
+        
+        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = $username AND sa.sts_asg_id = 2";
+        $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
+        $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
+
+        // $pagination = new Pagination(['totalCount' => $modelRiwayatPenugasanCount, 'pageSize' => 1]);
+        // $modelRiwayatPenugasan = $modelRiwayatPenugasan->offset($pagination->offset)
+        // ->limit($pagination->limit)
+        // ->all();
+
         return $this->render('assignment-student',[
-            'model' => $model,
+            'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
+            'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
+            'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
+            'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
         ]);
     }
 
     public function actionAssignmentDosen(){
-        // $modelAll = StudentAssignment::find()->where(['stu_id' => 1])->all();
-        // $modelRequest = StudentAssignment::find()->where(['stu_id' => 1])->andWhere([''])->all();
-        // $model = Assignment::find()
-        //         ->select('
-        //             sippm_assignment.asg_title, 
-        //             sippm_assignment.asg_start_time,
-        //             sippm_assignment.asg_end_time,
-        //             sippm_assignment.sts_asg_id,
-        //         ')
-        //         ->joinWith([
-        //             'classes' => function($query) {
-        //                 $query->where('sippm_class_assignment.asg_id' != '0')
-        //                 ->joinWith([
-        //                     'students' => function($query){
-        //                         $query->where('sippm_student_assignment.stu_id' == 2);
-        //                     }
-        //                 ]);
-        //             }
-        //         ])
-        //         ->all();
-        $sql = "SELECT *  FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = 1";
-        $model = Yii::$app->db->createCommand($sql)->queryAll();
-        // echo '<pre>';
-        // var_dump($model);die();
+        $session = Yii::$app->session;
+
+        $this->openCloseAssignment();
+        
+        $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere('deleted' != 1)->all();
+        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted' != 1)->all();
+
+        $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere('deleted' != 1)->count();
+        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted' != 1)->count();
+
         return $this->render('assignment-dosen',[
-            'model' => $model,
+            'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
+            'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
+            'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
+            'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
         ]);
     }
+
+    public function openCloseAssignment(){
+        $session = Yii::$app->session;
+        //Bagian update status penugasan pending menjadi open
+        date_default_timezone_set("Asia/Bangkok");
+        $now = new \DateTime();
+        $model = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->all();
+        $modelCount = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->count();
+
+        if($modelCount > 0){
+            foreach($model as $data){
+                $start = new \DateTime($data->asg_start_time);
+                $end = new \DateTime($data->asg_end_time);
+                if($now >= $start && $now <= $end){
+                    $data->sts_asg_id = 1;
+                    $data->save();
+                }
+            }
+        }
+
+        //bagian update status penugasan open menjadi close
+        $model2 = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->all();
+        $model2Count = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->count();
+
+        if($model2Count > 0){
+            foreach($model2 as $data){
+                $end = new \DateTime($data->asg_end_time);
+                if($now >= $end){
+                    $data->sts_asg_id = 2;
+                    $data->save();
+                }
+            }
+        }
+    }
     
+    public function getStatusAssignment($asg_id){
+        $model = $this->findModel($asg_id);
+        $result = $model->stsAsg->sts_asg_name;
+        return $result;
+    }
+
     public function actionCreate()
     {   
+        $session = Yii::$app->session;
+
         $modelAsg = new Assignment;
         
         $modelsClsAsg = [new ClassAssignment];
@@ -176,6 +217,7 @@ class AssignmentController extends Controller
             if ($valid) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
+                    $modelAsg->asg_creator = $session["nama"];
                     if ($flag = $modelAsg->save(false)) {
                         foreach ($modelsClsAsg as $indexClass => $modelClass) {
 
@@ -192,15 +234,28 @@ class AssignmentController extends Controller
                             if (isset($modelsStuAsg[$indexClass]) && is_array($modelsStuAsg[$indexClass])) {
                                 foreach ($modelsStuAsg[$indexClass] as $indexStudent => $modelStudent) {
                                     if($modelStudent->stu_id == ''){   
-                                        //Tempat insert semua mahasiswa by kelas. (Jika mahasiswa tidak ada yang dibuat) 
-                                        // die("Insert data Mahasiswa by Kelas ".$modelClass->class);
-                                        
-                                        $modelStudent->stu_id = 3;
+                                        $client = new Client();
+                                        $response = $client->createRequest()
+                                                            ->setMethod('GET')
+                                                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                                            ->send();
+
+                                        if($response->isOk){
+                                            if($response->data['result'] == "OK"){
+                                                foreach($response->data['data'] as $student){
+                                                    $studentModel = new StudentAssignment();
+                                                    $studentModel->stu_id = $student['nim'];
+                                                    $studentModel->cls_asg_id = $modelClass->cls_asg_id;
+                                                    
+                                                    $studentModel->save();
+                                                }
+                                            }
+                                        }
                                     }
-                                    $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                    if (!($flag = $modelStudent->save(false))) {
-                                        break;
-                                    }
+                                    // $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                    // if (!($flag = $modelStudent->save(false))) {
+                                    //     break;
+                                    // }
                                 }
                             }
                         }
@@ -211,11 +266,9 @@ class AssignmentController extends Controller
                         return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
                     } else {
                         $transaction->rollBack();
-                        die("Gagal Insert");
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
-                    die("Tidak Valid");
                 }
             }
         }
@@ -227,20 +280,47 @@ class AssignmentController extends Controller
         ]);
     }
 
+    public function getAllClass(){
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                $listKelas = array();
+
+                foreach($response->data['data'] as $kelas){
+                    $listKelas += [$kelas['kelas_id'] => $kelas['nama']];
+                }
+            }
+        }
+        return $listKelas;
+    }
     public function actionLists($id){
-        $countStudents = Student::find()
-        ->where(['cls_id' => $id])
-        ->count();
-        
-        $students = Student::find()
-        ->where(['cls_id' => $id])
-        ->orderBy('stu_fullname DESC')
-        ->all();
-        
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $id)
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                $students = array();
+
+                foreach($response->data['data'] as $student){
+                    array_push($students, [$student['nim'], $student['nama']]);
+                }
+            }
+        }
+
+        $countStudents = count($students);
+
         echo "<option value=''>Pilih Mahasiswaa ..</option>";
-        if($countStudents>0){
+        if($countStudents > 0){
             foreach($students as $student){
-                echo "<option value='".$student->stu_id."'>".$student->stu_fullname."</option>";
+                echo "<option value='". $student[0] ."'>". $student[1] ."</option>";
             }
         }
     }
@@ -325,19 +405,29 @@ class AssignmentController extends Controller
 
                             if (isset($modelsStuAsg[$indexClass]) && is_array($modelsStuAsg[$indexClass])) {
                                 foreach ($modelsStuAsg[$indexClass] as $indexStudent => $modelStudent) {
-
                                     if($modelStudent->stu_id == ''){   
-                                        //Tempat insert semua mahasiswa by kelas. (Jika mahasiswa tidak ada yang dibuat) 
-                                        // die("Insert data Mahasiswa by Kelas ".$modelClass->class);
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                        $modelStudent->stu_id = 3;
-                                    }else{
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                        $client = new Client();
+                                        $response = $client->createRequest()
+                                                            ->setMethod('GET')
+                                                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                                            ->send();
+
+                                        if($response->isOk){
+                                            if($response->data['result'] == "OK"){
+                                                foreach($response->data['data'] as $student){
+                                                    $studentModel = new StudentAssignment();
+                                                    $studentModel->stu_id = $student['nim'];
+                                                    $studentModel->cls_asg_id = $modelClass->cls_asg_id;
+                                                    
+                                                    $studentModel->save();
+                                                }
+                                            }
+                                        }
                                     }
-                                    
-                                    if (!($flag = $modelStudent->save(false))) {
-                                        break;
-                                    }
+                                    // $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                    // if (!($flag = $modelStudent->save(false))) {
+                                    //     break;
+                                    // }
                                 }
                             }
                         }
@@ -362,36 +452,15 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function getAllClass(){
-        $client = new Client();
-        $response = $client->createRequest()
-                            ->setMethod('GET')
-                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
-                            ->send();
-
-        if($response->isOk){
-            if($response->data['result'] == "OK"){
-                $listKelas = array();
-
-                foreach($response->data['data'] as $kelas){
-                    // array_push($listKelas[$kelas['nama']], $kelas['nama']);
-                    $listKelas += [$kelas['nama'] => $kelas['nama']];
-                }
-                // sort($listKelas);
-            }
-        }
-        return $listKelas;
-    }
-
     public function getProject($id){
-        $model = Project::find()->where(['asg_id' => $id, 'created_by' => 1])->one();
+        $session = Yii::$app->session;
+        $model = Project::find()->where(['asg_id' => $id, 'created_by' => $session["username"]])->one();
         // echo '<pre>';
         // var_dump($model);
         // die();
         return isset($model) ? $model : false ;
 
     }
-
 
     /**
      * Deletes an existing Assignment model.

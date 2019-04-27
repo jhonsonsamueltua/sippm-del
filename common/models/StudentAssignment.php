@@ -22,7 +22,6 @@ use common\behaviors\DeleteBehavior;
  * @property string $updated_by
  *
  * @property SippmAssignment $asg
- * @property SippmStudent $stu
  */
 class StudentAssignment extends \yii\db\ActiveRecord
 {
@@ -58,7 +57,6 @@ class StudentAssignment extends \yii\db\ActiveRecord
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['cls_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => ClassAssignment::className(), 'targetAttribute' => ['cls_asg_id' => 'cls_asg_id']],
-            [['stu_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['stu_id' => 'stu_id']],
         ];
     }
 
@@ -89,11 +87,4 @@ class StudentAssignment extends \yii\db\ActiveRecord
         return $this->hasOne(ClassAssignment::className(), ['cls_asg_id' => 'cls_asg_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStudent()
-    {
-        return $this->hasOne(Student::className(), ['stu_id' => 'stu_id']);
-    }
 }

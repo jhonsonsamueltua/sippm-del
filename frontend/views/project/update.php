@@ -13,11 +13,11 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="sippm-project-update">
 
     <!-- <h1><?= Html::encode($this->title) ?></h1> -->
-    <br>
+    <br><br>
     <?= $this->render('_form', [
         'model' => $model,
         'files' => $fileModel,
         'assignment' => $assignment,
     ]) ?>
-
+<br>
 </div>

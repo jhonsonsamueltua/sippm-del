@@ -61,12 +61,12 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['proj_title', 'proj_description', 'proj_author'], 'required', 'message' => "{attribute} tidak boleh kosong."],
             [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_cat_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
-            [['proj_description', 'proj_author'], 'string', 'max' => 1000],
-            [['proj_title'], 'string', 'max' => 1000],
-            [['proj_cat_name'], 'string', 'max' => 100],
+            [['proj_description', 'proj_title'], 'string', 'max' => 1000],
+            [['proj_author'], 'string', 'max' => 500],
             ['proj_author', 'match', 'pattern'=> '/^[A-Za-z; ]+$/u', 'message'=> 'Penulis hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
             [['files'], 'file', 'maxFiles' => 0],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],

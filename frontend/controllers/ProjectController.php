@@ -36,7 +36,7 @@ class ProjectController extends Controller
     }
 
     public function beforeAction($action){
-        $this->layout = 'main-2';
+        $this->layout = 'main';
 
         return parent::beforeAction($action);
     }
@@ -62,7 +62,7 @@ class ProjectController extends Controller
         
         $project = $this->findModel($proj_id);
         $assignmentModel = Assignment::find()->where(['asg_id' => $project->asg_id])->andWhere('deleted!=1')->one();
-        $usageModel = ProjectUsage::find()->where(['proj_id' => $proj_id])->andWhere(['created_by' => $session['nama']])->andWhere('deleted!=1')->one();
+        $usageModel = ProjectUsage::find()->where(['proj_id' => $proj_id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
         $files = File::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->all();
 
         return $this->render('view-project', [

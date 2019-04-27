@@ -59,6 +59,7 @@ class ProjectUsage extends \yii\db\ActiveRecord
             [['proj_id', 'sts_proj_usg_id', 'cat_usg_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_usg_usage'], 'string', 'max' => 300],
+            [['proj_usg_creator'], 'string', 'max' => 100],
             [['user_email', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['proj_id' => 'proj_id']],
             [['cat_usg_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryUsage::className(), 'targetAttribute' => ['cat_usg_id' => 'cat_usg_id']],
