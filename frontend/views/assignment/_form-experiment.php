@@ -285,7 +285,7 @@ $session = Yii::$app->session;
     
                         students += \"<option select='selected' value='empty'>Pilih Mahasiswa...</option>\";
                         result.forEach(function(student){
-                            students += \"<option value='\"+student['nim']+\"'>\"+student['nama']+\"</option>\";
+                            students += \"<option value='\"+student['nim']+\"'>\"+student['nama']+\" (\"+student['nim']+\")</option>\";
                         });
     
                         $('select[name^=\"Student['+classId+']\"]').empty();
