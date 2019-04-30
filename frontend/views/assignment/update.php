@@ -12,14 +12,14 @@ $this->params['breadcrumbs'][] = 'Update';
 $css = ['css/site.css'];
 ?>
 
-<div class="assignment-update">
+<div class="body-content">
+    <div class=" container box-content">
+        <h3 class=""> <b> Edit Penugasan </b></h3>
+        <hr class="hr-custom">
 
-    <h2 class="text-h2">Update Penugasan <b> <?= Html::encode($this->title) ?> </b> </h2>
-    <hr class="hr-custom">
-
-    <?= $this->render('_form-experiment', [
-        'modelAsg' => $modelAsg,
-        'modelClass' => $modelClass,
-    ]) ?>
-    
+        <?= $this->render('_form-experiment', [
+            'modelAsg' => $modelAsg,
+            'modelClass' => $modelClass,
+        ]) ?>
+    </div>
 </div>

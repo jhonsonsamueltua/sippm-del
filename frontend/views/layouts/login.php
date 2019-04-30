@@ -11,6 +11,7 @@ use common\widgets\Alert;
 
 AppAsset::register($this);
 $session = Yii::$app->session;
+$css = ['css/login.css'];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

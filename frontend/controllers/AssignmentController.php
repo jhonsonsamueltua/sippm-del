@@ -118,9 +118,9 @@ class AssignmentController extends Controller
         $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
 
         // $pagination = new Pagination(['totalCount' => $modelRiwayatPenugasanCount, 'pageSize' => 1]);
-        // $modelRiwayatPenugasan = $modelRiwayatPenugasan->offset($pagination->offset)
-        // ->limit($pagination->limit)
-        // ->all();
+        $modelRiwayatPenugasan = $modelRiwayatPenugasan->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->all();
 
         return $this->render('assignment-student',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
@@ -134,18 +134,25 @@ class AssignmentController extends Controller
         $session = Yii::$app->session;
 
         $this->openCloseAssignment();
-        
-        $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere('deleted' != 1)->all();
-        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted' != 1)->all();
 
-        $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere('deleted' != 1)->count();
-        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted' != 1)->count();
+        $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->count();
+        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->count();
+        
+        $pagination = new Pagination(['totalCount' => $modelRiwayatPenugasanCount, 'pageSize' => 5]);
+
+        $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->all();
+
+        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])
+        ->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->all();
 
         return $this->render('assignment-dosen',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
             'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
             'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
             'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
+            'pagination' => $pagination,
         ]);
     }
 

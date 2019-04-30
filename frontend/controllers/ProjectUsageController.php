@@ -34,11 +34,11 @@ class ProjectUsageController extends Controller
         ];
     }
 
-    public function beforeAction($action){
-        $this->layout = "main-2";
+    // public function beforeAction($action){
+    //     $this->layout = "main-2";
 
-        return parent::beforeAction($action);
-    }
+    //     return parent::beforeAction($action);
+    // }
 
     /**
      * Lists all ProjectUsage models.

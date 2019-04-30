@@ -29,12 +29,15 @@ $session = Yii::$app->session;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
   <style>
   body {
-    font: 16px 'Montserrat', sans-serif;
+    font: 14px 'Montserrat', sans-serif;
     color: #808080;
     font-weight: 400;
     line-height: 2em;
+    background-color: white;
   }
   p {font-size: 16px;}
   .margin {margin-bottom: 45px;}
@@ -134,11 +137,11 @@ $session = Yii::$app->session;
         cursor: default;
         border-bottom-color: transparent;
     }
-    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    /* .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
         color: #555;
         cursor: default;
         border-bottom-color: transparent;
-    }
+    } */
 
     /* content */
     .box-content{
@@ -192,7 +195,7 @@ $session = Yii::$app->session;
                                         <ul class="dropdown-menu">
                                             <li><?= Html::a('Penugasan', ['assignment/assignment-dosen']) ?></li>
                                             <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
-                                            <li><?= Html::a('Penggunaan Proyek', ['assignment/managemen-proyek']) ?></li>
+                                            <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                                         </ul>
                                     <!-- </div> -->
                                     </li>

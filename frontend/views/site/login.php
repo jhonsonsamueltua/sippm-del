@@ -6,7 +6,6 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$css = ['css/login.css'];
 $this->title = 'Masuk';
 $this->params['breadcrumbs'][] = $this->title;
 
