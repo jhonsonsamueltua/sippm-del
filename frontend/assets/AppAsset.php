@@ -14,10 +14,10 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/assignment-form.css',
-        'css/main.css',
         'css/project.css',
         'css/assignment.css',
         'css/login.css',
+        'css/main.css',
     ];
     public $js = [
         'js/site.js',

@@ -10,14 +10,14 @@ $this->params['breadcrumbs'][] = ['label' => 'Sippm Projects', 'url' => ['index'
 $this->params['breadcrumbs'][] = ['label' => $model->proj_id, 'url' => ['view', 'id' => $model->proj_id]];
 $this->params['breadcrumbs'][] = 'Update';  
 ?>
-<div class="sippm-project-update">
-
-    <!-- <h1><?= Html::encode($this->title) ?></h1> -->
-    <br><br>
-    <?= $this->render('_form', [
-        'model' => $model,
-        'files' => $fileModel,
-        'assignment' => $assignment,
-    ]) ?>
-<br>
+<div class="body-content">
+    <div class=" container box-content">
+        <h3 class=""> <b> Edit : <?= $model->proj_title ?>  </b></h3>
+        <hr class="hr-custom">
+        <?= $this->render('_form', [
+            'model' => $model,
+            'files' => $fileModel,
+            'assignment' => $assignment,
+        ]) ?>
+    </div>
 </div>

@@ -63,11 +63,23 @@ class ProjectUsageController extends Controller
             ->limit($pagination->limit)
             ->all();
 
+            $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1';
+            $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
+            $modelRequestUsersCount = count($modelRequestUsers);
+
+            $query2 = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND (PU.sts_proj_usg_id = 2 OR PU.sts_proj_usg_id = 3)';
+            $modelRiwayatRequestOrangLain = Yii::$app->db->createCommand($query2)->queryAll();
+            $modelRiwayatRequestOrangLainCount = count($modelRiwayatRequestOrangLain);
+
             return $this->render('index', [
                 'modelRequest' => $modelRequest,
+                'modelRequestUsers' => $modelRequestUsers,
                 'modelRiwayat' => $modelRiwayat,
+                'modelRiwayatRequestOrangLain' => $modelRiwayatRequestOrangLain,
                 'modelRequestCount' => $modelRequestCount,
+                'modelRequestUsersCount' => $modelRequestUsersCount,
                 'modelRiwayatCount' => $modelRiwayatCount,
+                'modelRiwayatRequestOrangLainCount' => $modelRiwayatRequestOrangLainCount,
                 'pagination' => $pagination,
                 // 'pagination2' => $pagination2,
             ]);
@@ -187,6 +199,7 @@ class ProjectUsageController extends Controller
     
                 return $this->render('update', [
                     'model' => $model,
+                    'project' => $this->getProject($model->proj_id),
                 ]);
             }
         }

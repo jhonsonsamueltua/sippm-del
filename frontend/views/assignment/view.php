@@ -39,6 +39,8 @@ $this->title = $model->asg_title;
                         "method" => "post",
                     ],
                 ]).'</p>';
+            }elseif($model->sts_asg_id == 2){
+                $button = '<p>'.Html::a('Open', ['assignment/view', 'id' => $model["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']).'</p>';
             }
             echo $button;
         ?>

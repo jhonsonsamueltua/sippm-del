@@ -50,7 +50,7 @@ $css = ['css/main.css'];
                     
 					<h4 class="text-white">Filter Pencarian</h4>
 
-					<div class="courses pt-20">
+					<div class="courses pt-20 wow fadeIn" data-wow-duration="10s">
                         <a href="#top-5" class="btn-md button btn-filter" transparent mr-10 mb-10>Top 5 Sering Digunakan</a>
                         <a href="#menang-kompetisi" class="btn-md button btn-filter" transparent mr-10 mb-10>Menang Kompetisi</a>
                         <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
@@ -123,10 +123,10 @@ $css = ['css/main.css'];
                     <ol class="custom-counter">
                     
                         <?php
-                            if($model == 0){
+                            if($modelCompCount == 0){
                                 echo "<i>&nbsp;&nbsp;Tidak ada data.</i>";
                             }else{
-                            foreach($model as $data){
+                            foreach($modelComp as $data){
                                 $description = $data->proj_description;
                                 $limit_words = 30;
                                 $words = explode(' ',$description);
@@ -178,7 +178,7 @@ $css = ['css/main.css'];
                     <ol class="custom-counter">
                     
                         <?php
-                            foreach($model as $data){
+                            foreach($modelNews as $data){
                                 $description = $data->proj_description;
                                 $limit_words = 30;
                                 $words = explode(' ',$description);
@@ -202,7 +202,7 @@ $css = ['css/main.css'];
                                 </li>
                             <?php
                                 }
-                            if($modelCount == 0){
+                            if($modelNewsCount == 0){
                                 echo "<i>&nbsp;&nbsp;Tidak ada data.</i>";
                             }
                         ?>

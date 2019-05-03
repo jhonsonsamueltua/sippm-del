@@ -11,14 +11,15 @@ $this->params['breadcrumbs'][] = ['label' => $model->proj_usg_id, 'url' => ['vie
 $this->params['breadcrumbs'][] = 'Update';
 $css = ['css/site.css'];
 ?>
-<br>
-<div class="project-usage-update">
 
-    <h2 class="text-h2">Update Penggunaan Proyek <b> <?= Html::encode($this->title) ?> </b> </h2>
-    <hr class="hr-custom">
+<div class="body-content" style="font-size: 14px;">
+    <div class=" container box-content">
+        <h3><b> Edit Request Penggunaan</b> </h3>
+        <hr class="hr-custom">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-<br>
+        <?= $this->render('_form', [
+            'model' => $model,
+            'project' => $project,
+        ]) ?>
+    </div>
 </div>

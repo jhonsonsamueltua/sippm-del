@@ -14,9 +14,10 @@ $css = ['css/project.css'];
 <div class="body-content">
     <div class=" container box-content">
         <div align="center">
+        <!-- <font style="float: right; font-size: 18px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font>  -->
             <h2 class="text-h2"><?= $model->proj_title ?></h2>
             <br>
-            <?= $author ?> 
+            <?= $author ?>                                            
         </div>
 
         <hr class="hr-custom">

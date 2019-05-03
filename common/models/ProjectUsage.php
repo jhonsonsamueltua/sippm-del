@@ -56,6 +56,7 @@ class ProjectUsage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['cat_usg_id', 'proj_usg_usage'], 'required', 'message' => "{attribute} tidak boleh kosong."],
             [['proj_id', 'sts_proj_usg_id', 'cat_usg_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_usg_usage'], 'string', 'max' => 300],
@@ -77,7 +78,7 @@ class ProjectUsage extends \yii\db\ActiveRecord
             'proj_usg_usage' => 'Deskripsi Penggunaan',
             'proj_id' => 'Id Proyek',
             'sts_proj_usg_id' => 'Sts Proj Usg ID',
-            'cat_usg_id' => 'Kategori Tujuan Pengunduhan',
+            'cat_usg_id' => 'Tujuan Penggunaan',
             'user_email' => 'Email Pemohon',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',

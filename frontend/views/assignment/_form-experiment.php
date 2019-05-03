@@ -27,37 +27,37 @@ $session = Yii::$app->session;
             ],
         ]); ?>    
         
-        <?= $form->field($modelAsg, 'asg_title')->textArea(['maxlength' => true])->label() ?>
-        
-        <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
-                    ['prompt' => "Pilih Kategori", 'onchange' => 'java_script_:show(this.options[this.selectedIndex].value)'])->label()?>    
+            <?= $form->field($modelAsg, 'asg_title')->textArea(['maxlength' => true])->label() ?>
+            
+            <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
+                        ['prompt' => "Pilih Kategori", 'onchange' => 'java_script_:show(this.options[this.selectedIndex].value)'])->label()?>    
 
-        <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label() ?>
+            <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label() ?>
 
-        <?= $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class, [
-            'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-            'options' => ['placeholder' => 'Pilih batas awal ...'],
-            'pluginOptions' => [
-                'autoclose'=>true,
-                'format' => 'yyyy-mm-dd hh:ii:ss'
-            ],
-            'class' => 'form-control'
-        ])->label(); ?>
-
-        <?= $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class, [
+            <?= $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class, [
                 'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                'options' => ['placeholder' => 'Pilih batas awal ...'],
                 'pluginOptions' => [
                     'autoclose'=>true,
                     'format' => 'yyyy-mm-dd hh:ii:ss'
-                ]
+                ],
+                'class' => 'form-control'
             ])->label(); ?>
 
-            <?= $form->field($modelAsg, 'asg_description')->widget(Redactor::classname(), [
-                'options' => [
-                    'minHeight' => 500,
-                ]
-            ]) ?>
+            <?= $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class, [
+                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                    ]
+                ])->label(); ?>
+
+                <?= $form->field($modelAsg, 'asg_description')->widget(Redactor::classname(), [
+                    'options' => [
+                        'minHeight' => 500,
+                    ]
+                ]) ?>
     </div>
         
     <div class="col-md-6">
@@ -96,34 +96,32 @@ $session = Yii::$app->session;
                     ");
                 } 
             ?>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <td>Kelas</td>
-                        <td>
-                            <div class="col-md-9">
-                                Mahasiswa
-                            </div>
-                            <div class="col-md-3" style="padding: 5px">
-                                <button type="button" class="btn btn-success btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>
-                                <button type="button" class="btn btn-danger btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
-                            </div>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody id="list-class">
-                    <form action="#" method="post">
-
-                    </form>
-                </tbody>
-            </table>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Kelas</td>
+                            <td>
+                                <div class="col-md-9">
+                                    Mahasiswa
+                                </div>
+                                <div class="col-md-3" style="padding: 5px">
+                                    <button type="button" class="btn btn-success btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button type="button" class="btn btn-danger btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="list-class">
+                        
+                    </tbody>
+                </table>
     </div>
 </div>
 
     <div class="row">
         <center>
-            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Edit', ['class' => 'btn-md button btn-custom', 'style' => 'padding: 8px 30px;width: 300px;font-style: bold;']) ?>
-            <!-- <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Update', ['class' => 'btn btn-primary']) ?> -->
+            <!-- <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Edit', ['class' => 'btn-md button btn-custom', 'style' => 'padding: 8px 30px;width: 300px;font-style: bold;']) ?> -->
+            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Update', ['class' => 'btn btn-primary']) ?>
         </center>   
     </div>
 

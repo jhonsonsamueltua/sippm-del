@@ -82,7 +82,7 @@ class Assignment extends \yii\db\ActiveRecord
             ['asg_start_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
             ['asg_end_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
             [['sts_asg_id'], 'default', 'value' => 3],
-            [['asg_title', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 1000],
+            [['asg_title', 'asg_creator_email', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 1000],
             [['asg_description'], 'string', 'max' => 500],
             [['asg_creator'], 'string', 'max' => 100],
             [['asg_year', 'class'], 'string', 'max' => 32],
