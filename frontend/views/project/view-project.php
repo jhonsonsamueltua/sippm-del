@@ -11,18 +11,19 @@ $css = ['css/project.css'];
     $author = implode(", ", $author_words);
 ?>
 
-<div class="site-proyek" >
-    <div class="body-content container project-view" style="line-height: 1.4em; padding-top: 20px; padding-bottom: 20px; min-height: 450px;">
+<div class="body-content">
+    <div class=" container box-content">
         <div align="center">
+        <!-- <font style="float: right; font-size: 18px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font>  -->
             <h2 class="text-h2"><?= $model->proj_title ?></h2>
-            
-            <?= $author ?> <font style="float: right; font-size: 18px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font>                                            
+            <br>
+            <?= $author ?>                                            
         </div>
 
         <hr class="hr-custom">
             
         <div class="row">
-            <div class = "col-md-4">
+            <div class = "col-md-3">
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <h4>Artefak Proyek</h4>
                     <?php
@@ -65,7 +66,7 @@ $css = ['css/project.css'];
             </div>
         
 
-            <div class ="col-md-8">
+            <div class ="col-md-9">
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <h4>Deskripsi</h4>
                     <?= $model->proj_description ?>

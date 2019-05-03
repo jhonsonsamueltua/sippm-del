@@ -29,12 +29,15 @@ $session = Yii::$app->session;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
   <style>
   body {
-    font: 16px 'Montserrat', sans-serif;
+    font: 14px 'Montserrat', sans-serif;
     color: #808080;
     font-weight: 400;
     line-height: 2em;
+    background-color: white;
   }
   p {font-size: 16px;}
   .margin {margin-bottom: 45px;}
@@ -134,11 +137,11 @@ $session = Yii::$app->session;
         cursor: default;
         border-bottom-color: transparent;
     }
-    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    /* .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
         color: #555;
         cursor: default;
         border-bottom-color: transparent;
-    }
+    } */
 
     /* content */
     .box-content{
@@ -156,12 +159,79 @@ $session = Yii::$app->session;
         padding-bottom: 20px; 
         min-height: 450px;
     }
+
+    /* sidenav */
+    .vertical-menu {
+    width: 100%;
+    }
+
+    .vertical-menu a {
+    background-color: #eee;
+    color: #555555;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    }
+
+    .vertical-menu i {
+    font-size: 13px;
+    height: 25px;
+    padding: 6px;
+    color: #9E9E9E;
+    background-color: #eee;
+    letter-spacing: 1px;
+    display: block;
+    text-decoration: none;
+    }
+
+    .vertical-menu a:hover {
+    background-color: #6AC7C1;
+    color: #555555;
+    }
+
+    .vertical-menu a .b :hover {
+    background-color: red;
+    color: #555555;
+    }
+
+    .vertical-menu a.active, .vertical-menu a.active:focus {
+    background-color: #6AC7C1;
+    color: #FFF;
+    }
+    
+    /* alert */
+    .alert {
+        padding: 8px;
+        margin : 0px;
+        /* background-color: #2196F3;
+        color: white; */
+    }
+
+    .alert-info{
+        border-left: 6px solid #2196F3;
+    }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .closebtn:hover {
+        color: black;
+    }
   </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
     <!-- Navbar -->
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default" style="background-color: #eeeeee;">
         <div class="container">
             <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -179,22 +249,30 @@ $session = Yii::$app->session;
                                     <!-- <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
                                     <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
                                     <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li> -->
-                                    <li><?= Html::a('Managemen Proyek', ['/project-usage']) ?></li>
+                                    <!-- <li><?= Html::a('Managemen Proyek', ['/project-usage']) ?></li> -->
+
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">Managemen Proyek
+                                        <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
+                                            <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
+                                            <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
+                                            <li> <hr style="padding: 0px; margin: 5px;"> </li>              
+                                            <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
+                                        </ul>
+                                    </li>
                             <?php
                                 }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
                                     <!-- <li><?= Html::a('Request Penggunaan Proyek', ['project-usage/list-project-usage-request']) ?></li> -->
                                     <li class="dropdown">
-                                    <!-- Dropdown -->
-                                    <!-- <div class="dropdown"> -->
-                                        <!-- <?= Html::a('Managemen Proyek', ['/project-usage']) ?> -->
                                         <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">Managemen Proyek
                                         <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             <li><?= Html::a('Penugasan', ['assignment/assignment-dosen']) ?></li>
                                             <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
-                                            <li><?= Html::a('Penggunaan Proyek', ['assignment/managemen-proyek']) ?></li>
+                                            <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                                         </ul>
-                                    <!-- </div> -->
                                     </li>
                                     
                             <?php

@@ -9,13 +9,17 @@ use yii\helpers\Html;
 $this->params['breadcrumbs'][] = ['label' => 'Sippm Projects', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sippm-project-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="body-content" style="font-size: 14px;">
+    <div class=" container box-content "> 
 
-    <?= $this->render('_form', [
-        'model' => $model,
-        'assignment' => $assignment
-    ]) ?>
+        <h3> <b>Submit Penugasan</b> </h3>
+        <hr class="hr-custom">
 
+        <?= $this->render('_form', [
+            'model' => $model,
+            'assignment' => $assignment
+        ]) ?>
+    
+    </div> 
 </div>

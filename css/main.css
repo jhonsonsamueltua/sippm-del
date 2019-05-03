@@ -192,7 +192,7 @@
   }
 
   .btn-custom {
-    background-color: #641a3e !important;
+    background-color: #6ac7c1 !important;
     color: white;
     border: 1px solid #f4f4f4;
     padding: 8px 30px;
@@ -203,3 +203,21 @@
     color: #555;
     text-decoration: none;
   }
+
+  .btn-info-custom:hover{
+    background-color: #d7df23!important;
+    color: #555 !important;
+    text-decoration: none;
+  }
+
+  /* .btn-primary-custom:hover{
+    background-color: #6270bd !important;
+    color: #555 !important;
+    text-decoration: none;
+  }
+
+  .btn-danger-custom:hover{
+    background-color: #e46e66!important;
+    color: #555 !important;
+    text-decoration: none;
+  } */

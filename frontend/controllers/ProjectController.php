@@ -224,7 +224,7 @@ class ProjectController extends Controller
                             }
                         }
                         
-                        return $this->redirect(['view', 'id' => $model->proj_id]);
+                        return $this->redirect(['view-project', 'proj_id' => $model->proj_id]);
                     }else{
                         Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
                         

@@ -10,13 +10,14 @@ $this->params['breadcrumbs'][] = ['label' => 'Project Usages', 'url' => ['index'
 $this->params['breadcrumbs'][] = $this->title;
 $css = ['css/site.css'];
 ?>
-<div class="project-usage-create">
-<br>
-    <h2 class="text-h2">Request Penggunaan Proyek <b> <?= Html::encode($this->title) ?> </b> </h2>
-    <hr class="hr-custom">
+<div class="body-content" style="font-size: 14px;">
+    <div class=" container box-content">
+        <h3><b> Request Penggunaan</b> </h3>
+        <hr class="hr-custom">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-<br>
+        <?= $this->render('_form', [
+            'model' => $model,
+            'project' => $project,
+        ]) ?>
+    </div>
 </div>
