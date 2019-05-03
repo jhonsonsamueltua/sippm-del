@@ -17,6 +17,10 @@ use frontend\models\SignupForm;
 use common\models\User;
 use frontend\models\ContactForm;
 use common\models\Project;
+use common\models\search\ProjectSearch;
+use yii\sphinx\Query;
+use yii\sphinx\MatchExpression;
+
 /**
  * Site controller
  */
@@ -29,46 +33,7 @@ class SiteController extends Controller
      */
     public function behaviors()
     {
-        return [
-            // 'access' => [
-            //     'class' => AccessControl::className(),
-            //     'only' => ['logout', 'signup', 'about', 'contact'],
-            //     'rules' => [
-            //         [
-            //             'actions' => ['signup'],
-            //             'allow' => true,
-            //             'roles' => ['?'],
-            //         ],
-            //         [
-            //             'actions' => ['logout'],
-            //             'allow' => true,
-            //             // 'roles' => ['@'],
-            //         ],
-            //         [
-            //             'actions' => ['contact'],
-            //             'allow' => true,
-            //             // 'roles' => ['@'],
-            //             'matchCallback' => function ($rule, $action) {
-            //                 // return User::isUserStudent(Yii::$app->user->identity->username);
-            //             }
-            //        ],
-            //        [
-            //             'actions' => ['about'],
-            //             'allow' => true,
-            //             // 'roles' => ['@'],
-            //             'matchCallback' => function ($rule, $action) {
-            //                 // return User::isUserLecturer(Yii::$app->user->identity->username);
-            //             }
-            //    ],
-            //     ],
-            // ],
-            // 'verbs' => [
-            //     'class' => VerbFilter::className(),
-            //     'actions' => [
-            //         'logout' => ['post'],
-            //     ],
-            // ],
-        ];
+        return [];
     }
 
     /**
@@ -97,6 +62,10 @@ class SiteController extends Controller
 
         $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
         $modelCompCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
+        
+        $searchModel = new ProjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'model' => $model,
             'modelNews' => $modelNews,
@@ -104,6 +73,8 @@ class SiteController extends Controller
             'modelCount' => $modelCount,
             'modelNewsCount' => $modelNewsCount,
             'modelCompCount' => $modelCompCount,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -167,29 +138,32 @@ class SiteController extends Controller
                     $session->open();
 
                     $datas = $response->data['data'];
+                    $nama = $datas['nama'];
+                    $email = $datas['email'];
                     $role = $datas['role'];
-                    $session['username'] = $model->username;
+                    
+                    $session->set('username', $model->username);
+                    $session->set('nama', $nama);
+                    $session->set('email', $email);
 
                     if($role == "Mahasiswa"){
                         $dimId = $datas['dimId'];
-                        echo $nim = $datas['nim'];
-                        $nama = $datas['nama'];
-                        $email = $datas['email'];
+                        $nim = $datas['nim'];
                         $kelas = $datas['kelas'];
+
                         if($session['username'] == 'if416004'){
                             $role = "Dosen";
+                            $session->set('pegawaiId', 1);    
                         }
 
                         $session->set('dimId', $dimId);
                         $session->set('nim', $nim);
-                        $session->set('nama', $nama);
-                        $session->set('email', $email);
                         $session->set('kelas', $kelas);
                     }else{
+                        $pegawaiId = $datas['pegawaiId'];
                         $nip = $datas['nip'];
 
-                        $session->set('nama', $nama);
-                        $session->set('email', $email);
+                        $session->set('pegawaiId', $pegawaiId);
                         $session->set('nip', $nip);
                     }
 
@@ -266,6 +240,29 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionSearchRes(){
+        $searchModel = new ProjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('search-res', [
+            'searchRes' => $dataProvider,
+        ]);
+    }
+
+    public function actionTest(){
+        $keyword = ['gemastik', 'asdf', 'test'];
+        $query = new Query();
+        $rows = $query->select('*')->from('sippm_project')->match(
+                    (new MatchExpression)->match(['proj_title' => $keyword])
+                                ->orMatch(['proj_description' => $keyword])
+                                ->andMatch(['proj_cat_name' => 'Matakuliah'])
+                )->all();
+        echo "<pre>";
+        var_dump($rows);
+        echo "</pre>";
+        die;
     }
 
     /**

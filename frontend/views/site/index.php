@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 
 $this->title = 'SIPPM Del';
@@ -21,32 +23,34 @@ $css = ['css/main.css'];
                         <br> than the building and launch of the space
 						telescope.
 					</p>
-					<form action="#" method="post" novalidate="novalidate" style="padding: 40px;">
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['search-res'],
+                        'method' => 'get',
+                    ]); ?>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="row">
                                     <center>
-                                    <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
-                                        <input type="text" class="form-control-custom search-slt" placeholder="Enter Keywords" >
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
-                                        <select class="form-control-custom search-slt" id="exampleFormControlSelect1">
-                                            <option>Select Category</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
-                                        <button type="button" class="btn wrn-btn" style="border-radius: 0px;    background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%);font-size: 18px;">Search</button>
-                                    </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
+                                            <?= $form->field($searchModel, 'globalSearch')->textInput(['class' => 'form-control-custom search-slt', 'placeholder' => 'Enter Keywords'])->label(false) ?>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
+                                            <?= $form->field($searchModel, 'globalSearchCategory')->dropDownList(['all' => 'All', 'matakuliah' => 'Matakuliah', 'kompetisi' => 'Kompetisi'], [
+                                                "prompt" => "Pilih Status",
+                                                'class' => 'form-control-custom search-slt',
+                                                'id' => 'exampleFormControlSelect1',
+                                            ])->label(false) ?>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
+                                            <?= Html::submitButton('Search', ['class' => 'btn wrn-btn', 'style' => 'border-radius: 0px; background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%); font-size: 18px;']) ?>
+                                        </div>
+                                    </center>   
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    <?php ActiveForm::end() ?>
                     
 					<h4 class="text-white">Filter Pencarian</h4>
 

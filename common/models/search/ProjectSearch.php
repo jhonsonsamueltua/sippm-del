@@ -11,6 +11,9 @@ use common\models\Project;
  */
 class ProjectSearch extends Project
 {
+    public $globalSearch;
+    public $globalSearchCategory;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +21,7 @@ class ProjectSearch extends Project
     {
         return [
             [['proj_id', 'proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
-            [['proj_title', 'proj_description', 'deleted_at', 'deleted_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['globalSearch', 'globalSearchCategory', 'proj_title', 'proj_description', 'deleted_at', 'deleted_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
 
@@ -53,18 +56,20 @@ class ProjectSearch extends Project
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+            
             return $dataProvider;
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'proj_downloaded' => $this->proj_downloaded,
-            'sts_win_id' => $this->sts_win_id,
-            'deleted' => $this->deleted,
-        ]);
+        // $query->andFilterWhere([
+        //     'proj_downloaded' => $this->proj_downloaded,
+        //     'sts_win_id' => $this->sts_win_id,
+        //     'deleted' => $this->deleted,
+        // ]);
 
-        $query->andFilterWhere(['like', 'proj_title', $this->proj_title])
-            ->andFilterWhere(['like', 'proj_description', $this->proj_description])
+        $query->orFilterWhere(['like', 'proj_title', $this->globalSearch])
+            ->orFilterWhere(['like', 'proj_description', $this->globalSearch])
+            ->andFilterWhere(['like', 'proj_cat_name', $this->globalSearchCategory])
             ->andFilterWhere(['not', ['deleted' => 1]]);
 
         return $dataProvider;

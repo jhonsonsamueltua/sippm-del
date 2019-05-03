@@ -95,6 +95,7 @@ class AssignmentController extends Controller
     {   
         $model = $this->findModel($asg_id);
         $modelProject = Project::find()->where(['asg_id' => $asg_id])->one();
+        
         return $this->render('view-detail-assignment', [
             'model' => $model,
             'modelProject' => $modelProject,
@@ -191,70 +192,83 @@ class AssignmentController extends Controller
 
     public function actionCreate()
     {   
-        $modelAsg = new Assignment();
+        $session = Yii::$app->session;
 
-        if($modelAsg->load(Yii::$app->request->post())){
-            $transaction = Yii::$app->db->beginTransaction();
+        if(!isset($session['role'])){
+            return $this->redirect(['site/login']);
+        }else if($session['role'] == "Mahasiswa"){
+            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memilik hak untuk mengakses halaman ini.');
             
-            try{
-                $modelAsg->save();
-
-                foreach($_POST['Class'] as $i => $class){
-                    $modelClass = new ClassAssignment();
-                    
-                    $modelClass->class = $class;
-                    $modelClass->asg_id = $modelAsg->asg_id;
-                    
-
-                    if($_POST['Student'][$i][0] == "empty"){
-                        $modelClass->partial = 0;
-                        $modelClass->save();
-
-                        $client = new Client();
-                        $response = $client->createRequest()
-                                            ->setMethod('GET')
-                                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
-                                            ->send();
-
-                        if($response->isOk){
-                            if($response->data['result'] == "OK"){
-                                foreach($response->data['data'] as $student){
-                                    $modelStudent = new StudentAssignment();
-                                    
-                                    $modelStudent->stu_id = $student['nim'];
-                                    $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                    $modelStudent->save();
+            return $this->redirect(['site/index']);
+        }else{
+            $modelAsg = new Assignment();
+            
+            if($modelAsg->load(Yii::$app->request->post())){
+                $transaction = Yii::$app->db->beginTransaction();
+                
+                try{
+                    $modelAsg->asg_creator_id = $session['pegawaiId'];
+                    $modelAsg->asg_creator = $session['nama'];
+                    $modelAsg->asg_creator_email = $session['email'];
+                    $modelAsg->save();
+    
+                    foreach($_POST['Class'] as $i => $class){
+                        $modelClass = new ClassAssignment();
+                        
+                        $modelClass->class = $class;
+                        $modelClass->asg_id = $modelAsg->asg_id;
+                        
+    
+                        if($_POST['Student'][$i][0] == "empty"){
+                            $modelClass->partial = 0;
+                            $modelClass->save();
+    
+                            $client = new Client();
+                            $response = $client->createRequest()
+                                                ->setMethod('GET')
+                                                ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                                ->send();
+    
+                            if($response->isOk){
+                                if($response->data['result'] == "OK"){
+                                    foreach($response->data['data'] as $student){
+                                        $modelStudent = new StudentAssignment();
+                                        
+                                        $modelStudent->stu_id = $student['nim'];
+                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                        $modelStudent->save();
+                                    }
                                 }
                             }
-                        }
-
-                    }else{
-                        $modelClass->partial = 1;
-                        $modelClass->save();
-
-                        foreach($_POST['Student'][$i] as $student){
-                            $modelStudent = new StudentAssignment();
-                    
-                            $modelStudent->stu_id = $student;
-                            $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                            $modelStudent->save();
+    
+                        }else{
+                            $modelClass->partial = 1;
+                            $modelClass->save();
+    
+                            foreach($_POST['Student'][$i] as $student){
+                                $modelStudent = new StudentAssignment();
+                        
+                                $modelStudent->stu_id = $student;
+                                $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                $modelStudent->save();
+                            }
                         }
                     }
+                    
+                    $transaction->commit();
+    
+                    return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
+                }catch(Exception $e){
+                    Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuka penugasan.');
+    
+                    $transaction->rollBack();
                 }
-                
-                $transaction->commit();
-
-                return $this->redirect(['view', 'id' => $modelAsg->asg_id]);
-            }catch(Exception $e){
-                Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuka penugasan.');
-
-                $transaction->rollBack();
             }
+    
+            return $this->render('create', [
+                'modelAsg' => $modelAsg,
+            ]);
         }
-
-        return $this->render('create', [
-            'modelAsg' => $modelAsg,
-        ]);
     }
 
     public function actionUpdate($id)
@@ -298,10 +312,6 @@ class AssignmentController extends Controller
                                         $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
                                         $modelStudent->save();
                                     }
-                                    // $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                    // if (!($flag = $modelStudent->save(false))) {
-                                    //     break;
-                                    // }
                                 }
                             }
                         }

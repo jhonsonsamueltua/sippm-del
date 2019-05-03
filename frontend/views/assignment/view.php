@@ -1,13 +1,14 @@
 <?php
+/* @var $this yii\web\View */
+/* @var $model common\models\Assignment */
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\ClassAssignment;
 use common\models\StudentAssignment;
 use yii\bootstrap\Tabs;
+use yii\bootstrap\Modal;
 use yii\widgets\Breadcrumbs;
-/* @var $this yii\web\View */
-/* @var $model common\models\Assignment */
 
 $this->title = $model->asg_title;
 // $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
@@ -17,15 +18,14 @@ $this->title = $model->asg_title;
 ?>
 <div class="body-content">
     <div class=" container box-content">
+        <h3> <b> Detail Penugasan </b> <font class="text-title"> <?= Html::encode($this->title) ?> </font> </h3>
+        <hr class="hr-custom">
 
-        <!-- <div class="assignment-view"> -->
-            <h3> <b> Detail Penugasan </b> <font class="text-title"> <?= Html::encode($this->title) ?> </font> </h3>
-            <hr class="hr-custom">
-
-            <?php
+        <?php
             $button = "";
+            
             if($model->sts_asg_id == 1 || $model->sts_asg_id == 3){
-                $button = '<p>'.Html::a("Update", ["update", "id" => $model->asg_id], ["class" => "btn btn-primary"]) .' &nbsp; &nbsp;'.
+                $button = '<p>'. Html::a("Update", ["update", "id" => $model->asg_id], ["class" => "btn btn-primary"]) .' &nbsp; &nbsp;'.
                 Html::a("Delete", ["delete", "id" => $model->asg_id], [
                     "class" => "btn btn-danger",
                     "data" => [
@@ -34,12 +34,11 @@ $this->title = $model->asg_title;
                     ],
                 ]).'</p>';
             }
+
             $content1 = 
                 DetailView::widget([
                     'model' => $model,
                     'attributes' => [
-                        // ['attribute' => 'asg_id',
-                        //     'label' => 'ID Penugasan'],
                         ['attribute' => 'asg_title',
                             'label' => 'Judul Penugasan'],
                         ['attribute' => 'asg_description',
@@ -63,6 +62,7 @@ $this->title = $model->asg_title;
                             'value' => function($model){
                                 $cls = "";
                                 $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->all();
+                                
                                 foreach($modelClass as $key => $data){
                                     if($key == 0){
                                         $cls = ($key+1)." ".$data->class;
@@ -90,10 +90,9 @@ $this->title = $model->asg_title;
                             //     }
                             // ]
                     ],
-                ]).$button ;
+                ]) . $button;
 
-            $label2 = "Proyek [ $countProject ]";
-
+            $label2 = "Proyek [$countProject]";
             $tempContent2 = "";
 
             foreach($projects as $data){
@@ -107,41 +106,32 @@ $this->title = $model->asg_title;
             }
 
             $content2 = '
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Diunggah oleh</th>
-                    <th>Proyek</th>
-                    <th>Author</th>
-                </tr>
-                </thead>
-                <tbody>'
-                    .$tempContent2.
-                '</tbody>
-            </table>
-            
-            ';
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Diunggah oleh</th>
+                        <th>Proyek</th>
+                        <th>Author</th>
+                    </tr>
+                    </thead>
+                    <tbody>'
+                        .$tempContent2.
+                    '</tbody>
+                </table>';
 
-
-
-                echo Tabs::widget([
-                    'items' => [
-                        [
-                            'label' => 'Penugasan',
-                            'content' => $content1,
-                            'active' => true
-                        ],
-                        [
-                            'label' => $label2,
-                            'content' => $content2,
-                        ],
+            echo Tabs::widget([
+                'items' => [
+                    [
+                        'label' => 'Penugasan',
+                        'content' => $content1,
+                        'active' => true
                     ],
-                ]);
-            ?>   
-            
-            <?php
-                
-            ?>
-        <!-- </div> -->
+                    [
+                        'label' => $label2,
+                        'content' => $content2,
+                    ],
+                ],
+            ]);
+        ?>
     </div>
 </div>

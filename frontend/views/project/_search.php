@@ -15,15 +15,7 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'proj_id') ?>
-
-    <?= $form->field($model, 'proj_title') ?>
-
-    <?= $form->field($model, 'proj_description') ?>
-
-    <?= $form->field($model, 'proj_downloaded') ?>
-
-    <?= $form->field($model, 'sts_win_id') ?>
+    <?= $form->field($model, 'globalSearch') ?>
 
     <?php // echo $form->field($model, 'sts_proj_id') ?>
 
