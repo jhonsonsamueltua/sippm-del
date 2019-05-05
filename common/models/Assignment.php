@@ -17,7 +17,7 @@ use common\behaviors\DeleteBehavior;
  * @property string $asg_end_time
  * @property string $asg_year
  * @property string $class
- * @property int $course_id
+ * @property int $sub_cat_proj_id
  * @property int $cat_proj_id
  * @property int $sts_asg_id
  * @property int $deleted
@@ -29,7 +29,7 @@ use common\behaviors\DeleteBehavior;
  * @property string $updated_by
  *
  * @property CategoryProject $catProj
- * @property Course $course
+ * @property SubCategoryProject $subCatProj
  * @property StatusAssignment $stsAsg
  * @property StudentAssignment[] $sippmStudentAssignments
  */
@@ -63,7 +63,7 @@ class Assignment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cat_proj_id', 'asg_title', 'asg_start_time', 'asg_end_time', 'asg_description'], 'required', 'message' => "{attribute} tidak boleh kosong."],
+            [['cat_proj_id', 'sub_cat_proj_id', 'asg_title', 'asg_start_time', 'asg_end_time', 'asg_description'], 'required', 'message' => "{attribute} tidak boleh kosong."],
             // ['course_id', 'required', 'when' => function($model) {
             //     return $model->cat_proj_id == 1;
             // }, 'enableClientValidation' => false],
@@ -78,7 +78,7 @@ class Assignment extends \yii\db\ActiveRecord
             //         return $model->cat_proj_id == 1;
             // }, 'enableClientValidation' => false],
             [['asg_start_time', 'asg_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['course_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
+            [['sub_cat_proj_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
             ['asg_start_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
             ['asg_end_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
             [['sts_asg_id'], 'default', 'value' => 3],
@@ -87,7 +87,7 @@ class Assignment extends \yii\db\ActiveRecord
             [['asg_creator'], 'string', 'max' => 100],
             [['asg_year', 'class'], 'string', 'max' => 32],
             [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
-            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Course::className(), 'targetAttribute' => ['course_id' => 'course_id']],
+            [['sub_cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => SubCategoryProject::className(), 'targetAttribute' => ['sub_cat_proj_id' => 'sub_cat_proj_id']],
             [['sts_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusAssignment::className(), 'targetAttribute' => ['sts_asg_id' => 'sts_asg_id']],
             ['asg_end_time', 'compare', 'compareAttribute' => 'asg_start_time', 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari Batas Awal."],
             // [['cat_proj_id'], 'ext.YiiConditionalValidator',
@@ -114,7 +114,7 @@ class Assignment extends \yii\db\ActiveRecord
             'asg_year' => 'Asg Year',
             'class' => 'Kelas',
             'asg_creator' => 'Penugas',
-            'course_id' => 'Matakuliah',
+            'sub_cat_proj_id' => 'Sub Kategori',
             'cat_proj_id' => 'Kategori',
             'sts_asg_id' => 'Status',
             'deleted' => 'Deleted',
@@ -134,13 +134,12 @@ class Assignment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCourse()
+    public function getSubCatProj()
     {
-        return $this->hasOne(Course::className(), ['course_id' => 'course_id']);
+        return $this->hasOne(SubCategoryProject::className(), ['sub_cat_proj_id' => 'sub_cat_proj_id']);
     }
 
     /**

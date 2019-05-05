@@ -8,11 +8,10 @@ use common\behaviors\BlameableBehavior;
 use common\behaviors\DeleteBehavior;
 
 /**
- * This is the model class for table "sippm_course".
+ * This is the model class for table "sippm_sub_cat_proj".
  *
- * @property int $course_id
- * @property string $course_name
- * @property string $course_alias
+ * @property int $sub_cat_proj_id
+ * @property string $sub_cat_proj_name
  * @property int $deleted
  * @property string $deleted_at
  * @property string $deleted_by
@@ -22,8 +21,9 @@ use common\behaviors\DeleteBehavior;
  * @property string $updated_by
  *
  * @property SippmAssignment[] $sippmAssignments
+ * @property CategoryProject $categoryProject
  */
-class Course extends \yii\db\ActiveRecord
+class SubCategoryProject extends \yii\db\ActiveRecord
 {
     public function behaviors(){
         return [
@@ -44,7 +44,7 @@ class Course extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sippm_course';
+        return 'sippm_sub_category_project';
     }
 
     /**
@@ -53,10 +53,10 @@ class Course extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['deleted'], 'integer'],
+            [['sub_cat_proj_id', 'cat_proj_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['course_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
-            [['course_alias'], 'string', 'max' => 32],
+            [['sub_cat_proj_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryProject::className(), 'targetAttribute' => ['cat_proj_id' => 'cat_proj_id']],
         ];
     }
 
@@ -66,9 +66,8 @@ class Course extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'course_id' => 'Course ID',
-            'course_name' => 'Course Name',
-            'course_alias' => 'Course Alias',
+            'sub_cat_proj_id' => 'Sub Category ID',
+            'sub_cat_proj_name' => 'Category Name',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -84,6 +83,11 @@ class Course extends \yii\db\ActiveRecord
      */
     public function getSippmAssignments()
     {
-        return $this->hasMany(SippmAssignment::className(), ['course_id' => 'course_id']);
+        return $this->hasMany(Assignment::className(), ['sub_cat_proj_id' => 'sub_cat_proj_id']);
+    }
+
+    public function getCatProj()
+    {
+        return $this->hasOne(CategoryProject::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 }

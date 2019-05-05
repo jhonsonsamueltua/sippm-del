@@ -209,48 +209,48 @@ class AssignmentController extends Controller
             try{
                 $modelAsg->save();
 
-                // foreach($_POST['Class'] as $i => $class){
-                //     $modelClass = new ClassAssignment();
+                foreach($_POST['Class'] as $i => $class){
+                    $modelClass = new ClassAssignment();
                     
-                //     $modelClass->class = $class;
-                //     $modelClass->asg_id = $modelAsg->asg_id;
+                    $modelClass->class = $class;
+                    $modelClass->asg_id = $modelAsg->asg_id;
                     
 
-                //     if($_POST['Student'][$i][0] == "empty"){
-                //         $modelClass->partial = 0;
-                //         $modelClass->save();
+                    if($_POST['Student'][$i][0] == "empty"){
+                        $modelClass->partial = 0;
+                        $modelClass->save();
 
-                //         $client = new Client();
-                //         $response = $client->createRequest()
-                //                             ->setMethod('GET')
-                //                             ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
-                //                             ->send();
+                        $client = new Client();
+                        $response = $client->createRequest()
+                                            ->setMethod('GET')
+                                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                            ->send();
 
-                //         if($response->isOk){
-                //             if($response->data['result'] == "OK"){
-                //                 foreach($response->data['data'] as $student){
-                //                     $modelStudent = new StudentAssignment();
+                        if($response->isOk){
+                            if($response->data['result'] == "OK"){
+                                foreach($response->data['data'] as $student){
+                                    $modelStudent = new StudentAssignment();
                                     
-                //                     $modelStudent->stu_id = $student['nim'];
-                //                     $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                //                     $modelStudent->save();
-                //                 }
-                //             }
-                //         }
+                                    $modelStudent->stu_id = $student['nim'];
+                                    $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                                    $modelStudent->save();
+                                }
+                            }
+                        }
 
-                //     }else{
-                //         $modelClass->partial = 1;
-                //         $modelClass->save();
+                    }else{
+                        $modelClass->partial = 1;
+                        $modelClass->save();
 
-                //         foreach($_POST['Student'][$i] as $student){
-                //             $modelStudent = new StudentAssignment();
+                        foreach($_POST['Student'][$i] as $student){
+                            $modelStudent = new StudentAssignment();
                     
-                //             $modelStudent->stu_id = $student;
-                //             $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                //             $modelStudent->save();
-                //         }
-                //     }
-                // }
+                            $modelStudent->stu_id = $student;
+                            $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
+                            $modelStudent->save();
+                        }
+                    }
+                }
                 
                 $transaction->commit();
 

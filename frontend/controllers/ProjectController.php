@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Assignment;
 use common\models\CategoryProject;
+use common\models\SubCategoryProject;
 use common\models\Project;
 use common\models\search\ProjectSearch;
 use common\models\ProjectUsage;
@@ -86,6 +87,31 @@ class ProjectController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionProjectByCategory($cat){
+        $category = CategoryProject::find()->where(['cat_proj_id' => $cat])->one();
+
+        $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
+        $model = Yii::$app->db->createCommand($query)->queryAll();
+        
+        return $this->render('project-by-category',[
+            'model' => $model,
+            'category' => $category->cat_proj_name,
+        ]);
+    }
+
+    public function actionProjectBySubCategory($sub_cat){
+        $sub_category = SubCategoryProject::find()->where(['sub_cat_proj_id' => $sub_cat])->one();
+
+        $query = 'SELECT sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_downloaded, sippm_project.proj_author, sippm_project.updated_at FROM sippm_project JOIN sippm_assignment ON sippm_assignment.asg_id = sippm_project.asg_id JOIN sippm_sub_category_project ON sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id WHERE sippm_sub_category_project.cat_proj_id = '.$sub_cat.' GROUP BY sippm_project.proj_title ORDER BY sippm_project.proj_title ASC';
+        $model = Yii::$app->db->createCommand($query)->queryAll();
+        // echo '<pre>';
+        // die(var_dump($model));
+        return $this->render('project-by-sub-category',[
+            'model' => $model,
+            'sub_category' => $sub_category,
+        ]);
     }
 
     /**

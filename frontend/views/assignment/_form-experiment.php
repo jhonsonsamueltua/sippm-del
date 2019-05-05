@@ -4,8 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use common\models\Course;
 use common\models\CategoryProject;
+use common\models\SubCategoryProject;
 use common\models\StudentAssignment;
 use yii\redactor\widgets\Redactor;
 use kartik\datetime\DateTimePicker;
@@ -32,7 +32,7 @@ $session = Yii::$app->session;
             <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
                         ['prompt' => "Pilih Kategori", 'onchange' => 'java_script_:show(this.options[this.selectedIndex].value)'])->label()?>    
 
-            <?= $form->field($modelAsg, 'course_id')->dropDownList(ArrayHelper::map(Course::find()->all(), 'course_id', 'course_name'), ["prompt" => "Pilih Matakuliah"])->label() ?>
+            <?= $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori"])->label() ?>
 
             <?= $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class, [
                 'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
