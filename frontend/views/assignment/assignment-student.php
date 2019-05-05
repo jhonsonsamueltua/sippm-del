@@ -52,7 +52,7 @@ $css = ['css/site.css'];
                                     $asg_end_time = date('l, d M Y, H:i', $asg_end_time_timestamp);
 
                                     $asg_start_time = $key["asg_start_time"];
-                                    $asg_start_time_timestamp = strtotime($asg_end_time);
+                                    $asg_start_time_timestamp = strtotime($asg_start_time);
                                     $asg_start_time = date('l, d M Y, H:i', $asg_start_time_timestamp);?>
 
                                     <tr>
@@ -120,7 +120,7 @@ $css = ['css/site.css'];
                                     $asg_end_time = date('l, d M Y, H:i', $asg_end_time_timestamp);
 
                                     $asg_start_time = $key["asg_start_time"];
-                                    $asg_start_time_timestamp = strtotime($asg_end_time);
+                                    $asg_start_time_timestamp = strtotime($asg_start_time);
                                     $asg_start_time = date('l, d M Y, H:i', $asg_start_time_timestamp);?>
                                     
                                     

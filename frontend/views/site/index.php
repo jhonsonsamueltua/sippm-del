@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'SIPPM Del';
 $css = ['css/main.css'];
+
 ?>
 <div class="site-index">
 

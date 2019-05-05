@@ -13,8 +13,10 @@ use common\models\CategoryProject;
 $css = ['css/site.css'];
 $css = ['css/main.css'];
 $js = ['js/main.js'];
+
 AppAsset::register($this);
 $session = Yii::$app->session;
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
