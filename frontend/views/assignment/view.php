@@ -64,7 +64,7 @@ $this->title = $model->asg_title;
                 <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>
 
                 <h4> <b>Kategori :</b></h4>
-                <?= $model->catProj->cat_proj_name ?>  <?= $model->course->course_name ?>
+                <?= $model->catProj->cat_proj_name ?> [ <?= $model->subCatProj->sub_cat_proj_name ?> ]
 
                 <h4> <b>Status :</b></h4>
                 <?= $model->stsAsg->sts_asg_name ?>

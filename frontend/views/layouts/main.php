@@ -8,6 +8,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use common\models\CategoryProject;
+
 $css = ['css/site.css'];
 $css = ['css/main.css'];
 $js = ['js/main.js'];
@@ -252,8 +254,10 @@ $session = Yii::$app->session;
                                     <!-- <li><?= Html::a('Managemen Proyek', ['/project-usage']) ?></li> -->
 
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">Managemen Proyek
-                                        <span class="caret"></span></a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                                            Managemen Proyek
+                                            <span class="caret"></span>
+                                        </a>
                                         <ul class="dropdown-menu">
                                             <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
                                             <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
@@ -278,7 +282,29 @@ $session = Yii::$app->session;
                             <?php
                                 }
                             ?>
-                            <li ><?= Html::a('Kategori', ['site/index']) ?></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                                    Kategori
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+
+                                    <?php
+                                        $category = CategoryProject::find()->where("deleted != 1")->orderBy("cat_proj_name ASC")->all();
+                                        $i = 0;
+                                        foreach($category as $cat){?>
+                                            <li> <?= Html::a($cat->cat_proj_name, ['project/project-by-category', 'cat' => $cat->cat_proj_id]) ?> </li>
+                                            
+                                    <?php
+                                        if($i <= (count($category) - 2)){
+                                                echo '<li> <hr style="padding: 0px; margin: 5px;"> </li>';
+                                            }
+                                            $i++;
+                                        }
+                                    ?>
+                                    
+                                </ul>
+                            </li>
                             <li><?= Html::a('Tentang', ['site/about']) ?></li>
                             <?php
                                 if(!isset($session["role"])){?>

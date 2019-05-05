@@ -84,4 +84,9 @@ class CategoryProject extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Assignment::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
+
+    public function getSubCat()
+    {
+        return $this->hasMany(SubCategoryAssignment::className(), ['cat_proj_id' => 'cat_proj_id']);
+    }
 }

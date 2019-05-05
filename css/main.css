@@ -101,7 +101,7 @@
   }
 
 .text-author{
-    color: #6d7173;
+    color: #90A4AE;
     font-size: 14px;
 }
 
@@ -221,3 +221,10 @@
     color: #555 !important;
     text-decoration: none;
   } */
+
+  .borderless table {
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+}
