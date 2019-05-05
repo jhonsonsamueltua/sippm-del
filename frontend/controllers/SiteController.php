@@ -251,18 +251,28 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionTest(){
-        $keyword = ['gemastik', 'asdf', 'test'];
+    public function actionTest($searchWords, $searchCategory){
+        $stopWordsRemoved = $this->removeStopWords(strtolower($searchWords));
+        $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
+        $keywords = explode(' ', $preprocessed); 
+
         $query = new Query();
         $rows = $query->select('*')->from('sippm_project')->match(
-                    (new MatchExpression)->match(['proj_title' => $keyword])
-                                ->orMatch(['proj_description' => $keyword])
-                                ->andMatch(['proj_cat_name' => 'Matakuliah'])
+                    (new MatchExpression)->match(['proj_title' => $keywords])
+                                ->orMatch(['proj_author' => $keywords])
+                                ->orMatch(['proj_description' => $keywords])
+                                ->andFilterMatch(['proj_cat_name' => $searchCategory])  
                 )->all();
-        echo "<pre>";
-        var_dump($rows);
-        echo "</pre>";
-        die;
+    
+        return $this->render('search-res', [
+            'searchRes' => $rows,
+        ]);
+    }
+
+    private function removeStopWords($searchWords){
+        $commonWords = require(dirname(__DIR__) . '/../files/stopwords.php');
+
+        return preg_replace('/\b(' . implode('|', $commonWords) . ')\b/', '', $searchWords);
     }
 
     /**

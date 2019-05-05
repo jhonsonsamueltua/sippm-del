@@ -24,7 +24,7 @@ $css = ['css/main.css'];
 						telescope.
 					</p>
                     <?php $form = ActiveForm::begin([
-                        'action' => ['search-res'],
+                        'action' => ['test'],
                         'method' => 'get',
                     ]); ?>
                         <div class="row">
@@ -32,19 +32,19 @@ $css = ['css/main.css'];
                                 <div class="row">
                                     <center>
                                         <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
-                                            <?= $form->field($searchModel, 'globalSearch')->textInput(['class' => 'form-control-custom search-slt', 'placeholder' => 'Enter Keywords'])->label(false) ?>
+                                            <input name="searchWords" type="text" placeholder="Keywords" class="form-control-custom search-slt">
                                         </div>
 
                                         <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
-                                            <?= $form->field($searchModel, 'globalSearchCategory')->dropDownList(['all' => 'All', 'matakuliah' => 'Matakuliah', 'kompetisi' => 'Kompetisi'], [
-                                                "prompt" => "Pilih Status",
-                                                'class' => 'form-control-custom search-slt',
-                                                'id' => 'exampleFormControlSelect1',
-                                            ])->label(false) ?>
+                                            <select name="searchCategory" placeholder="Category" class="form-control-custom search-slt">
+                                                <option value="">All</option>
+                                                <option value="Matakuliah">Matakuliah</option>
+                                                <option value="PKM">PKM</option>
+                                            </select>
                                         </div>
 
                                         <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
-                                            <?= Html::submitButton('Search', ['class' => 'btn wrn-btn', 'style' => 'border-radius: 0px; background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%); font-size: 18px;']) ?>
+                                            <button type="submit" class="btn wrn-btn" style="border-radius: 0px; background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%); font-size: 18px;">Search</button>
                                         </div>
                                     </center>   
                                 </div>

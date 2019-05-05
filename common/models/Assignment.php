@@ -35,6 +35,8 @@ use common\behaviors\DeleteBehavior;
  */
 class Assignment extends \yii\db\ActiveRecord
 {
+    public $updated_end_time;
+
     public function behaviors(){
         return [
             'timestamp' => [
@@ -77,7 +79,7 @@ class Assignment extends \yii\db\ActiveRecord
             // ['course_id', 'required', 'whenClient' => function($model) {
             //         return $model->cat_proj_id == 1;
             // }, 'enableClientValidation' => false],
-            [['asg_start_time', 'asg_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
+            [['asg_start_time', 'asg_end_time', 'updated_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['course_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
             ['asg_start_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
             ['asg_end_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
@@ -90,6 +92,7 @@ class Assignment extends \yii\db\ActiveRecord
             [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Course::className(), 'targetAttribute' => ['course_id' => 'course_id']],
             [['sts_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusAssignment::className(), 'targetAttribute' => ['sts_asg_id' => 'sts_asg_id']],
             ['asg_end_time', 'compare', 'compareAttribute' => 'asg_start_time', 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari Batas Awal."],
+            ['updated_end_time', 'compare', 'compareValue' => date('Y-m-d h:i:s'), 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari hari ini."],
             // [['cat_proj_id'], 'ext.YiiConditionalValidator',
             //     'if' => [
             //         [['cat_proj_id'], 'compare', 'compareValue' => 1]
@@ -111,6 +114,7 @@ class Assignment extends \yii\db\ActiveRecord
             'asg_description' => 'Deskripsi',
             'asg_start_time' => 'Batas Awal',
             'asg_end_time' => 'Batas Akhir',
+            'updated_end_time' => 'Batas Akhir',
             'asg_year' => 'Asg Year',
             'class' => 'Kelas',
             'asg_creator' => 'Penugas',

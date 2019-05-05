@@ -395,11 +395,19 @@ class AssignmentController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function getProject($id){
-        $session = Yii::$app->session;
-        $model = Project::find()->where(['asg_id' => $id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
+    public function actionOpenAssignment($asg_id){
+        $modelAsg = $this->findModel($asg_id);
+        
+        if($modelAsg->load(Yii::$app->request->post())){
+            $modelAsg->sts_asg_id = 1;
+            $modelAsg->asg_end_time = $modelAsg->updated_end_time;
+            
+            if(!$modelAsg->save()){
+                Yii::$app->session->setFlash('error', 'Maaf, terjadi kesalahan saat mengubah batas akhir penugasan');
+            }
 
-        return isset($model) ? $model : false ;
+            return $this->redirect(['assignment-dosen']);
+        }
     }
 
     public function actionGetAllClass(){
@@ -464,6 +472,13 @@ class AssignmentController extends Controller
         echo Json::encode($students);
     }
 
+    public function getProject($id){
+        $session = Yii::$app->session;
+        $model = Project::find()->where(['asg_id' => $id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
+
+        return isset($model) ? $model : false ;
+    }
+
     /**
      * Finds the Assignment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -471,7 +486,7 @@ class AssignmentController extends Controller
      * @return Assignment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    public static function findModel($id)
     {
         if (($model = Assignment::findOne($id)) !== null) {
             return $model;

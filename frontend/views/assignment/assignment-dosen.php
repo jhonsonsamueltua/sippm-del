@@ -4,12 +4,15 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 use yii\widgets\LinkPager;
+use yii\bootstrap\Modal;
+use yii\bootstrap\ActiveForm;
+use frontend\controllers\AssignmentController;
+use kartik\datetime\DateTimePicker;
 
 $this->title = 'Penugasan';
 $this->params['breadcrumbs'][] = $this->title;
 
 // $css = ['css/assignment.css'];
-
 ?>
     
 
@@ -57,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $asg_end_time = date('l, d M Y, H:i', $asg_end_time_timestamp);
 
                                     $asg_start_time = $key["asg_start_time"];
-                                    $asg_start_time_timestamp = strtotime($asg_end_time);
+                                    $asg_start_time_timestamp = strtotime($asg_start_time);
                                     $asg_start_time = date('l, d M Y, H:i', $asg_start_time_timestamp);?>
 
                                     <tr>
@@ -111,8 +114,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $asg_end_time = date('l, d M Y, H:i', $asg_end_time_timestamp);
 
                                     $asg_start_time = $key["asg_start_time"];
-                                    $asg_start_time_timestamp = strtotime($asg_end_time);
-                                    $asg_start_time = date('l, d M Y, H:i', $asg_start_time_timestamp);?>
+                                    $asg_start_time_timestamp = strtotime($asg_start_time);
+                                    $asg_start_time = date('l, d M Y, H :i', $asg_start_time_timestamp);?>
                                     
                                     
                                 <tr>
@@ -126,6 +129,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <div style="float: right; margin-bottom: 0px;">
                                             <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 20px;font-size: 13px;']) ?> 
                                             <?= Html::a('Open', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']) ?>
+                                        
+                                            <?php 
+                                                Modal::begin([
+                                                    'header' => '<h2>Pilih Batas Akhir</h2>',
+                                                    'toggleButton' => ['label' => 'Re-Open', 'class' => ['btn btn-custom'], 'style' => ['padding: 5px 20px; font-size: 13px']],
+                                                ]);
+                                                    
+                                                    $modelAsg = AssignmentController::findModel($key['asg_id']);    
+                                                    $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
+
+                                                    echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
+                                                        'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                                        'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                                        'pluginOptions' => [
+                                                            'autoclose'=>true,
+                                                            'format' => 'yyyy-mm-dd hh:ii:ss'
+                                                        ]
+                                                    ]);
+
+                                                    echo Html::submitButton('Re-Open Assignment');
+
+                                                    ActiveForm::end();
+
+                                                Modal::end();
+                                            ?>
                                         </div>
                                     </td>
                                 </tr>

@@ -1,18 +1,18 @@
 <?php
 
-use yii\grid\GridView;
+use yii\helpers\Html;
 
 ?>
 
-<?= GridView::widget([
-        'dataProvider' => $searchRes,
-        // 'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+<div class="container">
+<?php
 
-            ['attribute' => 'proj_title', 
-                'label' => 'ID'],
+    foreach($searchRes as $res){
+        echo("
+            <div><h2>" . Html::a($res['proj_title'], ['/project/view-project', 'proj_id' => $res['id']]) . "</h2></div>
+            <div><p>" . $res['proj_description'] . "</p></div>
+        ");
+    }
 
-            ['class' => 'yii\grid\ActionColumn',],
-        ],
-    ]); ?>
+?>
+</div>

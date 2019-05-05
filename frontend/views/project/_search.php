@@ -15,23 +15,21 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'globalSearch') ?>
+    <?php echo $form->field($model, 'sts_proj_id') ?>
 
-    <?php // echo $form->field($model, 'sts_proj_id') ?>
+    <?php echo $form->field($model, 'deleted') ?>
 
-    <?php // echo $form->field($model, 'deleted') ?>
+    <?php echo $form->field($model, 'deleted_at') ?>
 
-    <?php // echo $form->field($model, 'deleted_at') ?>
+    <?php echo $form->field($model, 'deleted_by') ?>
 
-    <?php // echo $form->field($model, 'deleted_by') ?>
+    <?php echo $form->field($model, 'created_at') ?>
 
-    <?php // echo $form->field($model, 'created_at') ?>
+    <?php echo $form->field($model, 'created_by') ?>
 
-    <?php // echo $form->field($model, 'created_by') ?>
+    <?php echo $form->field($model, 'updated_at') ?>
 
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
+    <?php echo $form->field($model, 'updated_by') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

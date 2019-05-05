@@ -16,17 +16,17 @@ $session = Yii::$app->session;
 ?>
 
 <div class="row">
-    
-    <div class="col-md-6">
-        <?php $form = ActiveForm::begin(['options' => [
-            'enctype' => 'multipart/form-data',],
-            'id' => 'dynamic-form',
-            'enableClientValidation' => true,
-            'fieldConfig' => [
-                'template' => "{label}\n{beginWrapper}\n{input}\n{error}\n{endWrapper}\n{hint}",
-            ],
-        ]); ?>    
         
+    <?php $form = ActiveForm::begin(['options' => [
+        'enctype' => 'multipart/form-data',],
+        'id' => 'dynamic-form',
+        'enableClientValidation' => true,
+        'fieldConfig' => [
+            'template' => "{label}\n{beginWrapper}\n{input}\n{error}\n{endWrapper}\n{hint}",
+        ],
+    ]); ?>
+
+        <div class="col-md-6">
             <?= $form->field($modelAsg, 'asg_title')->textArea(['maxlength' => true])->label() ?>
             
             <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
@@ -58,9 +58,9 @@ $session = Yii::$app->session;
                         'minHeight' => 500,
                     ]
                 ]) ?>
-    </div>
-        
-    <div class="col-md-6">
+        </div>
+            
+        <div class="col-md-6">
             <?php
                 if(!$modelAsg->isNewRecord){
                     echo("
@@ -96,26 +96,26 @@ $session = Yii::$app->session;
                     ");
                 } 
             ?>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>Kelas</td>
-                            <td>
-                                <div class="col-md-9">
-                                    Mahasiswa
-                                </div>
-                                <div class="col-md-3" style="padding: 5px">
-                                    <button type="button" class="btn btn-success btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>
-                                    <button type="button" class="btn btn-danger btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody id="list-class">
-                        
-                    </tbody>
-                </table>
-    </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>Kelas</td>
+                        <td>
+                            <div class="col-md-9">
+                                Mahasiswa
+                            </div>
+                            <div class="col-md-3" style="padding: 5px">
+                                <button type="button" class="btn btn-success btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>
+                                <button type="button" class="btn btn-danger btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="list-class">
+                    
+                </tbody>
+            </table>
+        </div>
 </div>
 
     <div class="row">
@@ -126,8 +126,6 @@ $session = Yii::$app->session;
     </div>
 
     <?php ActiveForm::end(); ?>
-
-
 
 <?php
      $this->registerJs("
