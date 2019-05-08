@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Url;
 use backend\assets\AppAsset;
+use common\models\CategoryProject;
+
 /**
  * @var string $content
  * @var \yii\web\View $this
@@ -29,7 +31,12 @@ AppAsset::register($this);
     <![endif]-->
 </head>
 <body class="nav-<?= !empty($_COOKIE['menuIsCollapsed']) && $_COOKIE['menuIsCollapsed'] == 'true' ? 'sm' : 'md' ?>" >
-<?php $this->beginBody(); ?>
+<?php 
+    
+    $this->beginBody(); 
+    
+?>
+
 <div class="container body">
 
     <div class="main_container">
@@ -49,16 +56,15 @@ AppAsset::register($this);
                     </div>
                     <div class="profile_info">
                         <span>Welcome,</span>
-                        <h4><?= Yii::$app->user->identity->username ?></h4n >
+                        <h4><?= Yii::$app->user->identity->username ?></h4>
                     </div>
                 </div>
                 <!-- /menu prile quick info -->
 
-                <br />
+                <br/>
 
                 <!-- sidebar menu -->
                 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-
                     <div class="menu_section">
                         <h3>General</h3>
                         <?=
@@ -66,63 +72,15 @@ AppAsset::register($this);
                             [
                                 "items" => [
                                     ["label" => "Dashboard", "url" => ["/"], "icon" => "dashboard"],
-                                    ["label" => "Layout", "url" => ["site/layout"], "icon" => "files-o"],
-                                    ["label" => "Error page", "url" => ["site/error-page"], "icon" => "close"],
+                                    ["label" => "Permohonan Penggunaan", "url" => ["project-usage/index"], "icon" => "files-o"],
                                     [
-                                        "label" => "Widgets",
+                                        "label" => "Manajemen Konten",
                                         "icon" => "th",
                                         "url" => "#",
                                         "items" => [
-                                            ["label" => "Menu", "url" => ["site/menu"]],
-                                            ["label" => "Panel", "url" => ["site/panel"]],
-                                        ],
-                                    ],
-                                    [
-                                        "label" => "Badges",
-                                        "url" => "#",
-                                        "icon" => "table",
-                                        "items" => [
                                             [
-                                                "label" => "Default",
-                                                "url" => "#",
-                                                "badge" => "123",
-                                            ],
-                                            [
-                                                "label" => "Success",
-                                                "url" => "#",
-                                                "badge" => "new",
-                                                "badgeOptions" => ["class" => "label-success"],
-                                            ],
-                                            [
-                                                "label" => "Danger",
-                                                "url" => "#",
-                                                "badge" => "!",
-                                                "badgeOptions" => ["class" => "label-danger"],
-                                            ],
-                                        ],
-                                    ],
-                                    [
-                                        "label" => "Multilevel",
-                                        "url" => "#",
-                                        "icon" => "table",
-                                        "items" => [
-                                            [
-                                                "label" => "Second level 1",
-                                                "url" => "#",
-                                            ],
-                                            [
-                                                "label" => "Second level 2",
-                                                "url" => "#",
-                                                "items" => [
-                                                    [
-                                                        "label" => "Third level 1",
-                                                        "url" => "#",
-                                                    ],
-                                                    [
-                                                        "label" => "Third level 2",
-                                                        "url" => "#",
-                                                    ],
-                                                ],
+                                                'label' => 'Kategori',
+                                                'url' => \yii\helpers\Url::to(['/category-project'])
                                             ],
                                         ],
                                     ],

@@ -25,7 +25,7 @@ $css = ['css/main.css'];
 						telescope.
 					</p>
                     <?php $form = ActiveForm::begin([
-                        'action' => ['test'],
+                        'action' => ['search-project'],
                         'method' => 'get',
                     ]); ?>
                         <div class="row">
@@ -39,8 +39,11 @@ $css = ['css/main.css'];
                                         <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
                                             <select name="searchCategory" placeholder="Category" class="form-control-custom search-slt">
                                                 <option value="">All</option>
-                                                <option value="Matakuliah">Matakuliah</option>
-                                                <option value="PKM">PKM</option>
+                                                <?php
+                                                    foreach($categories as $category){
+                                                        echo("<option value='" . $category->cat_proj_name . "'>" . $category->cat_proj_name . "</option>");
+                                                    }
+                                                ?>
                                             </select>
                                         </div>
 

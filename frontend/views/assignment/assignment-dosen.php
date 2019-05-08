@@ -128,12 +128,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td>
                                         <div style="float: right; margin-bottom: 0px;">
                                             <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 20px;font-size: 13px;']) ?> 
-                                            <?= Html::a('Open', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']) ?>
-                                        
                                             <?php 
                                                 Modal::begin([
                                                     'header' => '<h2>Pilih Batas Akhir</h2>',
-                                                    'toggleButton' => ['label' => 'Re-Open', 'class' => ['btn btn-custom'], 'style' => ['padding: 5px 20px; font-size: 13px']],
+                                                    'toggleButton' => ['label' => 'Re-Open', 'class' => ['btn-xs btn-custom'], 'style' => ['padding: 5px 20px; font-size: 13px']],
                                                 ]);
                                                     
                                                     $modelAsg = AssignmentController::findModel($key['asg_id']);    

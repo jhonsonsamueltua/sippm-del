@@ -18,6 +18,7 @@ use common\models\User;
 use frontend\models\ContactForm;
 use common\models\Project;
 use common\models\search\ProjectSearch;
+use common\models\CategoryProject;
 use yii\sphinx\Query;
 use yii\sphinx\MatchExpression;
 
@@ -62,9 +63,8 @@ class SiteController extends Controller
 
         $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
         $modelCompCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
-        
-        $searchModel = new ProjectSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $categories = CategoryProject::find()->where("deleted!=1")->all();
 
         return $this->render('index', [
             'model' => $model,
@@ -73,8 +73,7 @@ class SiteController extends Controller
             'modelCount' => $modelCount,
             'modelNewsCount' => $modelNewsCount,
             'modelCompCount' => $modelCompCount,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'categories' => $categories,
         ]);
     }
 
@@ -251,7 +250,7 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionTest($searchWords, $searchCategory){
+    public function actionSearchProject($searchWords, $searchCategory){
         $stopWordsRemoved = $this->removeStopWords(strtolower($searchWords));
         $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
         $keywords = explode(' ', $preprocessed); 
