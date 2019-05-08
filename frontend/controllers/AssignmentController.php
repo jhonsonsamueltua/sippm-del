@@ -6,6 +6,8 @@ use Yii;
 use yii\data\Pagination;
 use yii\httpclient\Client;
 use common\models\Assignment;
+use common\models\CategoryProject;
+use common\models\SubCategoryProject;
 use common\models\Student;
 use common\models\Project;
 use common\models\ClassAssignment;
@@ -46,9 +48,6 @@ class AssignmentController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionTesttest($id){
-        echo "test"; die;
-    }
 
     /**
      * Lists all Assignment models.
@@ -65,13 +64,6 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function actionManagemenProyek(){
-        $session = Yii::$app->session;
-
-        return $this->render('managemen-proyek',[
-
-        ]);
-    }
 
     /**
      * Displays a single Assignment model.
@@ -83,11 +75,11 @@ class AssignmentController extends Controller
     {   
         $model = $this->findModel($id);
         $projects = Project::find()->where(['asg_id' => $id])->andWhere('deleted' != 1)->all();
-        $countProject = Project::find()->where(['asg_id' => $id])->count();
+
         return $this->render('view', [
             'model' => $model,
             'projects' => $projects,
-            'countProject' => $countProject,
+            'projectsCount' => count($projects),
         ]);
     }
 
@@ -108,23 +100,14 @@ class AssignmentController extends Controller
         $session = Yii::$app->session;
         $username = $session['nim'];
 
-        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = $username AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3)";
+        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = $username AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3) GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
         $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
         $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
 
-        // $pagination = new Pagination(['totalCount' => $modelPenugasanSaatIniCount, 'pageSize' => 5]);
         
-        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id WHERE ssa.stu_id = $username AND sa.sts_asg_id = 2";
+        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = $username AND sa.sts_asg_id = 2";
         $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
         $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
-
-        // echo '<pre>';
-        // var_dump($modelRiwayatPenugasan);die();
-
-        // $pagination = new Pagination(['totalCount' => $modelRiwayatPenugasanCount, 'pageSize' => 1]);
-        // $modelRiwayatPenugasan = $modelRiwayatPenugasan->offset($pagination->offset)
-        // ->limit($pagination->limit)
-        // ->all();
 
         return $this->render('assignment-student',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
@@ -142,21 +125,14 @@ class AssignmentController extends Controller
         $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->count();
         $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->count();
         
-        $pagination = new Pagination(['totalCount' => $modelRiwayatPenugasanCount, 'pageSize' => 5]);
-
         $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->all();
-
-        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])
-        ->offset($pagination->offset)
-        ->limit($pagination->limit)
-        ->all();
+        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->all();
 
         return $this->render('assignment-dosen',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
             'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
             'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
             'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
-            'pagination' => $pagination,
         ]);
     }
 
@@ -207,7 +183,7 @@ class AssignmentController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role'] == "Mahasiswa"){
-            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memilik hak untuk mengakses halaman ini.');
+            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini.');
             
             return $this->redirect(['site/index']);
         }else{
@@ -220,19 +196,30 @@ class AssignmentController extends Controller
                     $modelAsg->asg_creator_id = $session['pegawaiId'];
                     $modelAsg->asg_creator = $session['nama'];
                     $modelAsg->asg_creator_email = $session['email'];
+
+                    // open or pending assignment
+                    date_default_timezone_set("Asia/Bangkok");
+                    $now = new \DateTime();
+                    $start = new \DateTime($modelAsg->asg_start_time);
+                    $end = new \DateTime($modelAsg->asg_end_time);
+                    if($now >= $start && $now <= $end){
+                        $modelAsg->sts_asg_id = 1;
+                    }
+
                     $modelAsg->save();
     
                     foreach($_POST['Class'] as $i => $class){
+                        
                         $modelClass = new ClassAssignment();
                         
                         $modelClass->class = $class;
-                        $modelClass->asg_id = $modelAsg->asg_id;
                         
+                        $modelClass->asg_id = $modelAsg->asg_id;
     
                         if($_POST['Student'][$i][0] == "empty"){
                             $modelClass->partial = 0;
                             $modelClass->save();
-    
+                            
                             $client = new Client();
                             $response = $client->createRequest()
                                                 ->setMethod('GET')
@@ -367,6 +354,18 @@ class AssignmentController extends Controller
             'modelAsg' => $modelAsg,
             'modelClass' => $modelClass,    
         ]);
+    }
+
+    public function actionLists($id){
+        $cat = CategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->one();
+        $model = SubCategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->all();
+        
+        echo "<option value=''>Pilih ".$cat->cat_proj_name." ...</option>";
+        if(count($model) > 0){
+            foreach($model as $data){
+                echo "<option value='". $data->sub_cat_proj_id ."'>". $data->sub_cat_proj_name ."</option>";
+            }
+        }
     }
 
     /**

@@ -15,21 +15,21 @@ $this->title = 'List Proyek';
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
-    <h4> <b>List Proyek "<?= $title ?>" </b> </h4>
+    <h4> <b>Hasil Pencarian Proyek </b> </h4>
     <hr class="hr-custom">
 
     <table class="table table-borderless" id="dataTable" width="100%" cellspacing="0" >
         <thead hidden>
         <tr>
-            <th>Proyek <?= $title ?></th>
+            <th>List Proyek</th>
         </tr>
         </thead>
         <tbody>
             <?php
-            if($modelCount == 0){
+            if($searchResCount == 0){
                 echo '<td style="text-align: center"><i><br> Tidak ada proyek yang anda cari. </i></td>';
             }else{
-                foreach($model as $data){
+                foreach($searchRes as $data){
                     $description = $data['proj_description'];
                     $limit_words = 30;
                     $words = explode(' ',$description);
@@ -45,7 +45,7 @@ $this->title = 'List Proyek';
 
                     <tr>
                         <td style="border: 0px;padding: 0px 8px;">
-                            <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['proj_id']], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= 1?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= 1    ?></font>
+                            <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['id']], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= 1?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= 1    ?></font>
                             <div class="text-author">
                                 <?= $author ?> (<?= $created_at ?>)
                             </div>

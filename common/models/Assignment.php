@@ -66,19 +66,6 @@ class Assignment extends \yii\db\ActiveRecord
     {
         return [
             [['cat_proj_id', 'sub_cat_proj_id', 'asg_title', 'asg_start_time', 'asg_end_time', 'asg_description'], 'required', 'message' => "{attribute} tidak boleh kosong."],
-            // ['course_id', 'required', 'when' => function($model) {
-            //     return $model->cat_proj_id == 1;
-            // }, 'enableClientValidation' => false],
-
-            // ['course_id', 'required', 'when' => function ($model) {
-            //     return $model->cat_proj_id == 1;
-            //   }, 'whenClient' => "function (attribute, value) {
-            //     return $('#cat_proj_id').val() == 1;
-            //   }"],
-
-            // ['course_id', 'required', 'whenClient' => function($model) {
-            //         return $model->cat_proj_id == 1;
-            // }, 'enableClientValidation' => false],
             [['asg_start_time', 'asg_end_time', 'updated_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['sub_cat_proj_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
             ['asg_start_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
@@ -92,15 +79,7 @@ class Assignment extends \yii\db\ActiveRecord
             [['sub_cat_proj_id'], 'exist', 'skipOnError' => true, 'targetClass' => SubCategoryProject::className(), 'targetAttribute' => ['sub_cat_proj_id' => 'sub_cat_proj_id']],
             [['sts_asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusAssignment::className(), 'targetAttribute' => ['sts_asg_id' => 'sts_asg_id']],
             ['asg_end_time', 'compare', 'compareAttribute' => 'asg_start_time', 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari Batas Awal."],
-            ['updated_end_time', 'compare', 'compareValue' => date('Y-m-d h:i:s'), 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari hari ini."],
-            // [['cat_proj_id'], 'ext.YiiConditionalValidator',
-            //     'if' => [
-            //         [['cat_proj_id'], 'compare', 'compareValue' => 1]
-            //     ],
-            //     'then' => [
-            //         [['course_id'], 'required']
-            //     ]
-            // ]
+            [['updated_end_time', 'asg_start_time'], 'compare', 'compareValue' => date('Y-m-d h:i:s'), 'operator' => '>', 'message' => "{attribute} tidak boleh lebih kecil dari hari ini."],
         ];
     }
     /**

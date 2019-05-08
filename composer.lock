@@ -199,8 +199,7 @@
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/9f3deb2e710d39c72a988559609d9dc9a319de0b",
                 "reference": "9f3deb2e710d39c72a988559609d9dc9a319de0b"
             },
-            "type": "bower-asset",
-            "time": "2017-08-27T22:53:19+00:00"
+            "type": "bower-asset"
         },
         {
             "name": "bower-asset/blueimp-file-upload",
@@ -270,8 +269,7 @@
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/da7647cb93fff2030e73a701db22c66de76a9919",
                 "reference": "da7647cb93fff2030e73a701db22c66de76a9919"
             },
-            "type": "bower-asset",
-            "time": "2017-08-27T22:51:02+00:00"
+            "type": "bower-asset"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -299,31 +297,30 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:puikinsh/gentelella.git",
+                "url": "https://github.com/ColorlibHQ/gentelella.git",
                 "reference": "310a3d92048173b03fdfdf2ad940334b4f2d6b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/puikinsh/gentelella/zipball/310a3d92048173b03fdfdf2ad940334b4f2d6b39",
+                "url": "https://api.github.com/repos/ColorlibHQ/gentelella/zipball/310a3d92048173b03fdfdf2ad940334b4f2d6b39",
                 "reference": "310a3d92048173b03fdfdf2ad940334b4f2d6b39"
             },
             "type": "bower-asset",
             "license": [
                 "MIT"
-            ],
-            "time": "2019-03-30T19:42:03+00:00"
+            ]
         },
         {
             "name": "bower-asset/highcharts-release",
             "version": "v5.0.14",
             "source": {
                 "type": "git",
-                "url": "git@github.com:highslide-software/highcharts-release.git",
+                "url": "https://github.com/highcharts/highcharts-dist.git",
                 "reference": "4f89cf3f98a557a9512f7ba63f727998d21f3b79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/highslide-software/highcharts-release/zipball/4f89cf3f98a557a9512f7ba63f727998d21f3b79",
+                "url": "https://api.github.com/repos/highcharts/highcharts-dist/zipball/4f89cf3f98a557a9512f7ba63f727998d21f3b79",
                 "reference": "4f89cf3f98a557a9512f7ba63f727998d21f3b79"
             },
             "type": "bower-asset"
@@ -354,7 +351,7 @@
             "version": "3.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "9e8ec3d10fad04748176144f108d7355662ae75e"
             },
             "dist": {

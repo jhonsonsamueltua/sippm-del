@@ -36,11 +36,6 @@ class ProjectUsageController extends Controller
         ];
     }
 
-    // public function beforeAction($action){
-    //     $this->layout = "main-2";
-
-    //     return parent::beforeAction($action);
-    // }
 
     /**
      * Lists all ProjectUsage models.
@@ -56,14 +51,8 @@ class ProjectUsageController extends Controller
             $modelRequestCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->count();
             $modelRiwayatCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->count();
 
-            $pagination = new Pagination(['totalCount' => $modelRequestCount, 'pageSize' => 5]);
-            // $pagination2 = new Pagination(['totalCount' => $modelRiwayatCount, 'pageSize' => 5]);
-            $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+            $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->all();
+            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->all();
 
             $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1';
             $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
@@ -82,8 +71,6 @@ class ProjectUsageController extends Controller
                 'modelRequestUsersCount' => $modelRequestUsersCount,
                 'modelRiwayatCount' => $modelRiwayatCount,
                 'modelRiwayatRequestOrangLainCount' => $modelRiwayatRequestOrangLainCount,
-                'pagination' => $pagination,
-                // 'pagination2' => $pagination2,
             ]);
         }
     }
@@ -262,7 +249,7 @@ class ProjectUsageController extends Controller
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
             $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
-            return $this->redirect(['list-project-usage-request']);
+            return $this->redirect(['index']);
         }
     }
 

@@ -30,29 +30,49 @@ $session = Yii::$app->session;
             <?= $form->field($modelAsg, 'asg_title')->textArea(['maxlength' => true])->label() ?>
             
             <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
-                        ['prompt' => "Pilih Kategori", 'onchange' => 'java_script_:show(this.options[this.selectedIndex].value)'])->label()?>    
-
-            <?= $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori"])->label() ?>
-
-            <?= $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class, [
-                'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                'options' => ['placeholder' => 'Pilih batas awal ...'],
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'yyyy-mm-dd hh:ii:ss'
-                ],
-                'class' => 'form-control'
-            ])->label(); ?>
-
-            <?= $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class, [
-                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
-                    'pluginOptions' => [
-                        'autoclose'=>true,
-                        'format' => 'yyyy-mm-dd hh:ii:ss'
-                    ]
-                ])->label(); ?>
-
+                        ['prompt' => "Pilih Kategori ...", 
+                        'onchange' => '
+                            $.get( "index.php?r=assignment/lists&id='.'"+$(this).val(), function( data ) {
+                            $( "select#sub_cat_proj_id" ).html( data );
+                            });
+                            '
+                        ])->label()?>    
+            <?php
+                if(!$modelAsg->isNewRecord){
+                    echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where(['cat_proj_id' => $modelAsg->cat_proj_id])->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori ...", 'id' => 'sub_cat_proj_id'])->label();
+                }else{
+                    echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where('0')->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori ...", 'id' => 'sub_cat_proj_id'])->label();
+                }
+            ?>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($modelAsg, 'asg_start_time')->widget(DateTimePicker::class, [
+                        'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                        'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                        'removeIcon' => '<i class="fa fa-calendar-times-o" aria-hidden="true" style="font-size: 19px;color: #FF8A65"></i>',
+                        'options' => ['placeholder' => 'Pilih batas awal ...'],
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd hh:ii:ss'
+                        ],
+                        'class' => 'form-control'
+                    ])->label(); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class, [
+                        'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                        'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                        'removeIcon' => '<i class="fa fa-calendar-times-o" aria-hidden="true" style="font-size: 19px;color: #FF8A65"></i>',
+                        'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd hh:ii:ss'
+                        ]
+                    ])->label(); ?>
+                </div>
+            </div>
+            
                 <?= $form->field($modelAsg, 'asg_description')->widget(Redactor::classname(), [
                     'options' => [
                         'minHeight' => 500,
@@ -99,13 +119,13 @@ $session = Yii::$app->session;
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td>Kelas</td>
+                        <td style="font-weight: 700;">Kelas</td>
                         <td>
-                            <div class="col-md-9">
+                            <div class="col-md-9" style="font-weight: 700;">
                                 Mahasiswa
                             </div>
-                            <div class="col-md-3" style="padding: 5px">
-                                <button type="button" class="btn btn-success btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>
+                            <div class="col-md-3" style="padding: 4px">
+                            &nbsp;<button type="button" class="btn btn-success btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>&nbsp; 
                                 <button type="button" class="btn btn-danger btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
                             </div>
                         </td>
@@ -121,7 +141,7 @@ $session = Yii::$app->session;
     <div class="row">
         <center>
             <!-- <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Edit', ['class' => 'btn-md button btn-custom', 'style' => 'padding: 8px 30px;width: 300px;font-style: bold;']) ?> -->
-            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Update', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Edit', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
         </center>   
     </div>
 
@@ -165,14 +185,14 @@ $session = Yii::$app->session;
                             classes += \"<option value='\"+classRes['kelas_id']+\"'>\"+classRes['nama']+\"</option>\";
                         });
                         
-                        $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;'' style='padding: 0px;'><button name='\"+classCounter+\"' type='button' class='btn btn-success btn-xs' onclick='addMoreStudent(this)' ><span class='glyphicon glyphicon-plus'></span></button><button name='\"+classCounter+\"' type='button' class='btn btn-danger btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+                        $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;'' style='padding: 0px;'><button name='\"+classCounter+\"' type='button' class='btn btn-success btn-xs' onclick='addMoreStudent(this)' ><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
                         sessionStorage.setItem('classList', classes);
                     }
                 });
             }else{
                 var classes = sessionStorage.getItem('classList', classes);
 
-                $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button><button name='\"+classCounter+\"' type='button' class='btn btn-danger btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+                $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
             }
         }
 
@@ -180,7 +200,7 @@ $session = Yii::$app->session;
             classCounter++;
             var classes = sessionStorage.getItem('classList');
 
-            $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student\"+classCounter+\"0'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button><button name='\"+classCounter+\"' type='button' class='btn btn-danger btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+            $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td style='padding:0px;border-top:0px'><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td style='padding:0px;border-top:0px'><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student\"+classCounter+\"0'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
         }
 
         function removeClass(){
@@ -200,11 +220,11 @@ $session = Yii::$app->session;
                 studentCounter[classIdx]++;
                 
                 if(sessionStorage.getItem(class_id) === null){
-                    $('#' + idName).append(\"<tr name='Student\"+classIdx+studentCounter[classIdx]+\"'><td><div class='col-md-9 form-group'><select name='Student[\"+classIdx+\"][\"+studentCounter[classIdx]+\"]' class='form-control'><option select='selected'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''></div></td></tr>\");
+                    $('#' + idName).append(\"<tr name='Student\"+classIdx+studentCounter[classIdx]+\"'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classIdx+\"][\"+studentCounter[classIdx]+\"]' class='form-control'><option select='selected'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''></div></td></tr>\");
                 }else{
                     var students = sessionStorage.getItem(class_id);
 
-                    $('#' + idName).append(\"<tr name='Student\"+classIdx+studentCounter[classIdx]+\"'><td><div class='col-md-9 form-group'><select name='Student[\"+classIdx+\"][\"+studentCounter[classIdx]+\"]' class='form-control'>\"+students+\"</select></div><div class='col-md-3' style='padding: 0px;''></div></td></tr>\");
+                    $('#' + idName).append(\"<tr name='Student\"+classIdx+studentCounter[classIdx]+\"'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classIdx+\"][\"+studentCounter[classIdx]+\"]' class='form-control'>\"+students+\"</select></div><div class='col-md-3' style='padding: 0px;''></div></td></tr>\");
                 }
             }
         }

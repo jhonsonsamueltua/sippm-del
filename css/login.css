@@ -3,9 +3,9 @@
 /* BASIC */
 
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: #56baed;
-  height: 100vh;
+  font-family: "Poppins", sans-serif !important;
+  background-color: #56baed !important;
+  height: 100vh !important;
 }
 
 a {
@@ -15,18 +15,16 @@ a {
   font-weight: 400;
 }
 
-h2 {
+h3 {
   text-align: center;
   font-size: 16px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif !important;
   /* text-transform: uppercase; */
   display:inline-block;
   margin: 25px 8px 25px 8px; 
   color: #cccccc;
 }
-
-
-
 /* STRUCTURE */
 
 .wrapper {
@@ -37,6 +35,7 @@ h2 {
   width: 100%;
   min-height: 100%;
   padding: 40px;
+  height: -webkit-fill-available;
 }
 
 #formContent {
@@ -66,26 +65,27 @@ h2 {
 
 /* TABS */
 
-h2.inactive {
+h3.inactive {
   color: #cccccc;
 }
 
-h2.active {
+h3.active {
   color: #0d0d0d;
-  border-bottom: 2px solid #5fbae9;
+  /* border-bottom: 2px solid #5fbae9; */
 }
 /* FORM TYPOGRAPHY*/
 
 input[type=button], button[type=submit], input[type=reset]  {
   background-color: #56baed;
+  cursor: pointer;
   border: none;
   color: white;
-  padding: 15px 80px;
+  padding: 10px 60px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   /* text-transform: uppercase; */
-  font-size: 13px;
+  font-size: 16px !important;
   -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   -webkit-border-radius: 5px 5px 5px 5px;
@@ -114,7 +114,7 @@ input[type=text], input[type=password] {
   background-color: #dbddde;
   border: none;
   color: #0d0d0d;
-  padding: 15px 32px;
+  padding: 10px 30px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -259,4 +259,21 @@ input[type=text]:placeholder {
 
 * {
   box-sizing: border-box;
+}
+
+.text-error{
+  color : #FF5722;
+  font-size: 14px;
+}
+
+.form-group {
+  position: relative
+}
+.form-group input[type="password"] {
+  padding-right: 30px
+}
+.form-group .glyphicon {
+  right: 50px;
+  position:absolute;
+  top:20px
 }

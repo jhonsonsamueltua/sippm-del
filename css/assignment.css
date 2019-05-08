@@ -10,19 +10,15 @@
     border-bottom: 5px solid #d6df22 !important;
     border-right: 0px !important;
     border-left: 0px!important;
-    border-top: 1px transparent !important;
-    background-color: #6ac7c1 !important;;
+    border-top: 1px transparent !important; 
+    background-color: #6ac7c1 !important;
+    padding: 8px 15px;
 }
 
 .nav-tabs>li>a {
-    margin-right: 0px !important;
+    margin-right: 5px !important;
     line-height: 1.42857143;
-    /* border: 1px solid transparent; */
+    border: none !important;
     border-radius: 0px !important;
 }
-/* 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    color: #555;
-    cursor: default;
-    border-bottom-color: transparent;
-} */
+

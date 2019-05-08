@@ -1,7 +1,7 @@
 <?php  
 use yii\helpers\Html;
 $this->title = 'SIPPM Del';
-$css = ['css/project.css'];
+$this->registerCssFile("././css/project.css");
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -12,77 +12,64 @@ $css = ['css/project.css'];
 ?>
 
 <div class="body-content">
-    <div class=" container box-content">
+    <div class=" container box-content" >
         <div align="center">
         <!-- <font style="float: right; font-size: 18px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font>  -->
-            <h2 class="text-h2"><?= $model->proj_title ?></h2>
-            <br>
-            <?= $author ?>                                            
+            <font class="title"><?= $model->proj_title ?></font>
+            <font style='color:#9E9E9E'> <?= $author ?> </font>
         </div>
 
-        <hr class="hr-custom">
+        <hr style="border-top: 2px solid #B2EBF2;">
             
         <div class="row">
-            <div class = "col-md-3">
-                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Artefak Proyek</h4>
-                    <?php
-                        $session = Yii::$app->session;
-
-                        if(!isset($session['role'])){
-                            echo Html::a('Permohonan Penggunaan', ['/site/login', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']);
-                        }else{
-                            if($usageModel == null || $usageModel->sts_proj_usg_id == 3){
-                                echo Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']);
-                            }else if($usageModel->sts_proj_usg_id == 1){
-                                echo Html::a('Ubah Permohonan Penggunaan', ['/project-usage/update', 'proj_usg_id' => $usageModel->proj_usg_id], ['class' => 'btn btn-primary']);
-                            }else{
-                                echo Html::a("Unduh semua file proyek", ['download-project', 'proj_id' => $model->proj_id]) . "<br>";
-                            }
-                        }
-                    ?>
-                </div>
-
-                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Dosen Penugas</h4>
-                    <?= "<p>". $assignmentModel->asg_creator ."</p>" ?>
-                 </div>
-
-                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Tanggal Diunggah</h4>
-                    <?php 
-                        $date = date_create($model->created_at);
-                        echo ("<p>". date_format($date, "d M Y") ."</p>"); 
-                    ?>
-                </div>
-                
-                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                 </div>
-
-                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Diunggah oleh</h4>
-                    <?= "<p>". $model->proj_creator ."</p>" ?>
-                </div>
-            </div>
-        
-
+            
             <div class ="col-md-9">
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Deskripsi</h4>
+                    <?php 
+                        $date = date_create($model->created_at);
+                    ?>
+                    <font style='color:#9E9E9E'> <?= date_format($date, "d M Y, h:m") ?> diunggah oleh <?= $model->proj_creator ?> </font><br><br>
                     <?= $model->proj_description ?>
                 </div>
-                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Jenis Proyek</h4>
-                    <p>Proyek Akhir 2</p>
-                </div>
 
-                <div class = "simple-item-view-date word-break item-page-field-wrapper table">
-                    <h4>Tahun Pengerjaan Proyek</h4>
-                    <p>2016</p>
-                </div>
+                
+                        <div >
+                            <font class = "project-sub-content">Kategori Proyek</font><br>
+                            <p><?= $assignmentModel->catProj->cat_proj_name ?> [ <?= $assignmentModel->subCatProj->sub_cat_proj_name ?> ]</p>
+                        </div>
+                    
+                        <div class = "">
+                            <font class = "project-sub-content">Dosen Penugas</font><br>
+                            <?= "<p>". $assignmentModel->asg_creator ."</p>" ?>
+                        </div>
+                  
+                        <div class = "">
+                            <font class = "project-sub-content">Artefak Proyek</font><br>
+                            <?php
+                                $session = Yii::$app->session;
 
+                                if(!isset($session['role'])){
+                                    echo Html::a('Permohonan Penggunaan', ['/site/login', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']);
+                                }else{
+                                    if($usageModel == null || $usageModel->sts_proj_usg_id == 3){
+                                        echo Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj_id], ['class' => 'btn btn-success']);
+                                    }else if($usageModel->sts_proj_usg_id == 1){
+                                        echo Html::a('Ubah Permohonan Penggunaan', ['/project-usage/update', 'proj_usg_id' => $usageModel->proj_usg_id], ['class' => 'btn btn-primary']);
+                                    }else{
+                                        echo Html::a("Unduh semua file proyek", ['download-project', 'proj_id' => $model->proj_id], ['class' => 'btn btn-info']) . "<br>";
+                                    }
+                                }
+                            ?>
+                      
+                </div>
             </div>
+            <div class = "col-md-3">
+                <h4>Rekomendasi Lainnya</h4>
+                <hr style="border-top: 2px solid #B2EBF2;">
+            </div>
+
         </div>
+
     </div>
 </div>
         

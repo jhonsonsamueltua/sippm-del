@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content "> 
 
-        <h3> <b>Submit Penugasan</b> </h3>
+        <h3> <b>Submit Proyek</b> </h3>
         <hr class="hr-custom">
 
         <?= $this->render('_form', [
