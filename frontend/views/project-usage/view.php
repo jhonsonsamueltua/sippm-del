@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\widgets\Breadcrumbs;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\ProjectUsage */
@@ -14,28 +15,24 @@ $css = ['css/site.css'];
 ?>
 <div class="body-content">
     <div class=" container box-content">
-    
+
+        <div style="float:right; margin-top: 10px;">
+        <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        [
+                            'label' => 'Penggunaan Proyek',
+                            'url' => ['project-usage/index'],
+                        ],
+                        'Detail Penggunaan',
+                    ],
+                ]);
+            ?>
+        </div>
+
         <h3><b>Detail Penggunaan Proyek</b></h3>
         <hr class="hr-custom">
-        
-        <!-- <b>Judul Proyek :</b>
-        <?= Html::a($model->proj->proj_title, ['/project/view-project', 'proj_id' => $model->proj->proj_id], ['class' => 'text-title-project']) ?>
-        <br><br>
-        <b>Direquest oleh :</b>
-        <?= $model->proj_usg_creator ?>
-        <br><br>
-        <b>Tanggal Request :</b>
-        <?= $model->updated_at ?>
-        <br><br>
-        <b>Koordinator Proyek :</b>
-        <?= $model->proj->proj_creator ?>
-        <br><br>
-        <b>Keterangan Penggunaan :</b>
-        <br>
-        <?= $model->proj_usg_usage ?>
-        <br>
-        <b>Status : </b>
-        <?= $model->stsProjUsg->sts_proj_usg_name ?> -->
 
         <?= DetailView::widget([
             'model' => $model,

@@ -4,12 +4,16 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 use yii\widgets\LinkPager;
+use yii\bootstrap\Modal;
+use yii\bootstrap\ActiveForm;
+use frontend\controllers\AssignmentController;
+use kartik\datetime\DateTimePicker;
+use frontend\controllers\SiteController;
 
 $this->title = 'Penugasan';
 $this->params['breadcrumbs'][] = $this->title;
 
-// $css = ['css/assignment.css'];
-
+$this->registerCssFile("././css/assignment.css");
 ?>
     
 
@@ -26,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3> <b>Penugasan</b> </h3>
         <hr class="hr-custom">
         
-        <?= Html::a('Tambah Penugasan', ['assignment/create'], ['class' => 'btn-sm button btn-custom', 'style' => 'padding: 8px 30px;']) ?>
+        <?= Html::a('Tambah Penugasan', ['assignment/create'], ['class' => 'btn-md btn-custom', 'style' => 'padding: 8px 30px;']) ?>
         <br><br>
 
         <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
@@ -36,46 +40,53 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="tab-content">
             <div id="tab1" class="tab-pane fade in active">
-                
-                <!-- <h3 class=""><b><i class="fa fa-tasks" aria-hidden="true"></i> Penugasan Saat Ini <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span></b></h3> -->
                 <br>
                 <table class="table table-hover" id="dataTables" width="100%" cellspacing="0">
-                    <thead>
+                    <thead hidden>
                     <tr>
                         <th>Penugasan</th>
                         <th>Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
-                        <?php
+                        <?php   
                             if($modelPenugasanSaatIniCount == 0){
-                                // echo '<br><p><i> &nbsp;&nbsp;Tidak ada penugasan saat ini.</i></p>';
+                                echo '<tr><td colspan=2> <br> Tidak ada penugasan saat ini. </td></tr>';
                             }else{
                                 foreach($modelPenugasanSaatIni as $key){
                                     $asg_end_time = $key["asg_end_time"];
                                     $asg_end_time_timestamp = strtotime($asg_end_time);
-                                    $asg_end_time = date('l, d M Y, H:i', $asg_end_time_timestamp);
+                                    $asg_end_time = SiteController::tgl_indo(date('Y-m-d', $asg_end_time_timestamp)).', '.date('H:i', $asg_end_time_timestamp);  
 
                                     $asg_start_time = $key["asg_start_time"];
-                                    $asg_start_time_timestamp = strtotime($asg_end_time);
-                                    $asg_start_time = date('l, d M Y, H:i', $asg_start_time_timestamp);?>
+                                    $asg_start_time_timestamp = strtotime($asg_start_time);
+                                    $asg_start_time = SiteController::tgl_indo(date('Y-m-d', $asg_start_time_timestamp)).', '.date('H:i', $asg_start_time_timestamp);  ?>
 
                                     <tr>
-                                        <td>
+                                        <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
+                                            <font class='text-category'> <?= $key->catProj->cat_proj_name.' [ '.$key->subCatProj->sub_cat_proj_name.' ]' ?> </font> <br>
                                             <?= Html::a($key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
                                             <div class="text-author">
                                                 Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>
                                             </div>
                                         </td>
-                                        <td>
-                                            <span class="badge badge-primary badge-pill" style="float: right">
-                                                Status : <?= $key->stsAsg->sts_asg_name ?>
-                                            </span>
-                                            <br>
+                                        <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
+                                            <?php
+                                                if($this->context->getStatusAssignment($key['asg_id']) == "Pending"){
+                                                    echo '<span class="badge badge-primary badge-pill" style="float: right;background-color:#FFA726;">
+                                                        Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                    </span>';
+                                                }else{
+                                                    echo '<span class="badge badge-primary badge-pill" style="float: right;background-color:#009688;">
+                                                        Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                    </span>';
+                                                }
+                                            ?>
+                                            <br><br>
                                             <div style="float: right; margin-bottom: 0px;">
-                                                <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 20px;font-size: 13px;']) ?> 
-                                                <?= Html::a('Edit', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-primary btn-info-custom', 'style' => 'padding: 5px 20px;font-size: 13px;']) ?> 
-                                                <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-danger btn-info-custom', 'style' => 'padding: 5px 20px;font-size: 13px;']) ?> 
+                                                <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                                <?= Html::a('Edit', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                                <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                             </div>
                                         </td>
                                     </tr>
@@ -91,7 +102,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div id="tab2" class="tab-pane fade">
                 
-                <!-- <h3 class=""><b><i class="fa fa-tasks" aria-hidden="true"></i> Riwayat Penugasan <span class="badge"> <?= $modelRiwayatPenugasanCount ?> </span></b></h3> -->
                 <br>
                 <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -103,29 +113,59 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tbody>
                         <?php
                             if($modelRiwayatPenugasanCount == 0){
-                                // echo '<br><p><i> &nbsp;&nbsp;Tidak ada riwayat penugasan.</i></p>';
+                                echo '<tr><td colspan=2> <br> Tidak ada riwayat penugasan. </td></tr>';
                             }else{
                                 foreach($modelRiwayatPenugasan as $key){
                                     $asg_end_time = $key["asg_end_time"];
                                     $asg_end_time_timestamp = strtotime($asg_end_time);
-                                    $asg_end_time = date('l, d M Y, H:i', $asg_end_time_timestamp);
+                                    $asg_end_time = SiteController::tgl_indo(date('Y-m-d', $asg_end_time_timestamp)).', '.date('H:i', $asg_end_time_timestamp);  
 
                                     $asg_start_time = $key["asg_start_time"];
-                                    $asg_start_time_timestamp = strtotime($asg_end_time);
-                                    $asg_start_time = date('l, d M Y, H:i', $asg_start_time_timestamp);?>
+                                    $asg_start_time_timestamp = strtotime($asg_start_time);
+                                    $asg_start_time = SiteController::tgl_indo(date('Y-m-d', $asg_start_time_timestamp)).', '.date('H:i', $asg_start_time_timestamp);  ?>
                                     
                                     
                                 <tr>
                                     <td>
-                                        <?= Html::a($key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
+                                        <font class='text-category'> <?= $key->catProj->cat_proj_name.' [ '.$key->subCatProj->sub_cat_proj_name.' ]' ?> </font> <br>
+                                        <?= Html::a($key->catProj->cat_proj_name.''.$key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
                                         <div class="text-author">
                                             Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>
                                         </div>
                                     </td>
                                     <td>
-                                        <div style="float: right; margin-bottom: 0px;">
-                                            <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 20px;font-size: 13px;']) ?> 
-                                            <?= Html::a('Open', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']) ?>
+                                        <div style="float: right;text-align: center;">
+                                            <br>
+                                            <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                            
+                                            <?php 
+                                                Modal::begin([
+                                                    'header' => '<h3>Re-Open Penugasan</h3>',
+                                                    'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;border-radius: 0px!important;'],
+                                                ]);
+                                                    
+                                                    $modelAsg = AssignmentController::findModel($key['asg_id']);    
+                                                    $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
+
+                                                    echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
+                                                        'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                                        'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                                                        'removeIcon' => '<i class="fa fa-calendar-times-o" aria-hidden="true" style="font-size: 19px;color: #FF8A65"></i>',
+                                                        'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                                        'pluginOptions' => [
+                                                            'autoclose'=>true,
+                                                            'format' => 'yyyy-mm-dd hh:ii:ss'
+                                                        ]
+                                                    ])->label('Batas Akhir &nbsp;&nbsp;');
+                                                    
+                                                    echo '<br><br>';
+                                                    echo Html::submitButton('Re-Open', ['class' => 'btn btn-sm btn-primary', 'style' => 'padding: 5px 25px;width: 120px;font-style: bold;font-size:14px']);
+
+                                                    ActiveForm::end();
+
+                                                Modal::end();
+                                            ?>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -148,9 +188,9 @@ $this->params['breadcrumbs'][] = $this->title;
             $("#dataTables").DataTable({
             "pageLength": 5,
             "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
             "info": true,
             "autoWidth": true
             });

@@ -22,7 +22,8 @@ use common\models\Student;
         <tbody >
             <tr >
                 <td class="vcenter">
-                    <?php $form = ActiveForm::begin(['options' => [
+                    <?php $form = ActiveForm::begin([
+                        'options' => [
                         'enctype' => 'multipart/form-data',],
                         'id' => 'dynamic-form',
                         'enableClientValidation' => true,

@@ -17,6 +17,10 @@ use frontend\models\SignupForm;
 use common\models\User;
 use frontend\models\ContactForm;
 use common\models\Project;
+use common\models\search\ProjectSearch;
+use yii\sphinx\Query;
+use yii\sphinx\MatchExpression;
+
 /**
  * Site controller
  */
@@ -29,46 +33,7 @@ class SiteController extends Controller
      */
     public function behaviors()
     {
-        return [
-            // 'access' => [
-            //     'class' => AccessControl::className(),
-            //     'only' => ['logout', 'signup', 'about', 'contact'],
-            //     'rules' => [
-            //         [
-            //             'actions' => ['signup'],
-            //             'allow' => true,
-            //             'roles' => ['?'],
-            //         ],
-            //         [
-            //             'actions' => ['logout'],
-            //             'allow' => true,
-            //             // 'roles' => ['@'],
-            //         ],
-            //         [
-            //             'actions' => ['contact'],
-            //             'allow' => true,
-            //             // 'roles' => ['@'],
-            //             'matchCallback' => function ($rule, $action) {
-            //                 // return User::isUserStudent(Yii::$app->user->identity->username);
-            //             }
-            //        ],
-            //        [
-            //             'actions' => ['about'],
-            //             'allow' => true,
-            //             // 'roles' => ['@'],
-            //             'matchCallback' => function ($rule, $action) {
-            //                 // return User::isUserLecturer(Yii::$app->user->identity->username);
-            //             }
-            //    ],
-            //     ],
-            // ],
-            // 'verbs' => [
-            //     'class' => VerbFilter::className(),
-            //     'actions' => [
-            //         'logout' => ['post'],
-            //     ],
-            // ],
-        ];
+        return [];
     }
 
     /**
@@ -97,6 +62,7 @@ class SiteController extends Controller
 
         $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
         $modelCompCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
+        
         return $this->render('index', [
             'model' => $model,
             'modelNews' => $modelNews,
@@ -109,32 +75,27 @@ class SiteController extends Controller
 
     public function actionLihatLainnya($type)
     {   
-        if($type == 1){
-            $modelCount = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->count();
-            $pagination = new Pagination(['totalCount' => $modelCount, 'pageSize' => 2]);
-
-            $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(3)->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        }else if($type == 2){
-            $modelCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
-            $pagination = new Pagination(['totalCount' => $modelCount, 'pageSize' => 2]);
-
-            $model = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->limit(3)->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        }else if($type == 3){
-            $modelCount = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->count();
-            $pagination = new Pagination(['totalCount' => $modelCount, 'pageSize' => 2]);
-
-            $model = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->limit(3)->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+        $title = '';
+        if($type == 'win_comp'){
+            $model = Project::find()->where(['sts_win_id' => 1])->andWhere('deleted != 1')->orderBy('proj_title ASC')->all();
+            $title = "Menang Kompetisi";
+        }elseif($type == 'recently_added'){
+            $model = Project::find()->where('deleted != 1')->orderBy('updated_at DESC')->all();
+            $title = "Baru Ditambahkan";
+        }elseif($type == 'comp'){
+            $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 2 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
+            $model = Yii::$app->db->createCommand($query)->queryAll();
+            $title = "Kompetisi";
+        }elseif($type == 'matkul'){
+            $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 1 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
+            $model = Yii::$app->db->createCommand($query)->queryAll();
+            $title = "Matakuliah";
         }
+
         return $this->render('lihat-lainnya', [
             'model' => $model,
-            'type' => $type,
-            'pagination' => $pagination,
+            'modelCount' => count($model),
+            'title' => $title,
         ]);
     }
     /**
@@ -167,29 +128,32 @@ class SiteController extends Controller
                     $session->open();
 
                     $datas = $response->data['data'];
+                    $nama = $datas['nama'];
+                    $email = $datas['email'];
                     $role = $datas['role'];
-                    $session['username'] = $model->username;
+                    
+                    $session->set('username', $model->username);
+                    $session->set('nama', $nama);
+                    $session->set('email', $email);
 
                     if($role == "Mahasiswa"){
                         $dimId = $datas['dimId'];
-                        echo $nim = $datas['nim'];
-                        $nama = $datas['nama'];
-                        $email = $datas['email'];
+                        $nim = $datas['nim'];
                         $kelas = $datas['kelas'];
+
                         if($session['username'] == 'if416004'){
                             $role = "Dosen";
+                            $session->set('pegawaiId', 1);    
                         }
 
                         $session->set('dimId', $dimId);
                         $session->set('nim', $nim);
-                        $session->set('nama', $nama);
-                        $session->set('email', $email);
                         $session->set('kelas', $kelas);
                     }else{
+                        $pegawaiId = $datas['pegawaiId'];
                         $nip = $datas['nip'];
 
-                        $session->set('nama', $nama);
-                        $session->set('email', $email);
+                        $session->set('pegawaiId', $pegawaiId);
                         $session->set('nip', $nip);
                     }
 
@@ -198,7 +162,7 @@ class SiteController extends Controller
 
                     return $this->goBack();
                 }else{
-                    Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
+                    // Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
                     
                     return $this->render('login', [
                         'model' => $model,
@@ -207,6 +171,9 @@ class SiteController extends Controller
                 }
             }else{
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
+                return $this->render('login', [
+                    'model' => $model,
+                ]);
             }
 
             return $this->goHome();
@@ -266,6 +233,63 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionSearchRes(){
+        $searchModel = new ProjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('search-res', [
+            'searchRes' => $dataProvider,
+        ]);
+    }
+
+    public function actionTest($searchWords, $searchCategory){
+        $stopWordsRemoved = $this->removeStopWords(strtolower($searchWords));
+        $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
+        $keywords = explode(' ', $preprocessed); 
+
+        $query = new Query();
+        $rows = $query->select('*')->from('sippm_project')->match(
+                    (new MatchExpression)->match(['proj_title' => $keywords])
+                                ->orMatch(['proj_author' => $keywords])
+                                ->orMatch(['proj_description' => $keywords])
+                                ->andFilterMatch(['proj_cat_name' => $searchCategory])  
+                )->all();
+
+        return $this->render('search-result', [
+            'searchRes' => $rows,
+            'searchResCount' => count($rows),
+        ]);
+    }
+
+    private function removeStopWords($searchWords){
+        $commonWords = require(dirname(__DIR__) . '/../files/stopwords.php');
+
+        return preg_replace('/\b(' . implode('|', $commonWords) . ')\b/', '', $searchWords);
+    }
+
+    public static function tgl_indo($tanggal){
+        $bulan = array (
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+        );
+        $pecahkan = explode('-', $tanggal);
+        // variabel pecahkan 0 = tanggal
+        // variabel pecahkan 1 = bulan
+        // variabel pecahkan 2 = tahun
+         
+        return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
 
     /**

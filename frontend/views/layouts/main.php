@@ -10,10 +10,11 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use common\models\CategoryProject;
 
-$css = ['css/site.css'];
+AppAsset::register($this);
+
 $css = ['css/main.css'];
 $js = ['js/main.js'];
-AppAsset::register($this);
+
 $session = Yii::$app->session;
 ?>
 <?php $this->beginPage() ?>
@@ -26,7 +27,7 @@ $session = Yii::$app->session;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css ">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css defer" > -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -34,200 +35,7 @@ $session = Yii::$app->session;
 
     
   <style>
-  body {
-    font: 14px 'Montserrat', sans-serif;
-    color: #808080;
-    font-weight: 400;
-    line-height: 2em;
-    background-color: white;
-  }
-  p {font-size: 16px;}
-  .margin {margin-bottom: 45px;}
-  .bg-1 { 
-    background-image: linear-gradient(141deg, #82b2d8 0%, #6AC7C1 51%, #0baabe 75%);
-    color: #ffffff;
-  }
-  .bg-2 { 
-    background-color: white;
-    /* color: #ffffff; */
-  }
-  .bg-3 { 
-    background-color: #6AC7C1;
-    color: #555555;
-  }
-  .bg-4 { 
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding: 50px 60px;
-
-  }
-  .navbar {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 15px;
-    letter-spacing: 1px;
-    font-weight: 400;
-    box-shadow: 0px 0px 10px #9E9E9E;
-  }
-  .navbar-nav  li a:hover {
-    color: #6ac7c1 !important;
-  }
-
-  /* filter dibawah search */
-.button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 15px;
-    margin: 4px 2px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    cursor: pointer;
-  }
-
-  .btn-filter {
-    background-color: transparent;
-    color: white;
-    border: 1px solid #f4f4f4;
-  }
-  
-  .btn-filter:hover {
-    background-color: white;
-    color: #555;
-    text-decoration: none;
-  }
-
-  /* dropdown */
-    .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-        color: #555;
-        background-color: #f8f8f8;
-        color: #68c6c3;
-    }
-
-    .dropdown-menu>li>a:hover{
-        background-color: white;
-    }
-
-    .navbar-nav>li>.dropdown-menu {
-        padding: 15px 5px;
-        background-color: #f8f8f8;
-    }
-
-    input[type=text], input[type=password] {
-        margin: 0px;
-        width: 100%;
-        background-color: #ffffff;
-    }
-
-    input[type=text]:focus, input[type=password]:focus {
-        background-color: #fff;
-        border-bottom: 2px solid #7b58ca ;
-        }
-
-    /* assignment */
-    .nav-tabs>li a {
-        color: white;
-        cursor: default;
-        border-bottom-color: transparent;
-    }
-    /* .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-        color: #555;
-        cursor: default;
-        border-bottom-color: transparent;
-    } */
-
-    /* content */
-    .box-content{
-        -moz-box-shadow: 0 0 5px #888;
-        -webkit-box-shadow: 0 0 5px#888;
-        box-shadow: 0 0 5px #888;
-        padding-top: 20px; 
-        padding-bottom: 20px;
-        min-height: 410px;
-    }
-
-    .body-content{
-        line-height: 1.4em; 
-        padding-top: 20px; 
-        padding-bottom: 20px; 
-        min-height: 450px;
-    }
-
-    /* sidenav */
-    .vertical-menu {
-    width: 100%;
-    }
-
-    .vertical-menu a {
-    background-color: #eee;
-    color: #555555;
-    display: block;
-    padding: 12px;
-    text-decoration: none;
-    letter-spacing: 1px;
-    }
-
-    .vertical-menu i {
-    font-size: 13px;
-    height: 25px;
-    padding: 6px;
-    color: #9E9E9E;
-    background-color: #eee;
-    letter-spacing: 1px;
-    display: block;
-    text-decoration: none;
-    }
-
-    .vertical-menu a:hover {
-    background-color: #6AC7C1;
-    color: #555555;
-    }
-
-    .vertical-menu a .b :hover {
-    background-color: red;
-    color: #555555;
-    }
-
-    .vertical-menu a.active, .vertical-menu a.active:focus {
-    background-color: #6AC7C1;
-    color: #FFF;
-    }
     
-    /* alert */
-    .alert {
-        padding: 8px;
-        margin : 0px;
-        /* background-color: #2196F3;
-        color: white; */
-    }
-
-    .alert-info{
-        border-left: 6px solid #2196F3;
-    }
-
-    .closebtn {
-        margin-left: 15px;
-        color: white;
-        font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .closebtn:hover {
-        color: black;
-    }
   </style>
 </head>
 <body>

@@ -1,18 +1,18 @@
 <?php
+/* @var $this yii\web\View */
+/* @var $model common\models\Assignment */
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\ClassAssignment;
 use common\models\StudentAssignment;
 use yii\bootstrap\Tabs;
+use yii\bootstrap\Modal;
 use yii\widgets\Breadcrumbs;
-/* @var $this yii\web\View */
-/* @var $model common\models\Assignment */
 
 $this->title = $model->asg_title;
 // $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
 // $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 
 ?>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css "> -->
@@ -24,16 +24,16 @@ $this->title = $model->asg_title;
 
 <div class="body-content">
     <div class=" container box-content">
-
         <h3> <b>Detail Penugasan : <?= $model->asg_title ?></b> </h3>
         <hr class="hr-custom">
 
         <?php
             $button = "";
+            
             if($model->sts_asg_id == 1 || $model->sts_asg_id == 3){
-                $button = '<p>'.Html::a("Edit", ["update", "id" => $model->asg_id], ['class' => 'btn-sm btn-primary btn-info-custom', 'style' => 'padding: 5px 20px;']) .' &nbsp; &nbsp;'.
+                $button = '<p>'.Html::a("Edit", ["update", "id" => $model->asg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 30px;']) .' &nbsp; &nbsp;'.
                 Html::a("Hapus", ["delete", "id" => $model->asg_id], [
-                    'class' => 'btn-sm btn-danger btn-info-custom', 'style' => 'padding: 5px 20px;',
+                    'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 20px;',
                     "data" => [
                         "confirm" => "Apakah anda yakin menghapus penugasan ini?",
                         "method" => "post",
@@ -84,41 +84,52 @@ $this->title = $model->asg_title;
 
             </div>
             <div class="col-md-6">
-                <h4><b>Submitan</b></h4>
+                <h4><b><i class="fa fa-list-ol" aria-hidden="true"></i> &nbsp;Submitan</b></h4>
+                <hr class="hr-custom">
                 <table class="table table-hover" id="dataTables" width="100%" cellspacing="0">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th>Diunggah oleh [ Proyek ]</th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        
                             <?php
-                                foreach($projects as $data){
-                                    $num_char = 62 - strlen($data->proj_creator);
-                                    if($num_char >= strlen($data->proj_title)){
-                                        $title = $data->proj_title;    
-                                    }else{
-                                        $title = substr($data->proj_title, 0, $num_char) . '...';
+                                if($projectsCount <= 0){
+                                    echo '<tr><td colspan=2> <br>Tidak ada proyek mahasiswa. </td></tr>';
+                                }else{
+                                    $i = 1;
+                                    foreach($projects as $data){
+                                        $num_char = 55 - strlen($data->proj_creator);
+                                        if($num_char >= strlen($data->proj_title)){
+                                            $title = $data->proj_title;    
+                                        }else{
+                                            $title = substr($data->proj_title, 0, $num_char) . '...';
+                                        }
+                            ?>  
+                            <tr>
+                                <td><b><?= $i ?></b></td>
+                                <td>
+                                
+                                    <a href="#" data-toggle="collapse" data-target="#a" onclick="find()">
+                                        <span id="caret1" class="glyphicon glyphicon-chevron-down"></span>
+                                    </a>
+                                    <?= $data->proj_creator ?> <?=  Html::a('[ '.$title.' ]', ['project/view-project', 'proj_id' => $data->proj_id]) ?> 
+                                    <div id="a" class="collapse">
+                                        <h5><b>Judul</b></h5>
+                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id]) ?>
+                                        <h5><b>Author</b></h5>
+                                        <?= $data->proj_author ?>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                                $i++;
                                     }
-                            ?>
-                            <td>
-                                <a href="#" data-toggle="collapse" data-target="#a" onclick="find()">
-                                    <span id="caret1" class="glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                                <?= $data->proj_creator ?> <?=  Html::a('[ '.$title.' ]', ['project/view-project', 'proj_id' => $data->proj_id]) ?> 
-                                <div id="a" class="collapse">
-                                    <h5><b>Judul</b></h5>
-                                    <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id]) ?>
-                                    <h5><b>Author</b></h5>
-                                    <?= $data->proj_author ?>
-                                </div>
-                            </td>
-
-                            <?php
                                 }
                             ?>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -160,10 +171,10 @@ $this->title = $model->asg_title;
      $this->registerJs('
         $(function () {
             $("#dataTables").DataTable({
-            "pageLength": 5,
+            "pageLength": 10,
             "paging": true,
-            "lengthChange": false,
-            "searching": false,
+            "lengthChange": true,
+            "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": true
@@ -171,4 +182,3 @@ $this->title = $model->asg_title;
         });
      ', $this::POS_END);
 ?>
-

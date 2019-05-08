@@ -1,23 +1,26 @@
+.form-project{
+    background-color: #EEEEEE;
+    margin: 25px -10px 10px -10px;
+    /* border-radius: 5px; */
+    padding: 10px;
+}
 
-.site-proyek{
-    line-height: 1.5em;
+.text-title-list-project{
+    font-size: 15px;
+    color: #00ACC1;
+}
+
+.project-sub-content{
+    padding: 0px;
+    margin: 8px 0px;
     font-size: 14px;
+    font-weight: 600;
+    color: #757575;
 }
 
-p{
-    font-size: 14px !important;
-}
-
-.col-md-4{
-    /* width: 30% !important; */
-}
-
-.col-md-8{
-    /* width: 70% !important; */
-}
-
-table {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 0px !important;
+.title{
+    font-weight: 600;
+    font-size: large;
+    display: block;
+    padding: 10px 0px;
 }

@@ -1,9 +1,11 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 
 $this->title = 'SIPPM Del';
-$css = ['css/main.css'];
+
 ?>
 <div class="site-index">
 
@@ -15,49 +17,52 @@ $css = ['css/main.css'];
                     
                 </div>
 				<div class="banner-content col-md-8 col-sm-12">
-					<h1 class="wow fadeIn" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">We Rank the Best Courses <br> on the Web</h1>
-					<p class="text-white">
+					<h1 class="wow fadeInDown first" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">We Rank the Best Courses <br> on the Web</h1>
+					<p class="text-white" style="padding: 10px 0px 0px 0px;">
                         In the history of modern astronomy, there is probably no one greater leap forward 
                         <br> than the building and launch of the space
 						telescope.
 					</p>
-					<form action="#" method="post" novalidate="novalidate" style="padding: 40px;">
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['test'],
+                        'method' => 'get',
+                    ]); ?>
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12" style="padding: 30px 0px;">
                                 <div class="row">
                                     <center>
-                                    <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
-                                        <input type="text" class="form-control-custom search-slt" placeholder="Enter Keywords" >
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
-                                        <select class="form-control-custom search-slt" id="exampleFormControlSelect1">
-                                            <option>Select Category</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
-                                        <button type="button" class="btn wrn-btn" style="border-radius: 0px;    background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%);font-size: 18px;">Search</button>
-                                    </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
+                                            <input name="searchWords" type="text" placeholder="Keywords" class="form-control-custom search-slt">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
+                                            <select name="searchCategory" placeholder="Category" class="form-control-custom search-slt select-custom">
+                                                <option value="" >Pilih Kategori</option>
+                                                <option value="">Semua</option>
+                                                <option value="Matakuliah">Matakuliah</option>
+                                                <option value="Kompetisi">Kompetisi</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
+                                            <button type="submit" class="btn wrn-btn" style="border-radius: 0px; background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%); font-size: 18px;">Search</button>
+                                        </div>
+                                    </center>   
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    <?php ActiveForm::end() ?>
                     
-					<h4 class="text-white">Filter Pencarian</h4>
+					<h4 class="text-white">Pencarian Cepat</h4>
 
-					<div class="courses pt-20 wow fadeIn" data-wow-duration="10s">
+					<div class="courses pt-20 wow fadeIn second" data-wow-duration="10s">
                         <a href="#top-5" class="btn-md button btn-filter" transparent mr-10 mb-10>Top 5 Sering Digunakan</a>
                         <a href="#menang-kompetisi" class="btn-md button btn-filter" transparent mr-10 mb-10>Menang Kompetisi</a>
                         <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
                         <br>
-                        <a href="#" class="btn-md button btn-filter" transparent mr-10 mb-10>Kompetisi</a>
-                        <a href="#" class="btn-md button btn-filter" transparent mr-10 mb-10>Matakuliah</a>
-                        <a href="#" class="btn-md button btn-filter" transparent mr-10 mb-10>Tugas Akhir</a>
+                        <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?>
+                        <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
+                        <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?>
 					</div>
                 </div>
                 <div class="col-md-2 col-sm-12">
@@ -90,7 +95,8 @@ $css = ['css/main.css'];
 
                                 $created_at = $data["created_at"];
                                 $old_date_timestamp = strtotime($created_at);
-                                $created_at = date('l, d M Y, H:i', $old_date_timestamp);
+                                $created_at = date('Y-m-d', $old_date_timestamp);
+                                $created_at = $this->context->tgl_indo($created_at);
                                 ?>
                                 <li>
                                     <!-- <div> -->
@@ -138,7 +144,8 @@ $css = ['css/main.css'];
 
                                 $created_at = $data["created_at"];
                                 $old_date_timestamp = strtotime($created_at);
-                                $created_at = date('l, d M Y, H:i', $old_date_timestamp);
+                                $created_at = date('Y-m-d', $old_date_timestamp);
+                                $created_at = $this->context->tgl_indo($created_at);
                                 ?>
                                 <li>
                                     <!-- <div> -->
@@ -155,7 +162,8 @@ $css = ['css/main.css'];
 
                     </ol>
                     <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#top-5" class="btn-md button btn-filter" style="padding: 8px 30px;" transparent mr-10 mb-10>Lihat Lainnya</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'win_comp'], ['class' => 'btn-md button btn-filter', 'style' => 'padding: 8px 30px;']) ?>
 
                 </div>
                 <div class="col-md-3 col-sm-12">
@@ -190,7 +198,8 @@ $css = ['css/main.css'];
 
                                 $created_at = $data["created_at"];
                                 $old_date_timestamp = strtotime($created_at);
-                                $created_at = date('l, d M Y, H:i', $old_date_timestamp);
+                                $created_at = date('Y-m-d', $old_date_timestamp);
+                                $created_at = $this->context->tgl_indo($created_at);
                                 ?>
                                 <li>
                                     <!-- <div> -->
@@ -209,7 +218,8 @@ $css = ['css/main.css'];
 
                     </ol>
                     <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button href="#top-5" class="btn-md button btn-custom" style="padding: 8px 30px;" transparent mr-10 mb-10>Lihat Lainnya</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'recently_added'], ['class' => 'btn-md button btn-custom', 'style' => 'padding: 8px 30px;']) ?>
 
                 </div>
             </div>

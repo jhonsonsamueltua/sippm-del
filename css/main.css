@@ -1,17 +1,215 @@
-.banner-content {
+body {
+    font: 14px 'Montserrat', sans-serif;
+    color: #808080;
+    font-weight: 400;
+    line-height: 2em;
+    background-color: white;
+}
+
+p {font-size: 14px;}
+.margin {
+    margin-bottom: 45px;
+    }
+.bg-1 { 
+    background-image: linear-gradient(141deg, #82b2d8 0%, #6AC7C1 51%, #0baabe 75%);
+    color: #ffffff;
+}
+.bg-2 { 
+    background-color: white;
+    /* color: #ffffff; */
+}
+.bg-3 { 
+    background-color: #6AC7C1;
+    color: #555555;
+}
+.bg-4 { 
+    background-color: #2f2f2f; /* Black Gray */
+    color: #fff;
+}
+.container-fluid {
+    padding: 50px 60px;
+
+}
+.navbar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-weight: 400;
+    box-shadow: 0px 0px 10px #9E9E9E;
+}
+.navbar-nav  li a:hover {
+    color: #6ac7c1 !important;
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 5px 10px;
     text-align: center;
-    /* margin-top: 100px; */
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+
+.btn-filter {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #f4f4f4;
+    padding: 10px;
+}
+
+.btn-filter:hover {
+    background-color: white;
+    color: #555;
+    text-decoration: none;
 }
 
 /* dropdown */
-/* .nav .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
     color: #555;
-    background-color: #f8f8f8 !important;
-} */
+    background-color: #f8f8f8;
+    color: #68c6c3;
+}
+
+.dropdown-menu>li>a:hover{
+    background-color: white;
+}
+
+.navbar-nav>li>.dropdown-menu {
+    padding: 15px 5px;
+    background-color: #f8f8f8;
+}
+
+input[type=text], input[type=password] {
+    margin: 0px;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #fff;
+    border-bottom: 2px solid #7b58ca ;
+    }
+
+/* assignment */
+.nav-tabs>li a {
+    color: white;
+    cursor: default;
+    border-bottom-color: transparent;
+    padding: 8px 15px;
+}
+
+/* content */
+.box-content{
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px#888;
+    box-shadow: 0 0 5px #888;
+    padding-top: 20px; 
+    padding-bottom: 20px;
+    min-height: 410px;
+    border-top: 5px solid #6ac7c1;
+    background-color: #F5F5F5;
+}
+
+.body-content{
+    line-height: 1.4em; 
+    padding-top: 20px; 
+    padding-bottom: 20px; 
+    min-height: 450px;
+}
+
+/* sidenav */
+.vertical-menu {
+width: 100%;
+}
+
+.vertical-menu a {
+background-color: #eee;
+color: #555555;
+display: block;
+padding: 12px;
+text-decoration: none;
+letter-spacing: 1px;
+}
+
+.vertical-menu i {
+font-size: 13px;
+height: 25px;
+padding: 6px;
+color: #9E9E9E;
+background-color: #eee;
+letter-spacing: 1px;
+display: block;
+text-decoration: none;
+}
+
+.vertical-menu a:hover {
+background-color: #6AC7C1;
+color: #555555;
+}
+
+.vertical-menu a .b :hover {
+background-color: red;
+color: #555555;
+}
+
+.vertical-menu a.active, .vertical-menu a.active:focus, .vertical-menu a.active:hover, .vertical-menu a:hover {
+background-color: #6AC7C1;
+color: white;
+border-bottom: 5px solid #d6df22;
+}
+
+/* alert */
+.alert {
+    padding: 8px;
+    margin : 0px;
+    /* background-color: #2196F3;
+    color: white; */
+}
+
+.alert-info{
+    border-left: 6px solid #2196F3;
+}
+
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+
+.banner-content {
+    text-align: center;
+}
 
 /*search box css start here*/
 .form-control-custom.search-slt{
     border-radius: 0px;
+    text-align: center;
+}
+
+.form-control-custom.select-custom{
+    text-align-last: center;
+    padding-right: 29px;
 }
 
 .search-sec{
@@ -93,7 +291,7 @@
     content: counter(step-counter);
     margin-right: 5px;
     font-size: 80%;
-    background-color: #d7df23!important;
+    background-color: #d6df22 !important;
     color: white;
     font-weight: 900;
     padding: 8px 12px;
@@ -101,13 +299,19 @@
   }
 
 .text-author{
-    color: #90A4AE;
+    color: #9E9E9E;
     font-size: 14px;
 }
 
+.text-category{
+    color: #757575;
+    font-weight: 700;
+}
+
 .text-title-project{
-    font-size: 20px;
-    color: #6ac6c1;
+    font-size: 18px;
+    color: #03A9F4;
+    /* font-weight: 700; */
 }
 
 .hr-custom {
@@ -171,22 +375,12 @@
     }
 }
 
-/* h1, h2, h3, h4, h5 {
-    color: #000;
-    font-family: "Rubik", arial, sans-serif;
-    font-weight: 300;
-} */
 
 /* cover content */
 .hero-image {
-    position: center;
+    position: center center;
     height:auto;
-    /* padding-top:40px; */
-    /* width: 100%; */
-    /* max-width: 400px; */
-    vertical-align: middle;
     height: auto;
-    /* width: auto; */
     margin: auto;
     padding: 50px 0px;
   }
@@ -209,22 +403,117 @@
     color: #555 !important;
     text-decoration: none;
   }
-
-  /* .btn-primary-custom:hover{
-    background-color: #6270bd !important;
-    color: #555 !important;
-    text-decoration: none;
-  }
-
-  .btn-danger-custom:hover{
-    background-color: #e46e66!important;
-    color: #555 !important;
-    text-decoration: none;
-  } */
-
   .borderless table {
     border-top-style: none;
     border-left-style: none;
     border-right-style: none;
     border-bottom-style: none;
 }
+
+
+/* ANIMATIONS */
+
+/* Simple CSS3 Fade-in-down Animation */
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+  
+  @-webkit-keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100%, 0);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+    }
+  }
+  
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100%, 0);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+    }
+  }
+  
+  /* Simple CSS3 Fade-in Animation */
+  @-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  
+  .fadeIn {
+    opacity:0;
+    -webkit-animation:fadeIn ease-in 1;
+    -moz-animation:fadeIn ease-in 1;
+    animation:fadeIn ease-in 1;
+  
+    -webkit-animation-fill-mode:forwards;
+    -moz-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+  
+    -webkit-animation-duration:1s;
+    -moz-animation-duration:1s;
+    animation-duration:1s;
+  }
+  
+  .fadeIn.first {
+    -webkit-animation-delay: 0.4s;
+    -moz-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+  }
+  
+  .fadeIn.second {
+    -webkit-animation-delay: 0.6s;
+    -moz-animation-delay: 0.6s;
+    animation-delay: 0.6s;
+  }
+  
+  .fadeIn.third {
+    -webkit-animation-delay: 0.8s;
+    -moz-animation-delay: 0.8s;
+    animation-delay: 0.8s;
+  }
+  
+  .fadeIn.fourth {
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    animation-delay: 1s;
+  }
+  
+  /* Simple CSS3 Fade-in Animation */
+  .underlineHover:after {
+    display: block;
+    left: 0;
+    bottom: -10px;
+    width: 0;
+    height: 2px;
+    background-color: #56baed;
+    content: "";
+    transition: width 0.2s;
+  }
+  
+  .underlineHover:hover {
+    color: #0d0d0d;
+  }
+  
+  .underlineHover:hover:after{
+    width: 100%;
+  }
+
+  .empty-data-table{
+    text-align: center;
+    font-style: italic;
+  }

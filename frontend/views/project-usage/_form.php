@@ -14,13 +14,13 @@ use common\models\CategoryUsage;
 <div class="row">
 
     <div class="col-md-6">
-        <b style="font-size: 16px">Judul</b>
-        <h4><b> "<?= $project->proj_title ?>" </b></h4>
+        <b style="font-size: 14px">Judul</b>
+        <h4> <?= $project->proj_title ?> </h4>
 
-        <b style="font-size: 16px">Author</b>
+        <b style="font-size: 14px">Author</b>
         <p> <?= $project->proj_author ?> </p>
 
-        <b style="font-size: 16px">Koordinator</b>
+        <b style="font-size: 14px">Koordinator</b>
         <p> <?= $project->asg->asg_creator ?> </p>
         <br>
 
@@ -41,7 +41,7 @@ use common\models\CategoryUsage;
             <?= $form->field($model, 'proj_usg_usage')->widget(Redactor::className())  ?>
         
             <div class="form-btn" align="center">
-                <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn submit-btn' : 'btn btn-primary']) ?>
+                <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-primary btn-custom']) ?>
             </div>
 
         <?php ActiveForm::end(); ?>

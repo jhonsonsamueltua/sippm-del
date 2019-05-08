@@ -4,7 +4,9 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 $this->title = 'List Proyek';
 $this->params['breadcrumbs'][] = $this->title;
-$css = ['css/site.css'];
+
+$this->registerCssFile("././css/project.css");
+
 ?>
 
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css "> -->
@@ -28,7 +30,7 @@ $css = ['css/site.css'];
             $tanggalUnggah = date('d M Y', $unggah_timestamp);
             $tempContent = $tempContent . '
             <tr>
-                <td>'.Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id]).'</td>
+                <td>'.Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-list-project']).'</td>
                 <td> '.$tanggalUnggah.' </td>
                 <td>'.$data->proj_author.'</td>
             </tr>

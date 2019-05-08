@@ -11,6 +11,7 @@ use common\models\Project;
  */
 class ProjectSearch extends Project
 {
+
     /**
      * {@inheritdoc}
      */
@@ -53,6 +54,7 @@ class ProjectSearch extends Project
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+            
             return $dataProvider;
         }
 
@@ -63,8 +65,9 @@ class ProjectSearch extends Project
             'deleted' => $this->deleted,
         ]);
 
-        $query->andFilterWhere(['like', 'proj_title', $this->proj_title])
-            ->andFilterWhere(['like', 'proj_description', $this->proj_description])
+        $query->orFilterWhere(['like', 'proj_title', $this->proj_title])
+            ->orFilterWhere(['like', 'proj_description', $this->proj_description])
+            ->andFilterWhere(['like', 'proj_cat_name', $this->proj_cat_name])
             ->andFilterWhere(['not', ['deleted' => 1]]);
 
         return $dataProvider;

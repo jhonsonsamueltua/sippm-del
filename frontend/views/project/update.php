@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="body-content">
     <div class=" container box-content">
-        <h3 class=""> <b> Edit : <?= $model->proj_title ?>  </b></h3>
+        <h3 class=""> <b> Edit Proyek  </b></h3>
         <hr class="hr-custom">
         <?= $this->render('_form', [
             'model' => $model,

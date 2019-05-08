@@ -4,15 +4,17 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\data\Pagination;
+use yii\helpers\Html;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\httpclient\Client;
+use common\models\Assignment;
 use common\models\Project;
 use common\models\ProjectUsage;
 use common\models\search\ProjectUsageSearch;
 use common\models\StatusProjectUsage;
 use common\models\CategoryUsage;
-use yii\helpers\Html;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProjectUsageController implements the CRUD actions for ProjectUsage model.
@@ -34,11 +36,6 @@ class ProjectUsageController extends Controller
         ];
     }
 
-    // public function beforeAction($action){
-    //     $this->layout = "main-2";
-
-    //     return parent::beforeAction($action);
-    // }
 
     /**
      * Lists all ProjectUsage models.
@@ -54,14 +51,8 @@ class ProjectUsageController extends Controller
             $modelRequestCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->count();
             $modelRiwayatCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->count();
 
-            $pagination = new Pagination(['totalCount' => $modelRequestCount, 'pageSize' => 5]);
-            // $pagination2 = new Pagination(['totalCount' => $modelRiwayatCount, 'pageSize' => 5]);
-            $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+            $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->all();
+            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->all();
 
             $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1';
             $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
@@ -80,8 +71,6 @@ class ProjectUsageController extends Controller
                 'modelRequestUsersCount' => $modelRequestUsersCount,
                 'modelRiwayatCount' => $modelRiwayatCount,
                 'modelRiwayatRequestOrangLainCount' => $modelRiwayatRequestOrangLainCount,
-                'pagination' => $pagination,
-                // 'pagination2' => $pagination2,
             ]);
         }
     }
@@ -121,13 +110,6 @@ class ProjectUsageController extends Controller
         }
     }
 
-    public function getProject($proj_id){
-        $session = Yii::$app->session;
-        $model = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted' != 1)->one();
-
-        return $model;
-    }
-
     public function getCategoryPenggunaan($id){
         $model = CategoryUsage::find()->where(['cat_usg_id' => $id])->one();
         $category = $model->cat_usg_name;
@@ -147,16 +129,32 @@ class ProjectUsageController extends Controller
             return $this->redirect(['site/login']);
         }else{
             $model = new ProjectUsage();
+            $projModel = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
+            $asgModel = Assignment::find()->where(['asg_id' => $projModel->asg_id])->andWhere('deleted!=1')->one();
 
             if ($model->load(Yii::$app->request->post())){
+                $coordinatorStat = $this->checkDosenActiveStatus($asgModel->asg_creator_id);
+
                 $model->proj_id = $proj_id;
                 $model->sts_proj_usg_id = 1;
                 $model->user_email = $session['email'];
                 $model->proj_usg_creator = $session['nama'];
-            
+                
+                if($coordinatorStat == "Tidak Aktif"){
+                    $model->alternate = 1;
+                }
+
                 if($model->save()){
+                    if($coordinatorStat == "Aktif"){
+                        $this->sendRequestEmail($asgModel->asg_creator_email, $proj_id, $session['nama']);
+                    }else{
+                        $this->sendRequestEmail($asgModel->asg_alternate_email, $proj_id, $session['nama']);
+                    }
+
                     return $this->redirect(['view', 'id' => $model->proj_usg_id]);
                 }else{
+                    Yii::$app->session->setFlash('error', 'Maaf, terjadi kesalahan pada saat permohonan penggunaan proyek. Silahkan melakukan permohonan ulang atau menghubungi penyedia layanan.');
+
                     return $this->redirect('create', [
                         'model' => $model,
                     ]);
@@ -196,7 +194,7 @@ class ProjectUsageController extends Controller
                 if ($model->load(Yii::$app->request->post()) && $model->save()) {
                     return $this->redirect(['index']);
                 }
-    
+                
                 return $this->render('update', [
                     'model' => $model,
                     'project' => $this->getProject($model->proj_id),
@@ -249,9 +247,9 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendEmail($request->user_email, $status, $request->proj_id);
+            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
-            return $this->redirect(['list-project-usage-request']);
+            return $this->redirect(['index']);
         }
     }
 
@@ -271,15 +269,28 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendEmail($request->user_email, $status, $request->proj_id);
+            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
             return $this->redirect(['list-project-usage-request']);
         }
     }
 
-    private function sendEmail($to, $status, $proj_id){
+    private function sendRequestEmail($to, $proj_id, $requester){
         $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
-        $link = "localhost/sippm-del/index.php?r=project/view-project";
+        $link = "/localhost/sippm-del/index.php?r=project-usage/list-project-usage-request";
+        $emailBody = "$requester telah melakukan permohonan penggunaan untuk proyek $project->proj_title. Silahkan klik link berikut untuk menindaklanjuti permohonan penggunaan ini.<br>". Html::a($project->proj_title, [$link]);
+
+        Yii::$app->mailer->compose()
+            ->setFrom('sippm.del@gmail.com')
+            ->setTo($to)
+            ->setSubject('[SIPPM] Permohonan Penggunaan Proyek')
+            ->setHtmlBody($emailBody)
+            ->send();
+    }
+
+    private function sendResponseEmail($to, $status, $proj_id){
+        $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
+        $link = "/localhost/sippm-del/index.php?r=project/view-project";
 
         if($status == "Diterima")
             $emailBody = "Request penggunaan anda untuk proyek $project->proj_title telah $status. Silahkan klik link berikut untuk melakukan pengunduhan file proyek.<br>". Html::a($project->proj_title, [$link, 'proj_id' => $project->proj_id]);
@@ -322,6 +333,27 @@ class ProjectUsageController extends Controller
         }
 
         throw new NotFoundHttpException('Proyek yang dimaksud tidak ada atau telah dihapus.');
+    }
+
+    public function getProject($proj_id){
+        $session = Yii::$app->session;
+        $model = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted' != 1)->one();
+
+        return $model;
+    }
+
+    private function checkDosenActiveStatus($pegawai_id){
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-dosen-active-status?pegawai_id=' . $pegawai_id)
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                return $response->data['data'];
+            }
+        }
     }
 
 }
