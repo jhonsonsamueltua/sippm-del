@@ -127,6 +127,7 @@ class ProjectController extends Controller
             return $this->redirect(['site/login']);
         }else{
             $model = new Project();
+            $year = new DateTime();
             $assignmentModel = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one();
             
             if ($model->load(Yii::$app->request->post())) {
@@ -134,6 +135,7 @@ class ProjectController extends Controller
                 $model->proj_creator = $session['nama'];
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
                 $model->proj_downloaded = 0;
+                $model->proj_year = $year->format('Y');
     
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
