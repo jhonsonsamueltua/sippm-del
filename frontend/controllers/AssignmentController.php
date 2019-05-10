@@ -143,14 +143,15 @@ class AssignmentController extends Controller
         $now = new \DateTime();
         $model = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->all();
         $modelCount = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->count();
-
+        
         if($modelCount > 0){
             foreach($model as $data){
+                // $now->format('Y-m-d h:i:s')
                 $start = new \DateTime($data->asg_start_time);
                 $end = new \DateTime($data->asg_end_time);
-                if($now >= $start && $now <= $end){
+                if($now > $start){
                     $data->sts_asg_id = 1;
-                    $data->save();
+                    $data->save(false);
                 }
             }
         }
@@ -158,13 +159,13 @@ class AssignmentController extends Controller
         //bagian update status penugasan open menjadi close
         $model2 = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->all();
         $model2Count = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->count();
-
+        
         if($model2Count > 0){
             foreach($model2 as $data){
                 $end = new \DateTime($data->asg_end_time);
-                if($now >= $end){
+                if($now > $end){
                     $data->sts_asg_id = 2;
-                    $data->save();
+                    $data->save(false);
                 }
             }
         }
@@ -271,16 +272,16 @@ class AssignmentController extends Controller
     public function actionUpdate($id)
     {   
         $modelAsg = $this->findModel($id);
-        $modelClass = ClassAssignment::find()->where(['asg_id' => $id])->andWhere('deleted!=1')->all();
+        $modelClass = ClassAssignment::find()->where(['asg_id' => $id])->andWhere('deleted != 1')->all();
 
         if($modelAsg->load(Yii::$app->request->post())){
             $transaction = Yii::$app->db->beginTransaction();
             
             try{
-                $modelAsg->save();
+                $modelAsg->save(false);
 
                 foreach($_POST['Class'] as $i => $class){
-                    $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $id])->one();
+                    $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $id])->andWhere('deleted != 1')->one();
 
                     if($checkClass == null){
                         $modelClass = new ClassAssignment();
@@ -320,7 +321,7 @@ class AssignmentController extends Controller
 
                         foreach($_POST['Student'][$i] as $student){
                             if($checkClass != null){ //Kalau kelas sudah pernah ditugaskan tapi secara partial
-                                $checkStudent = StudentAssignment::find()->where(['cls_asg_id' => $checkClass->cls_asg_id])->andWhere(['stu_id' => $student])->one();
+                                $checkStudent = StudentAssignment::find()->where(['cls_asg_id' => $checkClass->cls_asg_id])->andWhere(['stu_id' => $student])->andWhere('deleted != 1')->one();
                                 
                                 if($checkStudent == null){ //Jika mahasiswa/i belum pernah ditugaskan
                                     $modelStudent = new StudentAssignment();
@@ -359,13 +360,47 @@ class AssignmentController extends Controller
     public function actionLists($id){
         $cat = CategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->one();
         $model = SubCategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->all();
-        
         echo "<option value=''>Pilih ".$cat->cat_proj_name." ...</option>";
         if(count($model) > 0){
             foreach($model as $data){
                 echo "<option value='". $data->sub_cat_proj_id ."'>". $data->sub_cat_proj_name ."</option>";
             }
         }
+    }
+
+    public function getClassByClassId($id){
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-class-by-class-id?kelas_id=' . $id)
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                foreach($response->data['data'] as $class){
+                    $kelas = array();
+                    array_push($kelas, array('nama' => $response->data['data']['nama'], 'ket' => $response->data['data']['ket']));
+                }
+            }
+        }
+        return $kelas;
+    }
+
+    public function getStudentByNim($id){
+        $client = new Client();
+        $response = $client->createRequest()
+                            ->setMethod('GET')
+                            ->setUrl('https://cis.del.ac.id/api/sippm-api/get-student-by-nim?nim=' . $id)
+                            ->send();
+
+        if($response->isOk){
+            if($response->data['result'] == "OK"){
+                foreach($response->data['data'] as $student){
+                    $name_student = $response->data['data']['nama'];
+                }
+            }
+        }
+        return $name_student;
     }
 
     /**
@@ -401,8 +436,10 @@ class AssignmentController extends Controller
             $modelAsg->sts_asg_id = 1;
             $modelAsg->asg_end_time = $modelAsg->updated_end_time;
             
-            if(!$modelAsg->save()){
-                Yii::$app->session->setFlash('error', 'Maaf, terjadi kesalahan saat mengubah batas akhir penugasan');
+            if(!$modelAsg->save(false)){
+                Yii::$app->session->setFlash('danger', '<center>Maaf, terjadi kesalahan saat mengubah batas akhir penugasan</center>');
+            }else{
+                Yii::$app->session->setFlash('success', '<center>Berhasil membuka penugasan kembali.</center>');
             }
 
             return $this->redirect(['assignment-dosen']);

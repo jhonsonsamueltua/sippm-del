@@ -151,15 +151,13 @@ $this->registerCssFile("././css/assignment.css");
                                     </td>
                                     <td style="padding: 15px 8px;">
                                         <div style="float: right; margin-bottom: 0px;">
-                                            <span class="badge badge-primary badge-pill">
                                                 <?php
                                                     if(!$submission == false){
                                                         echo "<span class='badge badge-primary badge-pill' style='background-color: #4CAF50'>Sudah submit</span>";
                                                     }else{
-                                                        echo "<span class='badge badge-primary badge-pill' style='background-color: #E65100'>Belum submit</span>";
+                                                        echo "<span class='badge badge-primary badge-pill' style='background-color: #E65100'>Tidak submit</span>";
                                                     }
                                                 ?>
-                                            </span>
                                         </div>
                                     </td>
                                 </tr>

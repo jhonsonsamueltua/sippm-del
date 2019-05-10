@@ -1,6 +1,6 @@
 .form-project{
     background-color: #EEEEEE;
-    margin: 25px -10px 10px -10px;
+    margin: 0px -10px 10px -10px;
     /* border-radius: 5px; */
     padding: 10px;
 }
@@ -24,3 +24,17 @@
     display: block;
     padding: 10px 0px;
 }
+
+.btn-primary-edit{
+    background-color: #337ab7 !important;
+  }
+
+  .btn-danger-custom {
+    color: #fff;
+    background-color: #FB8C00;
+    border-color: #e6601b;
+  }
+
+  .btn {
+    /* display: unset; */
+  }

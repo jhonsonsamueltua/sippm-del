@@ -68,7 +68,7 @@ class DeleteBehavior extends Behavior {
      */
     public function doDelete($event) {
         // do nothing if safeMode is disabled. this will result in a normal deletion or user has HardDeleteDB Task
-        if (!$this->enableSoftDelete || Yii::$app->privilegeControl->isHasTask($this->hardDeleteTaskName)) {
+        if ($this->enableSoftDelete || Yii::$app->privilegeControl->isHasTask($this->hardDeleteTaskName)) {
             return;
         }else{
             $event->isValid = false;

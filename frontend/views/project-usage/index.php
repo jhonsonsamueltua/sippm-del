@@ -30,7 +30,7 @@ $this->registerCssFile("././css/project.css");
                 <div class="vertical-menu nav nav-tabs">
                     <a class=" active" href="#1" data-toggle="tab">Request saat ini </a>
                     <a class="" href="#2" data-toggle="tab">  Riwayat Request Saya</a>
-                    <a class="" href="#3" data-toggle="tab">  Unduhan </a>
+                    <!-- <a class="" href="#3" data-toggle="tab">  Unduhan </a> -->
                     <?php
                         if($session['role'] != "Mahasiswa"){
                             echo '<i> Tambahan </i>

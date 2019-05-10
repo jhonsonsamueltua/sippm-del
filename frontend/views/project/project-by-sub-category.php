@@ -27,7 +27,8 @@ $this->title = 'List Proyek';
         <tbody>
             <?php
                 foreach($model as $data){
-                    $description = $data['proj_description'];
+                    $description = str_replace('<p>', '', $data['proj_description']);
+                    $description = str_replace('</p>', '', $description);
                     $limit_words = 30;
                     $words = explode(' ',$description);
                     $description = implode(" ",array_splice($words,0,$limit_words));
@@ -47,7 +48,7 @@ $this->title = 'List Proyek';
                                 <?= $author ?> (<?= $created_at ?>)
                             </div>
 
-                            <?= $description ?>...
+                           <p> <?= $description .'...'?> </p>
                         </td>
                     </tr>
             <?php

@@ -8,17 +8,34 @@ use yii\helpers\Html;
 // $this->title = 'Submit Proyek';
 $this->params['breadcrumbs'][] = ['label' => 'Sippm Projects', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+use yii\widgets\Breadcrumbs;
 ?>
 
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content "> 
 
-        <h3> <b>Submit Proyek</b> </h3>
+        <div class="row" style="float:right;">
+        <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        [
+                            'label' => 'Penugasan',
+                            'url' => ['assignment/assignment-student'],
+                        ],
+                        'Unggah Proyek',
+                    ],
+                ]);
+            ?>
+        </div>
+
+        <h3> <b>Unggah Proyek</b> </h3>
         <hr class="hr-custom">
 
         <?= $this->render('_form', [
             'model' => $model,
-            'assignment' => $assignment
+            'assignment' => $assignment,
+            'late' => $late,
         ]) ?>
     
     </div> 

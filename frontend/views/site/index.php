@@ -18,11 +18,10 @@ $this->title = 'SIPPM Del';
                     
                 </div>
 				<div class="banner-content col-md-8 col-sm-12">
-					<h1 class="wow fadeInDown first" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">We Rank the Best Courses <br> on the Web</h1>
+					<h1 class="wow fadeInDown first" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">Cari Ide Terbaik di Kampus <br> Institut Teknologi Del</h1>
 					<p class="text-white" style="padding: 10px 0px 0px 0px;">
-                        In the history of modern astronomy, there is probably no one greater leap forward 
-                        <br> than the building and launch of the space
-						telescope.
+                        SIPPM Del (Sistem Informasi Pengolahan Proyek Mahasiswa) merupakan sebuah sistem
+                        <br> untuk mengumpulkan ide-ide / proyek mahasiswa Institut Teknologi Del.
 					</p>
                     
                     <div class="row">
@@ -139,7 +138,7 @@ $this->title = 'SIPPM Del';
                         <br>
                         <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?>
                         <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
-                        <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?>
+                        <!-- <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?> -->
 					</div>
                 </div>
                 <div class="col-md-2 col-sm-12">
@@ -174,10 +173,16 @@ $this->title = 'SIPPM Del';
                                 $old_date_timestamp = strtotime($created_at);
                                 $created_at = date('Y-m-d', $old_date_timestamp);
                                 $created_at = $this->context->tgl_indo($created_at);
+
+                                $title = $data->proj_title;
+                                if(strlen($data->proj_title) >= 73 ){
+                                    $title = substr($data->proj_title, 0, 73) . '...';
+                                }
+                                
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -223,10 +228,15 @@ $this->title = 'SIPPM Del';
                                 $old_date_timestamp = strtotime($created_at);
                                 $created_at = date('Y-m-d', $old_date_timestamp);
                                 $created_at = $this->context->tgl_indo($created_at);
+
+                                $title = $data->proj_title;
+                                if(strlen($data->proj_title) >= 73 ){
+                                    $title = substr($data->proj_title, 0, 73) . '...';
+                                }
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
                                         <div class="text-author" style="color: #e9eaea;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -277,10 +287,15 @@ $this->title = 'SIPPM Del';
                                 $old_date_timestamp = strtotime($created_at);
                                 $created_at = date('Y-m-d', $old_date_timestamp);
                                 $created_at = $this->context->tgl_indo($created_at);
+
+                                $title = $data->proj_title;
+                                if(strlen($data->proj_title) >= 73 ){
+                                    $title = substr($data->proj_title, 0, 73) . '...';
+                                }
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -311,7 +326,7 @@ $this->title = 'SIPPM Del';
             var value = '';
         
             $(document).ready(function(){
-                
+
             };
 
             $('#adv-category').change(function(){

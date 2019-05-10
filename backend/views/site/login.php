@@ -26,15 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
             <?= $form->field($model, 'username', [
                 'inputOptions'=>[
-                    'template' => "\{input}\n{hint}\n{error}",
-                    'class'=>'form-control',
+                    // 'template' => "\{input}\n{hint}\n{error}",
+                    // 'class'=>'form-control',
                     'placeholder'=>"Username"
                 ]
             ])->textInput()->label(false); ?>
             <?= $form->field($model, 'password', [
                 'inputOptions'=>[
                     // 'template' => "{input}\n{hint}\n{error}",
-                    'class'=>'form-control',
+                    // 'class'=>'form-control',
                     'placeholder'=>"Password"
                 ]
             ])->passwordInput()->label(false); ?>
