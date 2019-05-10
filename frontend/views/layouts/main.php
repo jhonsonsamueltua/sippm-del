@@ -27,7 +27,7 @@ $session = Yii::$app->session;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css defer" > -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css defer" >
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -49,11 +49,11 @@ $session = Yii::$app->session;
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>                        
             </button>
-            <a class="navbar-brand" href="#">SIPPM Del</a>
+            <?= Html::a('Sippm Del', ['site/index'], ['class' => 'navbar-brand']) ?>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                            <li ><?= Html::a('Beranda', ['site/index']) ?></li>
+                            <li><?= Html::a('Beranda', ['site/index']) ?></li>
                             <?php
                                 if($session["role"] == "Mahasiswa"){?>
                                     <!-- <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
@@ -63,7 +63,7 @@ $session = Yii::$app->session;
 
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
-                                            Managemen Proyek
+                                            Manajemen Proyek
                                             <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu">
@@ -78,7 +78,7 @@ $session = Yii::$app->session;
                                 }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
                                     <!-- <li><?= Html::a('Request Penggunaan Proyek', ['project-usage/list-project-usage-request']) ?></li> -->
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">Managemen Proyek
+                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">Manajemen Proyek
                                         <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             <li><?= Html::a('Penugasan', ['assignment/assignment-dosen']) ?></li>

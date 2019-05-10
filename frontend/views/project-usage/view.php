@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\widgets\Breadcrumbs;
+use frontend\controllers\SiteController;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\ProjectUsage */
@@ -16,7 +17,7 @@ $css = ['css/site.css'];
 <div class="body-content">
     <div class=" container box-content">
 
-        <div style="float:right; margin-top: 10px;">
+        <div class="row" style="float:right;">
         <?php
                 echo Breadcrumbs::widget([
                     'itemTemplate' => "<li><i>{link}</i></li>\n",
@@ -30,7 +31,6 @@ $css = ['css/site.css'];
                 ]);
             ?>
         </div>
-
         <h3><b>Detail Penggunaan Proyek</b></h3>
         <hr class="hr-custom">
 
@@ -56,7 +56,7 @@ $css = ['css/site.css'];
                         $date = $model["updated_at"];
                         $date_timestamp = strtotime($date);
 
-                        return date('l, d M Y, H:i', $date_timestamp);
+                        return SiteController::tgl_indo(date('Y-m-d', $date_timestamp)).', '.date('H:i', $date_timestamp);
                     },
                 ],
                 [

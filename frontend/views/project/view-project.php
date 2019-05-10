@@ -1,5 +1,7 @@
 <?php  
 use yii\helpers\Html;
+use frontend\controllers\SiteController;
+
 $this->title = 'SIPPM Del';
 $this->registerCssFile("././css/project.css");
 ?>
@@ -26,9 +28,11 @@ $this->registerCssFile("././css/project.css");
             <div class ="col-md-9">
                 <div class = "simple-item-view-date word-break item-page-field-wrapper table">
                     <?php 
-                        $date = date_create($model->created_at);
+                        $updated_at = $model["updated_at"];
+                        $updated_at_timestamp = strtotime($updated_at);
+                        $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);
                     ?>
-                    <font style='color:#9E9E9E'> <?= date_format($date, "d M Y, h:m") ?> diunggah oleh <?= $model->proj_creator ?> </font><br><br>
+                    <font style='color:#9E9E9E'> <?= $updated_at ?>, diunggah oleh <?= $model->proj_creator ?> </font><br><br>
                     <?= $model->proj_description ?>
                 </div>
 

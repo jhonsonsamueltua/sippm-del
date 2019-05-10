@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+use yii\widgets\Breadcrumbs;
 /* @var $this yii\web\View */
 /* @var $model common\models\Assignment */
 
@@ -14,6 +14,22 @@ $css = ['css/site.css'];
 
 <div class="body-content">
     <div class=" container box-content">
+        
+        <div class="row" style="float:right;">
+            <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        [
+                            'label' => 'Penugasan',
+                            'url' => ['assignment/assignment-dosen'],
+                        ],
+                        'Tambah Penugasan',
+                    ],
+                ]);
+            ?>
+        </div>
+
         <h3 class=""> <b> Edit Penugasan </b></h3>
         <hr class="hr-custom">
 

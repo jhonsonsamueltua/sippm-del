@@ -150,7 +150,7 @@ class ProjectUsageController extends Controller
                     }else{
                         $this->sendRequestEmail($asgModel->asg_alternate_email, $proj_id, $session['nama']);
                     }
-
+                    Yii::$app->session->setFlash('success', '<center> Permohonan anda berhasil dikirim. Untuk tindak lanjut akan di kirim melalui email.</center>');
                     return $this->redirect(['view', 'id' => $model->proj_usg_id]);
                 }else{
                     Yii::$app->session->setFlash('error', 'Maaf, terjadi kesalahan pada saat permohonan penggunaan proyek. Silahkan melakukan permohonan ulang atau menghubungi penyedia layanan.');

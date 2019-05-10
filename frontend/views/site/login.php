@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     ?>
 
-    <?= $form->field($model, 'username')->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom.'', 'autofocus' => true, 'placeholder' => 'Username'])->label(false) ?>
+    <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom.'', 'autofocus' => true, 'placeholder' => 'Username'])->label(false) ?>
     <div class="form-group">
         <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom.'', 'placeholder' => 'Password'])->label(false) ?>
         <span class="glyphicon glyphicon-eye-open"></span>
