@@ -17,7 +17,7 @@ class AssignmentSearch extends Assignment
     public function rules()
     {
         return [
-            [['asg_id', 'course_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
+            [['asg_id', 'sub_cat_proj_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
             [['asg_title', 'asg_description', 'asg_start_time', 'asg_end_time', 'asg_year', 'class', 'deleted_at', 'deleted_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class AssignmentSearch extends Assignment
             'asg_id' => $this->asg_id,
             'asg_start_time' => $this->asg_start_time,
             'asg_end_time' => $this->asg_end_time,
-            'course_id' => $this->course_id,
+            'sub_cat_proj_id' => $this->sub_cat_proj_id,
             'cat_proj_id' => $this->cat_proj_id,
             'sts_asg_id' => $this->sts_asg_id,
             'deleted' => $this->deleted,

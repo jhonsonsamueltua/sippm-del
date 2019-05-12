@@ -5,10 +5,12 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Assignment;
 use common\models\CategoryProject;
+use common\models\SubCategoryProject;
 use common\models\Project;
 use common\models\search\ProjectSearch;
 use common\models\ProjectUsage;
 use common\models\File;
+use frontend\controllers\AssignmentController;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
@@ -88,26 +90,69 @@ class ProjectController extends Controller
         }
     }
 
+    public function actionProjectByCategory($cat){
+        $category = CategoryProject::find()->where(['cat_proj_id' => $cat])->one();
+
+        $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
+        $model = Yii::$app->db->createCommand($query)->queryAll();
+        
+        return $this->render('project-by-category',[
+            'model' => $model,
+            'category' => $category->cat_proj_name,
+        ]);
+    }
+
+    public function actionProjectBySubCategory($sub_cat){
+        $sub_category = SubCategoryProject::find()->where(['sub_cat_proj_id' => $sub_cat])->one();
+
+        $query = 'SELECT sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_downloaded, sippm_project.proj_author, sippm_project.updated_at FROM sippm_project JOIN sippm_assignment ON sippm_assignment.asg_id = sippm_project.asg_id JOIN sippm_sub_category_project ON sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id WHERE sippm_assignment.sub_cat_proj_id = '.$sub_cat.' GROUP BY sippm_project.proj_title ORDER BY sippm_project.proj_title ASC';
+        $model = Yii::$app->db->createCommand($query)->queryAll();
+        // echo '<pre>';
+        // die(var_dump($model));
+        return $this->render('project-by-sub-category',[
+            'model' => $model,
+            'sub_category' => $sub_category,
+        ]);
+    }
+
     /**
      * Creates a new SippmProject model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate($asg_id)
-    {
+    {   
+        AssignmentController::openCloseAssignment();
+
         $session = Yii::$app->session;
 
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else{
             $model = new Project();
+            $year = new \DateTime();
             $assignmentModel = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one();
             
             if ($model->load(Yii::$app->request->post())) {
+
+                // Validasi waktu submit
+                date_default_timezone_set("Asia/Bangkok");
+                $now = new \DateTime();
+                $batas_submit = new \DateTime($assignmentModel->asg_end_time);
+
+                if($now > $batas_submit){
+                    $assignmentModel->sts_asg_id = 2;
+                    return $this->render('create', [
+                        'model' => $model,
+                        'assignment' => $assignmentModel,
+                        'late' => true,
+                    ]);
+                }
                 $model->asg_id = $asg_id;
                 $model->proj_creator = $session['nama'];
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
                 $model->proj_downloaded = 0;
+                $model->proj_year = $year->format('Y');
     
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
@@ -160,18 +205,20 @@ class ProjectController extends Controller
                             // $idx++; For extracting Zip
                         }
                     }
-    
-                    return $this->redirect(['view-project', 'proj_id' => $model->proj_id]);
+
+                    Yii::$app->session->setFlash('succes', 'Selamat, anda berhasil mengunggah proyek.');
+                    return $this->redirect(['update', 'id' => $model->proj_id]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
     
                     return $this->goBack();
                 }
             }
-    
+
             return $this->render('create', [
                 'model' => $model,
                 'assignment' => $assignmentModel,
+                'late' => false,
             ]);
         }
     }
@@ -184,7 +231,9 @@ class ProjectController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
-    {
+    {   
+        AssignmentController::openCloseAssignment();
+
         $session = Yii::$app->session;
 
         if(!isset($session['role'])){
@@ -201,34 +250,49 @@ class ProjectController extends Controller
                 $fileModel = $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
 
                 if ($model->load(Yii::$app->request->post())) {
-                    if($model->save()){
-                        $model->files = UploadedFile::getInstancesByName('files');
+                    // Validasi waktu submit
+                    date_default_timezone_set("Asia/Bangkok");
+                    $now = new \DateTime();
+                    $batas_submit = new \DateTime($assignmentModel->asg_end_time);
                     
-                        if($model->files != null){
-                            foreach($model->files as $file){
-                                $fileModel = new File();
-                                $fileName = $file->baseName . '.' . $file->extension;
-                                $fileDir = Yii::getAlias('@uploadDirTemplate') . "/" . $model->proj_title . "/" . $fileName;
-            
-                                $fileModel->file_name = $fileName;
-                                $fileModel->file_path = $fileDir;
-                                $fileModel->proj_id = $model->proj_id;
-            
-                                if($fileModel->save()){
-                                    $file->saveAs($fileDir);
-                                }else{
-                                    Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat mengubah proyek');
-                                    
-                                    return $this->goBack();
+                    if($now > $batas_submit){
+                        $assignmentModel->sts_asg_id = 2;
+                        return $this->render('update', [
+                            'model' => $model,
+                            'fileModel' => $fileModel,
+                            'assignment' => $assignmentModel,
+                            'late' => true,
+                        ]);
+                    }else{
+                        if($model->save()){
+                            $model->files = UploadedFile::getInstancesByName('files');
+                        
+                            if($model->files != null){
+                                foreach($model->files as $file){
+                                    $fileModel = new File();
+                                    $fileName = $file->baseName . '.' . $file->extension;
+                                    $fileDir = Yii::getAlias('@uploadDirTemplate') . "/" . $model->proj_title . "/" . $fileName;
+                
+                                    $fileModel->file_name = $fileName;
+                                    $fileModel->file_path = $fileDir;
+                                    $fileModel->proj_id = $model->proj_id;
+                
+                                    if($fileModel->save()){
+                                        $file->saveAs($fileDir);
+                                    }else{
+                                        Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat mengubah proyek');
+                                        
+                                        return $this->goBack();
+                                    }
                                 }
                             }
+                            
+                            return $this->redirect(['update', 'id' => $id]);
+                        }else{
+                            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
+                            
+                            return $this->goBack();
                         }
-                        
-                        return $this->redirect(['view', 'id' => $model->proj_id]);
-                    }else{
-                        Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
-                        
-                        return $this->goBack();
                     }
                 }
 
@@ -236,6 +300,7 @@ class ProjectController extends Controller
                     'model' => $model,
                     'fileModel' => $fileModel,
                     'assignment' => $assignmentModel,
+                    'late' => false,
                 ]);
             }
         }
@@ -287,7 +352,7 @@ class ProjectController extends Controller
                 $zip->close();
                 
                 header('Content-type: application/zip');
-                header('Content-Disposition: attachment; filename=' . $project->proj_title);
+                header('Content-Disposition: attachment; filename=' . $project->proj_title.'.zip');
                 header('Content-Transfer-Encoding: chunked');
                 header('Pragma: no-cache');
                 header('Expires: 0');

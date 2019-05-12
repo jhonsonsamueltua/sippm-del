@@ -1,68 +1,146 @@
 <?php
+
 use yii\helpers\Html;
-/* @var $this yii\web\View */
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
+use yii\bootstrap\Modal;
 
 $this->title = 'SIPPM Del';
-$css = ['css/main.css'];
+
 ?>
+
 <div class="site-index">
 
     <div class="body-content" style="padding-top: 0px">
         <!-- First Container -->
         <div class="container-fluid bg-1 text-center">
             <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    
-                </div>
+                <div class="col-md-2 col-sm-12"></div>
 				<div class="banner-content col-md-8 col-sm-12">
-					<h1 class="wow fadeIn" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">We Rank the Best Courses <br> on the Web</h1>
-					<p class="text-white">
-                        In the history of modern astronomy, there is probably no one greater leap forward 
-                        <br> than the building and launch of the space
-						telescope.
+					<h1 class="wow fadeInDown first" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">Cari Ide Terbaik di Kampus <br> Institut Teknologi Del</h1>
+					<p class="text-white" style="padding: 10px 0px 0px 0px;">
+                        SIPPM Del (Sistem Informasi Pengolahan Proyek Mahasiswa) merupakan sebuah sistem informasi
+                        <br> untuk mencari dan mengumpulkan ide-ide / proyek mahasiswa Institut Teknologi Del.
 					</p>
-					<form action="#" method="post" novalidate="novalidate" style="padding: 40px;">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="row">
-                                    <center>
-                                    <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
-                                        <input type="text" class="form-control-custom search-slt" placeholder="Enter Keywords" >
+                    
+                    <div class="row">
+                        <div class="col-lg-12" style="padding: 30px 0px;">
+                            <center>
+                                <?php $form = ActiveForm::begin([
+                                    'action' => ['search-project'],
+                                    'method' => 'get',
+                                ]); ?>
+
+                                    <div class="col-lg-5 col-md-5 col-sm-12" style="padding:0px;" data-toggle="tooltip" data-placement="top" title="Cari berdasarkan Judul, Deskripsi, dan Author">
+                                        <input name="searchWords" type="text" placeholder="Cari proyek ..." class="form-control-custom search-slt">
                                     </div>
+
                                     <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
-                                        <select class="form-control-custom search-slt" id="exampleFormControlSelect1">
-                                            <option>Select Category</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
-                                            <option>Example one</option>
+                                        <select name="searchCategory" placeholder="Category" class="form-control-custom search-slt select-custom">
+                                            <option value="" >Pilih Kategori</option>
+                                            <?php
+                                                foreach($categories as $category){
+                                                    echo("<option value='" . $category->cat_proj_name . "'>" . $category->cat_proj_name . "</option>");
+                                                }
+                                            ?>
                                         </select>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
-                                        <button type="button" class="btn wrn-btn" style="border-radius: 0px;    background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%);font-size: 18px;">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    
-					<h4 class="text-white">Filter Pencarian</h4>
 
-					<div class="courses pt-20">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
+                                        <button type="submit" class="btn-search" >Telusuri</button>
+                                    </div>
+
+                                <?php ActiveForm::end(); ?>
+                            </center>   
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <?php
+                            Modal::begin([
+                                'header' => '<h3>Penelusuran Lanjutan</h3>',
+                                'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
+                                'toggleButton' => ['label' => 'Penelusuran Lanjutan', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;'],
+                            ]);
+
+                                $advancedForm = ActiveForm::begin([
+                                    'action' => \yii\helpers\Url::to(['advanced-search']),
+                                    'method' => 'get',
+                                ]);
+                                
+                                    echo("
+                                        <div class='form-group'>
+                                            <input name='advKeywords' class='form-control' placeholder='Kata Kunci'>
+                                        </div>
+                                    ");
+                                    
+                                    echo("
+                                        <div class='form-group'>
+                                            <select id='adv-category' name='advCategory' class='form-control'>
+                                                <option value=''>Pilih Kategori</option>
+                                    ");
+                                            foreach($categories as $category){
+                                                echo("<option value='" . $category->cat_proj_name . "'>" . $category->cat_proj_name . "</option>");
+                                            }
+                                    echo(")
+                                            </select>
+                                        </div>
+                                    ");
+                                    
+                                    echo("
+                                        <div class='form-group'>
+                                            <select id='adv-sub-category' name='advSubCategory' class='form-control'>
+                                                <option value=''>Pilih Sub Kategori</option>
+                                            </select>
+                                        </div>
+                                    ");
+
+                                    echo("
+                                        <div class='form-group'>
+                                        <select name='advYear' class='form-control'>
+                                            <option value=''>Pilih Tahun Proyek</option>
+                                    ");
+                                        
+                                    foreach($yearList as $year){
+                                        echo "<option value='$year->proj_year'>$year->proj_year</option>";
+                                    }
+
+                                    echo("
+                                            </select>
+                                        </div>
+                                    ");
+
+                                    echo "<p style='color: #000; text-align: left;'>Cari berdasarkan:</p>";
+
+                                    echo("
+                                        <fieldset style='text-align: left;'>
+                                            <input type='checkbox' name='title' value='Judul'><label style='color: #000; margin: 5px;'>Judul</label><br>
+                                            <input type='checkbox' name='description' value='Deskripsi'><label style='color: #000; margin: 5px;'>Deskripsi</label><br>
+                                            <input type='checkbox' name='author' value='Penulis'><label style='color: #000; margin: 5px;'>Penulis</label><br>
+                                        </fieldset>
+                                    ");
+
+                                    echo Html::submitButton('Search', ['class' => 'btn']);
+
+                                ActiveForm::end();
+
+                            Modal::end();
+                        ?>
+                    </div>
+
+					<h4 class="text-white">Pencarian Cepat</h4>
+
+					<div class="courses pt-20 wow fadeIn second" data-wow-duration="10s">
                         <a href="#top-5" class="btn-md button btn-filter" transparent mr-10 mb-10>Top 5 Sering Digunakan</a>
                         <a href="#menang-kompetisi" class="btn-md button btn-filter" transparent mr-10 mb-10>Menang Kompetisi</a>
                         <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
                         <br>
-                        <a href="#" class="btn-md button btn-filter" transparent mr-10 mb-10>Kompetisi</a>
-                        <a href="#" class="btn-md button btn-filter" transparent mr-10 mb-10>Matakuliah</a>
-                        <a href="#" class="btn-md button btn-filter" transparent mr-10 mb-10>Tugas Akhir</a>
+                        <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?>
+                        <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
+                        <!-- <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?> -->
 					</div>
                 </div>
-                <div class="col-md-2 col-sm-12">
-                    
-                </div>
+                <div class="col-md-2 col-sm-12"></div>
             </div>
         </div>
 
@@ -90,11 +168,18 @@ $css = ['css/main.css'];
 
                                 $created_at = $data["created_at"];
                                 $old_date_timestamp = strtotime($created_at);
-                                $created_at = date('l, d M Y, H:i', $old_date_timestamp);
+                                $created_at = date('Y-m-d', $old_date_timestamp);
+                                $created_at = $this->context->tgl_indo($created_at);
+
+                                $title = $data->proj_title;
+                                if(strlen($data->proj_title) >= 73 ){
+                                    $title = substr($data->proj_title, 0, 73) . '...';
+                                }
+                                
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -123,10 +208,10 @@ $css = ['css/main.css'];
                     <ol class="custom-counter">
                     
                         <?php
-                            if($model == 0){
+                            if($modelCompCount == 0){
                                 echo "<i>&nbsp;&nbsp;Tidak ada data.</i>";
                             }else{
-                            foreach($model as $data){
+                            foreach($modelComp as $data){
                                 $description = $data->proj_description;
                                 $limit_words = 30;
                                 $words = explode(' ',$description);
@@ -138,11 +223,17 @@ $css = ['css/main.css'];
 
                                 $created_at = $data["created_at"];
                                 $old_date_timestamp = strtotime($created_at);
-                                $created_at = date('l, d M Y, H:i', $old_date_timestamp);
+                                $created_at = date('Y-m-d', $old_date_timestamp);
+                                $created_at = $this->context->tgl_indo($created_at);
+
+                                $title = $data->proj_title;
+                                if(strlen($data->proj_title) >= 73 ){
+                                    $title = substr($data->proj_title, 0, 73) . '...';
+                                }
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author" style="color: #e9eaea;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -155,7 +246,8 @@ $css = ['css/main.css'];
 
                     </ol>
                     <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#top-5" class="btn-md button btn-filter" style="padding: 8px 30px;" transparent mr-10 mb-10>Lihat Lainnya</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'win_comp'], ['class' => 'btn-md button btn-filter btn-comp']) ?>
 
                 </div>
                 <div class="col-md-3 col-sm-12">
@@ -178,7 +270,7 @@ $css = ['css/main.css'];
                     <ol class="custom-counter">
                     
                         <?php
-                            foreach($model as $data){
+                            foreach($modelNews as $data){
                                 $description = $data->proj_description;
                                 $limit_words = 30;
                                 $words = explode(' ',$description);
@@ -190,11 +282,17 @@ $css = ['css/main.css'];
 
                                 $created_at = $data["created_at"];
                                 $old_date_timestamp = strtotime($created_at);
-                                $created_at = date('l, d M Y, H:i', $old_date_timestamp);
+                                $created_at = date('Y-m-d', $old_date_timestamp);
+                                $created_at = $this->context->tgl_indo($created_at);
+
+                                $title = $data->proj_title;
+                                if(strlen($data->proj_title) >= 73 ){
+                                    $title = substr($data->proj_title, 0, 73) . '...';
+                                }
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -202,14 +300,15 @@ $css = ['css/main.css'];
                                 </li>
                             <?php
                                 }
-                            if($modelCount == 0){
+                            if($modelNewsCount == 0){
                                 echo "<i>&nbsp;&nbsp;Tidak ada data.</i>";
                             }
                         ?>
 
                     </ol>
                     <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button href="#top-5" class="btn-md button btn-custom" style="padding: 8px 30px;" transparent mr-10 mb-10>Lihat Lainnya</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'recently_added'], ['class' => 'btn-md button btn-custom btn-news']) ?>
 
                 </div>
             </div>
@@ -218,4 +317,3 @@ $css = ['css/main.css'];
 
     </div>
 </div>
-

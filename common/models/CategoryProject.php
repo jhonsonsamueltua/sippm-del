@@ -52,9 +52,10 @@ class CategoryProject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['cat_proj_name'], 'required', 'message' => '{attribute} tidak boleh kosong'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['cat_proj_name'], 'string', 'max' => 32],
-            [['deleted'], 'string', 'max' => 1],
+            [['deleted'], 'integer'],
             [['deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
         ];
     }
@@ -66,7 +67,7 @@ class CategoryProject extends \yii\db\ActiveRecord
     {
         return [
             'cat_proj_id' => 'Cat Proj ID',
-            'cat_proj_name' => 'Cat Proj Name',
+            'cat_proj_name' => 'Nama Kategori',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',
@@ -83,5 +84,10 @@ class CategoryProject extends \yii\db\ActiveRecord
     public function getSippmAssignments()
     {
         return $this->hasMany(Assignment::className(), ['cat_proj_id' => 'cat_proj_id']);
+    }
+
+    public function getSubCat()
+    {
+        return $this->hasMany(SubCategoryAssignment::className(), ['cat_proj_id' => 'cat_proj_id']);
     }
 }

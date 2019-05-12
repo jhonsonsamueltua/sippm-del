@@ -2,24 +2,40 @@
 .text-title-project{
     font-size: 18px;
     color: #2196F3;
-}
+}   
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li>a:hover {
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .nav-tabs>li>a:hover {
     color: #555;
     cursor: pointer !important;
-    background-color: #d6df22 !important;
-    border: 1px solid transparent;
+    border-bottom: 5px solid #d6df22 !important;
+    border-right: 0px !important;
+    border-left: 0px!important;
+    border-top: 1px transparent !important; 
+    background-color: #6ac7c1 !important;
+    padding: 8px 15px;
 }
 
 .nav-tabs>li>a {
-    margin-right: 0px !important;
+    margin-right: 5px !important;
     line-height: 1.42857143;
-    /* border: 1px solid transparent; */
+    /* border: none !important; */
     border-radius: 0px !important;
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    color: #555;
-    cursor: default;
-    border-bottom-color: transparent;
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.center-badge{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-title-asg{
+    font-size: 20px;
+    color: #2196F3;
 }

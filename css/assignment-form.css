@@ -59,3 +59,25 @@
   border-radius: 3px;
   margin: 3px;
 }
+
+.btn-success-custom {
+  color: #fff;
+  background-color: #9CCC65 ;
+  border-color: #99ce99 ;
+}
+
+.btn-success-custom:hover {
+  color:red;
+  background-color: #9CCC65 ;
+  border-color: #99ce99 ;
+}
+
+.btn-danger-custom {
+  color: #fff;
+  background-color: #FB8C00;
+  border-color: #e6601b;
+}
+
+.btn-primary-edit{
+  background-color: #337ab7 !important;
+}
