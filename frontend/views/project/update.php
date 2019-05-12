@@ -11,6 +11,9 @@ $this->params['breadcrumbs'][] = ['label' => $model->proj_id, 'url' => ['view', 
 $this->params['breadcrumbs'][] = 'Update'; 
 use yii\widgets\Breadcrumbs;
 ?>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+
 <div class="body-content">
     <div class=" container box-content">
 

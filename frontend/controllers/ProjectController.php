@@ -130,7 +130,7 @@ class ProjectController extends Controller
             return $this->redirect(['site/login']);
         }else{
             $model = new Project();
-            $year = new DateTime();
+            $year = new \DateTime();
             $assignmentModel = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one();
             
             if ($model->load(Yii::$app->request->post())) {

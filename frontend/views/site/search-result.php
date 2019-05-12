@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
+use yii\widgets\Breadcrumbs;
 
 $this->title = 'List Proyek';
 if(isset($_GET['searchWords'])){
@@ -16,15 +17,25 @@ if(isset($_GET['searchWords'])){
 
 ?>
 
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css "> -->
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
 
 <div class="body-content" style="font-size: 14px;">
+
     <div class=" container box-content">
+        
+        <div class="row" style="float:right;">
+            <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        'Hasil Pencarian Proyek',
+                    ],
+                ]);
+            ?>
+        </div><br>
+        
         <h4><b>Hasil Pencarian Proyek</b></h4>
         <hr class="hr-custom">
 
@@ -52,7 +63,7 @@ if(isset($_GET['searchWords'])){
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-12" style="padding: 0px;">
-                        <button type="submit" class="btn form-control" style="background: #6bc5c2; border: 0px; color: #fff;">Search</button>
+                        <button type="submit" class="btn form-control" style="background: #6bc5c2; border: 0px; color: #fff;">Telusuri</button>
                     </div>
                     <?php ActiveForm::end() ?>
             </div>
@@ -61,9 +72,9 @@ if(isset($_GET['searchWords'])){
         <div class="row">
             <?php
                 Modal::begin([
-                    'header' => '<h3>Advanced Search</h3>',
+                    'header' => '<h3>Penelusuran Lanjutan</h3>',
                     'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
-                    'toggleButton' => ['label' => 'Advanced Search', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;'],
+                    'toggleButton' => ['label' => 'Penelusuran Lanjutan', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px; padding-right: 18px;'],
                 ]);
 
                 $advancedForm = ActiveForm::begin([
@@ -129,7 +140,7 @@ if(isset($_GET['searchWords'])){
 
                 Modal::end();
             ?>
-        </div>
+        </div><br>
 
         <table class="table table-borderless" id="dataTable" width="100%" cellspacing="0" >
             <thead hidden>

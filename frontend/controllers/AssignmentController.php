@@ -99,12 +99,12 @@ class AssignmentController extends Controller
         $session = Yii::$app->session;
         $username = $session['nim'];
 
-        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = $username AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3) GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
+        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3) GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
         $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
         $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
 
         
-        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = $username AND sa.sts_asg_id = 2";
+        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND sa.sts_asg_id = 2";
         $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
         $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
 

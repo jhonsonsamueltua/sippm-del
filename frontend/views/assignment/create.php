@@ -8,6 +8,9 @@ use yii\widgets\Breadcrumbs;
 $this->title = 'Tambah Penugasan';
 $session = Yii::$app->session;
 ?>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+
 <div class="body-content">
     <div class=" container box-content">
 

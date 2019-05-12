@@ -11,6 +11,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Project Usages', 'url' => ['index'
 $this->params['breadcrumbs'][] = $this->title;
 $css = ['css/site.css'];
 ?>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
