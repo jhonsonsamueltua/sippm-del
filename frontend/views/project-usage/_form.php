@@ -11,6 +11,9 @@ use common\models\CategoryUsage;
 /* @var $form yii\widgets\ActiveForm */
 
 ?>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+
 <div class="row">
 
     <div class="col-md-6">
@@ -36,12 +39,12 @@ use common\models\CategoryUsage;
             ]); ?>
         
             <?= $form->field($model, 'cat_usg_id')->dropDownList(ArrayHelper::map(CategoryUsage::find()->all(), 'cat_usg_id', 'cat_usg_name'), [
-                'prompt' => 'Pilih Kategori Penggunaan..'
+                'prompt' => 'Pilih Tujuan Penggunaan...'
             ])->label('Tujuan Penggunaan')?>
             <?= $form->field($model, 'proj_usg_usage')->widget(Redactor::className())  ?>
         
             <div class="form-btn" align="center">
-                <?= Html::submitButton($model->isNewRecord ? 'Submit' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-primary btn-custom']) ?>
+                <?= Html::submitButton($model->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i>', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-primary btn-custom', 'style' => 'border: 0px;']) ?>
             </div>
 
         <?php ActiveForm::end(); ?>

@@ -55,9 +55,9 @@ class SiteController extends Controller
     public function actionIndex()
     {   
         $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
-        $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
-
         $modelCount = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->count();
+        
+        $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->all();
         $modelNewsCount = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->count();
 
         $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
@@ -112,6 +112,28 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
+            // die($model->username.' '.$model->password);
+            if($model->username === "" && $model->password === ""){
+                // die("1");
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "username_password",
+                ]);
+            }
+            if($model->username === ""){
+                // die("2");
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "username",
+                ]);
+            }
+            if($model->password === ""){
+                // die("3");
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "password",
+                ]);
+            }
             $client = new Client();
             $response = $client->createRequest()
                                 ->setMethod('POST')
@@ -163,16 +185,16 @@ class SiteController extends Controller
                     return $this->goBack();
                 }else{
                     // Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
-                    
                     return $this->render('login', [
                         'model' => $model,
-                        'error' => true,
+                        'error' => "data",
                     ]);
                 }
             }else{
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
                 return $this->render('login', [
                     'model' => $model,
+                    'error' => false,
                 ]);
             }
 

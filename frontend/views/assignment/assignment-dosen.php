@@ -27,6 +27,17 @@ $this->registerCssFile("././css/assignment.css");
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
+        <div class="row" style="float:right;">
+            <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        'Penugasan',
+                    ],
+                ]);
+            ?>
+        </div>
+
         <h3> <b>Penugasan</b> </h3>
         <hr class="hr-custom">
         
@@ -34,7 +45,7 @@ $this->registerCssFile("././css/assignment.css");
         <br><br>
 
         <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
-            <li class="active"><a data-toggle="tab" href="#tab1"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Penugasan saat ini <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span> </a></li>
+            <li class="active"><a data-toggle="tab" href="#tab1"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Penugasan Anda <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span> </a></li>
             <li><a data-toggle="tab" href="#tab2"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Riwayat Penugasan <span class="badge"> <?= $modelRiwayatPenugasanCount ?> </span> </a></li>
         </ul>
 
@@ -51,7 +62,7 @@ $this->registerCssFile("././css/assignment.css");
                     <tbody>
                         <?php   
                             if($modelPenugasanSaatIniCount == 0){
-                                echo '<tr><td colspan=2> <br> Tidak ada penugasan saat ini. </td></tr>';
+                                echo '<tr><td colspan=2 style="border-top: 0px;"><i> Tidak ada penugasan saat ini. </i></td></tr>';
                             }else{
                                 foreach($modelPenugasanSaatIni as $key){
                                     $asg_end_time = $key["asg_end_time"];
@@ -113,7 +124,7 @@ $this->registerCssFile("././css/assignment.css");
                     <tbody>
                         <?php
                             if($modelRiwayatPenugasanCount == 0){
-                                echo '<tr><td colspan=2> <br> Tidak ada riwayat penugasan. </td></tr>';
+                                echo '<tr><td colspan=2 style="border-top: 0px;"><i> Tidak ada penugasan saat ini. </i></td></tr>';
                             }else{
                                 foreach($modelRiwayatPenugasan as $key){
                                     $asg_end_time = $key["asg_end_time"];
@@ -126,14 +137,14 @@ $this->registerCssFile("././css/assignment.css");
                                     
                                     
                                 <tr>
-                                    <td>
+                                    <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
                                         <font class='text-category'> <?= $key->catProj->cat_proj_name.' [ '.$key->subCatProj->sub_cat_proj_name.' ]' ?> </font> <br>
                                         <?= Html::a($key->catProj->cat_proj_name.''.$key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
                                         <div class="text-author">
                                             Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
                                         <div style="float: right;text-align: center;">
                                             <br>
                                             <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;

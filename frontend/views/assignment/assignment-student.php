@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use common\models\Assignment;
 use yii\widgets\LinkPager;
 use frontend\controllers\SiteController;
+use yii\widgets\Breadcrumbs;
 
 $this->title = 'Penugasan';
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,13 +20,24 @@ $this->registerCssFile("././css/assignment.css");
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
 
 <div class="body-content" style="font-size: 14px;">
-    <div class=" container box-content">    
+    <div class=" container box-content">   
+        
+        <div class="row" style="float:right;">
+            <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        'Penugasan',
+                    ],
+                ]);
+            ?>
+        </div>
 
         <h3> <b>Penugasan</b> </h3>
         <hr class="hr-custom">
 
         <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
-            <li class="active"><a data-toggle="tab" href="#tab1"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Penugasan saat ini <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span> </a></li>
+            <li class="active"><a data-toggle="tab" href="#tab1"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Penugasan Anda <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span> </a></li>
             <li><a data-toggle="tab" href="#tab2"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Riwayat Penugasan <span class="badge"> <?= $modelRiwayatPenugasanCount ?> </span> </a></li>
         </ul>
 
@@ -43,7 +55,7 @@ $this->registerCssFile("././css/assignment.css");
                     <tbody>
                         <?php
                             if($modelPenugasanSaatIniCount == 0){
-                                echo '<tr><td colspan=2> <br> Tidak ada penugasan saat ini. </td></tr>';
+                                echo '<tr><td colspan=2><i> Tidak ada penugasan saat ini. </i></td></tr>';
                             }else{
                                 foreach($modelPenugasanSaatIni as $key){
                                     $submission = $this->context->getProject($key["asg_id"]);
@@ -60,9 +72,9 @@ $this->registerCssFile("././css/assignment.css");
                                         <font class='text-category'> <?= $key['cat_proj_name'].' [ '.$key['sub_cat_proj_name'].' ]' ?> </font> <br>
                                             <?php
                                                 if(!$submission == false){?>
-                                                    <?= Html::a($key["asg_title"], ['project/update', 'id' => $submission->proj_id], ['class' => 'text-title-project']) ?>
+                                                    <?= Html::a($key["asg_title"], ['project/update', 'id' => $submission->proj_id], ['class' => 'text-title-project', 'style' => 'font-size:20px']) ?>
                                                 <?php }else{ ?>
-                                                    <?= Html::a($key["asg_title"], ['project/create', 'asg_id' => $key["asg_id"]], ['class' => 'text-title-project']) ?>
+                                                    <?= Html::a($key["asg_title"], ['project/create', 'asg_id' => $key["asg_id"]], ['class' => 'text-title-project', 'style' => 'font-size:20px']) ?>
                                             <?php
                                                 }
                                             ?>
@@ -70,32 +82,31 @@ $this->registerCssFile("././css/assignment.css");
                                                 Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>, Oleh : <?= $key['asg_creator'] ?>
                                             </div>
                                         </td>
-                                        <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
-                                            <?php
-                                                if($this->context->getStatusAssignment($key['asg_id']) == "Pending"){
-                                                    echo '<span class="badge badge-primary badge-pill" style="float: right;background-color:#FFA726;">
-                                                        Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
-                                                    </span>';
-                                                }else{
-                                                    echo '<span class="badge badge-primary badge-pill" style="float: right;background-color:#009688;">
-                                                        Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
-                                                    </span>';
-                                                }
-                                            ?>
-                                            <br>
-                                            <div style="float: right; margin-bottom: 0px;">
-                                                
-                                                    <?php
-                                                        if($this->context->getStatusAssignment($key['asg_id']) != "Pending"){
-                                                            if(!$submission == false){
-                                                                echo "<span class='badge badge-primary badge-pill' style='background-color: #4CAF50'>Sudah submit</span>";
-                                                            }else{
-                                                                echo "<span class='badge badge-primary badge-pill' style='background-color: #E65100'>Belum submit</span>";
-                                                            }
+                                        <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;position: relative;">
+                                            <font><br>
+                                                <?php
+                                                    if($this->context->getStatusAssignment($key['asg_id']) == "Pending"){
+                                                        echo '<span class="badge " style="background-color:#FFA726;margin-bottom: 5px;">
+                                                            Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                        </span>';
+                                                    }else{
+                                                        echo '<span class="badge " style="background-color:#009688;margin-bottom: 5px;">
+                                                            Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                        </span>';
+                                                    }
+                                                ?>
+                                                <br>
+                                                <?php
+                                                    if($this->context->getStatusAssignment($key['asg_id']) != "Pending"){
+                                                        if(!$submission == false){
+                                                            echo "<span class='badge ' style='background-color: #4CAF50'>Sudah submit</span>";
+                                                        }else{
+                                                            echo "<span class='badge ' style='background-color: #E65100'>Belum submit</span>";
                                                         }
-                                                    ?>
-                                                
-                                            </div>
+                                                    }
+                                                ?>
+                                                    
+                                            </font>
                                         </td>
                                     </tr>
 
@@ -115,7 +126,7 @@ $this->registerCssFile("././css/assignment.css");
                     <thead>
                     <tr>
                         <th>Penugasan</th>
-                        <th>Aksi</th>
+                        <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -139,9 +150,9 @@ $this->registerCssFile("././css/assignment.css");
                                     <font class='text-category'> <?= $key['cat_proj_name'].' [ '.$key['sub_cat_proj_name'].' ]' ?> </font> <br>
                                         <?php
                                             if(!$submission == false){?>
-                                                <?= Html::a($key["asg_title"], ['project/update', 'id' => $submission->proj_id], ['class' => 'text-title-project']) ?> 
+                                                <?= Html::a($key["asg_title"], ['project/update', 'id' => $submission->proj_id], ['class' => 'text-title-project', 'style' => 'font-size:20px']) ?>
                                             <?php }else{ ?>
-                                                <?= Html::a($key["asg_title"], ['project/create', 'asg_id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
+                                                <?= Html::a($key["asg_title"], ['project/create', 'asg_id' => $key["asg_id"]], ['class' => 'text-title-project', 'style' => 'font-size:20px']) ?>
                                         <?php
                                             }
                                         ?>
@@ -149,13 +160,13 @@ $this->registerCssFile("././css/assignment.css");
                                             Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?> ; oleh : <?= $key['asg_creator'] ?>
                                         </div>
                                     </td>
-                                    <td style="padding: 15px 8px;">
-                                        <div style="float: right; margin-bottom: 0px;">
+                                    <td style="padding: 15px 8px;position: relative;">
+                                        <div>
                                                 <?php
                                                     if(!$submission == false){
-                                                        echo "<span class='badge badge-primary badge-pill' style='background-color: #4CAF50'>Sudah submit</span>";
+                                                        echo "<span class='badge center-badge' style='background-color: #4CAF50'>Sudah submit</span>";
                                                     }else{
-                                                        echo "<span class='badge badge-primary badge-pill' style='background-color: #E65100'>Tidak submit</span>";
+                                                        echo "<span class='badge center-badge' style='background-color: #E65100'>Tidak submit</span>";
                                                     }
                                                 ?>
                                         </div>

@@ -16,12 +16,16 @@ use frontend\controllers\SiteController;
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("././css/project.css");
 ?>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 <div class="row">
 
     <div class="col-md-6" style="padding: 0px 25px;">
-        <b><?= $assignment->catProj->cat_proj_name ?> [ <?= $assignment->subCatProj->sub_cat_proj_name ?> ] </b>
-        <h3><b style="font-size: 18px">Penugasan : <?= $assignment->asg_title ?></b></h3>
+        <h3 style="margin-top:0px"><b style="font-size: 18px">Penugasan</b></h3>
+        <hr class="hr-custom">
+        <b style="display:block;margin-bottom:5px;"><?= $assignment->catProj->cat_proj_name ?> [ <?= $assignment->subCatProj->sub_cat_proj_name ?> ] </b>
+        <font class="text-title-asg"><?= $assignment->asg_title ?></font>
+        
         <p>
             <?= $assignment->asg_description ?>
         </p>
@@ -138,6 +142,8 @@ $this->registerCssFile("././css/project.css");
     </div>
 
     <div class="col-md-6 form-project">
+        <h3 style="margin-top:0px"><b style="font-size: 18px">Proyek</b></h3>
+        <hr class="hr-custom">
         <?php
             $status = AssignmentController::getProject($assignment["asg_id"]);
             if($assignment->stsAsg->sts_asg_name == "Pending"){
@@ -169,7 +175,7 @@ $this->registerCssFile("././css/project.css");
             ],
         ]) ?>
         
-        <?= $form->field($model, 'proj_author')->textArea(['rows' => '3', 'maxLength' => true])->hint('Max 500 karakter.')->label("Penulis (Pisahkan Penulis dengan tanda titik koma [ ; ] )") ?>
+        <?= $form->field($model, 'proj_author')->textArea(['rows' => '3', 'maxLength' => true, 'placeholder' => 'Contoh : Nama Anda; Nama Teman Anda'])->hint('Max 500 karakter.')->label("Penulis (Pisahkan Penulis dengan tanda titik koma [ ; ] )")?>
 
         <div id="sts_win">
             <?= $form->field($model, 'sts_win_id')->dropDownList(ArrayHelper::map(StatusWin::find()->all(), 'sts_win_id', 'sts_win_name'), [
@@ -187,7 +193,10 @@ $this->registerCssFile("././css/project.css");
                     foreach($files as $file){
                         if($assignment->sts_asg_id == 1){
                             echo '<div class="row">';
-                            echo "<p class='col-sm-1'>" . Html::a('-', ['remove-attachment', 'file_id' => $file->file_id], ['class' => 'btn btn-danger-custom btn-sm', 'style' => 'padding: 0px 10px 5px;; font-size:20px;display: unset']) . "</p>";
+                            echo "<p class='col-sm-1'>" . Html::a('-', ['remove-attachment', 'file_id' => $file->file_id], ['class' => 'btn btn-danger-custom btn-sm', 'style' => 'padding: 0px 10px 5px;; font-size:20px;display: unset',"data" => [
+                                "confirm" => "Apakah anda yakin menghapus file ini?",
+                                "method" => "post",
+                            ]]) . "</p>";
                             echo "<p class='col-sm-11' style='margin: 0px;padding: 10px;'>" . $file->file_name . "</p>";
                             echo '</div>';
                         }else{
@@ -211,7 +220,7 @@ $this->registerCssFile("././css/project.css");
                             <div id="file_field" class="col-md-6">
                                 <input type="file" class="form-control" name="files[]">
                             </div>
-                            <a href="#" onclick="addMoreFile()">Add More File</a>
+                            <a href="#" onclick="addMoreFile()">Tambah File</a>
                         </div>
                     </div>
                 ');
@@ -222,11 +231,12 @@ $this->registerCssFile("././css/project.css");
             <?php
                 echo '<br><br>';
                 if($assignment->sts_asg_id == 1){
-                    echo Html::submitButton($model->isNewRecord ? 'Kirim' : 'Edit', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']).'&nbsp;&nbsp;';
+                    echo Html::submitButton($model->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i> ', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
                 }
                 
-                if($assignment->sts_asg_id == 3 || $assignment->sts_asg_id == 2){
-                    echo Html::a("Kembali", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']);
+                if($assignment->sts_asg_id == 3 || $assignment->sts_asg_id == 2 || !$model->isNewRecord){
+                    echo '&nbsp;&nbsp;'.Html::a("Kembali &nbsp;<i class='fa fa-arrow-left' aria-hidden='true' style='font-size:16px'></i>
+                    ", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']);
                 }
             ?>
         </div>
