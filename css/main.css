@@ -380,10 +380,6 @@ border-bottom: 5px solid #d6df22;
 /* footer */
 .site-footer
 {    
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
     padding:25px 20px;
     background-color:#010520;
     color:#737373;
