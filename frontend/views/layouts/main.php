@@ -32,7 +32,6 @@ $session = Yii::$app->session;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     
   <style>
     
@@ -55,18 +54,18 @@ $session = Yii::$app->session;
                 <ul class="nav navbar-nav navbar-right">
                             <li><?= Html::a('Beranda', ['site/index']) ?></li>
                             <?php
-                                if($session["role"] == "Mahasiswa"){?>
+                                if($session["role"] == "Mahasiswa"){ ?>
                                     <!-- <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
                                     <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
                                     <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li> -->
                                     <!-- <li><?= Html::a('Managemen Proyek', ['/project-usage']) ?></li> -->
 
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">
                                             Manajemen Proyek
                                             <span class="caret"></span>
                                         </a>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu" role="menu">
                                             <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
                                             <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
                                             <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>

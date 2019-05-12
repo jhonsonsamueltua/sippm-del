@@ -42,12 +42,11 @@ class AssignmentController extends Controller
         ];
     }
     
-    public function beforeAction($action){
-        $this->layout = "main";
+    // public function beforeAction($action){
+    //     $this->layout = "main";
 
-        return parent::beforeAction($action);
-    }
-
+    //     return parent::beforeAction($action);
+    // }
 
     /**
      * Lists all Assignment models.
