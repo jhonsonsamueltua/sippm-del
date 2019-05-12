@@ -4,7 +4,6 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
-
 $this->title = 'SIPPM Del';
 ?>
 
