@@ -16,6 +16,23 @@ $this->registerCssFile("././css/assignment-form.css");
 $session = Yii::$app->session;
 ?>
 
+<style>
+
+    .class-error {
+        font-size: 14px;
+        color: #A94442;
+    }
+
+    .error-border {
+        border-color: #A94442;
+    }
+
+    .label-error.active{
+        color: #A94442;
+    }
+
+</style>
+
 <div class="row">
         
     <?php $form = ActiveForm::begin(['options' => [
@@ -149,12 +166,12 @@ $session = Yii::$app->session;
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td style="font-weight: 700;">Kelas</td>
+                        <td class='label-error' style="font-weight: 700;">Kelas</td>
                         <td>
                             <div class="col-md-9" style="font-weight: 700;">
                                 Mahasiswa
                             </div>
-                            <div class="col-md-3" style="padding: 4px">
+                            <div class="col-md-3" style="padding: 0px">
                             &nbsp;<button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>&nbsp; 
                                 <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
                             </div>
@@ -180,12 +197,32 @@ $session = Yii::$app->session;
      $this->registerJs("
         var classCounter = 0;
         var studentCounter = [];
+        var url = window.location.href;
 
         $(document).ready(function(){
             fillArray();
             initDynamicForm();
             $('#PenerimaTugas').hide();
+            $('.class-error').hide();
         });
+
+        if(url.search('create') != -1){
+            $('#dynamic-form').submit(function(event){
+                var classVal = $('select[name=\"Class[0]\"]').val();
+    
+                if(classVal === ''){
+                    $('.label-error').addClass('active');
+                    $('select[name=\"Class[0]\"]').addClass('border-error');
+                    $('.class-error').show();
+                    
+                    event.preventDefault();
+                }else{
+                    $('.label-error').removeClass('active');
+                    $('select[name=\"Class[0]\"]').removeClass('border-error');
+                    $('.class-error').hide();
+                }
+            });
+        }
 
         function show(select_item) {
             if (select_item == 1) {
@@ -214,14 +251,14 @@ $session = Yii::$app->session;
                             classes += \"<option value='\"+classRes['kelas_id']+\"'>\"+classRes['nama']+\"</option>\";
                         });
                         
-                        $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;'' style='padding: 0px;'><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)' ><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+                        $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(this, \"+classCounter+\")'>\"+classes+\"</select><span class='class-error help-block help-block-error' display='none' aria-live='polite'>Kelas tidak boleh kosong</span></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;'' style='padding: 0px;'><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)' ><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
                         sessionStorage.setItem('classList', classes);
                     }
                 });
             }else{
                 var classes = sessionStorage.getItem('classList', classes);
 
-                $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+                $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(this, \"+classCounter+\")'>\"+classes+\"</select><span class='class-error help-block help-block-error' display='none' aria-live='polite'>Kelas tidak boleh kosong</span></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
             }
         }
 
@@ -274,8 +311,22 @@ $session = Yii::$app->session;
             }
         }
 
-        function getAllStudentByClass(classId){
+        function getAllStudentByClass(element, classId){
             var class_id = $('select[name=\"Class['+classId+']\"]').children('option:selected').val();
+
+            if(element.name === 'Class[0]'){
+                var classVal = $('select[name=\"Class[0]\"]').val();
+
+                if(classVal === ''){
+                    $('.label-error').addClass('active');
+                    $('select[name=\"Class[0]\"]').addClass('border-error');
+                    $('.class-error').show();
+                }else{
+                    $('.label-error').removeClass('active');
+                    $('select[name=\"Class[0]\"]').removeClass('border-error');
+                    $('.class-error').hide();
+                }
+            }
 
             if(sessionStorage.getItem(class_id) === null){
                 $.ajax({
@@ -300,20 +351,6 @@ $session = Yii::$app->session;
 
                 $('select[name^=\"Student['+classId+']\"]').empty();
                 $('select[name^=\"Student['+classId+']\"]').append(students);
-            }
-        }
-
-        function openTab(tabName){
-            if(tabName == 'DeskripsiPenugasan'){
-                $('button[name=\"tab2\"]').removeClass('active');
-                $('#PenerimaTugas').hide();
-                $('button[name=\"tab1\"]').addClass('active');
-                $('#DeskripsiPenugasan').show();
-            }else if(tabName == 'PenerimaTugas'){
-                $('button[name=\"tab1\"]').removeClass('active');
-                $('#DeskripsiPenugasan').hide();
-                $('button[name=\"tab2\"]').addClass('active');
-                $('#PenerimaTugas').show();
             }
         }
 

@@ -324,10 +324,6 @@ $this->title = 'SIPPM Del';
 
         $this->registerJs("
             var value = '';
-        
-            $(document).ready(function(){
-
-            };
 
             $('#adv-category').change(function(){
                 value = ($('#adv-category').val() == '') ? 'Sub Kategori' : $('#adv-category').val();
