@@ -6,7 +6,9 @@ use yii\widgets\LinkPager;
 use frontend\controllers\ProjectUsageController;
 use frontend\controllers\ProjectController;
 use yii\widgets\DetailView;
+use yii\widgets\Breadcrumbs;
 use frontend\controllers\SiteController;
+$this->registerCssFile("././css/assignment.css");
 
 $this->title = 'SIPPM Del';
 $session = Yii::$app->session;
@@ -21,24 +23,29 @@ $this->registerCssFile("././css/project.css");
 
 <div class="body-content">
     <div class=" container box-content">
+
+        <div class="row" style="float:right;">
+            <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'links' => [
+                        'Penggunaan Proyek',
+                    ],
+                ]);
+            ?>
+        </div>
+
         <h3><b>Penggunaan Proyek</b></h3>
         <hr class="hr-custom">
         <div class="row">
             
-            <div class="col-md-3" style="text-align: center;">
+            <div class="col-md-3" style="text-align: center;border-radius: 3px;">
 
-                <div class="vertical-menu nav nav-tabs">
-                    <a class=" active" href="#1" data-toggle="tab">Request saat ini </a>
-                    <a class="" href="#2" data-toggle="tab">  Riwayat Request Saya</a>
-                    <!-- <a class="" href="#3" data-toggle="tab">  Unduhan </a> -->
-                    <?php
-                        if($session['role'] != "Mahasiswa"){
-                            echo '<i> Tambahan </i>
-                            <a class="" href="#4" data-toggle="tab"> Request <font style="font-size: 13px;"> (Sebagai Koordinator) </font> </a>';
-                        }
-                    ?>
-                    
-                </div>
+            <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
+                <li class="active"><a data-toggle="tab" href="#1" style="width:262px;border-bottom: 2px solid #eeecec;">Request Anda &nbsp;&nbsp; <span class="badge"> <?= $modelRequestCount ?></span> </a></li>
+                <li><a data-toggle="tab" href="#2" style="width:262px;"> Riwayat Request &nbsp;&nbsp; <span class="badge"> <?= $modelRiwayatCount ?> </span> </a></li>
+            </ul>
+
 
             </div>
             <div class="col-md-9" style="border-left: 1px solid #dad4d4;">
@@ -171,8 +178,8 @@ $this->registerCssFile("././css/project.css");
                                                     <td>';
                                                     echo '<ul style="padding: 0px;">';
                                                     echo '<li class="list-group-item d-flex justify-content-between align-items-center" style="border: 1px solid #FFF59D;">';
-                                                    echo '<h5> <b> Request Saya </b> </h5>';
-                                                    echo Html::a($project->proj_title, ['/project/view-project', 'proj_id' => $project->proj_id], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
+                                                    echo '<h5> <b> Request Anda </b> </h5>';
+                                                    echo Html::a($project->proj_title, ['project-usage/view', 'id' => $request['proj_usg_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
 
                                                     echo '<span class="badge badge-primary badge-pill" style="background-color: #FFA726"> Status : 
                                                             '.$request->stsProjUsg->sts_proj_usg_name.'
@@ -186,8 +193,8 @@ $this->registerCssFile("././css/project.css");
 
                                                     ';
                                                     echo(
-                                                        Html::a(" Edit", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;']) .'&nbsp&nbsp' 
-                                                        . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;', "data" => [
+                                                        Html::a(" Edit", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;']) .'&nbsp&nbsp' 
+                                                        . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;', "data" => [
                                                             "confirm" => "Apakah anda yakin ingin  membatalkan permohonan penggunaan ini?",
                                                             "method" => "post",
                                                         ]]) 
@@ -244,7 +251,7 @@ $this->registerCssFile("././css/project.css");
                     </div>
 
                     <div class="tab-pane fade " id="2">
-                        <h4><b>Riwayat Request Saya</b></h4>
+                        <h4><b>Riwayat Request Anda</b></h4>
                         <hr class="hr-custom">
                         <table class="table table-hover" id="dataTable2" width="100%" cellspacing="0">
                             <thead>

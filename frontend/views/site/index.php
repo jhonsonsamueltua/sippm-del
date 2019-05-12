@@ -20,8 +20,8 @@ $this->title = 'SIPPM Del';
 				<div class="banner-content col-md-8 col-sm-12">
 					<h1 class="wow fadeInDown first" data-wow-duration="4s" style="font-weight: 600; font-size: 40px">Cari Ide Terbaik di Kampus <br> Institut Teknologi Del</h1>
 					<p class="text-white" style="padding: 10px 0px 0px 0px;">
-                        SIPPM Del (Sistem Informasi Pengolahan Proyek Mahasiswa) merupakan sebuah sistem
-                        <br> untuk mengumpulkan ide-ide / proyek mahasiswa Institut Teknologi Del.
+                        SIPPM Del (Sistem Informasi Pengolahan Proyek Mahasiswa) merupakan sebuah sistem informasi
+                        <br> untuk mencari dan mengumpulkan ide-ide / proyek mahasiswa Institut Teknologi Del.
 					</p>
                     
                     <div class="row">
@@ -182,7 +182,7 @@ $this->title = 'SIPPM Del';
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -236,7 +236,7 @@ $this->title = 'SIPPM Del';
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author" style="color: #e9eaea;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -250,7 +250,7 @@ $this->title = 'SIPPM Del';
                     </ol>
                     <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'win_comp'], ['class' => 'btn-md button btn-filter', 'style' => 'padding: 8px 30px;']) ?>
+                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'win_comp'], ['class' => 'btn-md button btn-filter btn-comp']) ?>
 
                 </div>
                 <div class="col-md-3 col-sm-12">
@@ -295,7 +295,7 @@ $this->title = 'SIPPM Del';
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -311,7 +311,7 @@ $this->title = 'SIPPM Del';
                     </ol>
                     <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'recently_added'], ['class' => 'btn-md button btn-custom', 'style' => 'padding: 8px 30px;']) ?>
+                    <?= Html::a('Lihat Lainnya', ['site/lihat-lainnya', 'type' => 'recently_added'], ['class' => 'btn-md button btn-custom btn-news']) ?>
 
                 </div>
             </div>

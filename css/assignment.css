@@ -18,7 +18,24 @@
 .nav-tabs>li>a {
     margin-right: 5px !important;
     line-height: 1.42857143;
-    border: none !important;
+    /* border: none !important; */
     border-radius: 0px !important;
 }
 
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.center-badge{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-title-asg{
+    font-size: 20px;
+    color: #2196F3;
+}

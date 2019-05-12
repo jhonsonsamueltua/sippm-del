@@ -32,6 +32,7 @@ $session = Yii::$app->session;
     }
 
 </style>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 <div class="row">
         
@@ -187,7 +188,7 @@ $session = Yii::$app->session;
 
     <div class="row">
         <center>
-            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim' : 'Edit', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
+            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i>', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
         </center>   
     </div>
 

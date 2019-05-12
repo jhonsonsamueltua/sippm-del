@@ -16,11 +16,13 @@ p {font-size: 14px;}
 }
 .bg-2 { 
     background-color: white;
+    min-height: 500px;
     /* color: #ffffff; */
 }
 .bg-3 { 
     background-color: #6AC7C1;
     color: #555555;
+    min-height: 500px
 }
 .bg-4 { 
     background-color: #2f2f2f; /* Black Gray */
@@ -69,12 +71,26 @@ p {font-size: 14px;}
     color: white;
     border: 1px solid #f4f4f4;
     padding: 10px;
+    border-radius: 3px;
 }
 
 .btn-filter:hover {
     background-color: white;
     color: #555;
     text-decoration: none;
+}
+
+.btn-comp{
+    padding: 8px 30px;
+    position: absolute;
+    top: 380px;
+}
+
+.btn-news{
+    padding: 8px 30px;
+    position: absolute;
+    top: 380px;
+    right: 0px;
 }
 
 /* dropdown */
@@ -119,15 +135,16 @@ input[type=text]:focus, input[type=password]:focus {
     box-shadow: 0 0 5px #888;
     padding-top: 20px; 
     padding-bottom: 20px;
-    min-height: 410px;
+    min-height: 430px;
     border-top: 5px solid #6ac7c1;
     background-color: #FFFFFF;
+    margin-bottom: 20px;
 }
 
 .body-content{
     line-height: 1.4em; 
     padding-top: 20px; 
-    /* padding-bottom: 20px;  */
+    padding-bottom: 5px; 
     min-height: 450px;
     background-color: #eeecec;
 }
@@ -210,6 +227,7 @@ border-bottom: 5px solid #d6df22;
 .form-control-custom.search-slt{
     border-radius: 0px;
     text-align: center;
+    border-radius: 3px 0px 0px 3px;
 }
 
 .form-control-custom.select-custom{
@@ -237,7 +255,7 @@ border-bottom: 5px solid #d6df22;
 
 .btn-search{
     border: 0px;
-    border-radius: 0px;
+    border-radius: 0px 3px 3px 0px;
     background: #2196F3;
     font-size: 18px;
     width: 100%;
@@ -245,7 +263,6 @@ border-bottom: 5px solid #d6df22;
     font-weight: 400;
     text-transform: capitalize;
     height: calc(3rem + 2px) !important;
-    border-radius:0;
     min-height: 60px;
     font-size: 18px;
 }
@@ -265,6 +282,14 @@ border-bottom: 5px solid #d6df22;
 @media (max-width: 992px){
     .search-sec{
         background: #1A4668;
+    }
+    .btn-comp{
+        position: relative;
+        top: initial;
+    }
+    .btn-news{
+        position: initial;
+        float: right;
     }
 }
 
@@ -360,6 +385,7 @@ border-bottom: 5px solid #d6df22;
     font-size:15px;
     line-height:24px;
     color:#737373;
+    /* margin-top: 20px; */
 }
 .site-footer hr
 {
@@ -405,6 +431,7 @@ border-bottom: 5px solid #d6df22;
     color: white;
     border: 1px solid #f4f4f4;
     padding: 8px 30px;
+    border-radius: 3px;
   }
   
   .btn-custom:hover {

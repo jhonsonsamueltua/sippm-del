@@ -23,21 +23,44 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'form'],
             ]);
 
-        $border_bottom = "";
-        if($error == true){
-            $border_bottom = " 2px solid #FF5722";
+        $border_bottom_username = " ";
+        $border_bottom_password = "";
+        $autofocus_username = true;
+        $autofocus_password = false;
+        if($error == "data" || $error == "username_password"){
+            $border_bottom_username = " 2px solid #FF5722";
+            $border_bottom_password = " 2px solid #FF5722";
+        }elseif($error == "username"){
+            $border_bottom_username = " 2px solid #FF5722";
+        }elseif($error == "password"){
+            $border_bottom_password = " 2px solid #FF5722";
+            $autofocus_username = false;
+            $autofocus_password = true;
         }
     ?>
-
-    <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom.'', 'autofocus' => true, 'placeholder' => 'Username'])->label(false) ?>
     <div class="form-group">
-        <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom.'', 'placeholder' => 'Password'])->label(false) ?>
-        <span class="glyphicon glyphicon-eye-open"></span>
+        <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom_username.'', 'autofocus' => $autofocus_username, 'placeholder' => 'Username'])->label(false) ?>
+        <?php 
+            if($error == "username_password" || $error == "username"){
+                echo "<font class='text-error'> &nbsp;Username tidak boleh kosong. </font>";
+            }
+        ?>
     </div>
-    <!-- <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom.'', 'placeholder' => 'Password'])->label(false) ?> -->
+    
+    <div class="form-group">
+        <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom_password.'', 'autofocus' => $autofocus_password, 'placeholder' => 'Password'])->label(false) ?>
+        <span class="glyphicon glyphicon-eye-open"></span>
+        
+        <?php
+            if($error == "username_password" || $error == "password"){
+                echo "<font class='text-error'> &nbsp;Password tidak boleh kosong. <br></font>";
+            }
+        ?>
+    </div>
+    
     <?php
-        if($error == true){
-            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Maaf, username atau password anda salah. </font>";
+        if($error == "data"){
+            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Maaf, username atau password anda salah. <br><br></font>";
         }
     ?>
     <div class="form-group" align="center">

@@ -113,7 +113,7 @@ $session = Yii::$app->session;
                                     
                                 </ul>
                             </li>
-                            <li><?= Html::a('Tentang', ['site/about']) ?></li>
+                            <li><?= Html::a('Tentang', ['site/index'], ['disable' => true]) ?></li>
                             <?php
                                 if(!isset($session["role"])){?>
                                     <li><?= Html::a('Masuk', ['site/login']) ?></li>
