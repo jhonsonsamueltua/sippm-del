@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Breadcrumbs;
 $this->title = 'List Proyek';
 ?>
 
@@ -12,6 +13,22 @@ $this->title = 'List Proyek';
 
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
+
+    <div class="row" style="float:right;">
+        <?php
+            echo Breadcrumbs::widget([
+                'itemTemplate' => "<li><i>{link}</i></li>\n",
+                'links' => [
+                    [
+                        'label' => 'Proyek Kategori '.$sub_category->catProj->cat_proj_name.'',
+                        'url' => ['project/project-by-category', 'cat'=> $sub_category->cat_proj_id],
+                    ],
+                    'Proyek '.$sub_category->sub_cat_proj_name.'',
+                ],
+            ]);
+        ?>
+    </div>
+    <br>
 
     <h4> <b>Proyek <?= $sub_category->catProj->cat_proj_name ?> - "<?= $sub_category->sub_cat_proj_name ?>"</b> </h4>
     <hr class="hr-custom">

@@ -24,7 +24,7 @@ $this->title = 'SIPPM Del';
 					</p>
                     
                     <div class="row">
-                        <div class="col-lg-12" style="padding: 30px 0px;">
+                        <div class="col-lg-12 col-md-12" style="padding: 30px 0px 10px 0px;">
                             <center>
                                 <?php $form = ActiveForm::begin([
                                     'action' => ['search-project'],
@@ -60,7 +60,7 @@ $this->title = 'SIPPM Del';
                             Modal::begin([
                                 'header' => '<h3>Penelusuran Lanjutan</h3>',
                                 'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
-                                'toggleButton' => ['label' => 'Penelusuran Lanjutan', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;'],
+                                'toggleButton' => ['label' => 'Penelusuran Lanjutan >>', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;color: #3949AB;'],
                             ]);
 
                                 $advancedForm = ActiveForm::begin([
@@ -120,7 +120,7 @@ $this->title = 'SIPPM Del';
                                         </fieldset>
                                     ");
 
-                                    echo Html::submitButton('Search', ['class' => 'btn']);
+                                echo Html::submitButton('Telusuri', ['class' => 'btn-search', 'style' => 'min-height: 40px;padding: 10px 20px;border-radius: 3px;margin-top: 20px;margin-bottom: 10px;']);
 
                                 ActiveForm::end();
 
