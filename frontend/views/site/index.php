@@ -6,8 +6,8 @@ use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 
 $this->title = 'SIPPM Del';
-
 ?>
+
 <div class="site-index">
 
     <div class="body-content" style="padding-top: 0px">
@@ -23,40 +23,33 @@ $this->title = 'SIPPM Del';
                         SIPPM Del (Sistem Informasi Pengolahan Proyek Mahasiswa) merupakan sebuah sistem informasi
                         <br> untuk mencari dan mengumpulkan ide-ide / proyek mahasiswa Institut Teknologi Del.
 					</p>
-                    
-                    <div class="row">
-                        <div class="col-lg-12" style="padding: 10px 0px;">
-                            <center>
-                                <?php $form = ActiveForm::begin([
-                                    'action' => ['search-project'],
-                                    'method' => 'get',
-                                ]); ?>
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['test'],
+                        'method' => 'get',
+                    ]); ?>
+                        <div class="row">
+                            <div class="col-lg-12" style="padding: 30px 0px;">
+                                <div class="row">
+                                    <center>
+                                        <div class="col-lg-5 col-md-5 col-sm-12" style="padding:0px;" data-toggle="tooltip" data-placement="top" title="Cari berdasarkan Judul, Deskripsi, dan Author">
+                                            <input name="searchWords" type="text" placeholder="Cari proyek ..." class="form-control-custom search-slt">
+                                        </div>
 
-                                    <div class="col-lg-5 col-md-5 col-sm-12 " style="padding:0px;">
-                                        <input name="searchWords" type="text" placeholder="Keywords" class="form-control-custom search-slt">
-                                    </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
+                                            <select name="searchCategory" placeholder="Category" class="form-control-custom search-slt select-custom">
+                                                <option value="" >Pilih Kategori</option>
+                                                <option value="">Semua</option>
+                                                <option value="Matakuliah">Matakuliah</option>
+                                                <option value="Kompetisi">Kompetisi</option>
+                                            </select>
+                                        </div>
 
-                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
-                                        <select name="searchCategory" placeholder="Category" class="form-control-custom search-slt">
-                                            <option value="">All</option>
-                                            <?php
-                                                foreach($categories as $category){
-                                                    echo("<option value='" . $category->cat_proj_name . "'>" . $category->cat_proj_name . "</option>");
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
-                                        <button type="submit" class="btn wrn-btn" style="border-radius: 0px; background: linear-gradient(90deg, #28bce4 0%, #7e54c9 100%); font-size: 18px;">Search</button>
-                                    </div>
-
-                                <?php ActiveForm::end() ?>
-                            </center>
-                        </div>
-                    </div>
-
-                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
+                                            <button type="submit" class="btn-search" >Search</button>
+                                        </div>
+                                    </center>   
+                                </div>
+                                <div class="row">
                         <?php
                             Modal::begin([
                                 'header' => '<h3>Advanced Search</h3>',
@@ -128,7 +121,10 @@ $this->title = 'SIPPM Del';
                             Modal::end();
                         ?>
                     </div>
-
+                            </div>
+                        </div>
+                    <?php ActiveForm::end() ?>
+                    
 					<h4 class="text-white">Pencarian Cepat</h4>
 
 					<div class="courses pt-20 wow fadeIn second" data-wow-duration="10s">
@@ -319,46 +315,5 @@ $this->title = 'SIPPM Del';
         </div>
 
     </div>
-
-    <?php
-
-        $this->registerJs("
-            var value = '';
-
-            $('#adv-category').change(function(){
-                value = ($('#adv-category').val() == '') ? 'Sub Kategori' : $('#adv-category').val();
-                
-                if(sessionStorage.getItem(value) === null){
-                    $.ajax({
-                        url: '" . Yii::$app->urlManager->createUrl(['site/get-sub-category']) . "&categoryName=' + value,
-                        type: 'GET',
-                        success: function(result){
-                            var result = jQuery.parseJSON(result);
-                            var subCategories = '';
-    
-                            subCategories += \"<option value=''>Pilih \"+ value +\"</option>\"
-                            result.forEach(function(subCategory){
-                                subCategories += \"<option value='\"+ subCategory['sub_cat_proj_name'] +\"'>\"+ subCategory['sub_cat_proj_name'] +\"</option>\";
-                            });
-                        
-                            $('#adv-sub-category').empty();
-                            $('#adv-sub-category').append(subCategories);
-                        
-                            sessionStorage.setItem(value, subCategories);
-                        }
-                    });
-                }else{
-                    var subCategories = sessionStorage.getItem(value);
-
-                    $('#adv-sub-category').empty();
-                    $('#adv-sub-category').append(subCategories);
-                }
-                
-            });
-
-        ", $this::POS_END);
-
-    ?>
-
 </div>
 
