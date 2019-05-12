@@ -2,11 +2,11 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
-$this->title = 'SIPPM Del';
-?>
 
+$this->title = 'SIPPM Del';
+
+?>
 <div class="site-index">
 
     <div class="body-content" style="padding-top: 0px">
@@ -48,78 +48,6 @@ $this->title = 'SIPPM Del';
                                         </div>
                                     </center>   
                                 </div>
-                                <div class="row">
-                        <?php
-                            Modal::begin([
-                                'header' => '<h3>Advanced Search</h3>',
-                                'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
-                                'toggleButton' => ['label' => 'Advanced Search', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;'],
-                            ]);
-
-                            $advancedForm = ActiveForm::begin([
-                                'action' => \yii\helpers\Url::to(['advanced-search']),
-                                'method' => 'get',
-                            ]);
-                            
-                                echo("
-                                    <div class='form-group'>
-                                        <input name='advKeywords' class='form-control' placeholder='Kata Kunci'>
-                                    </div>
-                                ");
-                                
-                                echo("
-                                    <div class='form-group'>
-                                        <select id='adv-category' name='advCategory' class='form-control'>
-                                            <option value=''>Pilih Kategori</option>
-                                ");
-                                        foreach($categories as $category){
-                                            echo("<option value='" . $category->cat_proj_name . "'>" . $category->cat_proj_name . "</option>");
-                                        }
-                                echo(")
-                                        </select>
-                                    </div>
-                                ");
-                                
-                                echo("
-                                    <div class='form-group'>
-                                        <select id='adv-sub-category' name='advSubCategory' class='form-control'>
-                                            <option value=''>Pilih Sub Kategori</option>
-                                        </select>
-                                    </div>
-                                ");
-
-                                echo("
-                                    <div class='form-group'>
-                                    <select name='advYear' class='form-control'>
-                                        <option value=''>Pilih Tahun Proyek</option>
-                                ");
-                                    
-                                foreach($yearList as $year){
-                                    echo "<option value='$year->proj_year'>$year->proj_year</option>";
-                                }
-
-                                echo("
-                                        </select>
-                                    </div>
-                                ");
-
-                                echo "<p style='color: #000; text-align: left;'>Cari berdasarkan:</p>";
-
-                                echo("
-                                    <fieldset style='text-align: left;'>
-                                        <input type='checkbox' name='title' value='Judul'><label style='color: #000; margin: 5px;'>Judul</label><br>
-                                        <input type='checkbox' name='description' value='Deskripsi'><label style='color: #000; margin: 5px;'>Deskripsi</label><br>
-                                        <input type='checkbox' name='author' value='Penulis'><label style='color: #000; margin: 5px;'>Penulis</label><br>
-                                    </fieldset>
-                                ");
-
-                                echo Html::submitButton('Search', ['class' => 'btn']);
-
-                            ActiveForm::end();
-
-                            Modal::end();
-                        ?>
-                    </div>
                             </div>
                         </div>
                     <?php ActiveForm::end() ?>
