@@ -61,7 +61,7 @@ $session = Yii::$app->session;
                                     <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
                                     <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
                                     <li> <hr style="padding: 0px; margin: 5px;"> </li>              
-                                    <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
+                                    <li><?= Html::a('Daftar Proyek Anda', ['project/list-project']) ?></li>
                                 </ul>
                             </li>
                     <?php

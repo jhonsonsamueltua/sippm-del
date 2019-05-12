@@ -135,8 +135,8 @@ $this->title = 'SIPPM Del';
                         <a href="#menang-kompetisi" class="btn-md button btn-filter" transparent mr-10 mb-10>Menang Kompetisi</a>
                         <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
                         <br>
-                        <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?>
-                        <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
+                        <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
+                        <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?>
                         <!-- <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?> -->
 					</div>
                 </div>
@@ -316,4 +316,47 @@ $this->title = 'SIPPM Del';
         </div>
 
     </div>
+
+    <?php
+    
+        $this->registerJs("
+
+            var value = '';
+
+            $('#adv-category').change(function(){
+                value = ($('#adv-category').val() == '') ? 'Sub Kategori' : $('#adv-category').val();
+                
+                if(sessionStorage.getItem(value) === null){
+                    $.ajax({
+                        url: '" . Yii::$app->urlManager->createUrl(['site/get-sub-category']) . "&categoryName=' + value,
+                        type: 'GET',
+                        success: function(result){
+                            var result = jQuery.parseJSON(result);
+                            var subCategories = '';
+
+                            subCategories += \"<option value=''>Pilih \"+ value +\"</option>\"
+                            result.forEach(function(subCategory){
+                                subCategories += \"<option value='\"+ subCategory['sub_cat_proj_name'] +\"'>\"+ subCategory['sub_cat_proj_name'] +\"</option>\";
+                            });
+                        
+                            $('#adv-sub-category').empty();
+                            $('#adv-sub-category').append(subCategories);
+                        
+                            sessionStorage.setItem(value, subCategories);
+                        }
+                    });
+                }else{
+                    var subCategories = sessionStorage.getItem(value);
+
+                    $('#adv-sub-category').empty();
+                    $('#adv-sub-category').append(subCategories);
+                }
+                
+            });
+
+        ", $this::POS_END);
+        
+    ?>
+
 </div>
+

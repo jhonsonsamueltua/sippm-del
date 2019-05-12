@@ -380,7 +380,7 @@ border-bottom: 5px solid #d6df22;
 /* footer */
 .site-footer
 {    
-    position: fixed;
+    /* position: fixed; */
     left: 0;
     bottom: 0;
     width: 100%;

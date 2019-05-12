@@ -82,7 +82,7 @@ class ProjectController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['/site/login']);
         }else{
-            $model = Project::find()->where(["created_by" => $session['username']])->all();
+            $model = Project::find()->where(["created_by" => $session['username']])->andWhere('deleted!=1')->all();
         
             return $this->render('list-project', [
                 'model' => $model,
@@ -207,7 +207,7 @@ class ProjectController extends Controller
                     }
 
                     Yii::$app->session->setFlash('succes', 'Selamat, anda berhasil mengunggah proyek.');
-                    return $this->redirect(['update', 'id' => $model->proj_id]);
+                    return $this->redirect(['/assignment/assignment-student']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
     

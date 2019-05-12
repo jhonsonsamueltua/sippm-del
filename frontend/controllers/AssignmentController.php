@@ -412,6 +412,7 @@ class AssignmentController extends Controller
     public function actionDelete($id){
         $modelAsg = $this->findModel($id);
         $modelClass = ClassAssignment::find()->where(['asg_id' => $modelAsg->asg_id])->andWhere('deleted!=1')->all();
+        $modelProject = Project::find()->where(['asg_id' => $modelAsg->asg_id])->andWhere('deleted!=1')->all();
 
         foreach($modelClass as $class){
             $students = StudentAssignment::find()->where(['cls_asg_id' => $class->cls_asg_id])->andWhere('deleted!=1')->all();
@@ -423,9 +424,13 @@ class AssignmentController extends Controller
             $class->softDelete();
         }
 
+        foreach($modelProject as $project){
+            $project->softDelete();
+        }
+
         $modelAsg->softDelete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['assignment-dosen']);
     }
 
     public function actionOpenAssignment($asg_id){

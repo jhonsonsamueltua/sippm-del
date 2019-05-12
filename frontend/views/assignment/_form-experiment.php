@@ -121,7 +121,7 @@ $session = Yii::$app->session;
 
                                     echo '<div class="row">
                                             <div class="col-md-1 col-sm-6 col-xs-6">'
-                                                .Html::a('<span class="glyphicon glyphicon-minus">', ['remove-students-in-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $cls->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']).
+                                                .Html::a('<span class="glyphicon glyphicon-minus" data-toggle="tooltip" title="Hapus Dari Penugasan">', ['remove-students-in-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $cls->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']).
                                             '</div>
                                             <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
                                             .$class.
@@ -151,10 +151,10 @@ $session = Yii::$app->session;
 
                                     echo '<div class="row">
                                             <div class="col-md-1 col-sm-6 col-xs-6">'
-                                                .Html::a('<span class="glyphicon glyphicon-minus">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $data->stu_id], ['class' => 'btn btn-danger-custom btn-xs']).
+                                                . Html::a('<span class="glyphicon glyphicon-minus" data-toggle="tooltip" title="Hapus Dari Penugasan">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $data->stu_id], ['class' => 'btn btn-danger-custom btn-xs']) .
                                             '</div>
                                             <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
-                                            .$student.
+                                                .$student.
                                             '</div>
                                         </div>';
                                     // echo "<li>" . $student->stu_id . Html::a('<span class="glyphicon glyphicon-minus">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $student->stu_id], ['class' => 'btn btn-danger-custom btn-xs']) . "</li>";
@@ -173,8 +173,8 @@ $session = Yii::$app->session;
                                 Mahasiswa
                             </div>
                             <div class="col-md-3" style="padding: 0px">
-                            &nbsp;<button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>&nbsp; 
-                                <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
+                            &nbsp;<button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" data-toggle='tooltip' title='Tambah Kelas'><span class="glyphicon glyphicon-plus"></span></button>&nbsp; 
+                                <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()" data-toggle='tooltip' title='Kurangi Kelas'><span class="glyphicon glyphicon-minus"></span></button>
                             </div>
                         </td>
                     </tr>
@@ -189,6 +189,7 @@ $session = Yii::$app->session;
     <div class="row">
         <center>
             <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i>', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
+            <?= '&nbsp;&nbsp;'.Html::a("Kembali &nbsp;<i class='fa fa-arrow-left' aria-hidden='true' style='font-size:16px'></i>", ['assignment/assignment-dosen'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']) ?>
         </center>   
     </div>
 
@@ -252,14 +253,14 @@ $session = Yii::$app->session;
                             classes += \"<option value='\"+classRes['kelas_id']+\"'>\"+classRes['nama']+\"</option>\";
                         });
                         
-                        $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(this, \"+classCounter+\")'>\"+classes+\"</select><span class='class-error help-block help-block-error' display='none' aria-live='polite'>Kelas tidak boleh kosong</span></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;'' style='padding: 0px;'><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)' ><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+                        $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(this, \"+classCounter+\")'>\"+classes+\"</select><span class='class-error help-block help-block-error' display='none' aria-live='polite'>Kelas tidak boleh kosong</span></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;'' style='padding: 0px;'><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)' data-toggle='tooltip' title='Tambah Mahasiswa'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)' data-toggle='tooltip' title='Kurangi Mahasiswa'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
                         sessionStorage.setItem('classList', classes);
                     }
                 });
             }else{
                 var classes = sessionStorage.getItem('classList', classes);
 
-                $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(this, \"+classCounter+\")'>\"+classes+\"</select><span class='class-error help-block help-block-error' display='none' aria-live='polite'>Kelas tidak boleh kosong</span></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+                $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td><div class='form-group'><select class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(this, \"+classCounter+\")'>\"+classes+\"</select><span class='class-error help-block help-block-error' display='none' aria-live='polite'>Kelas tidak boleh kosong</span></div></td><td><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student00'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)'  data-toggle='tooltip' title='Tambah Mahasiswa'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)' data-toggle='tooltip' title='Kurangi Mahasiswa'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
             }
         }
 
@@ -267,7 +268,7 @@ $session = Yii::$app->session;
             classCounter++;
             var classes = sessionStorage.getItem('classList');
 
-            $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td style='padding:0px;border-top:0px'><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td style='padding:0px;border-top:0px'><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student\"+classCounter+\"0'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
+            $('#list-class').append(\"<tr name='Class\"+classCounter+\"'><td style='padding:0px;border-top:0px'><div class='form-group'><select required class='form-control' name='Class[\"+classCounter+\"]' onchange='getAllStudentByClass(\"+classCounter+\")'>\"+classes+\"</select></div></td><td style='padding:0px;border-top:0px'><table class='table'><tbody id='list-student\"+classCounter+\"'><tr name='Student\"+classCounter+\"0'><td style='padding:0px;border-top:0px'><div class='col-md-9 form-group'><select name='Student[\"+classCounter+\"][0]' class='form-control'><option select='selected' value='empty'>Pilih Mahasiswa...</option></select></div><div class='col-md-3' style='padding: 0px;''><button name='\"+classCounter+\"' type='button' class='btn btn-success-custom btn-xs' onclick='addMoreStudent(this)' data-toggle='tooltip' title='Tambah Mahasiswa'><span class='glyphicon glyphicon-plus'></span></button>&nbsp;&nbsp;<button name='\"+classCounter+\"' type='button' class='btn btn-danger-custom btn-xs' onclick='removeStudent(this)' data-toggle='tooltip' title='Kurangi Mahasiswa'><span class='glyphicon glyphicon-minus'></span></button></div></td></tr></tbody></table></td></tr>\");
         }
 
         function removeClass(){

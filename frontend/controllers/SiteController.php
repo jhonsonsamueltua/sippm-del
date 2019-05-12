@@ -58,14 +58,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {   
-        $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
-        $modelCount = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->count();
+        $model = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
+        $modelCount = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->count();
         
-        $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->all();
-        $modelNewsCount = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->count();
+        $modelNews = Project::find()->where("deleted!=1")->orderBy(['created_at' => SORT_DESC])->limit(5)->all();
+        $modelNewsCount = Project::find()->where("deleted!=1")->orderBy(['created_at' => SORT_DESC])->count();
 
-        $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
-        $modelCompCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
+        $modelComp = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->limit(5)->all();
+        $modelCompCount = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
 
         $categories = CategoryProject::find()->where("deleted!=1")->all();
         $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
@@ -154,51 +154,105 @@ class SiteController extends Controller
                                 ->send();
 
             if($response->isOk){
-                if($response->data['result'] == "true"){
-                    $session = Yii::$app->session;
-                    $session->open();
-
-                    $datas = $response->data['data'];
-                    $nama = $datas['nama'];
-                    $email = $datas['email'];
-                    $role = $datas['role'];
+                
+                if(isset($response->data['result'])){
                     
-                    $session->set('username', $model->username);
-                    $session->set('nama', $nama);
-                    $session->set('email', $email);
-
-                    if($role == "Mahasiswa"){
-                        $dimId = $datas['dimId'];
-                        $nim = $datas['nim'];
-                        $kelas = $datas['kelas'];
-
-                        if($session['username'] == 'if416004'){
-                            $role = "Dosen";
-                            $session->set('pegawaiId', 1);    
+                    if($response->data['result'] == "true"){
+                        $session = Yii::$app->session;
+                        $session->open();
+    
+                        $datas = $response->data['data'];
+                        $nama = $datas['nama'];
+                        $email = $datas['email'];
+                        $role = $datas['role'];
+                        
+                        $session->set('username', $model->username);
+                        $session->set('nama', $nama);
+                        $session->set('email', $email);
+    
+                        if($role == "Mahasiswa"){
+                            $dimId = $datas['dimId'];
+                            $nim = $datas['nim'];
+                            $kelas = $datas['kelas'];
+    
+                            if($session['username'] == 'if416004'){
+                                $role = "Dosen";
+                                $session->set('pegawaiId', 1);    
+                            }
+    
+                            $session->set('dimId', $dimId);
+                            $session->set('nim', $nim);
+                            $session->set('kelas', $kelas);
+                        }else{
+                            $pegawaiId = $datas['pegawaiId'];
+                            $nip = $datas['nip'];
+    
+                            $session->set('pegawaiId', $pegawaiId);
+                            $session->set('nip', $nip);
                         }
-
-                        $session->set('dimId', $dimId);
-                        $session->set('nim', $nim);
-                        $session->set('kelas', $kelas);
+    
+                        $session->set('role', $role);
+                        $session->close();
+    
+                        return $this->goBack();
                     }else{
-                        $pegawaiId = $datas['pegawaiId'];
-                        $nip = $datas['nip'];
-
-                        $session->set('pegawaiId', $pegawaiId);
-                        $session->set('nip', $nip);
+                        // Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
+                        return $this->render('login', [
+                            'model' => $model,
+                            'error' => "data",
+                        ]);
                     }
 
-                    $session->set('role', $role);
-                    $session->close();
-
-                    return $this->goBack();
                 }else{
-                    // Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
-                    return $this->render('login', [
-                        'model' => $model,
-                        'error' => "data",
-                    ]);
+
+                    if($response->data['resut'] == "true"){
+                        $session = Yii::$app->session;
+                        $session->open();
+    
+                        $datas = $response->data['data'];
+                        $nama = $datas['nama'];
+                        $email = $datas['email'];
+                        $role = $datas['role'];
+                        
+                        $session->set('username', $model->username);
+                        $session->set('nama', $nama);
+                        $session->set('email', $email);
+    
+                        if($role == "Mahasiswa"){
+                            $dimId = $datas['dimId'];
+                            $nim = $datas['nim'];
+                            $kelas = $datas['kelas'];
+    
+                            if($session['username'] == 'if416004'){
+                                $role = "Dosen";
+                                $session->set('pegawaiId', 1);    
+                            }
+    
+                            $session->set('dimId', $dimId);
+                            $session->set('nim', $nim);
+                            $session->set('kelas', $kelas);
+                        }else{
+                            $pegawaiId = $datas['pegawaiId'];
+                            $nip = $datas['nip'];
+    
+                            $session->set('pegawaiId', $pegawaiId);
+                            $session->set('nip', $nip);
+                        }
+    
+                        $session->set('role', $role);
+                        $session->close();
+    
+                        return $this->goBack();
+                    }else{
+                        // Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
+                        return $this->render('login', [
+                            'model' => $model,
+                            'error' => "data",
+                        ]);
+                    }
+
                 }
+                
             }else{
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
                 return $this->render('login', [
