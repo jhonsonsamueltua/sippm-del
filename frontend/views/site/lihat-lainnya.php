@@ -31,7 +31,14 @@ $this->title = 'List Proyek';
                     $description = $data['proj_description'];
                     $limit_words = 30;
                     $words = explode(' ',$description);
-                    $description = implode(" ",array_splice($words,0,$limit_words));
+                    $words = str_replace("<p>", "", $words);
+                    $words = str_replace("</p>", "", $words);
+                    
+                    if(count($words) > 30){
+                        $description = implode(" ",array_splice($words,0,$limit_words)).'...';
+                    }else{
+                        $description = implode(" ",array_splice($words,0,$limit_words));
+                    }
 
                     $author = $data['proj_author'];
                     $author_words = explode(';', $author);
@@ -48,7 +55,7 @@ $this->title = 'List Proyek';
                                 <?= $author ?> (<?= $created_at ?>)
                             </div>
 
-                            <?= $description ?>...
+                            <p><?= $description ?></p>
                         </td>
                     </tr>
             <?php
@@ -70,7 +77,7 @@ $this->title = 'List Proyek';
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "autoWidth": true
             });

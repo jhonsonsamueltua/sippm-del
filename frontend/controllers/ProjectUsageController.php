@@ -145,15 +145,10 @@ class ProjectUsageController extends Controller
                 }
 
                 if($model->save()){
-                    if($coordinatorStat == "Aktif"){
-                        $this->sendRequestEmail($asgModel->asg_creator_email, $proj_id, $session['nama']);
-                    }else{
-                        $this->sendRequestEmail($asgModel->asg_alternate_email, $proj_id, $session['nama']);
-                    }
-                    Yii::$app->session->setFlash('success', '<center> Permohonan anda berhasil dikirim. Untuk tindak lanjut akan di kirim melalui email.</center>');
+                    Yii::$app->session->setFlash('success', '<center>Permohonan anda berhasil dikirim.</center>');
                     return $this->redirect(['view', 'id' => $model->proj_usg_id]);
                 }else{
-                    Yii::$app->session->setFlash('error', 'Maaf, terjadi kesalahan pada saat permohonan penggunaan proyek. Silahkan melakukan permohonan ulang atau menghubungi penyedia layanan.');
+                    Yii::$app->session->setFlash('error', 'Terjadi kesalahan pada saat permohonan penggunaan proyek. Silahkan melakukan permohonan ulang.');
 
                     return $this->redirect('create', [
                         'model' => $model,
@@ -187,7 +182,7 @@ class ProjectUsageController extends Controller
             $model = $this->findModel($proj_usg_id);
 
             if($model->created_by !== $session['username']){
-                Yii::$app->session->setFlash('error', 'Maaf, anda tidak mempunyai hak untuk memodifikasi permohonan penggunaan ini.'); 
+                Yii::$app->session->setFlash('error', 'Anda tidak mempunyai hak untuk memodifikasi permohonan penggunaan ini.'); 
 
                 return $this->redirect(['/']);
             }else{
@@ -220,7 +215,7 @@ class ProjectUsageController extends Controller
             $model = $this->findModel($proj_usg_id);
 
             if($model->created_by !== $session['username']){
-                Yii::$app->session->setFlash('error', 'Maaf, anda tidak mempunyai hak untuk memodifikasi permohonan penggunaan ini.'); 
+                Yii::$app->session->setFlash('error', 'Anda tidak mempunyai hak akses untuk memodifikasi permohonan penggunaan ini.'); 
 
                 return $this->redirect(['/']);
             }else{
@@ -237,7 +232,7 @@ class ProjectUsageController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role' == 'Mahasiswa']){
-            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini');
+            Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk mengakses halaman ini');
             
             return $this->goHome();
         }else{
@@ -247,7 +242,6 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
             return $this->redirect(['index']);
         }
@@ -269,40 +263,9 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
             return $this->redirect(['list-project-usage-request']);
         }
-    }
-
-    private function sendRequestEmail($to, $proj_id, $requester){
-        $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
-        $link = "/localhost/sippm-del/index.php?r=project-usage/list-project-usage-request";
-        $emailBody = "$requester telah melakukan permohonan penggunaan untuk proyek $project->proj_title. Silahkan klik link berikut untuk menindaklanjuti permohonan penggunaan ini.<br>". Html::a($project->proj_title, [$link]);
-
-        Yii::$app->mailer->compose()
-            ->setFrom('sippm.del@gmail.com')
-            ->setTo($to)
-            ->setSubject('[SIPPM] Permohonan Penggunaan Proyek')
-            ->setHtmlBody($emailBody)
-            ->send();
-    }
-
-    private function sendResponseEmail($to, $status, $proj_id){
-        $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
-        $link = "/localhost/sippm-del/index.php?r=project/view-project";
-
-        if($status == "Diterima")
-            $emailBody = "Request penggunaan anda untuk proyek $project->proj_title telah $status. Silahkan klik link berikut untuk melakukan pengunduhan file proyek.<br>". Html::a($project->proj_title, [$link, 'proj_id' => $project->proj_id]);
-        else
-            $emailBody = "Request penggunaan anda untuk proyek $project->proj_title telah $status. Silahkan klik link berikut untuk <i>request</i> ulang file proyek.<br>". Html::a($project->proj_title, [$link, 'proj_id' => $project->proj_id]);
-
-        Yii::$app->mailer->compose()
-            ->setFrom('sippm.del@gmail.com')
-            ->setTo($to)
-            ->setSubject('[SIPPM] Permohonan Penggunaan Proyek')
-            ->setHtmlBody($emailBody)
-            ->send();
     }
 
     public static function getProjectRequestStatus($sts_id){

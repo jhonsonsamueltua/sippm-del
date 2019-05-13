@@ -42,11 +42,17 @@ $this->title = 'List Proyek';
         <tbody>
             <?php
                 foreach($model as $data){
-                    $description = str_replace('<p>', '', $data['proj_description']);
-                    $description = str_replace('</p>', '', $description);
+                    $description = $data['proj_description'];
                     $limit_words = 30;
                     $words = explode(' ',$description);
-                    $description = implode(" ",array_splice($words,0,$limit_words));
+                    $words = str_replace("<p>", "", $words);
+                    $words = str_replace("</p>", "", $words);
+                    
+                    if(count($words) > 30){
+                        $description = implode(" ",array_splice($words,0,$limit_words)).'...';
+                    }else{
+                        $description = implode(" ",array_splice($words,0,$limit_words));
+                    }
 
                     $author = $data['proj_author'];
                     $author_words = explode(';', $author);
@@ -63,7 +69,7 @@ $this->title = 'List Proyek';
                                 <?= $author ?> (<?= $created_at ?>)
                             </div>
 
-                           <p> <?= $description .'...'?> </p>
+                           <p><?= $description ?></p>
                         </td>
                     </tr>
             <?php

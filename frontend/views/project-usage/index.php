@@ -20,7 +20,6 @@ $this->registerCssFile("././css/project.css");
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
-
 <div class="body-content">
     <div class=" container box-content">
 
@@ -41,12 +40,12 @@ $this->registerCssFile("././css/project.css");
             
             <div class="col-md-3" style="text-align: center;border-radius: 3px;">
             <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
-                <i style="display: block;    margin-top: 10px;"> Permohonan Anda </i>
+                <i style="display: block;    margin-top: 10px; color: #fff;"> Permohonan Anda </i>
                 <li class="active"><a data-toggle="tab" href="#1" style="width: 262px;border-bottom: 1px solid #BDBDBD;padding: 15px;color: black;">Menunggu Ditanggapi &nbsp;&nbsp; <span class="badge"> <?= $modelRequestCount ?></span> </a></li>
                 <li><a data-toggle="tab" href="#2" style="width: 262px;border-bottom: 1px solid #BDBDBD;padding: 15px;color: black;margin-bottom: 15px;"> Riwayat &nbsp;&nbsp; <span class="badge"> <?= $modelRiwayatCount ?> </span> </a></li>
                 <?php
                     if($session['role'] != "Mahasiswa"){
-                        echo '<i> Permohonan user Lain </i>
+                        echo '<i style="color: #fff;"> Permohonan user Lain </i>
                         <li><a data-toggle="tab" href="#3" style="width: 262px;border-bottom: 1px solid #BDBDBD;padding: 15px;color: black;"> Tanggapi Permohonan &nbsp;&nbsp; <span class="badge">' . $modelRequestUsersCount . '</span> </a></li>
                         <li><a data-toggle="tab" href="#4" style="width: 262px;padding: 15px;color: black;"> Riwayat &nbsp;&nbsp; <span class="badge"> '.$modelRiwayatRequestOrangLainCount .' </span> </a></li>';
                     }

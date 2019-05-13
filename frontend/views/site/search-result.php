@@ -41,7 +41,7 @@ if(isset($_GET['searchWords'])){
 
         <h4>Search</h4>
         
-        <div class="row" style="margin-bottom: 30px;">
+        <div class="row" style="margin-bottom: 20px;">
             <div class="col-lg-12">
                 <?php $form = ActiveForm::begin([
                     'action' => ['search-project'],
@@ -53,7 +53,7 @@ if(isset($_GET['searchWords'])){
 
                     <div class="col-lg-4 col-md-4 col-sm-12 p-0">
                         <select name="searchCategory" placeholder="Category" class="form-control">
-                            <option value="">All</option>
+                            <option value="">Pilih Kategori</option>
                             <?php
                                 foreach($categories as $category){
                                     echo("<option value='" . $category->cat_proj_name . "'>" . $category->cat_proj_name . "</option>");
@@ -74,7 +74,7 @@ if(isset($_GET['searchWords'])){
                 Modal::begin([
                     'header' => '<h3>Penelusuran Lanjutan</h3>',
                     'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
-                    'toggleButton' => ['label' => 'Penelusuran Lanjutan', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px; padding-right: 18px;'],
+                    'toggleButton' => ['label' => 'Penelusuran Lanjutan >>', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); color: #3949AB; border: 0px; font-size: 18px; padding-right: 18px;'],
                 ]);
 
                 $advancedForm = ActiveForm::begin([
@@ -157,7 +157,14 @@ if(isset($_GET['searchWords'])){
                         $description = $data['proj_description'];
                         $limit_words = 30;
                         $words = explode(' ',$description);
-                        $description = implode(" ",array_splice($words,0,$limit_words));
+                        $words = str_replace("<p>", "", $words);
+                        $words = str_replace("</p>", "", $words);
+                        
+                        if(count($words) > 30){
+                            $description = implode(" ",array_splice($words,0,$limit_words)).'...';
+                        }else{
+                            $description = implode(" ",array_splice($words,0,$limit_words));
+                        }
 
                         $author = $data['proj_author'];
                         $author_words = explode(';', $author);
@@ -174,7 +181,7 @@ if(isset($_GET['searchWords'])){
                                     <?= $author ?> (<?= $created_at ?>)
                                 </div>
 
-                                <?= $description ?>...
+                                <p><?= $description ?></p>
                             </td>
                         </tr>
                 <?php
