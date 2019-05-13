@@ -4,26 +4,25 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 $this->title = 'List Proyek';
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
+
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
     
-    <div class="row" style="float:right;">
         <?php
             echo Breadcrumbs::widget([
-                'itemTemplate' => "<li><i>{link}</i></li>\n",
+                'itemTemplate' => "<li>{link}</li>\n",
                 'links' => [
                     'Proyek Kategori '.$category.'',
                 ],
             ]);
         ?>
-    </div>
     <br>
 
     <h4> <b>Proyek Kategori "<?= $category ?>"</b> </h4>

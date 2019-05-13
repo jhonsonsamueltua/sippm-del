@@ -9,31 +9,26 @@ use frontend\controllers\SiteController;
 /* @var $model common\models\ProjectUsage */
 
 $this->title = $model->proj->proj_title;
-$this->params['breadcrumbs'][] = ['label' => 'Project Usages', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $this->registerCssFile("././css/project.css");
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
 <div class="body-content">
     <div class=" container box-content">
 
-        <div class="row" style="float:right;">
         <?php
-                echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
-                    'links' => [
-                        [
-                            'label' => 'Penggunaan Proyek',
-                            'url' => ['project-usage/index'],
-                        ],
-                        'Detail Penggunaan',
+            echo Breadcrumbs::widget([
+                'itemTemplate' => "<li>{link}</li>\n",
+                'links' => [
+                    [
+                        'label' => 'Penggunaan Proyek',
+                        'url' => ['project-usage/index'],
                     ],
-                ]);
-            ?>
-        </div>
+                    'Detail Penggunaan',
+                ],
+            ]);
+        ?>
         <h3><b>Detail Penggunaan Proyek</b></h3>
         <hr class="hr-custom">
 

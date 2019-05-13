@@ -13,27 +13,25 @@ use frontend\controllers\SiteController;
 $this->title = 'SIPPM Del';
 $session = Yii::$app->session;
 $this->registerCssFile("././css/project.css");
-?>
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+?>
 
 
 <div class="body-content">
     <div class=" container box-content">
 
-        <div class="row" style="float:right;">
             <?php
                 echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'itemTemplate' => "<li>{link}</li>\n",
                     'links' => [
                         'Penggunaan Proyek',
                     ],
                 ]);
             ?>
-        </div>
         
         <h3><b>Permohonan Penggunaan Proyek</b></h3>
         <hr class="hr-custom">

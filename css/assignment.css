@@ -7,7 +7,7 @@
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .nav-tabs>li>a:hover {
     color: #555;
     cursor: pointer !important;
-    border-bottom: 5px solid #d6df22 ;
+    border-bottom: 5px solid #d6df22 !important;
     border-right: 0px !important;
     border-left: 0px!important;
     border-top: 1px transparent !important; 
