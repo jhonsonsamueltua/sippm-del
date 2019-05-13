@@ -45,31 +45,53 @@ $session = Yii::$app->session;
         ],
     ]); ?>
 
-        <div class="col-md-6">
+        <div class="col-md-12">
+
+            <?php
+                $year = array();
+                $year_now = (int)date('Y');
+                for($i = 2016; $i <= $year_now; $i++){
+                    $year[$i] = $i;
+                }
+                
+            ?>
+            <div class="row">
+                <div class="col-md-3">
+                    <?= $form->field($modelAsg, 'asg_year')->dropDownList($year)->label('Tahun') ?>  
+                </div>
+            </div>
+
             <?= $form->field($modelAsg, 'asg_title')->textArea(['maxlength' => true])->label() ?>
-            
-            <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
+
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($modelAsg, 'cat_proj_id')->dropDownList(ArrayHelper::map(CategoryProject::find()->all(), 'cat_proj_id', 'cat_proj_name'),
                         ['prompt' => "Pilih Kategori...", 
                         'onchange' => '
                             $.get( "index.php?r=assignment/lists&id='.'"+$(this).val(), function( data ) {
                             $( "select#sub_cat_proj_id" ).html( data );
                             });
                             '
-                        ])->label()?>    
-            <?php
-                if(!$modelAsg->isNewRecord){
-                    echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where(['cat_proj_id' => $modelAsg->cat_proj_id])->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
-                }else{
-                    echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where('0')->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
-                }
-            ?>
+                        ])->label()?>
+                </div>
+                <div class="col-md-6">
+                <?php
+                        if(!$modelAsg->isNewRecord){
+                            echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where(['cat_proj_id' => $modelAsg->cat_proj_id])->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
+                        }else{
+                            echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where('0')->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
+                        }
+                    ?>
+                </div>
+            </div>
+
             
             <div class="row">
                 <div class="col-md-6">
                     <?= $form->field($modelAsg, 'asg_start_time', ['enableClientValidation' => !$modelAsg->isNewRecord ? false : true])->widget(DateTimePicker::class, [
                         'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                         'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
-                        'removeIcon' => '<i class="fa fa-calendar-times-o" aria-hidden="true" style="font-size: 19px;color: #FF8A65"></i>',
+                        'removeButton' => false,
                         'options' => ['placeholder' => 'Pilih batas awal ...'],
                         'pluginOptions' => [
                             'autoclose'=>true,
@@ -82,7 +104,7 @@ $session = Yii::$app->session;
                     <?= $form->field($modelAsg, 'asg_end_time')->widget(DateTimePicker::class, [
                         'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                         'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
-                        'removeIcon' => '<i class="fa fa-calendar-times-o" aria-hidden="true" style="font-size: 19px;color: #FF8A65"></i>',
+                        'removeButton' => false,
                         'options' => ['placeholder' => 'Pilih batas akhir ...'],
                         'pluginOptions' => [
                             'autoclose'=>true,
@@ -98,98 +120,101 @@ $session = Yii::$app->session;
                         // 'reuired' => true,
                     ],
                 ]) ?>
+
+                <br>
+                <h4><b>Penerima Penugasan</b></h4>
+                <!-- <hr class="hr-custom"> -->
+                <?php
+                    if(!$modelAsg->isNewRecord){
+                        echo("<p>Kelas yang ditugaskan:</p> 
+                            <ul>");
+                                $i = 1;
+                                foreach($modelClass as $key => $cls){
+                                    
+                                    if(!$cls->partial){
+                                        $data_class = $this->context->getClassByClassId($cls->class);
+                                        $class = '';
+                                        if($i == 1){
+                                            $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.''."".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                        }else{
+                                            $class = $class.''.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.''.''.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                        }
+
+                                        echo '<div class="row">
+                                                <div class="col-md-1 col-sm-6 col-xs-6">'
+                                                    .Html::a('<span class="glyphicon glyphicon-minus">', ['remove-students-in-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $cls->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']).
+                                                '</div>
+                                                <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
+                                                .$class.
+                                                '</div>
+                                            </div>';
+                                        // echo "<li>" . $class->class .'&nbsp;&nbsp;&nbsp;'. Html::a('<span class="glyphicon glyphicon-minus">', ['remove-students-in-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']) .  "</li>";
+                                        $i++;
+                                    }
+                                }
+                        echo '</ul>';
+                        echo("<p>Mahasiswa yang ditugaskan:</p>
+                            <ul>");
+                            foreach($modelClass as $class){
+                                if($class->partial){
+                                    $modelStudent = StudentAssignment::find()->where(['cls_asg_id' => $class->cls_asg_id])->andWhere('deleted!=1')->all();
+
+                                    foreach($modelStudent as $key => $data){
+                                        $data_student = $this->context->getStudentByNim($data->stu_id);
+                                        $data_class = $this->context->getClassByClassId($data->classes->class);
+
+                                        $student = "";
+                                        if($key == 0){
+                                            $student = '<font data-toggle="tooltip" data-placement="top" title="'.$data['stu_id'].'">&nbsp;'.''."".$data_student.'</font> - <font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.$data_class[0]['nama'].'</font>';
+                                        }else{
+                                            $student = $student.'<font data-toggle="tooltip" data-placement="top" title="'.$data['stu_id'].'">'.''.''.$data_student.'</font> - <font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.$data_class[0]['nama'].'</font>';
+                                        }
+
+                                        echo '<div class="row">
+                                                <div class="col-md-1 col-sm-6 col-xs-6">'
+                                                    .Html::a('<span class="glyphicon glyphicon-minus">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $data->stu_id], ['class' => 'btn btn-danger-custom btn-xs']).
+                                                '</div>
+                                                <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
+                                                .$student.
+                                                '</div>
+                                            </div>';
+                                        // echo "<li>" . $student->stu_id . Html::a('<span class="glyphicon glyphicon-minus">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $student->stu_id], ['class' => 'btn btn-danger-custom btn-xs']) . "</li>";
+                                    }
+                                }
+                            }
+                        echo '</ul>';
+                    } 
+                ?>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td class='label-error' style="font-weight: 700;">Kelas</td>
+                            <td>
+                                <div class="col-md-9" style="font-weight: 700;">
+                                    Mahasiswa
+                                </div>
+                                <div class="col-md-3" style="padding: 0px">
+                                &nbsp;<button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" ><span class="glyphicon glyphicon-plus"></span></button>&nbsp; 
+                                    <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()" ><span class="glyphicon glyphicon-minus"></span></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="list-class">
+                        
+                    </tbody>
+                </table>
+
         </div>
             
-        <div class="col-md-6">
-            <h4><b>Penerima Penugasan</b></h4>
-            <hr class="hr-custom">
-            <?php
-                if(!$modelAsg->isNewRecord){
-                    echo("<p>Kelas yang ditugaskan:</p> 
-                        <ul>");
-                            $i = 1;
-                            foreach($modelClass as $key => $cls){
-                                
-                                if(!$cls->partial){
-                                    $data_class = $this->context->getClassByClassId($cls->class);
-                                    $class = '';
-                                    if($i == 1){
-                                        $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.''."".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
-                                    }else{
-                                        $class = $class.''.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.''.''.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
-                                    }
-
-                                    echo '<div class="row">
-                                            <div class="col-md-1 col-sm-6 col-xs-6">'
-                                                .Html::a('<span class="glyphicon glyphicon-minus" data-toggle="tooltip" title="Hapus Dari Penugasan">', ['remove-students-in-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $cls->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']).
-                                            '</div>
-                                            <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
-                                            .$class.
-                                            '</div>
-                                        </div>';
-                                    // echo "<li>" . $class->class .'&nbsp;&nbsp;&nbsp;'. Html::a('<span class="glyphicon glyphicon-minus">', ['remove-students-in-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']) .  "</li>";
-                                    $i++;
-                                }
-                            }
-                    echo '</ul>';
-                    echo("<p>Mahasiswa yang ditugaskan:</p>
-                        <ul>");
-                        foreach($modelClass as $class){
-                            if($class->partial){
-                                $modelStudent = StudentAssignment::find()->where(['cls_asg_id' => $class->cls_asg_id])->andWhere('deleted!=1')->all();
-
-                                foreach($modelStudent as $key => $data){
-                                    $data_student = $this->context->getStudentByNim($data->stu_id);
-                                    $data_class = $this->context->getClassByClassId($data->classes->class);
-
-                                    $student = "";
-                                    if($key == 0){
-                                        $student = '<font data-toggle="tooltip" data-placement="top" title="'.$data['stu_id'].'">&nbsp;'.''."".$data_student.'</font> - <font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.$data_class[0]['nama'].'</font>';
-                                    }else{
-                                        $student = $student.'<font data-toggle="tooltip" data-placement="top" title="'.$data['stu_id'].'">'.''.''.$data_student.'</font> - <font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.$data_class[0]['nama'].'</font>';
-                                    }
-
-                                    echo '<div class="row">
-                                            <div class="col-md-1 col-sm-6 col-xs-6">'
-                                                . Html::a('<span class="glyphicon glyphicon-minus" data-toggle="tooltip" title="Hapus Dari Penugasan">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $data->stu_id], ['class' => 'btn btn-danger-custom btn-xs']) .
-                                            '</div>
-                                            <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
-                                                .$student.
-                                            '</div>
-                                        </div>';
-                                    // echo "<li>" . $student->stu_id . Html::a('<span class="glyphicon glyphicon-minus">', ['remove-student', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $class->cls_asg_id, 'nim' => $student->stu_id], ['class' => 'btn btn-danger-custom btn-xs']) . "</li>";
-                                }
-                            }
-                        }
-                    echo '</ul>';
-                } 
-            ?>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <td class='label-error' style="font-weight: 700;">Kelas</td>
-                        <td>
-                            <div class="col-md-9" style="font-weight: 700;">
-                                Mahasiswa
-                            </div>
-                            <div class="col-md-3" style="padding: 0px">
-                            &nbsp;<button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" data-toggle='tooltip' title='Tambah Kelas'><span class="glyphicon glyphicon-plus"></span></button>&nbsp; 
-                                <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()" data-toggle='tooltip' title='Kurangi Kelas'><span class="glyphicon glyphicon-minus"></span></button>
-                            </div>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody id="list-class">
-                    
-                </tbody>
-            </table>
-        </div>
+        <!-- <div class="col-md-2">
+            
+        </div> -->
 </div>
 
     <div class="row">
         <center>
-            <?= Html::submitButton($modelAsg->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i>', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
-            <?= '&nbsp;&nbsp;'.Html::a("Kembali &nbsp;<i class='fa fa-arrow-left' aria-hidden='true' style='font-size:16px'></i>", ['assignment/assignment-dosen'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']) ?>
+            <?= Html::submitButton($modelAsg->isNewRecord ? 'Tambah' : 'Edit', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
         </center>   
     </div>
 

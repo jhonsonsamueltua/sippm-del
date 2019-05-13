@@ -14,26 +14,24 @@ $this->title = 'Penugasan';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCssFile("././css/assignment.css");
-?>
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script> -->
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+?>
 
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
-        <div class="row" style="float:right;">
             <?php
                 echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'itemTemplate' => "<li>{link}</i>\n",
                     'links' => [
                         'Penugasan',
                     ],
                 ]);
             ?>
-        </div>
+
 
         <h3> <b>Penugasan</b> </h3>
         <hr class="hr-custom">
@@ -42,14 +40,14 @@ $this->registerCssFile("././css/assignment.css");
         <br><br>
 
         <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
-            <li class="active"><a data-toggle="tab" href="#tab1"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Penugasan Anda <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span> </a></li>
-            <li><a data-toggle="tab" href="#tab2"> <i class="fa fa-tasks" aria-hidden="true" style="color:#777777"></i> &nbsp; Riwayat Penugasan <span class="badge"> <?= $modelRiwayatPenugasanCount ?> </span> </a></li>
+            <li class="active"><a data-toggle="tab" href="#tab1"> &nbsp;&nbsp; Penugasan Saya <span class="badge"> <?= $modelPenugasanSaatIniCount ?> </span>&nbsp;&nbsp; </a></li>
+            <li><a data-toggle="tab" href="#tab2">  &nbsp;&nbsp; Riwayat Penugasan <span class="badge"> <?= $modelRiwayatPenugasanCount ?> </span>&nbsp;&nbsp; </a></li>
         </ul>
 
         <div class="tab-content">
             <div id="tab1" class="tab-pane fade in active">
                 <br>
-                <table class="table table-hover" id="dataTables" width="100%" cellspacing="0">
+                <table class="table " id="dataTables" width="100%" cellspacing="0">
                     <thead hidden>
                     <tr>
                         <th>Penugasan</th>
@@ -72,10 +70,10 @@ $this->registerCssFile("././css/assignment.css");
 
                                     <tr>
                                         <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
-                                            <font class='text-category'> <?= $key->catProj->cat_proj_name.' [ '.$key->subCatProj->sub_cat_proj_name.' ]' ?> </font> <br>
+                                            <font class='text-category'> <?= $key->catProj->cat_proj_name.' - '.$key->subCatProj->sub_cat_proj_name.' ' ?> </font> <br>
                                             <?= Html::a($key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
                                             <div class="text-author">
-                                                Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>
+                                                Waktu Penugasan : <?= $asg_start_time?> <b>  -  </b> <?= $asg_end_time?>
                                             </div>
                                         </td>
                                         <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
@@ -117,7 +115,7 @@ $this->registerCssFile("././css/assignment.css");
             <div id="tab2" class="tab-pane fade">
                 
                 <br>
-                <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
                         <th>Penugasan</th>
@@ -141,10 +139,10 @@ $this->registerCssFile("././css/assignment.css");
                                     
                                 <tr>
                                     <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">
-                                        <font class='text-category'> <?= $key->catProj->cat_proj_name.' [ '.$key->subCatProj->sub_cat_proj_name.' ]' ?> </font> <br>
-                                        <?= Html::a($key->catProj->cat_proj_name.''.$key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> 
+                                        <?= Html::a($key->catProj->cat_proj_name.''.$key["asg_title"], ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'text-title-project']) ?> <br>
+                                        <font class='text-category'> <?= $key->catProj->cat_proj_name.' - '.$key->subCatProj->sub_cat_proj_name.' ' ?> </font>
                                         <div class="text-author">
-                                            Waktu Penugasan : <?= $asg_start_time?> <b> --- </b> <?= $asg_end_time?>
+                                            Waktu Penugasan : <?= $asg_start_time?> <b>  -  </b> <?= $asg_end_time?>
                                         </div>
                                     </td>
                                     <td style="padding: 15px 8px;border-bottom: 1px solid #ddd;border-top: none;">

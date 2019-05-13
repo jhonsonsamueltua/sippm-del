@@ -12,23 +12,21 @@ use yii\widgets\Breadcrumbs;
 use frontend\controllers\SiteController;
 
 $this->title = $model->asg_title;
-// $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
-// $this->params['breadcrumbs'][] = $this->title;
+$this->registerCssFile("././css/assignment.css");
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
 ?>
-
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+
 
 <div class="body-content">
     <div class=" container box-content">
 
-        <div class="row" style="float:right;">
             <?php
                 echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'itemTemplate' => "<li>{link}</li>\n",
                     'links' => [
                         [
                             'label' => 'Penugasan',
@@ -38,7 +36,6 @@ $this->title = $model->asg_title;
                     ],
                 ]);
             ?>
-        </div>
 
         <h3> <b>Detail Penugasan</b> </h3>
         <hr class="hr-custom">

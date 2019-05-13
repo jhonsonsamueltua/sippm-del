@@ -291,6 +291,11 @@ border-bottom: 5px solid #d6df22;
         position: initial;
         float: right;
     }
+
+    .breadcrumb {
+        margin-bottom: 10px;
+        width: 100%;
+    }
 }
 
 .form-control-custom {
@@ -601,4 +606,24 @@ border-bottom: 5px solid #d6df22;
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.breadcrumb {
+    padding: 6px 15px;
+    margin-top: -10px;
+    list-style: none;
+    background-color: #eeecec;
+    border-radius: 4px;
+    float: right;
 }

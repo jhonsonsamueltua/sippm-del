@@ -8,6 +8,11 @@ $this->title = 'List Proyek';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCssFile("././css/project.css");
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
+
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 ?>
 
@@ -19,16 +24,14 @@ $this->registerCssFile("././css/project.css");
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
-    <div class="row" style="float:right;">
         <?php
             echo Breadcrumbs::widget([
-                'itemTemplate' => "<li><i>{link}</i></li>\n",
+                'itemTemplate' => "<li>{link}</li>\n",
                 'links' => [
                     'List Proyek',
                 ],
             ]);
         ?>
-    </div>
     
 
     <h3> <b>List Proyek</b> </h3>
