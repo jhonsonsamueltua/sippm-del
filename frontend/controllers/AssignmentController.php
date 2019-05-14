@@ -99,20 +99,26 @@ class AssignmentController extends Controller
         $session = Yii::$app->session;
         $username = $session['nim'];
 
-        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3) GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
+        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND sa.sts_asg_id = 1 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
         $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
         $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
 
+        $menunggu = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND sa.sts_asg_id = 3 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
+        $modelMenunggu = Yii::$app->db->createCommand($menunggu)->queryAll();
+        $modelMenungguCount = count($modelMenunggu);
+
         
-        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND sa.sts_asg_id = 2";
+        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND sa.sts_asg_id = 2 GROUP BY sa.asg_title ORDER BY sa.created_at ASC";
         $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
         $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
-
+        
         return $this->render('assignment-student',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
             'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
+            'modelMenunggu' => $modelMenunggu,
             'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
             'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
+            'modelMenungguCount' => $modelMenungguCount,
         ]);
     }
 
@@ -121,17 +127,22 @@ class AssignmentController extends Controller
 
         $this->openCloseAssignment();
 
-        $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->count();
-        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->count();
+        $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 1])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
+        $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 1])->andWhere('deleted != 1')->count();
+        // die($modelPenugasanSaatIniCount);
+        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
+        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted != 1')->count();
         
-        $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->all();
-        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->all();
+        $modelMenunggu = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 3])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
+        $modelMenungguCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 3])->andWhere('deleted != 1')->count();
 
         return $this->render('assignment-dosen',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
             'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
+            'modelMenunggu' => $modelMenunggu,
             'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
             'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
+            'modelMenungguCount' => $modelMenungguCount,
         ]);
     }
 

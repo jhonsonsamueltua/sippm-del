@@ -171,6 +171,7 @@ class SiteController extends Controller
                         $dimId = $datas['dimId'];
                         $nim = $datas['nim'];
                         $kelas = $datas['kelas'];
+                        $kelas_id = $datas['kelas_id'];
 
                         if($session['username'] == 'if416004'){
                             $role = "Dosen";

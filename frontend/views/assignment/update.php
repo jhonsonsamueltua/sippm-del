@@ -30,7 +30,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                 ]);
             ?>
         
-        <h3 class=""> <b> Edit Penugasan </b></h3>
+        <h3 class=""> <b> Ubah Penugasan </b></h3>
         <hr class="hr-custom">
 
         <?= $this->render('_form-experiment', [

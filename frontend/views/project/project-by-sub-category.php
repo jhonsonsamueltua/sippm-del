@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
 $this->title = 'List Proyek';
+$this->registerCssFile("././css/project.css");
+
 $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
@@ -27,7 +29,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 ],
             ]);
         ?>
-
+    <br>
     <h4> <b>Proyek <?= $sub_category->catProj->cat_proj_name ?> - "<?= $sub_category->sub_cat_proj_name ?>"</b> </h4>
     <hr class="hr-custom">
 
@@ -55,8 +57,12 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     $created_at = date('l, d M Y', $old_date_timestamp); ?>
 
                     <tr>
-                        <td style="border: 0px;padding: 0px 8px;">
-                            <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['proj_id']], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data['proj_downloaded']?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data['proj_downloaded']    ?></font>
+                        <td style="border: 0px;padding: 8px 8px 0px 8px;">
+                            
+                            <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['proj_id']], ['class' => 'text-title-project']) ?>
+                            
+                            <font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data['proj_downloaded']?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data['proj_downloaded']    ?></font>
+                            
                             <div class="text-author">
                                 <?= $author ?> (<?= $created_at ?>)
                             </div>

@@ -27,8 +27,9 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     ],
                 ]);
             ?>
-
-        <h3 class=""> <b> Edit Proyek  </b></h3>
+        
+        <br>
+        <h4 class=""> <b> Ubah Proyek  </b></h4>
         <hr class="hr-custom">
         <?= $this->render('_form', [
             'model' => $model,

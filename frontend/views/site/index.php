@@ -127,7 +127,7 @@ $this->title = 'SIPPM Del';
                             Modal::end();
                         ?>
                     </div>
-
+                    <br>
 					<h4 class="text-white">Pencarian Cepat</h4>
 
 					<div class="courses pt-20 wow fadeIn second" data-wow-duration="10s">
