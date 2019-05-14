@@ -36,15 +36,15 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                     ],
                 ]);
             ?>
-
-        <h3> <b>Detail Penugasan</b> </h3>
+        <br>
+        <h4> <b>Detail Penugasan</b> </h4>
         <hr class="hr-custom">
 
         <?php
             $button = "";
             
             if($model->sts_asg_id == 1 || $model->sts_asg_id == 3){
-                $button = '<p>'.Html::a("Edit", ["update", "id" => $model->asg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 30px;']) .' &nbsp; &nbsp;'.
+                $button = '<p>'.Html::a("Ubah", ["update", "id" => $model->asg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 30px;']) .' &nbsp; &nbsp;'.
                 Html::a("Hapus", ["delete", "id" => $model->asg_id], [
                     'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 20px;',
                     "data" => [
@@ -55,10 +55,10 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             }elseif($model->sts_asg_id == 2){
                 $button = '<p>'.Html::a('Open', ['assignment/view', 'id' => $model["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']).'</p>';
             }
-            echo $button.'<br>';
+            echo $button.'';
         ?>
 
-        <div class="row">
+        <div class="">
             <?php
                 $asg_end_time = $model["asg_end_time"];
                 $asg_end_time_timestamp = strtotime($asg_end_time);
@@ -68,29 +68,20 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                 $asg_start_time_timestamp = strtotime($asg_start_time);
                 $asg_start_time = SiteController::tgl_indo(date('Y-m-d', $asg_start_time_timestamp)).', '.date('H:i', $asg_start_time_timestamp); 
             ?>
-            <div class="col-md-6">
-                <b><?= $model->catProj->cat_proj_name ?> [ <?= $model->subCatProj->sub_cat_proj_name ?> ] </b>
-                <h3><b style="font-size: 18px">Penugasan : <?= $model->asg_title ?></b></h3>
-                <p>
-                    <?= $model->asg_description ?>
-                </p>
-                <br>
+            <font style="font-size: px;margin: 15px 0px;display: block;color: #616161;"><b><?= $model->catProj->cat_proj_name ?> &nbsp;-&nbsp; <?= $model->subCatProj->sub_cat_proj_name ?> , <?= $model->asg_year ?> </b> </font>
+            <font><b style="font-size: 22px;color: #03A9F4;"> <?= $model->asg_title ?></b></font>
+            <div style="padding: 15px 0px;">
+                <?= $model->asg_description ?>
+            </div>
 
-                <?= DetailView::widget([
+            <!-- <font>Status Penugasan : <?= $model->stsAsg->sts_asg_name ?></font> -->
+            <?= DetailView::widget([
                     'model' => $model,
                     'attributes' => [
-
-                        // [
-                        //     'attribute' => '',
-                        //     'label' => 'Jumlah Proyek',
-                        //     'value' => function($model){
-
-                        //         return "10";
-                        //     }
-                        // ],
                         [
                             'attribute' => 'stsAsg.sts_asg_name',
-                            'label' => 'Status Penugasan'
+                            'label' => '<font style="padding-left: 0px;">Status Penugasan</font>',
+                            'format' => 'raw',
                         ],
                         [
                             'attribute' => '',
@@ -103,111 +94,94 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                 $asg_start_time = $model["asg_start_time"];
                                 $asg_start_time_timestamp = strtotime($asg_start_time);
                                 $asg_start_time = SiteController::tgl_indo(date('Y-m-d', $asg_start_time_timestamp)).', '.date('H:i', $asg_start_time_timestamp);
-                                return $asg_start_time.' --- '.$asg_end_time;
+                                return $asg_start_time.' &nbsp;-&nbsp; '.$asg_end_time;
+                            },
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'created_at',
+                            'label' => 'Tanggal Dibuat',
+                            'value' => function($model){
+                                $created_at = $model["created_at"];
+                                $created_at_timestamp = strtotime($created_at);
+                                $created_at = SiteController::tgl_indo(date('Y-m-d', $created_at_timestamp)).', '.date('H:i', $created_at_timestamp);
+
+                                return $created_at;
                             }
                         ],
                         [
                             'attribute' => '',
                             'label' => 'Kelas Ditugaskan',
                             'value' => function($model){
-                                $class = "";
-                                $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
+                                if($model->class == "All"){
+                                    return "Semua Kelas";
+                                }else{
+                                    $class = "";
+                                    $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
 
-                                foreach($modelClass as $key => $data){
-                                    $data_class = $this->context->getClassByClassId($data->class);
+                                    foreach($modelClass as $key => $data){
+                                        $data_class = $this->context->getClassByClassId($data->class);
 
-                                    if($key == 0){
-                                        $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.($key+1).". ".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
-                                    }else{
-                                        $class = $class.'<br>'.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.($key+1).'. '.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                        if($key == 0){
+                                            $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.($key+1).". &nbsp;".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                        }else{
+                                            $class = $class.'<br>'.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.($key+1).'. &nbsp;'.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                        }
                                     }
+                                    return '<font style="font-size: px;">'.$class.'</font>';
                                 }
-                                return '<font style="font-size: 12px;">'.$class.'</font>';
                             },
                             'format' => 'raw',
                         ],
-                        [
-                            'attribute' => '',
-                            'label' => 'Mahasiswa Ditugaskan',
-                            'value' => function($model){
-                                $student = "";
-                                $query = "SELECT sa.stu_id, ca.class FROM sippm_student_assignment sa JOIN sippm_class_assignment ca ON sa.cls_asg_id = ca.cls_asg_id JOIN sippm_assignment sp ON ca.asg_id = sp.asg_id WHERE sp.asg_id = ".$model->asg_id." AND ca.partial = 1 AND sa.deleted != 1 GROUP BY sa.stu_id, ca.class ORDER BY ca.class ASC
-                                ";
-                                $modelStudent = Yii::$app->db->createCommand($query)->queryAll();
-
-                                foreach($modelStudent as $key => $data){
-                                    $data_student = $this->context->getStudentByNim($data['stu_id']);
-                                    $data_class = $this->context->getClassByClassId($data['class']);
-
-                                    if($key == 0){
-                                        $student = '<font data-toggle="tooltip" data-placement="top" title="'.$data['stu_id'].'">&nbsp;'.($key+1).". ".$data_student.'</font> - <font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.$data_class[0]['nama'].'</font>';
-                                    }else{
-                                        $student = $student.'<font data-toggle="tooltip" data-placement="top" title="'.$data['stu_id'].'"><br>'.($key+1).'. '.$data_student.'</font> - <font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.$data_class[0]['nama'].'</font>';
-                                    }
-                                }
-                                return '<font style="font-size: 12px;">'.$student.'</font>';
-                            },
-                            'format' => 'raw',
-                        ],
-
                     ],
                 ]) ?>
-
-            </div>
-            <div class="col-md-6">
-                <h4><b><i class="fa fa-list-ol" aria-hidden="true"></i> &nbsp;Proyek Mahasiswa 
-                    <span class="badge badge-primary" style="background-color: #6ac7c1"> <?= $projectsCount ?>  </span></b>
-                </h4>
-                <hr class="hr-custom">
-                <table class="table table-hover" id="dataTables" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Diunggah oleh [ Proyek ]</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        
-                            <?php
-                                if($projectsCount <= 0){
-                                    echo '<tr><td colspan=2> <br>Tidak ada proyek mahasiswa. </td></tr>';
-                                }else{
-                                    $i = 1;
-                                    foreach($projects as $data){
-                                        $num_char = 55 - strlen($data->proj_creator);
-                                        if($num_char >= strlen($data->proj_title)){
-                                            $title = $data->proj_title;    
-                                        }else{
-                                            $title = substr($data->proj_title, 0, $num_char) . '...';
-                                        }
-                            ?>  
-                            <tr>
-                                <td><b><?= $i ?></b></td>
-                                <td>
-                                
-                                    <a href="#" data-toggle="collapse" data-target="#<?= $data->proj_id ?>" onclick="find()">
-                                        <span id="caret1" class="glyphicon glyphicon-chevron-down"></span>
-                                    </a>
-                                    <?= $data->proj_creator ?> <?=  Html::a('[ '.$title.' ]', ['project/view-project', 'proj_id' => $data->proj_id]) ?> 
-                                    <div id="<?= $data->proj_id ?>" class="collapse">
-                                        <h5><b>Judul</b></h5>
-                                        <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id]) ?>
-                                        <h5><b>Author</b></h5>
-                                        <?= $data->proj_author ?>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
-                                $i++;
-                                    }
-                                }
-                            ?>
-                        
-                    </tbody>
-                </table>
-            </div>
-
         </div>
+
+        <h4><b>Proyek Mahasiswa 
+            <span class="badge badge-primary" style="background-color: #6ac7c1"> <?= $projectsCount ?>  </span></b>
+        </h4>
+        <hr class="hr-custom">
+        <table class="table table-hover" id="dataTables" width="100%" cellspacing="0">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Judul Proyek</th>
+                <th>Diunggah Oleh</th>
+                <th>Kelas</th>
+            </tr>
+            </thead>
+            <tbody>
+                
+                    <?php
+                        if($projectsCount <= 0){
+                            echo '<tr><td colspan=4> <center><br><i>Tidak ada proyek mahasiswa. </i></center> </td></tr>';
+                        }else{
+                            $i = 1;
+                            foreach($projects as $data){
+                    ?>  
+                    <tr>
+                        <td><b><?= $i ?></b></td>
+                        <td>
+                                <?= Html::a($data->proj_title, ['project/view-project', 'proj_id' => $data->proj_id]) ?>
+                                
+                            </div>
+                        </td>
+                        <td><?= $data->proj_creator ?></td>
+                        <td>
+                            <?php 
+                                $data_class = $this->context->getClassByClassId($data['proj_creator_class']);
+                                echo $data_class[0]['nama'];
+                            ?>
+                        </td>
+                    </tr>
+                    <?php
+                        $i++;
+                            }
+                        }
+                    ?>
+                
+            </tbody>
+        </table>
 
     </div>
 </div>

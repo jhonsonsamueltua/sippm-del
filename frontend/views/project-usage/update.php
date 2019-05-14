@@ -29,7 +29,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 ]);
             ?>
 
-        <h3><b> Edit Request Penggunaan</b> </h3>
+        <h3><b> Ubah Permohonan Penggunaan</b> </h3>
         <hr class="hr-custom">
 
         <?= $this->render('_form', [

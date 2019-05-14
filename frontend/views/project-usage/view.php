@@ -86,7 +86,8 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                             $artefak = Html::a('Permohonan Penggunaan', ['/site/login', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
                         }else{
                             if($model == null || $model->sts_proj_usg_id == 3){
-                                $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
+                                // $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
+                                $artefak = '---';
                             }else if($model->sts_proj_usg_id == 1){
                                 // $artefak =  Html::a('Ubah Permohonan Penggunaan', ['/project-usage/update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn btn-primary']);
                                 $artefak = '---';
@@ -94,7 +95,8 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                 if($session['nama'] != $model->proj->asg->asg_creator){
                                     $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";
                                 }else{
-                                    $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
+                                    // $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
+                                    $artefak = '---';
                                 }
                             }
                         }
@@ -118,7 +120,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 }else{
                     if($model == null || $model->sts_proj_usg_id == 3){
                         // $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                        echo Html::a('Edit', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']);
+                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']);
                         echo Html::a('Batal', ['delete', 'id' => $model->proj_usg_id], [
                             'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;',
                             'data' => [
@@ -127,9 +129,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                             ],
                         ]);
                     }else if($model->sts_proj_usg_id == 1){
-                        // $artefak =  Html::a('Ubah Permohonan Penggunaan', ['/project-usage/update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn btn-primary']);
-                        // $artefak = '---';
-                        echo Html::a('Edit', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']);
+                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']);
                         echo Html::a('Batal', ['delete', 'id' => $model->proj_usg_id], [
                             'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;',
                             'data' => [

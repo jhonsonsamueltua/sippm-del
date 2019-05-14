@@ -139,6 +139,8 @@ input[type=text]:focus, input[type=password]:focus {
     border-top: 5px solid #6ac7c1;
     background-color: #FFFFFF;
     margin-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .body-content{
@@ -256,7 +258,7 @@ border-bottom: 5px solid #d6df22;
 .btn-search{
     border: 0px;
     border-radius: 0px 3px 3px 0px;
-    background: #2196F3;
+    background-color: #3F51B5;
     font-size: 18px;
     width: 100%;
     font-size: 16px;
@@ -268,7 +270,7 @@ border-bottom: 5px solid #d6df22;
 }
 
 .btn-search:hover{
-    background-color: #1E88E5;
+    background-color: #283593;
 }
 
 @media (min-width: 992px){
@@ -344,7 +346,7 @@ border-bottom: 5px solid #d6df22;
   }
 
 .text-author{
-    color: #9E9E9E;
+    color: #757575;
     font-size: 14px;
 }
 
@@ -357,6 +359,11 @@ border-bottom: 5px solid #d6df22;
     font-size: 18px;
     color: #03A9F4;
     /* font-weight: 700; */
+}
+
+.text-title-project:hover{
+    color: #00ACC1;
+    text-decoration: none;
 }
 
 .hr-custom {

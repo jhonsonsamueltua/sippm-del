@@ -21,10 +21,10 @@ $this->registerCssFile("././css/project.css");
 <div class="row">
 
     <div class="col-md-6" style="padding: 0px 25px;">
-        <h3 style="margin-top:0px"><b style="font-size: 18px">Penugasan</b></h3>
+        <b style="font-size: 16px">Penugasan</b>
         <hr class="hr-custom">
-        <b style="display:block;margin-bottom:5px;"><?= $assignment->catProj->cat_proj_name ?> [ <?= $assignment->subCatProj->sub_cat_proj_name ?> ] </b>
-        <font class="text-title-asg"><?= $assignment->asg_title ?></font>
+        <font style="font-size: px;margin: 15px 0px;display: block;color: #616161;"><b><?= $assignment->catProj->cat_proj_name ?> &nbsp;-&nbsp; <?= $assignment->subCatProj->sub_cat_proj_name ?> , <?= $assignment->asg_year ?> </b> </font>
+        <font><b style="font-size: 22px;color: #03A9F4;"> <?= $assignment->asg_title ?></b></font>
         
         <p>
             <?= $assignment->asg_description ?>
@@ -142,13 +142,13 @@ $this->registerCssFile("././css/project.css");
     </div>
 
     <div class="col-md-6 form-project">
-        <h3 style="margin-top:0px"><b style="font-size: 18px">Proyek</b></h3>
+        <b style="font-size: 16px">Proyek</b>
         <hr class="hr-custom">
         <?php
             $status = AssignmentController::getProject($assignment["asg_id"]);
             if($assignment->stsAsg->sts_asg_name == "Pending"){
                 echo "<div class='alert alert-warning' style='border-left: 6px solid #FFA726;'>
-                        <strong>Info!</strong> <br> Belum dapat submit proyek karena status penugasan masih pending.
+                        <strong>Info!</strong> <br> Tidak dapat mengirim proyek karena status penugasan masih Menunggu.
                     </div><br>";
             }elseif($status == false && $assignment->stsAsg->sts_asg_name == "Close"){
                 echo "<div class='alert alert-danger' style='border-left: 6px solid #FF7043;'>
@@ -231,9 +231,12 @@ $this->registerCssFile("././css/project.css");
             <?php
                 echo '<br><br>';
                 if($assignment->sts_asg_id == 1){
-                    echo Html::submitButton($model->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i> ', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
+                    echo Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
                 }
-                echo '&nbsp;&nbsp;'.Html::a("Kembali &nbsp;<i class='fa fa-arrow-left' aria-hidden='true' style='font-size:16px'></i>", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']);
+                
+                if($assignment->sts_asg_id == 3 || $assignment->sts_asg_id == 2 || !$model->isNewRecord){
+                    echo '&nbsp;&nbsp;'.Html::a("Kembali", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']);
+                }
             ?>
         </div>
 
