@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\data\Pagination;
 use yii\httpclient\Client;
+use common\controllers\NotificationController;
 use common\models\Assignment;
 use common\models\CategoryProject;
 use common\models\SubCategoryProject;
@@ -20,6 +21,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use backend\models\SippmClass;
+use common\controllers\NotificationViewerController;
 
 
 /**
@@ -60,96 +62,66 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function actionAssignmentStudent(){
+    public function actionAssignmentStudent($ntf_id = ''){
+        $this->openCloseAssignment();
+
         $session = Yii::$app->session;
-        
-        if(!isset($session['role'])){
-            return $this->redirect(['site/login']);
-        }else{
-            $this->openCloseAssignment();
-        
-            $username = $session['nim'];
+        $class = $session['kelas_id'];
 
-            $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND (sa.sts_asg_id = 1 OR sa.sts_asg_id = 3) AND sa.deleted !=1 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
-            $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
-            $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
-            
-            $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_student_assignment as ssa ON sca.cls_asg_id = ssa.cls_asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE ssa.stu_id = '$username' AND sa.sts_asg_id = 2 AND sa.deleted != 1";
-            $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
-            $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
-
-            return $this->render('assignment-student',[
-                'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
-                'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
-                'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
-                'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
-            ]);
+        if($ntf_id != ''){
+            NotificationViewerController::createNotificationViewer($ntf_id, $session['username']);
         }
+
+        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE sca.class = '$class' AND sa.sts_asg_id = 1 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
+        $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
+        $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
+
+        $menunggu = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE sca.class = '$class' AND sa.sts_asg_id = 3 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
+        $modelMenunggu = Yii::$app->db->createCommand($menunggu)->queryAll();
+        $modelMenungguCount = count($modelMenunggu);
+
+        
+        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE sca.class = '$class' AND sa.sts_asg_id = 2 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
+        $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
+        $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
+        
+        return $this->render('assignment-student',[
+            'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
+            'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
+            'modelMenunggu' => $modelMenunggu,
+            'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
+            'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
+            'modelMenungguCount' => $modelMenungguCount,
+        ]);
     }
 
     public function actionAssignmentDosen(){
         $session = Yii::$app->session;
 
-        if(!isset($session['role'])){
-            return $this->redirect(['site/login']);
-        }else{
-            $this->openCloseAssignment();
+        $this->openCloseAssignment();
 
-            $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->count();
-            $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->count();
-            
-            $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or', ['sts_asg_id' => 1], ['sts_asg_id' => 3]])->andWhere(['deleted' => 0])->all();
-            $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere(['deleted' => 0])->all();
-
-            return $this->render('assignment-dosen',[
-                'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
-                'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
-                'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
-                'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
-            ]);
-        }
-    }
-
-    public function openCloseAssignment(){
-        $session = Yii::$app->session;
-        //Bagian update status penugasan pending menjadi open
-        date_default_timezone_set("Asia/Bangkok");
-        $now = new \DateTime();
-        $model = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->all();
-        $modelCount = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->count();
+        $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 1])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
+        $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 1])->andWhere('deleted != 1')->count();
+        // die($modelPenugasanSaatIniCount);
+        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
+        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted != 1')->count();
         
-        if($modelCount > 0){
-            foreach($model as $data){
-                // $now->format('Y-m-d h:i:s')
-                $start = new \DateTime($data->asg_start_time);
-                $end = new \DateTime($data->asg_end_time);
-                if($now > $start){
-                    $data->sts_asg_id = 1;
-                    $data->save(false);
-                }
-            }
-        }
+        $modelMenunggu = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 3])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
+        $modelMenungguCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 3])->andWhere('deleted != 1')->count();
 
-        //bagian update status penugasan open menjadi close
-        $model2 = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->all();
-        $model2Count = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->count();
-        
-        if($model2Count > 0){
-            foreach($model2 as $data){
-                $end = new \DateTime($data->asg_end_time);
-                if($now > $end){
-                    $data->sts_asg_id = 2;
-                    $data->save(false);
-                }
-            }
-        }
+        return $this->render('assignment-dosen',[
+            'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
+            'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
+            'modelMenunggu' => $modelMenunggu,
+            'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
+            'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
+            'modelMenungguCount' => $modelMenungguCount,
+        ]);
     }
-    
-    public function getStatusAssignment($asg_id){
-        $model = $this->findModel($asg_id);
-        $result = $model->stsAsg->sts_asg_name;
-        return $result;
-    }
+
+    /**
+     * CRUD
+     */
 
     public function actionCreate()
     {   
@@ -177,54 +149,64 @@ class AssignmentController extends Controller
                     $now = new \DateTime();
                     $start = new \DateTime($modelAsg->asg_start_time);
                     $end = new \DateTime($modelAsg->asg_end_time);
+                    
                     if($now >= $start && $now <= $end){
                         $modelAsg->sts_asg_id = 1;
                     }
+    
+                    $innerTransaction = Yii::$app->db->beginTransaction();
 
-                    $modelAsg->save();
-    
-                    foreach($_POST['Class'] as $i => $class){
-                        
-                        $modelClass = new ClassAssignment();
-                        
-                        $modelClass->class = $class;
-                        
-                        $modelClass->asg_id = $modelAsg->asg_id;
-    
-                        if($_POST['Student'][$i][0] == "empty"){
-                            $modelClass->partial = 0;
-                            $modelClass->save();
-                            
+                    try{
+                        if(isset($_POST['allClass'])){
+                            $modelAsg->class = "All";
+                            $modelAsg->save();
+
                             $client = new Client();
                             $response = $client->createRequest()
-                                                ->setMethod('GET')
-                                                ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
-                                                ->send();
-    
+                                                    ->setMethod('GET')
+                                                    ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
+                                                    ->send();
+
                             if($response->isOk){
                                 if($response->data['result'] == "OK"){
-                                    foreach($response->data['data'] as $student){
-                                        $modelStudent = new StudentAssignment();
-                                        
-                                        $modelStudent->stu_id = $student['nim'];
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                        $modelStudent->save();
+                                    $modelClass = new ClassAssignment();
+
+                                    foreach($response->data['data'] as $class){
+                                        $modelClass->setIsNewRecord(true);
+                                        $modelClass->class = (string) $class['kelas_id'];
+                                        $modelClass->asg_id = $modelAsg->asg_id;
+                                        $modelClass->partial = 0;
+                                        $modelClass->save();
+                                        $modelClass->cls_asg_id++;
+
+                                        NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class['kelas_id']);
                                     }
                                 }
                             }
-    
                         }else{
-                            $modelClass->partial = 1;
-                            $modelClass->save();
-    
-                            foreach($_POST['Student'][$i] as $student){
-                                $modelStudent = new StudentAssignment();
-                        
-                                $modelStudent->stu_id = $student;
-                                $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                $modelStudent->save();
+                            $modelAsg->class = "Partial";
+                            $modelAsg->save();
+
+                            $modelClass = new ClassAssignment();
+                            foreach($_POST['Class'] as $i => $class){
+                                $modelClass->setIsNewRecord(true);
+                                $modelClass->class = $class;
+                                $modelClass->asg_id = $modelAsg->asg_id;
+                                $modelClass->partial = 0;
+                                $modelClass->save();
+                                $modelClass->cls_asg_id++;
+
+                                NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class);
                             }
                         }
+
+                        $innerTransaction->commit();
+                    }catch(Exception $e){
+                        Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuka penugasan.');
+
+                        $innerTransaction->rollback();
+                        
+                        throw $e;
                     }
                     
                     $transaction->commit();
@@ -267,67 +249,67 @@ class AssignmentController extends Controller
                     $transaction = Yii::$app->db->beginTransaction();
                     
                     try{
-                        $modelAsg->save(false);
+                        $innerTransaction = Yii::$app->db->beginTransaction();
 
-                        foreach($_POST['Class'] as $i => $class){
-                            $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $id])->andWhere('deleted != 1')->one();
+                        try{
+                            if(isset($_POST['allClass'])){
+                                $modelAsg->class = "All";
+                                $modelAsg->save(false);
 
-                            if($checkClass == null){
-                                $modelClass = new ClassAssignment();
-                                
-                                $modelClass->class = $class;
-                                $modelClass->asg_id = $modelAsg->asg_id;
-                            }
-
-                            if($_POST['Student'][$i][0] == "empty"){
-                                if($checkClass == null){ //Kalau kelas belum pernah ditugaskan secara non-partial
-                                    $modelClass->partial = 0;
-                                    $modelClass->save();
-
-                                    $client = new Client();
-                                    $response = $client->createRequest()
+                                $client = new Client();
+                                $response = $client->createRequest()
                                                         ->setMethod('GET')
-                                                        ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-students-by-class?kelas_id=' . $modelClass->class)
+                                                        ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
                                                         ->send();
 
-                                    if($response->isOk){
-                                        if($response->data['result'] == "OK"){
-                                            foreach($response->data['data'] as $student){
-                                                $modelStudent = new StudentAssignment();
-                                                
-                                                $modelStudent->stu_id = $student['nim'];
-                                                $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                                $modelStudent->save();
+                                if($response->isOk){
+                                    if($response->data['result'] == "OK"){
+                                        $modelClass = new ClassAssignment();
+
+                                        foreach($response->data['data'] as $class){
+                                            $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $modelAsg->asg_id])->andWhere('deleted != 1')->one();
+                                            
+                                            if($checkClass == null){
+                                                $modelClass->setIsNewRecord(true);
+                                                $modelClass->class = (string) $class['kelas_id'];
+                                                $modelClass->asg_id = $modelAsg->asg_id;
+                                                $modelClass->partial = 0;
+                                                $modelClass->save();
+                                                $modelClass->cls_asg_id++;
+                                            
+                                                NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class['kelas_id']);
                                             }
                                         }
                                     }
                                 }
                             }else{
-                                if($checkClass == null){
-                                    $modelClass->partial = 1;
-                                    $modelClass->save();
-                                }
+                                $modelAsg->save(false);
 
-                                foreach($_POST['Student'][$i] as $student){
-                                    if($checkClass != null){ //Kalau kelas sudah pernah ditugaskan tapi secara partial
-                                        $checkStudent = StudentAssignment::find()->where(['cls_asg_id' => $checkClass->cls_asg_id])->andWhere(['stu_id' => $student])->andWhere('deleted != 1')->one();
-                                        
-                                        if($checkStudent == null){ //Jika mahasiswa/i belum pernah ditugaskan
-                                            $modelStudent = new StudentAssignment();
-                                    
-                                            $modelStudent->stu_id = $student;
-                                            $modelStudent->cls_asg_id = $checkClass->cls_asg_id;
-                                            $modelStudent->save();
-                                        }
-                                    }else{ //Kalau kelas belum pernah ditugaskan secara parsial
-                                        $modelStudent = new StudentAssignment();
-                                
-                                        $modelStudent->stu_id = $student;
-                                        $modelStudent->cls_asg_id = $modelClass->cls_asg_id;
-                                        $modelStudent->save();
+                                $modelClass = new ClassAssignment();
+
+                                foreach($_POST['Class'] as $i => $class){
+                                    $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $modelAsg->asg_id])->andWhere('deleted != 1')->one();
+        
+                                    if($checkClass == null){
+                                        $modelClass->setIsNewRecord(true);
+                                        $modelClass->class = $class;
+                                        $modelClass->asg_id = $modelAsg->asg_id;
+                                        $modelClass->partial = 0;
+                                        $modelClass->save();
+                                        $modelClass->cls_asg_id++;
+
+                                        NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class['kelas_id']);
                                     }
                                 }
                             }
+
+                            $innerTransaction->commit();
+                        }catch(Exception $e){
+                            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat mengubah penugasan.');
+
+                            $innerTransaction->rollBack();
+
+                            throw $e;
                         }
 
                         $transaction->commit();
@@ -376,12 +358,6 @@ class AssignmentController extends Controller
                 $modelProject = Project::find()->where(['asg_id' => $modelAsg->asg_id])->andWhere('deleted!=1')->all();
 
                 foreach($modelClass as $class){
-                    $students = StudentAssignment::find()->where(['cls_asg_id' => $class->cls_asg_id])->andWhere('deleted!=1')->all();
-
-                    foreach($students as $student){
-                        $student->softDelete();
-                    }
-
                     $class->softDelete();
                 }
 
@@ -395,6 +371,10 @@ class AssignmentController extends Controller
             }
         }
     }
+
+    /**
+     * Open / Close Assignment Method
+     */
 
     public function actionOpenAssignment($asg_id){
         $session = Yii::$app->session;
@@ -429,39 +409,57 @@ class AssignmentController extends Controller
         }
     }
 
-    public function actionRemoveStudentsInClass($asg_id, $cls_asg_id){
-        $class = ClassAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere('deleted!=1')->one();
-        $students = StudentAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere('deleted!=1')->all();
-
-        $class->softDelete();
-        foreach($students as $student){
-            $student->softDelete();
+    public function openCloseAssignment(){
+        $session = Yii::$app->session;
+        //Bagian update status penugasan pending menjadi open
+        date_default_timezone_set("Asia/Bangkok");
+        $now = new \DateTime();
+        $model = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->all();
+        $modelCount = Assignment::find()->where(['sts_asg_id' => 3])->andWhere('deleted' != 1)->count();
+        
+        if($modelCount > 0){
+            foreach($model as $data){
+                // $now->format('Y-m-d h:i:s')
+                $start = new \DateTime($data->asg_start_time);
+                $end = new \DateTime($data->asg_end_time);
+                if($now > $start){
+                    $data->sts_asg_id = 1;
+                    $data->save(false);
+                }
+            }
         }
 
-        return $this->redirect(['update', 'id' => $asg_id]);
-    }
-
-    public function actionRemoveStudent($asg_id, $cls_asg_id, $nim){
-        $student = StudentAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere(['stu_id' => $nim])->andWhere('deleted!=1')->one();
-
-        $student->softDelete();
-
-        return $this->redirect(['update', 'id' => $asg_id]);
-    }
-
-    public function actionLists($id){
-        $cat = CategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->one();
-        $model = SubCategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->all();
+        //bagian update status penugasan open menjadi close
+        $model2 = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->all();
+        $model2Count = Assignment::find()->where(['sts_asg_id' => 1])->andWhere('deleted' != 1)->count();
         
-        echo "<option value=''>Pilih ".$cat->cat_proj_name." ...</option>";
-        
-        if(count($model) > 0){
-            foreach($model as $data){
-                echo "<option value='". $data->sub_cat_proj_id ."'>". $data->sub_cat_proj_name ."</option>";
+        if($model2Count > 0){
+            foreach($model2 as $data){
+                $end = new \DateTime($data->asg_end_time);
+                if($now > $end){
+                    $data->sts_asg_id = 2;
+                    $data->save(false);
+                }
             }
         }
     }
-    
+
+    /**
+     * Remove Class
+     */
+
+    public function actionRemoveClass($asg_id, $cls_asg_id){
+        $class = ClassAssignment::find()->where(['cls_asg_id' => $cls_asg_id])->andWhere('deleted!=1')->one();
+
+        $class->softDelete();
+
+        return $this->redirect(['update', 'id' => $asg_id]);
+    }
+
+    /**
+     * Getter
+     */
+
     public function actionGetAllClass(){
         $session = Yii::$app->session;
 
@@ -539,12 +537,22 @@ class AssignmentController extends Controller
         return $name_student;
     }
 
+    public function getStatusAssignment($asg_id){
+        $model = $this->findModel($asg_id);
+        $result = $model->stsAsg->sts_asg_name;
+        return $result;
+    }
+
     public function getProject($id){
         $session = Yii::$app->session;
         $model = Project::find()->where(['asg_id' => $id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
 
         return isset($model) ? $model : false ;
     }
+
+    /**
+     * Find Method
+     */
 
     /**
      * Finds the Assignment model based on its primary key value.
@@ -561,4 +569,22 @@ class AssignmentController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    /**
+     * Other Method
+     */
+
+    public function actionLists($id){
+        $cat = CategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->one();
+        $model = SubCategoryProject::find()->where(['cat_proj_id' => $id])->andWhere('deleted != 1')->orderBy('sub_cat_proj_name ASC')->all();
+        
+        echo "<option value=''>Pilih ".$cat->cat_proj_name." ...</option>";
+        
+        if(count($model) > 0){
+            foreach($model as $data){
+                echo "<option value='". $data->sub_cat_proj_id ."'>". $data->sub_cat_proj_name ."</option>";
+            }
+        }
+    }
+
 }

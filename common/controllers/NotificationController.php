@@ -13,7 +13,7 @@ class NotificationController extends Controller{
         $now = new \DateTime();
 
         $notification->ntf_type = $type;
-        $notification->user_username = (string) $user;
+        $notification->ntf_recipient = (string) $user;
         $notification->asg_id = $asg_id;
         $notification->created_at = $now->format('Y-m-d h:i:s');
         $notification->save();
@@ -24,7 +24,7 @@ class NotificationController extends Controller{
         $now = new \DateTime();
 
         $notification->ntf_type = $type;
-        $notification->user_username = (string) $user;
+        $notification->ntf_recipient = (string) $user;
         $notification->proj_usg_id = $proj_usg_id;
         $notification->created_at = $now->format('Y-m-d h:i:s');
         $notification->save();

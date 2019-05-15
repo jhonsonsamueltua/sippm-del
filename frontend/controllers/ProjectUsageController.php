@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\httpclient\Client;
+use common\controllers\NotificationController;
+use common\controllers\NotificationViewerController;
 use common\models\Assignment;
 use common\models\Project;
 use common\models\ProjectUsage;
@@ -41,7 +43,7 @@ class ProjectUsageController extends Controller
      * Lists all ProjectUsage models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($ntf_id = '')
     {
         $session = Yii::$app->session;
         
@@ -62,6 +64,10 @@ class ProjectUsageController extends Controller
             $modelRiwayatRequestUsers = Yii::$app->db->createCommand($query2)->queryAll();
             $modelRiwayatRequestUsersCount = count($modelRiwayatRequestUsers);
 
+            if($ntf_id != ''){
+                NotificationViewerController::createNotificationViewer($ntf_id, $session['username']);
+            }
+
             return $this->render('index', [
                 'modelRequest' => $modelRequest,
                 'modelRequestUsers' => $modelRequestUsers,
@@ -75,12 +81,23 @@ class ProjectUsageController extends Controller
         }
     }
 
-    public function actionView($id)
+    public function actionView($id, $ntf_id = '')
     {   
-        $model = $this->findModel($id);
-        return $this->render('view', [
-            'model' => $model,
-        ]);
+        $session = Yii::$app->session;
+
+        if(!isset($session['role'])){
+            return $this->redirect(['site/login']);
+        }else{
+            if($ntf_id != ''){
+                NotificationViewerController::createNotificationViewer($ntf_id, $session['username']);
+            }
+
+            $model = $this->findModel($id);
+            
+            return $this->render('view', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionListProjectUsageRequest(){
@@ -145,6 +162,12 @@ class ProjectUsageController extends Controller
                 }
 
                 if($model->save()){
+                    if($model->alternate == 1){
+                        NotificationController::sendProjectUsageRequestNotification('new_request_alternate', $model->proj_usg_id, 'admin');
+                    }else{
+                        NotificationController::sendProjectUsageRequestNotification('new_request', $model->proj_usg_id, $asgModel->created_by);
+                    }
+                    
                     Yii::$app->session->setFlash('success', '<center>Permohonan anda berhasil dikirim.</center>');
                     return $this->redirect(['view', 'id' => $model->proj_usg_id]);
                 }else{
@@ -232,7 +255,7 @@ class ProjectUsageController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role' == 'Mahasiswa']){
-            Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk mengakses halaman ini');
+            Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk mengakses halaman tersebut.');
             
             return $this->goHome();
         }else{
@@ -242,6 +265,8 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
+
+            NotificationController::sendProjectUsageRequestNotification('request_accepted', $request->proj_usg_id, $request->created_by);
 
             return $this->redirect(['index']);
         }
@@ -253,7 +278,7 @@ class ProjectUsageController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role' == 'Mahasiswa']){
-            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini');
+            Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk mengakses halaman tersebut.');
             
             return $this->goHome();
         }else{
@@ -263,6 +288,8 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
+
+            NotificationController::sendProjectUsageRequestNotification('request_rejected', $request->proj_usg_id, $request->created_by);
 
             return $this->redirect(['list-project-usage-request']);
         }

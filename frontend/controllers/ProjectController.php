@@ -153,7 +153,8 @@ class ProjectController extends Controller
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
                 $model->proj_downloaded = 0;
                 $model->proj_year = $year->format('Y');
-    
+                $model->proj_creator_class = $session['kelas_id'];
+
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
     

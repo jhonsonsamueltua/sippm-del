@@ -23,6 +23,7 @@ use common\models\CategoryProject;
 use common\models\SubCategoryProject;
 use yii\sphinx\Query;
 use yii\sphinx\MatchExpression;
+use common\models\SippmNotification;
 
 
 /**
@@ -72,6 +73,10 @@ class SiteController extends Controller
             $modelComp = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->andWhere(['sts_win_id' => 1])->orderBy(['created_at' => SORT_DESC])->limit(5)->all();
             $modelCompCount = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->andWhere(['sts_win_id' => 1])->orderBy(['created_at' => SORT_DESC])->count();
 
+            // $query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE sn.ntf_recipient = '" . $session['username'] . "' OR sn.ntf_recipient = '" . $session['kelas_id'] ."'";
+            // $listSeenNotifId = Yii::$app->db->createCommand($query)->queryAll();
+            // $modelNotif = SippmNotification::find()->where(['ntf_recipient' => $session['username']])->orWhere(['ntf_recipient' => $session['kelas_id']])->andWhere(['not in', 'ntf_id', $listSeenNotifId])->all();
+
             $categories = CategoryProject::find()->where("deleted!=1")->all();
             $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
 
@@ -82,6 +87,7 @@ class SiteController extends Controller
                 'modelCount' => $modelCount,
                 'modelNewsCount' => $modelNewsCount,
                 'modelCompCount' => $modelCompCount,
+                // 'modelNotif' => $modelNotif,
                 'categories' => $categories,
                 'yearList' => $yearList,
             ]);
@@ -189,6 +195,7 @@ class SiteController extends Controller
                                 $dimId = $datas['dimId'];
                                 $nim = $datas['nim'];
                                 $kelas = $datas['kelas'];
+                                $kelas_id = $datas['kelas_id'];
         
                                 if($session['username'] == 'if416004'){
                                     $role = "Dosen";
@@ -198,6 +205,7 @@ class SiteController extends Controller
                                 $session->set('dimId', $dimId);
                                 $session->set('nim', $nim);
                                 $session->set('kelas', $kelas);
+                                $session->set('kelas_id', $kelas_id);
                             }else{
                                 $pegawaiId = $datas['pegawaiId'];
                                 $nip = $datas['nip'];
@@ -236,6 +244,7 @@ class SiteController extends Controller
                                 $dimId = $datas['dimId'];
                                 $nim = $datas['nim'];
                                 $kelas = $datas['kelas'];
+                                $kelas_id = $datas['kelas_id'];
         
                                 if($session['username'] == 'if416004'){
                                     $role = "Dosen";
@@ -245,6 +254,7 @@ class SiteController extends Controller
                                 $session->set('dimId', $dimId);
                                 $session->set('nim', $nim);
                                 $session->set('kelas', $kelas);
+                                $session->set('kelas_id', $kelas_id);
                             }else{
                                 $pegawaiId = $datas['pegawaiId'];
                                 $nip = $datas['nip'];

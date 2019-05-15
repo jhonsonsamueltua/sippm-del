@@ -35,10 +35,10 @@ class SippmNotification extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ntf_type', 'user_username', 'created_at'], 'required'],
+            [['ntf_type', 'ntf_recipient', 'created_at'], 'required'],
             [['ntf_seen', 'asg_id', 'proj_usg_id'], 'integer'],
             [['created_at'], 'safe'],
-            [['ntf_type', 'user_username'], 'string', 'max' => 100],
+            [['ntf_type', 'ntf_recipient'], 'string', 'max' => 100],
             [['asg_id'], 'exist', 'skipOnError' => true, 'targetClass' => Assignment::className(), 'targetAttribute' => ['asg_id' => 'asg_id']],
             [['proj_usg_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProjectUsage::className(), 'targetAttribute' => ['proj_usg_id' => 'proj_usg_id']],
         ];
