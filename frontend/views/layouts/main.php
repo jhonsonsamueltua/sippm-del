@@ -22,24 +22,12 @@ $session = Yii::$app->session;
 $query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE snv.ntf_reader = '" . $session['username'] . "'";
 $listSeenNotifId = Yii::$app->db->createCommand($query)->queryAll();
 
-// echo $session['username'];
-// echo "<pre>";
-// var_dump($listSeenNotifId);
-// echo "</pre>";
-// die;
-
 $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_notification.asg_id = sippm_assignment.asg_id')
                                        ->leftJoin('sippm_project_usage', 'sippm_notification.proj_usg_id = sippm_project_usage.proj_usg_id')
                                        ->where(['or', 'ntf_recipient="'.$session['username'].'"', 'ntf_recipient="'.$session['kelas_id'].'"'])
                                        ->andWhere(['not in', 'ntf_id', $listSeenNotifId])
                                        ->orderBy('sippm_notification.created_at DESC')
                                        ->all();
-
-// echo "<pre>";
-// var_dump($modelNotif);
-// echo "</pre>";
-// die;
-
 ?>
 
 <?php $this->beginPage() ?>

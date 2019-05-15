@@ -25,7 +25,6 @@ $this->registerCssFile("././css/project.css");
         <hr class="hr-custom">
         <?php
             $status = AssignmentController::getProject($assignment["asg_id"]);
-
             if($assignment->stsAsg->sts_asg_name == "Pending"){
                 echo "<div class='alert alert-warning' style='border-left: 6px solid #FFA726;'>
                         <strong>Info!</strong> <br> Tidak dapat mengirim proyek karena status penugasan masih Menunggu.
