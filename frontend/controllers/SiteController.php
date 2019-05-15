@@ -23,6 +23,7 @@ use common\models\CategoryProject;
 use common\models\SubCategoryProject;
 use yii\sphinx\Query;
 use yii\sphinx\MatchExpression;
+use common\models\SippmNotification;
 
 
 /**
@@ -58,55 +59,73 @@ class SiteController extends Controller
 
     public function actionIndex()
     {   
-        $model = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
-        $modelCount = Project::find()->where("deleted" != 1)->orderBy(['proj_downloaded' => SORT_DESC])->count();
+        $session = Yii::$app->session;
         
-        $modelNews = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->all();
-        $modelNewsCount = Project::find()->where("deleted" != 1)->orderBy(['created_at' => SORT_DESC])->count();
+        if(!isset($session['role'])){
+            return $this->redirect(['login']);
+        }else{
+            $model = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
+            $modelCount = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->count();
+            
+            $modelNews = Project::find()->where("deleted!=1")->orderBy(['created_at' => SORT_DESC])->limit(5)->all();
+            $modelNewsCount = Project::find()->where("deleted!=1")->orderBy(['created_at' => SORT_DESC])->count();
 
-        $modelComp = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->all();
-        $modelCompCount = Project::find()->where("deleted" != 1)->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->orderBy(['created_at' => SORT_DESC])->count();
+            $modelComp = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->andWhere(['sts_win_id' => 1])->orderBy(['created_at' => SORT_DESC])->limit(5)->all();
+            $modelCompCount = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->andWhere(['sts_win_id' => 1])->orderBy(['created_at' => SORT_DESC])->count();
 
-        $categories = CategoryProject::find()->where("deleted!=1")->all();
-        $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
+            // $query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE sn.ntf_recipient = '" . $session['username'] . "' OR sn.ntf_recipient = '" . $session['kelas_id'] ."'";
+            // $listSeenNotifId = Yii::$app->db->createCommand($query)->queryAll();
+            // $modelNotif = SippmNotification::find()->where(['ntf_recipient' => $session['username']])->orWhere(['ntf_recipient' => $session['kelas_id']])->andWhere(['not in', 'ntf_id', $listSeenNotifId])->all();
 
-        return $this->render('index', [
-            'model' => $model,
-            'modelNews' => $modelNews,
-            'modelComp' => $modelComp,
-            'modelCount' => $modelCount,
-            'modelNewsCount' => $modelNewsCount,
-            'modelCompCount' => $modelCompCount,
-            'categories' => $categories,
-            'yearList' => $yearList,
-        ]);
+            $categories = CategoryProject::find()->where("deleted!=1")->all();
+            $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
+
+            return $this->render('index', [
+                'model' => $model,
+                'modelNews' => $modelNews,
+                'modelComp' => $modelComp,
+                'modelCount' => $modelCount,
+                'modelNewsCount' => $modelNewsCount,
+                'modelCompCount' => $modelCompCount,
+                // 'modelNotif' => $modelNotif,
+                'categories' => $categories,
+                'yearList' => $yearList,
+            ]);
+        }
     }
 
     public function actionLihatLainnya($type)
     {   
-        $title = '';
-        if($type == 'win_comp'){
-            $model = Project::find()->where(['sts_win_id' => 1])->andWhere('deleted != 1')->orderBy('proj_title ASC')->all();
-            $title = "Menang Kompetisi";
-        }elseif($type == 'recently_added'){
-            $model = Project::find()->where('deleted != 1')->orderBy('updated_at DESC')->all();
-            $title = "Baru Ditambahkan";
-        }elseif($type == 'comp'){
-            $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 2 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
-            $model = Yii::$app->db->createCommand($query)->queryAll();
-            $title = "Kompetisi";
-        }elseif($type == 'matkul'){
-            $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 1 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
-            $model = Yii::$app->db->createCommand($query)->queryAll();
-            $title = "Matakuliah";
-        }
+        $session = Yii::$app->session;
 
-        return $this->render('lihat-lainnya', [
-            'model' => $model,
-            'modelCount' => count($model),
-            'title' => $title,
-        ]);
+        if(!isset($session['role'])){
+            return $this->redirect(['login']);
+        }else{
+            $title = '';
+            if($type == 'win_comp'){
+                $model = Project::find()->where(['sts_win_id' => 1])->andWhere('deleted != 1')->orderBy('proj_title ASC')->all();
+                $title = "Menang Kompetisi";
+            }elseif($type == 'recently_added'){
+                $model = Project::find()->where('deleted != 1')->orderBy('created_at DESC')->all();
+                $title = "Baru Ditambahkan";
+            }elseif($type == 'comp'){
+                $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 2 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
+                $model = Yii::$app->db->createCommand($query)->queryAll();
+                $title = "Kompetisi";
+            }elseif($type == 'matkul'){
+                $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 1 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
+                $model = Yii::$app->db->createCommand($query)->queryAll();
+                $title = "Matakuliah";
+            }
+
+            return $this->render('lihat-lainnya', [
+                'model' => $model,
+                'modelCount' => count($model),
+                'title' => $title,
+            ]);
+        }
     }
+    
     /**
      * Logs in a user.
      *
@@ -114,106 +133,165 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {   
-        $this->layout = 'login';
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+        $session = Yii::$app->session;
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post())) {
-            // die($model->username.' '.$model->password);
-            if($model->username === "" && $model->password === ""){
-                // die("1");
-                return $this->render('login', [
-                    'model' => $model,
-                    'error' => "username_password",
-                ]);
-            }
-            if($model->username === ""){
-                // die("2");
-                return $this->render('login', [
-                    'model' => $model,
-                    'error' => "username",
-                ]);
-            }
-            if($model->password === ""){
-                // die("3");
-                return $this->render('login', [
-                    'model' => $model,
-                    'error' => "password",
-                ]);
-            }
-            $client = new Client();
-            $response = $client->createRequest()
-                                ->setMethod('POST')
-                                ->setUrl('https://cis.del.ac.id/api/sippm-api/do-auth')
-                                ->setData([
-                                    'username' => $model->username,
-                                    'password' => $model->password
-                                ])
-                                ->send();
+        if(isset($session['role'])){
+            return $this->redirect(['index']);
+        }else{
+            $this->layout = 'login';
 
-            if($response->isOk){
-                if($response->data['result'] == "true"){
-                    $session = Yii::$app->session;
-                    $session->open();
-
-                    $datas = $response->data['data'];
-                    $nama = $datas['nama'];
-                    $email = $datas['email'];
-                    $role = $datas['role'];
-                    
-                    $session->set('username', $model->username);
-                    $session->set('nama', $nama);
-                    $session->set('email', $email);
-
-                    if($role == "Mahasiswa"){
-                        $dimId = $datas['dimId'];
-                        $nim = $datas['nim'];
-                        $kelas = $datas['kelas'];
-
-                        if($session['username'] == 'if416004'){
-                            $role = "Dosen";
-                            $session->set('pegawaiId', 1);    
-                        }
-
-                        $session->set('dimId', $dimId);
-                        $session->set('nim', $nim);
-                        $session->set('kelas', $kelas);
-                    }else{
-                        $pegawaiId = $datas['pegawaiId'];
-                        $nip = $datas['nip'];
-
-                        $session->set('pegawaiId', $pegawaiId);
-                        $session->set('nip', $nip);
-                    }
-
-                    $session->set('role', $role);
-                    $session->close();
-
-                    return $this->goBack();
-                }else{
-                    // Yii::$app->session->setFlash('error', 'Maaf, anda tidak terdaftar dalam sistem');
+            $model = new LoginForm();
+            if ($model->load(Yii::$app->request->post())) {
+                // die($model->username.' '.$model->password);
+                if($model->username === "" && $model->password === ""){
+                    // die("1");
                     return $this->render('login', [
                         'model' => $model,
-                        'error' => "data",
+                        'error' => "username_password",
                     ]);
                 }
-            }else{
-                Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
+                if($model->username === ""){
+                    // die("2");
+                    return $this->render('login', [
+                        'model' => $model,
+                        'error' => "username",
+                    ]);
+                }
+                if($model->password === ""){
+                    // die("3");
+                    return $this->render('login', [
+                        'model' => $model,
+                        'error' => "password",
+                    ]);
+                }
+                $client = new Client();
+                $response = $client->createRequest()
+                                    ->setMethod('POST')
+                                    ->setUrl('https://cis.del.ac.id/api/sippm-api/do-auth')
+                                    ->setData([
+                                        'username' => $model->username,
+                                        'password' => $model->password
+                                    ])
+                                    ->send();
+
+                if($response->isOk){
+                    
+                    // if(isset($response->data['result'])){
+                        
+                        if($response->data['result'] == "true"){
+                            $session = Yii::$app->session;
+                            $session->open();
+        
+                            $datas = $response->data['data'];
+                            $nama = $datas['nama'];
+                            $email = $datas['email'];
+                            $role = $datas['role'];
+                            
+                            $session->set('username', $model->username);
+                            $session->set('nama', $nama);
+                            $session->set('email', $email);
+        
+                            if($role == "Mahasiswa"){
+                                $dimId = $datas['dimId'];
+                                $nim = $datas['nim'];
+                                $kelas = $datas['kelas'];
+                                $kelas_id = $datas['kelas_id'];
+        
+                                if($session['username'] == 'if416004'){
+                                    $role = "Dosen";
+                                    $session->set('pegawaiId', 1);    
+                                }
+        
+                                $session->set('dimId', $dimId);
+                                $session->set('nim', $nim);
+                                $session->set('kelas', $kelas);
+                                $session->set('kelas_id', $kelas_id);
+                            }else{
+                                $pegawaiId = $datas['pegawaiId'];
+                                $nip = $datas['nip'];
+        
+                                $session->set('pegawaiId', $pegawaiId);
+                                $session->set('nip', $nip);
+                            }
+        
+                            $session->set('role', $role);
+                            $session->close();
+        
+                            return $this->goBack();
+                        }else{
+                            return $this->render('login', [
+                                'model' => $model,
+                                'error' => "data",
+                            ]);
+                        }
+
+                    // }else{
+
+                    //     if($response->data['resut'] == "true"){
+                    //         $session = Yii::$app->session;
+                    //         $session->open();
+        
+                    //         $datas = $response->data['data'];
+                    //         $nama = $datas['nama'];
+                    //         $email = $datas['email'];
+                    //         $role = $datas['role'];
+                            
+                    //         $session->set('username', $model->username);
+                    //         $session->set('nama', $nama);
+                    //         $session->set('email', $email);
+        
+                    //         if($role == "Mahasiswa"){
+                    //             $dimId = $datas['dimId'];
+                    //             $nim = $datas['nim'];
+                    //             $kelas = $datas['kelas'];
+                    //             $kelas_id = $datas['kelas_id'];
+        
+                    //             if($session['username'] == 'if416004'){
+                    //                 $role = "Dosen";
+                    //                 $session->set('pegawaiId', 1);    
+                    //             }
+        
+                    //             $session->set('dimId', $dimId);
+                    //             $session->set('nim', $nim);
+                    //             $session->set('kelas', $kelas);
+                    //             $session->set('kelas_id', $kelas_id);
+                    //         }else{
+                    //             $pegawaiId = $datas['pegawaiId'];
+                    //             $nip = $datas['nip'];
+        
+                    //             $session->set('pegawaiId', $pegawaiId);
+                    //             $session->set('nip', $nip);
+                    //         }
+        
+                    //         $session->set('role', $role);
+                    //         $session->close();
+        
+                    //         return $this->goBack();
+                    //     }else{
+                    //         return $this->render('login', [
+                    //             'model' => $model,
+                    //             'error' => "data",
+                    //         ]);
+                    //     }
+
+                    // }
+                    
+                }else{
+                    Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');
+                    return $this->render('login', [
+                        'model' => $model,
+                        'error' => false,
+                    ]);
+                }
+
+                return $this->goHome();
+            } else {
+
                 return $this->render('login', [
                     'model' => $model,
                     'error' => false,
                 ]);
             }
-
-            return $this->goHome();
-        } else {
-
-            return $this->render('login', [
-                'model' => $model,
-                'error' => false,
-            ]);
         }
     }
 
@@ -233,49 +311,9 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return mixed
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
     public function actionSearchProject($searchWords, $searchCategory, $filterCategory = ''){
         $categories = CategoryProject::find()->where('deleted!=1')->all();
         $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
-
-        // if($searchCategory == ""){
-        //     $filterCategories = SubCategoryProject::find()->where('deleted!=1')->all();    
-        // }else{
-        //     $category = CategoryProject::find()->where(['cat_proj_name' => $searchCategory])->andWhere('deleted!=1')->one();
-        //     $filterCategories = SubCategoryProject::find()->where(['cat_proj_id' => $category['cat_proj_id']])->andWhere('deleted!=1')->all();    
-        // }
 
         $stopWordsRemoved = $this->removeStopWords(strtolower($searchWords));
         $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
@@ -295,7 +333,6 @@ class SiteController extends Controller
             'searchResCount' => count($rows),
             'categories' => $categories,
             'yearList' => $yearList,
-            // 'filterCategories' => $filterCategories,
         ]);
     }
 

@@ -20,11 +20,115 @@ $this->registerCssFile("././css/project.css");
 
 <div class="row">
 
-    <div class="col-md-6" style="padding: 0px 25px;">
-        <h3 style="margin-top:0px"><b style="font-size: 18px">Penugasan</b></h3>
+    <div class="col-md-6 form-project" style="padding: 0px 0px 0px 25px;">
+        <b style="font-size: 16px">Proyek</b>
         <hr class="hr-custom">
-        <b style="display:block;margin-bottom:5px;"><?= $assignment->catProj->cat_proj_name ?> [ <?= $assignment->subCatProj->sub_cat_proj_name ?> ] </b>
-        <font class="text-title-asg"><?= $assignment->asg_title ?></font>
+        <?php
+            $status = AssignmentController::getProject($assignment["asg_id"]);
+
+            if($assignment->stsAsg->sts_asg_name == "Pending"){
+                echo "<div class='alert alert-warning' style='border-left: 6px solid #FFA726;'>
+                        <strong>Info!</strong> <br> Tidak dapat mengirim proyek karena status penugasan masih Menunggu.
+                    </div><br>";
+            }elseif($status == false && $assignment->stsAsg->sts_asg_name == "Close"){
+                echo "<div class='alert alert-danger' style='border-left: 6px solid #FF7043;'>
+                        <strong>Info!</strong> <br>Maaf, penugasan telah di tutup. Anda tidak dapat lagi mengirim proyek sampai koordinator membuka kembali.
+                    </div><br>";
+            }elseif($late == true){
+                echo "<div class='alert alert-danger' style='border-left: 6px solid #FF7043;'>
+                        <strong>Info!</strong> <br>Maaf, tidak dapat mengubah proyek karena penugasan telah di tutup.
+                    </div><br>";
+            }
+        ?>
+
+        <?php $form = ActiveForm::begin([
+            'options' => ['enctype' => 'multipart/form-data']
+        ]); ?>
+
+        <!-- <?= $form->field($model, 'proj_title')->textInput(['readOnly' => false, 'maxlength' => true, 'style' => 'font-weight: 700']) ?> -->
+
+        <?= $form->field($model, 'proj_title')->textArea(['rows' => '3', 'maxLength' => true, 'style' => 'font-weight: 700']) ?>
+        
+        <?= $form->field($model, 'proj_description')->widget(Redactor::classname(), [
+            'options' => [
+                'minHeight' => 500,
+            ],
+        ]) ?>
+        
+        <?= $form->field($model, 'proj_author')->textArea(['rows' => '3', 'maxLength' => true, 'placeholder' => 'Contoh : Nama Anda; Nama Teman Anda'])->hint('Max 500 karakter.')->label("Penulis (Pisahkan Penulis dengan tanda titik koma [ ; ] )")?>
+
+        <div id="sts_win">
+            <?= $form->field($model, 'sts_win_id')->dropDownList(ArrayHelper::map(StatusWin::find()->all(), 'sts_win_id', 'sts_win_name'), [
+                "prompt" => "Pilih Status",
+            ]) ?>
+        </div>
+
+        <?php
+            if(!$model->isNewRecord){
+                if(count($files) != 0){
+                    echo("
+                        <label>File Proyek</label>
+                        <div class='form-group'>
+                    ");
+                    foreach($files as $file){
+                        if($assignment->sts_asg_id == 1){
+                            echo '<div class="row">';
+                            echo "<p class='col-sm-1'>" . Html::a('-', ['remove-attachment', 'file_id' => $file->file_id], ['class' => 'btn btn-danger-custom btn-sm', 'style' => 'padding: 0px 10px 5px;; font-size:20px;display: unset',"data" => [
+                                "confirm" => "Apakah anda yakin menghapus file ini?",
+                                "method" => "post",
+                            ]]) . "</p>";
+                            echo "<p class='col-sm-11' style='margin: 0px;padding: 10px;'>" . $file->file_name . "</p>";
+                            echo '</div>';
+                        }else{
+                            echo "<p class='col-sm-12'>" . Html::a($file->file_name, ['download-attachment', 'file_id' => $file->file_id]) . "</p>";
+                            echo "<br>";
+                        }   
+                    }
+                    echo("
+                        </div>
+                    ");
+                }
+            }
+        ?>
+
+        <?php
+            if($assignment->sts_asg_id == 1){
+                echo('
+                    <div class="form-group">
+                        <label>Upload Proyek</label>
+                        <div class="row">
+                            <div id="file_field" class="col-md-6">
+                                <input type="file" class="form-control" name="files[]">
+                            </div>
+                            <a href="#" onclick="addMoreFile()">Tambah File</a>
+                        </div>
+                    </div>
+                ');
+            }
+        ?>
+
+        <div class="form-group" align="center">
+            <?php
+                echo '<br>';
+                if($assignment->sts_asg_id == 1){
+                    echo Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
+                }
+                
+                // if($assignment->sts_asg_id == 3 || $assignment->sts_asg_id == 2 || !$model->isNewRecord){
+                    echo '&nbsp;&nbsp;'.Html::a("Batal", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']);
+                // }
+            ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
+
+    <div class="col-md-6" style="padding: 0px 0px 0px 55px;">
+        <b style="font-size: 16px">Penugasan</b>
+        <hr class="hr-custom">
+        <font style="font-size: px;margin: 15px 0px;display: block;color: #616161;"><b><?= $assignment->catProj->cat_proj_name ?> &nbsp;-&nbsp; <?= $assignment->subCatProj->sub_cat_proj_name ?> , <?= $assignment->asg_year ?> </b> </font>
+        <font><b style="font-size: 22px;color: #03A9F4;"> <?= $assignment->asg_title ?></b></font>
         
         <p>
             <?= $assignment->asg_description ?>
@@ -141,109 +245,7 @@ $this->registerCssFile("././css/project.css");
         
     </div>
 
-    <div class="col-md-6 form-project">
-        <h3 style="margin-top:0px"><b style="font-size: 18px">Proyek</b></h3>
-        <hr class="hr-custom">
-        <?php
-            $status = AssignmentController::getProject($assignment["asg_id"]);
-            if($assignment->stsAsg->sts_asg_name == "Pending"){
-                echo "<div class='alert alert-warning' style='border-left: 6px solid #FFA726;'>
-                        <strong>Info!</strong> <br> Belum dapat submit proyek karena status penugasan masih pending.
-                    </div><br>";
-            }elseif($status == false && $assignment->stsAsg->sts_asg_name == "Close"){
-                echo "<div class='alert alert-danger' style='border-left: 6px solid #FF7043;'>
-                        <strong>Info!</strong> <br>Maaf, penugasan telah di tutup. Anda tidak dapat lagi mengirim proyek sampai koordinator membuka kembali.
-                    </div><br>";
-            }elseif($late == true){
-                echo "<div class='alert alert-danger' style='border-left: 6px solid #FF7043;'>
-                        <strong>Info!</strong> <br>Maaf, tidak dapat mengubah proyek karena penugasan telah di tutup.
-                    </div><br>";
-            }
-        ?>
-
-        <?php $form = ActiveForm::begin([
-            'options' => ['enctype' => 'multipart/form-data']
-        ]); ?>
-
-        <!-- <?= $form->field($model, 'proj_title')->textInput(['readOnly' => false, 'maxlength' => true, 'style' => 'font-weight: 700']) ?> -->
-
-        <?= $form->field($model, 'proj_title')->textArea(['rows' => '3', 'maxLength' => true, 'style' => 'font-weight: 700']) ?>
-        
-        <?= $form->field($model, 'proj_description')->widget(Redactor::classname(), [
-            'options' => [
-                'minHeight' => 500,
-            ],
-        ]) ?>
-        
-        <?= $form->field($model, 'proj_author')->textArea(['rows' => '3', 'maxLength' => true, 'placeholder' => 'Contoh : Nama Anda; Nama Teman Anda'])->hint('Max 500 karakter.')->label("Penulis (Pisahkan Penulis dengan tanda titik koma [ ; ] )")?>
-
-        <div id="sts_win">
-            <?= $form->field($model, 'sts_win_id')->dropDownList(ArrayHelper::map(StatusWin::find()->all(), 'sts_win_id', 'sts_win_name'), [
-                "prompt" => "Pilih Status",
-            ]) ?>
-        </div>
-
-        <?php
-            if(!$model->isNewRecord){
-                if(count($files) != 0){
-                    echo("
-                        <label>File Proyek</label>
-                        <div class='form-group'>
-                    ");
-                    foreach($files as $file){
-                        if($assignment->sts_asg_id == 1){
-                            echo '<div class="row">';
-                            echo "<p class='col-sm-1'>" . Html::a('-', ['remove-attachment', 'file_id' => $file->file_id], ['class' => 'btn btn-danger-custom btn-sm', 'style' => 'padding: 0px 10px 5px;; font-size:20px;display: unset',"data" => [
-                                "confirm" => "Apakah anda yakin menghapus file ini?",
-                                "method" => "post",
-                            ]]) . "</p>";
-                            echo "<p class='col-sm-11' style='margin: 0px;padding: 10px;'>" . $file->file_name . "</p>";
-                            echo '</div>';
-                        }else{
-                            echo "<p class='col-sm-12'>" . Html::a($file->file_name, ['download-attachment', 'file_id' => $file->file_id]) . "</p>";
-                            echo "<br>";
-                        }   
-                    }
-                    echo("
-                        </div>
-                    ");
-                }
-            }
-        ?>
-
-        <?php
-            if($assignment->sts_asg_id == 1){
-                echo('
-                    <div class="form-group">
-                        <label>Upload Proyek</label>
-                        <div class="row">
-                            <div id="file_field" class="col-md-6">
-                                <input type="file" class="form-control" name="files[]">
-                            </div>
-                            <a href="#" onclick="addMoreFile()">Tambah File</a>
-                        </div>
-                    </div>
-                ');
-            }
-        ?>
-
-        <div class="form-group" align="center">
-            <?php
-                echo '<br><br>';
-                if($assignment->sts_asg_id == 1){
-                    echo Html::submitButton($model->isNewRecord ? 'Kirim &nbsp;<i style="font-size:16px" class="fa fa-paper-plane" aria-hidden="true"></i>' : 'Edit &nbsp;<i style="font-size:16px" class="far fa-edit"></i> ', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
-                }
-                
-                if($assignment->sts_asg_id == 3 || $assignment->sts_asg_id == 2 || !$model->isNewRecord){
-                    echo '&nbsp;&nbsp;'.Html::a("Kembali &nbsp;<i class='fa fa-arrow-left' aria-hidden='true' style='font-size:16px'></i>
-                    ", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']);
-                }
-            ?>
-        </div>
-
-        <?php ActiveForm::end(); ?>
-
-    </div>
+    
 
 </div>
                              

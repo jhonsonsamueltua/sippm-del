@@ -5,8 +5,8 @@ use yii\widgets\Breadcrumbs;
 
 $this->title = 'SIPPM Del';
 $this->registerCssFile("././css/project.css");
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <?php
     $author = $model->proj_author;
@@ -16,21 +16,15 @@ $this->registerCssFile("././css/project.css");
 
 <div class="body-content">
     <div class=" container box-content" >
-        <div class="row">
-        <div class="col-md-3"><font style="text-align: center; font-size: 16px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font></div>
-        <div class="col-md-6"></div>
-        <div class="col-md-3" style="float:right;">
-            <?php
-                echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
-                    'links' => [
-                        'Detail Proyek',
-                    ],
-                ]);
-            ?>
-        </div>
-        </div>
-
+                <?php
+                    echo Breadcrumbs::widget([
+                        'itemTemplate' => "<li>{link}</li>\n",
+                        'links' => [
+                            'Detail Proyek',
+                        ],
+                    ]);
+                ?>
+        <br><br>
         <div align="center">
         <!-- <font style="float: right; font-size: 18px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font>  -->
             <font class="title"><?= $model->proj_title ?></font>

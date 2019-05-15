@@ -1,7 +1,6 @@
 <?php
 /* @var $this \yii\web\View */
 /* @var $content string */
-
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -9,14 +8,40 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use common\models\CategoryProject;
+use common\models\SippmNotification;
+use common\models\Assignment;
+use common\models\Project;
+use common\models\ProjectUsage;
 
 AppAsset::register($this);
-
 $css = ['css/main.css'];
 $js = ['js/main.js'];
 
 $session = Yii::$app->session;
+
+$query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE snv.ntf_reader = '" . $session['username'] . "'";
+$listSeenNotifId = Yii::$app->db->createCommand($query)->queryAll();
+
+// echo $session['username'];
+// echo "<pre>";
+// var_dump($listSeenNotifId);
+// echo "</pre>";
+// die;
+
+$modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_notification.asg_id = sippm_assignment.asg_id')
+                                       ->leftJoin('sippm_project_usage', 'sippm_notification.proj_usg_id = sippm_project_usage.proj_usg_id')
+                                       ->where(['or', 'ntf_recipient="'.$session['username'].'"', 'ntf_recipient="'.$session['kelas_id'].'"'])
+                                       ->andWhere(['not in', 'ntf_id', $listSeenNotifId])
+                                       ->orderBy('sippm_notification.created_at DESC')
+                                       ->all();
+
+// echo "<pre>";
+// var_dump($modelNotif);
+// echo "</pre>";
+// die;
+
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -27,15 +52,43 @@ $session = Yii::$app->session;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css defer" >
+    
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .notification{
+            background-color: transparent; 
+            border: 0px; 
+            /* margin-top: 16px; */
+        }
     
-  <style>
-    
-  </style>
+        .notification:hover{
+            color: #68c6c3;
+        }
+
+        .notification .badge{
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            padding: 5px 10px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+        }
+
+        .notification-box{
+            position: absolute;
+            
+            background: #fff;
+        }
+
+        .notification-info:hover{
+            background-color: #ddd;
+        }
+
+    </style>
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -52,29 +105,29 @@ $session = Yii::$app->session;
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                            <li><?= Html::a('Beranda', ['site/index']) ?></li>
-                            <?php
-                                if($session["role"] == "Mahasiswa"){ ?>
-                                    <!-- <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
-                                    <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
-                                    <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li> -->
-                                    <!-- <li><?= Html::a('Managemen Proyek', ['/project-usage']) ?></li> -->
+                    <li><?= Html::a('Beranda', ['site/index']) ?></li>
+                    <?php
+                        if($session["role"] == "Mahasiswa"){?>
+                            <!-- <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
+                            <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
+                            <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li> -->
+                            <!-- <li><?= Html::a('Managemen Proyek', ['/project-usage']) ?></li> -->
 
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">
-                                            Manajemen Proyek
-                                            <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
-                                            <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
-                                            <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
-                                            <li> <hr style="padding: 0px; margin: 5px;"> </li>              
-                                            <li><?= Html::a('List Proyek', ['project/list-project']) ?></li>
-                                        </ul>
-                                    </li>
-                            <?php
-                                }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                                    Manajemen Proyek
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><?= Html::a('Penugasan', ['assignment/assignment-student']) ?></li>
+                                    <li> <hr style="padding: 0px; margin: 5px;"> </li>                                            
+                                    <li><?= Html::a('Penggunaan Proyek', ['/project-usage']) ?></li>
+                                    <li> <hr style="padding: 0px; margin: 5px;"> </li>              
+                                    <li><?= Html::a('Daftar Proyek Anda', ['project/list-project']) ?></li>
+                                </ul>
+                            </li>
+                    <?php
+                        }elseif($session["role"] == "Dosen" || $session["role"] == "Asisten Dosen"){?>
                                     <!-- <li><?= Html::a('Request Penggunaan Proyek', ['project-usage/list-project-usage-request']) ?></li> -->
                                     <li class="dropdown">
                                         <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">Manajemen Proyek
@@ -112,7 +165,7 @@ $session = Yii::$app->session;
                                     
                                 </ul>
                             </li>
-                            <li><?= Html::a('Tentang', ['site/index'], ['disable' => true]) ?></li>
+                            <!-- <li><?= Html::a('Tentang', ['site/index'], ['disable' => true]) ?></li> -->
                             <?php
                                 if(!isset($session["role"])){?>
                                     <li><?= Html::a('Masuk', ['site/login']) ?></li>
@@ -122,6 +175,82 @@ $session = Yii::$app->session;
                             <?php
                                 }
                             ?>
+                            <li>
+                                <a class="notification fa fa-bell fa-lg dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <?php
+                                        $countNotif = 0;
+                                        
+                                        foreach($modelNotif as $notif){
+                                            if($notif->ntf_type == "assignment"){
+                                                $assignment = Assignment::find()->where(['asg_id' => $notif->asg_id])->one();
+                                                
+                                                if($assignment->sts_asg_id == 1){
+                                                    $countNotif++;
+                                                }
+                                            }else if($notif->ntf_type == "request_accepted"){
+                                                $countNotif++;
+                                            }else if($notif->ntf_type == "request_rejected"){
+                                                $countNotif++;
+                                            }else if($notif->ntf_type == "new_request"){
+                                                $countNotif++;
+                                            }else if($notif->ntf_type == "new_request_alternate"){
+                                                $countNotif++;
+                                            }
+                                        }
+                                    ?>
+                                    <span class="badge"><?= $countNotif ?></span>
+                                </a>
+                                <ul class="dropdown-menu" style="min-width: 250px;">
+                                    <li class="header" style="border-bottom: 1px solid #ddd;">Notifikasi</li>
+                                    <li>
+                                        <div style="max-height: 200px; min=width: 300px; overflow: auto;">
+                                            <ul style="list-style: none; padding: 0px;">
+                                                <?php
+                                                    foreach($modelNotif as $notif){
+                                                        if($notif->ntf_type == "assignment"){
+                                                            $assignment = Assignment::find()->where(['asg_id' => $notif->asg_id])->one();
+                                                            
+                                                            if($assignment->sts_asg_id == 1){
+                                                                echo(" 
+                                                                    <li class='notification-info'><a href=". \yii\helpers\Url::to(['/assignment/assignment-student', 'ntf_id' => $notif->ntf_id]) .">Penugasan $assignment->asg_title telah dibuka</a></li>
+                                                                ");
+                                                            }
+                                                        }else if($notif->ntf_type == "request_accepted"){
+                                                            $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
+                                                            $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
+
+                                                            echo(" 
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage/view', 'id' => $request->proj_usg_id, 'ntf_id' => $notif->ntf_id]) .">Permohonan $project->proj_title telah diterima</a></li>
+                                                            ");
+                                                        }else if($notif->ntf_type == "request_rejected"){
+                                                            $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
+                                                            $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
+
+                                                            echo(" 
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage/view', 'id' => $request->proj_usg_id, 'ntf_id' => $notif->ntf_id]) .">Permohonan $project->proj_title telah ditolak</a></li>
+                                                            ");
+                                                        }else if($notif->ntf_type == "new_request"){
+                                                            $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
+                                                            $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
+
+                                                            echo(" 
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
+                                                            ");
+                                                        }else if($notif->ntf_type == "new_request_alternate"){
+                                                            $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
+                                                            $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
+
+                                                            echo(" 
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
+                                                            ");
+                                                        }
+                                                    }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
                 </ul>
             </div>
         </div>

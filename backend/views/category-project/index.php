@@ -15,14 +15,15 @@ $css = ['css/category-project.css'];
 $this->title = 'Category Projects';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div style="display: flex; justify-content: center; max-width: 50%; margin: 0 auto;">
+<div style="width: 80%">
     <div style="padding: 5px;">
-        <h1>Kategori</h1>
+        <h3>Kategori</h3>
+        <hr>
         
         <?php
             Modal::begin([
-                'header' => 'Tambah Kategori',
-                'toggleButton' => ['label' => 'Tambah Kategori', 'class' => ['btn btn-success']],
+                'header' => '<font style="font-size: 20px"><b>Tambah Kategori</b></font>',
+                'toggleButton' => ['label' => 'Tambah Kategori', 'class' => ['btn btn-sm btn-success']],
             ]);
             
             $newCategory = new CategoryProject();
@@ -32,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             echo $form->field($newCategory, 'cat_proj_name')->textInput();
 
-            echo Html::submitButton('Tambah', ['class' => 'btn btn-success']);
+            echo Html::submitButton('Tambah', ['class' => 'btn btn-success', 'style' => 'text-align: right']);
 
             ActiveForm::end();
 
@@ -47,17 +48,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo("
                     <div class='col-md-12' style='background-color:#fff; border: 1px solid #fff; border-radius: 7px; padding: 5px; padding-left: 10px; margin-bottom: 10px;'>
                         <div class='row'>
-                            <div class='col-md-9'>
-                                <h3 href='#' data-toggle='collapse' data-target='#1$categoryName' onclick='changeIcon(\"$categoryName\")'>
+                            <div class='col-md-5'>
+                                <h4 href='#' data-toggle='collapse' data-target='#1$categoryName' onclick='changeIcon(\"$categoryName\")'>
                                     <span id='caret1$categoryName' class='glyphicon glyphicon-chevron-right'></span> $category->cat_proj_name
-                                </h3>
+                                </h4>
                             </div>
-                            <div class='col-md-3'>
+                            <div class='col-md-7' style='padding-top: 6px;'>
                 ");
                 
                                 Modal::begin([
                                     'header' => 'Ubah kategori ' . $category->cat_proj_name . '',
-                                    'toggleButton' => ['label' => 'Ubah', 'class' => ['btn btn-primary']],
+                                    'toggleButton' => ['label' => 'Ubah', 'class' => ['btn btn-sm btn-primary'], 'style' => 'padding: 4px 20px;'],
                                 ]);
 
                                     $updatedCategory = CategoryProject::find()->where(['cat_proj_id' => $categoryId])->one();
@@ -75,7 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 echo("         
                                 ". Html::a('Hapus', ['delete', 'cat_proj_id' => $categoryId], [
-                                    'class' => 'btn btn-danger',
+                                    'class' => 'btn btn-sm btn-danger',
+                                    'style' => 'padding: 4px 20px;',
                                     'data' => [
                                         'confirm' => 'Hapus kategori ' . $category->cat_proj_name . '?',
                                         'method' => 'POST'
@@ -87,9 +89,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div style='display: flex; justify-content: center;'>
                             <div id='1$categoryName' class='col-md-12 collapse' style='padding-left: 20px;'>
                     ");
+                    echo '<hr>';
                                 Modal::begin([
                                     'header' => 'Tambah Sub Kategori',
-                                    'toggleButton' => ['label' => 'Tambah '. $category->cat_proj_name .'', 'class' => ['btn btn-success modal-btn']],
+                                    'toggleButton' => ['label' => 'Tambah '. $category->cat_proj_name .'', 'class' => ['btn btn-sm btn-success modal-btn']],
                                 ]);
 
                                     $newSubCategory = new SubCategoryProject();
@@ -105,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 Modal::end();
                                 
-                                echo("<hr>");
+                                echo("<br>");
                                 
                                 $subCategories = SubCategoryProject::find()->where(['cat_proj_id' => $categoryId])->andWhere('deleted!=1')->all();
                                 foreach($subCategories as $subCategory){
@@ -121,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                         Modal::begin([
                                             'header' => 'Ubah Sub Kategori '. $subCategoryName .'',
-                                            'toggleButton' => ['label' => 'Ubah', 'class' => ['btn btn-primary']],
+                                            'toggleButton' => ['label' => 'Ubah', 'class' => ['btn btn-sm btn-primary']],
                                         ]);
 
                                             $updatedSubCategory = SubCategoryProject::find()->where(['sub_cat_proj_id' => $subCategoryId])->one();
@@ -138,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         Modal::end();
 
                                     echo("". Html::a('Hapus', ['/sub-category-project/delete', 'sub_cat_proj_id' => $subCategoryId], [
-                                                'class' => 'btn btn-danger',
+                                                'class' => 'btn btn-sm btn-danger',
                                                 'data' => [
                                                     'confirm' => 'Hapus sub kategori '. $subCategoryName . '?',
                                                     'method' => 'POST'
