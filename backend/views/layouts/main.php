@@ -71,8 +71,22 @@ AppAsset::register($this);
                         \yiister\gentelella\widgets\Menu::widget(
                             [
                                 "items" => [
-                                    ["label" => "Dashboard", "url" => ["/"], "icon" => "dashboard"],
-                                    ["label" => "Permohonan Penggunaan", "url" => ["project-usage/index"], "icon" => "files-o"],
+                                    ["label" => "Beranda", "url" => ["/"], "icon" => "dashboard"],
+                                    [
+                                        "label" => "Penggunaan Proyek",
+                                        "icon" => "files-o",
+                                        "url" => "#",
+                                        "items" => [
+                                            [
+                                                'label' => 'Tanggapi Permohonan',
+                                                'url' => \yii\helpers\Url::to(['project-usage/index'])
+                                            ],
+                                            [
+                                                'label' => 'Riwayat Tanggapan',
+                                                'url' => \yii\helpers\Url::to(['project-usage/riwayat-request-users'])
+                                            ],
+                                        ],
+                                    ],
                                     [
                                         "label" => "Manajemen Konten",
                                         "icon" => "th",

@@ -50,14 +50,14 @@ $session = Yii::$app->session;
             <?php
                 $year = array();
                 $year_now = (int)date('Y');
-                for($i = 2016; $i <= $year_now; $i++){
+                for($i = $year_now; $i >= 2016; $i--){
                     $year[$i] = $i;
                 }
             ?>
 
             <div class="row">
                 <div class="col-md-3">
-                    <?= $form->field($modelAsg, 'asg_year')->dropDownList($year)->label('Tahun') ?>  
+                    <?= $form->field($modelAsg, 'asg_year')->dropDownList($year)->label('Tahun Proyek') ?>  
                 </div>
             </div>
 

@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
@@ -7,155 +6,87 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = 'Masuk';
 $this->params['breadcrumbs'][] = $this->title;
-?>
 
-<div class="site-login">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <div class="myform">
-        <div class="logo">
-            <div><i class="fa fa-user" aria-hidden="true"></i></div>
-            LOGIN
-        </div>
-        <?php 
-            $form = ActiveForm::begin([
-                'id' => 'login-form',
-                'options' => ['class' => 'form'],
-                ]);
-        ?>
-            <?= $form->field($model, 'username', [
-                'inputOptions'=>[
-                    // 'template' => "\{input}\n{hint}\n{error}",
-                    // 'class'=>'form-control',
-                    'placeholder'=>"Username"
-                ]
-            ])->textInput()->label(false); ?>
-            <?= $form->field($model, 'password', [
-                'inputOptions'=>[
-                    // 'template' => "{input}\n{hint}\n{error}",
-                    // 'class'=>'form-control',
-                    'placeholder'=>"Password"
-                ]
-            ])->passwordInput()->label(false); ?>
-            <!-- <input type="password" placeholder=" &#xf023;  Password" /> -->
-            <button type="submit">LOGIN </button>
-            <div> <a href="#">Forgot Password?</a> </div>
-        <?php ActiveForm::end() ?>
+?>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <div class="fadeIn first">
+        <img src="../../../images/logo.jpg" id="icon" alt="Del Logo" />
     </div>
-</div>
+    <h3 class="active"> SIPPM Del</h3>
+    <br><br>
+    <?php 
+    // $error = "";
+        $form = ActiveForm::begin([
+            'id' => 'login-form',
+            'options' => ['class' => 'form'],
+            ]);
 
-<?php $style= <<< CSS
-    p{
-        color: #a94442;
-    }
-
-    input {
-        height: 40px;
-        width: 100%;
-        margin: 20px auto;
-        border-left: none;
-        border-right: none;
-        border-top: none;
-        color: white;
-        background: #2A3F54;
-  padding-left:5px;
-        font-family: FontAwesome, "Open Sans", Verdana, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    text-decoration: inherit;
-    }
-    
-    button {
-        height: 40px;
-        width: 100%;
-        border-radius: 4px;
-        margin-top: 30px;
-        margin-bottom: 20px;
-        border: none;
-        background: #1ABB9C;
-        color: #ffffff;
-        font-family: sans-serif;
-        font-weight: 700;
-        font-size: 14pt;
-    }
-    
-    .form {
-        width: 90%;
-        margin: 40px auto;
-        text-align: center;
-    }
-    
-    input:focus {
-        outline: none
-    }
-    
-    .logo {
-        color: white;
-        font-family: sans-serif;
-        font-size: 15pt;
-        font-weight: 600;
-        text-align: center;
-        padding-top: 40px
-    }
-    
-    .myform {
-        background: #2A3F54;
-        width: 30%;
-        margin: auto;
-        height: 600px;
-        -webkit-box-shadow: 0px 0px 3px 1px rgba(38, 35, 128, 1);
-        -moz-box-shadow: 0px 0px 3px 1px rgba(38, 35, 128, 1);
-        box-shadow: 0px 0px 3px 1px rgba(38, 35, 128, 1);
-        /* padding : 10px; */
-    }
-    
-    .myform a {
-        text-decoration: none;
-        color: white;
-        font-family: sans-serif;
-        letter-spacing: .1em;
-    }
-    
-     ::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
-         color: #cccccc;
-    }
-    input.icon::-webkit-input-placeholder {
-        font-family:'FontAwesome';
-    }
-    .fa-user{
-    font-size:90px;
-    
-    }
-    
-    ::-moz-placeholder {
-        /* Firefox 19+ */
-        color: #cccccc;
-          }
-    
-    :-ms-input-placeholder {
-        /* IE 10+ */
-         color: #cccccc;
-         }
-    
-    :-moz-placeholder {
-        /* Firefox 18- */
-        color: #cccccc;
-      
-    }
-  @media screen and (max-width:500px){
-        .myform{
-            width:80%;
+        $border_bottom_username = " ";
+        $border_bottom_password = "";
+        $autofocus_username = true;
+        $autofocus_password = false;
+        if($error == "data" || $error == "username_password"){
+            $border_bottom_username = " 2px solid #FF5722";
+            $border_bottom_password = " 2px solid #FF5722";
+        }elseif($error == "username"){
+            $border_bottom_username = " 2px solid #FF5722";
+        }elseif($error == "password"){
+            $border_bottom_password = " 2px solid #FF5722";
+            $autofocus_username = false;
+            $autofocus_password = true;
         }
-    }
-    @media screen and (max-width:800px){
-        .myform{
-            width:80%;
+    ?>
+    <div class="form-group">
+        <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom_username.'', 'autofocus' => $autofocus_username, 'placeholder' => 'Pengguna'])->label(false) ?>
+        <?php 
+            if($error == "username_password" || $error == "username"){
+                echo "<font class='text-error'> &nbsp;Pengguna tidak boleh kosong. </font>";
+            }
+        ?>
+    </div>
+    
+    <div class="form-group">
+        <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom_password.'', 'autofocus' => $autofocus_password, 'placeholder' => 'Kata Sandi'])->label(false) ?>
+        <span class="glyphicon glyphicon-eye-open"></span>
+        
+        <?php
+            if($error == "username_password" || $error == "password"){
+                echo "<font class='text-error'> &nbsp;Kata Sandi tidak boleh kosong. <br></font>";
+            }
+        ?>
+    </div>
+    
+    <?php
+        if($error == "data"){
+            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Pengguna atau Kata Sandi anda salah. <br><br></font>";
         }
-    }
+    ?>
+    <div class="form-group" align="center">
+    <br>
+        <button type="submit" class="fadeIn fourth">Masuk </button>
+        <!-- <?= Html::submitButton('Masuk', ['class' => 'fadeIn fourth', 'name' => 'login-button']) ?> -->
+    </div>
 
-CSS;
-$this->registerCss($style);
+    <?php ActiveForm::end(); ?>
+
+  </div>
+</div> 
+
+            
+<?php $this->endPage() ?>
+
+<?php
+     $this->registerJs('
+     $(".glyphicon-eye-open").on("click", function() {
+        $(this).toggleClass("glyphicon-eye-close");
+          var type = $("#password").attr("type");
+        if (type == "text"){ 
+          $("#password").prop("type","password");}
+        else{ 
+          $("#password").prop("type","text"); }
+        });
+     ', $this::POS_END);
 ?>
-

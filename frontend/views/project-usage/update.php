@@ -11,7 +11,7 @@ $this->title = $model->proj->proj_title;
 $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script> -->
 
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
@@ -28,8 +28,8 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     ],
                 ]);
             ?>
-
-        <h3><b> Ubah Permohonan Penggunaan</b> </h3>
+        <br>
+        <h4><b> Ubah Permohonan Penggunaan</b> </h4>
         <hr class="hr-custom">
 
         <?= $this->render('_form', [

@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="fadeIn first">
         <img src="images/logo.jpg" id="icon" alt="Del Logo" />
     </div>
-    <h3 class="active"> Log In SIPPM Del</h3>
+    <h3 class="active"> SIPPM Del</h3>
     <br><br>
     <?php 
         $form = ActiveForm::begin([
@@ -39,32 +39,33 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     ?>
     <div class="form-group">
-        <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom_username.'', 'autofocus' => $autofocus_username, 'placeholder' => 'Username'])->label(false) ?>
+        <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom_username.'', 'autofocus' => $autofocus_username, 'placeholder' => 'Pengguna'])->label(false) ?>
         <?php 
             if($error == "username_password" || $error == "username"){
-                echo "<font class='text-error'> &nbsp;Username tidak boleh kosong. </font>";
+                echo "<font class='text-error'> &nbsp;Pengguna tidak boleh kosong. </font>";
             }
         ?>
     </div>
     
     <div class="form-group">
-        <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom_password.'', 'autofocus' => $autofocus_password, 'placeholder' => 'Password'])->label(false) ?>
+        <?= $form->field($model, 'password')->passwordInput(['id' => 'password', 'class' => 'fadeIn third', 'style' => 'border-bottom: '.$border_bottom_password.'', 'autofocus' => $autofocus_password, 'placeholder' => 'Kata Sandi'])->label(false) ?>
         <span class="glyphicon glyphicon-eye-open"></span>
         
         <?php
             if($error == "username_password" || $error == "password"){
-                echo "<font class='text-error'> &nbsp;Password tidak boleh kosong. <br></font>";
+                echo "<font class='text-error'> &nbsp;Kata Sandi tidak boleh kosong. <br></font>";
             }
         ?>
     </div>
     
     <?php
         if($error == "data"){
-            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Maaf, username atau password anda salah. <br><br></font>";
+            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Pengguna atau Kata Sandi anda salah. <br><br></font>";
         }
     ?>
     <div class="form-group" align="center">
-        <button type="submit" class="fadeIn fourth">Log In </button>
+    <br>
+        <button type="submit" class="fadeIn fourth">Masuk </button>
         <!-- <?= Html::submitButton('Log In', ['class' => 'fadeIn fourth', 'name' => 'login-button']) ?> -->
     </div>
 

@@ -24,7 +24,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                         ],
                     ]);
                 ?>
-        <br>
+        <br><br>
         <div align="center">
         <!-- <font style="float: right; font-size: 18px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font>  -->
             <font class="title"><?= $model->proj_title ?></font>
