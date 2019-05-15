@@ -10,17 +10,16 @@ $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $modelAsg->asg_id, 'url' => ['view', 'id' => $modelAsg->asg_id]];
 $this->params['breadcrumbs'][] = 'Update';
 $css = ['css/site.css'];
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
 ?>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
 <div class="body-content">
     <div class=" container box-content">
         
-        <div class="row" style="float:right;">
             <?php
                 echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'itemTemplate' => "<li>{link}</li>\n",
                     'links' => [
                         [
                             'label' => 'Penugasan',
@@ -30,9 +29,8 @@ $css = ['css/site.css'];
                     ],
                 ]);
             ?>
-        </div>
-
-        <h3 class=""> <b> Edit Penugasan </b></h3>
+        
+        <h3 class=""> <b> Ubah Penugasan </b></h3>
         <hr class="hr-custom">
 
         <?= $this->render('_form-experiment', [

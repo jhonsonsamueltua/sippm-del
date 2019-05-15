@@ -13,322 +13,338 @@ $this->registerCssFile("././css/assignment.css");
 $this->title = 'SIPPM Del';
 $session = Yii::$app->session;
 $this->registerCssFile("././css/project.css");
-?>
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+?>
 
 <div class="body-content">
     <div class=" container box-content">
 
-        <div class="row" style="float:right;">
             <?php
                 echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li><i>{link}</i></li>\n",
+                    'itemTemplate' => "<li>{link}</li>\n",
                     'links' => [
                         'Penggunaan Proyek',
                     ],
                 ]);
             ?>
-        </div>
-
-        <h3><b>Penggunaan Proyek</b></h3>
+        <br>
+        <h4><b>Permohonan Penggunaan Proyek</b></h4>
         <hr class="hr-custom">
+        <?php
+            $activeRequestSaya = "";
+            $activeRequestUsers = "";
+            if($modelRequestUsersCount >= 1){
+                $activeRequestUsers = "defaultOpen";
+            }else{
+                $activeRequestSaya = "defaultOpen";
+            }
+        
+        ?>
         <div class="row">
-            
-            <div class="col-md-3" style="text-align: center;border-radius: 3px;">
+            <div class="col-md-3" style="padding-bottom: 20px;">
+                <div class="tab">
+                    <button class="tab-head" > <b> Permohonan Anda </b> </button>
+                    <button class="tablinks" onclick="openContent(event, '1')" id= "<?= $activeRequestSaya ?>" > Menunggu Ditanggapi &nbsp;&nbsp; <span class="badge" style="background-color: #00838F;float: right"> <?= $modelRequestCount ?></span></button>
+                    <button class="tablinks" onclick="openContent(event, '2')" >Riwayat Permohonan &nbsp;&nbsp; <span class="badge" style="background-color: #00838F;float: right"> <?= $modelRiwayatCount ?> </span></button>
 
-            <ul class="nav nav-tabs" style="background-color: #6AC7C1;">
-                <li class="active"><a data-toggle="tab" href="#1" style="width:262px;border-bottom: 2px solid #eeecec;">Request Anda &nbsp;&nbsp; <span class="badge"> <?= $modelRequestCount ?></span> </a></li>
-                <li><a data-toggle="tab" href="#2" style="width:262px;"> Riwayat Request &nbsp;&nbsp; <span class="badge"> <?= $modelRiwayatCount ?> </span> </a></li>
-            </ul>
-
-
+                    <?php
+                    if($session['role'] != "Mahasiswa"){?>
+                    <button class="tab-head" style="padding-top: 30px;"> <b> Sebagai Koordinator Proyek</b> </button>
+                    <button class="tablinks" onclick="openContent(event, '3')" id="<?= $activeRequestUsers ?>" >Tanggapi Permohonan &nbsp;&nbsp; <span class="badge" style="background-color: #00838F;float: right"> <?= $modelRequestUsersCount ?> </span></button>
+                    <button class="tablinks" onclick="openContent(event, '4')">Riwayat Tanggapan &nbsp;&nbsp; <span class="badge" style="background-color: #00838F;float: right"> <?= $modelRiwayatRequestUsersCount ?> </span></button>
+                    <?php } ?>
+                </div>
             </div>
-            <div class="col-md-9" style="border-left: 1px solid #dad4d4;">
+            <div class="col-md-9">
 
-                <div class="tab-content">
-                    <div class="tab-pane fade in active " id="1">
+                <div id="1" class="tabcontent">
+
+                    <table class="table " id="dataTable1" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th><b>Permohonan Anda</b></th>
+                                <?php
+                                    if($modelRequestCount == 0){
+                                         echo '<th> </th>';
+                                    }?>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
 
                         <?php
-                            if($modelRequestUsersCount != 0 && $modelRequestCount != 0 && ($session['role'] == "Dosen" || $session['role'] == "Asisten Dosen")){
-                                echo '<div class="alert alert-info">
-                                            <span class="closebtn" onclick="this.parentElement.style.display="none";">&times;</span> 
-                                            <strong>Info!</strong> <br>
-                                            '. $modelRequestUsersCount.' request untuk ditanggapi, <br>
-                                            '. $modelRequestCount.' request anda dengan status menunggu tanggapan dari koordinator proyek.
-                                        </div>';
-                            }else if($modelRequestUsersCount != 0 && ($session['role'] == "Dosen" || $session['role'] == "Asisten Dosen")){
-                                echo '<div class="alert alert-info">
-                                            <span class="closebtn" onclick="this.parentElement.style.display="none";">&times;</span> 
-                                            <strong>Info!</strong> <br>
-                                            '.$modelRequestUsersCount.' request untuk ditanggapi.
-                                        </div>';
-                            }else if($modelRequestCount != 0){
-                                echo '<div class="alert alert-info">
-                                            <span class="closebtn" onclick="this.parentElement.style.display="none";">&times;</span> 
-                                            <strong>Info!</strong> <br>
-                                            '.$modelRequestCount.' request anda dengan status menunggu tanggapan dari koordinator proyek.
-                                        </div>';
+                            if($modelRequestCount == 0){
+                                echo '<td class="empty-data-table" colspan=2> <br><div style="min-height: 205px;"> Tidak ada Permohonan saat ini.</div></td>';
+                            }else{
+                            
+                                foreach($modelRequest as $request){
+                                    $project = ProjectController::findModel($request['proj_id']);
+                                    $status = ProjectUsageController::getProjectRequestStatus($request->sts_proj_usg_id);
+                                    
+                                        $updated_at = $request["updated_at"];
+                                        $updated_at_timestamp = strtotime($updated_at);
+                                        $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);  
+
+                                        echo '<tr>
+                                                <td style="border-top: 0px;">';
+                                                echo '<ul style="padding: 0px;">';
+                                                echo '<li class="list-group-item d-flex justify-content-between align-items-center" style="border: 1px solid #efebc5">';
+                                                echo '<font> <b> Request Anda </b> </font>';
+                                                echo '<span class="badge " style="background-color: #FFA726"> Status : 
+                                                        '.$request->stsProjUsg->sts_proj_usg_name.'
+                                                    </span>';
+                                                echo '<br>';
+                                                echo Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Proyek">'.$project->proj_title.'</font>', ['project-usage/view', 'id' => $request['proj_usg_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
+                                                echo '<br>Tujuan Penggunaan : '.$this->context->getCategoryPenggunaan($request['cat_usg_id']).'';
+                                                
+                                                echo '
+                                                
+                                                <div style="float: right;padding-top: 9px;">
+                                                    <p>
+
+                                                ';
+                                                echo(
+                                                    Html::a(" Ubah", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;']) .'&nbsp&nbsp' 
+                                                    . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;', "data" => [
+                                                        "confirm" => "Apakah anda yakin ingin  membatalkan permohonan penggunaan ini?",
+                                                        "method" => "post",
+                                                    ]]) 
+                                                );
+
+                                                echo '</p>
+                                                </div>';
+                                                
+                                                echo '<br>
+                                                        <font href="#" data-toggle="collapse" data-target="#1'.$request['proj_usg_id'].'" onclick="find()">
+                                                        <span id="caret1" class="glyphicon glyphicon-chevron-down"></span> Detail Permohonan
+                                                            
+                                                        </font>
+                                                        <div id="1'.$request['proj_usg_id'].'" class="collapse">';
+                                                        echo DetailView::widget([
+                                                            'model' => $request,
+                                                            'attributes' => [
+                                                                [
+                                                                    'attribute' => 'proj_usg_usage',
+                                                                    'label' => 'Keterangan Penggunaan',
+                                                                    'format' => 'raw',
+                                                                ],
+                                                                [
+                                                                    'attribute' => 'proj.asg.asg_creator',
+                                                                    'label' => 'Penerima Permohonan',
+                                                                    'value' => function($model){
+                                                                        if($model->alternate == 1){
+                                                                            return "Admin SIPPM Del (Dikarenakan koordinator proyek / ".$model->proj->asg->asg_creator." berstatus tidak aktif)";
+                                                                        }else{
+                                                                            return $model->proj->asg->asg_creator;
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                [
+                                                                    'label' => 'Tanggal Permohonan',
+                                                                    'value' => function($model){
+                                                                        $updated_at = $model["created_at"];
+                                                                        $updated_at_timestamp = strtotime($updated_at);
+                                                                        $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);
+
+                                                                        return $updated_at;
+                                                                    }
+                                                                ],
+                                                            ]
+                                                        ]);
+                                                    echo '</div>';
+                                                echo '</li>';
+                                                echo '</ul>';
+                                        echo '  </td>
+                                            </tr>';
+                                    
+                                  
+                                }
+                                
                             }
                         ?>
 
-                        
+                        </tbody>
+                    </table>
 
-                        <table class="table table-hover" id="dataTable1" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th><h4><b>Request Penggunaan Proyek</b></h4></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
+                </div>
+                <div id="2" class="tabcontent" style="margin-top: 12px;">
+                    
+                    <b>Riwayat Permohonan Anda</b>
+                    <hr class="hr-custom">
+                    <table class="table table-hover" id="dataTable2" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>  
+                                <th>#</th>
+                                <th>Proyek</th>
+                                <th>Koordinator</th>
+                                <th>Status</th>
+                                <th>Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <?php
-                                if($modelRequestUsersCount == 0 && $modelRequestCount == 0){
-                                    echo '<td class="empty-data-table"> <br> Tidak ada request saat ini.</td>';
-                                }else{
-                                    if($session['role'] == "Dosen" || $session['role'] == "Asisten Dosen"){
-                                        foreach($modelRequestUsers as $request){
-                                            $status = ProjectUsageController::getProjectRequestStatus($request["sts_proj_usg_id"]);
-                                            
-                                                $updated_at = $request["updated_at"];
-                                                $updated_at_timestamp = strtotime($updated_at);
-                                                $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);  
+                            $i = 1;
+                            if($modelRiwayatCount == 0){
+                                echo '<tr><td class="empty-data-table" colspan=5> <br> Tidak ada riwayat Permohonan anda.</td></tr>';
+                            }else{
+                                foreach($modelRiwayat as $riwayat){
+                                    $project = ProjectController::findModel($riwayat['proj_id']);
+                                    $icon = $riwayat->stsProjUsg->sts_proj_usg_name == "Diterima" ? '<i class="fa fa-check-circle-o" aria-hidden="true" style="color: #03A9F4"></i>' : '<i class="fa fa-times-circle-o" aria-hidden="true" style="color: #FF7043"></i>';
 
-                                                echo '<tr>
-                                                        <td>';
-                                                        echo '<ul style="padding: 0px;">';
-                                                            echo '<li class="list-group-item d-flex justify-content-between align-items-center" style="border: 1px solid #C5E1A5;">';
 
-                                                            echo '<h5> <b> Tanggapi Request user </b> </h5>';
-                                                            
-                                                            echo Html::a($request['proj_title'], ['/project/view-project', 'proj_id' =>$request['proj_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
-                        
-                                                            echo '<br>
-                                                                <font style="color: #777777;">Direquest oleh : '.$request['proj_usg_creator'].', '.$updated_at.' </font>';
-                                                            echo '
-                                                            
-                                                            <div style="float: right;">
-                                                                <p>
-                        
-                                                            ';
-                                                            echo(
-                                                                Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
-                                                                . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
-                                                                    "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
-                                                                    "method" => "post",
-                                                                ]])
-                                                            );
-                        
-                                                            echo '</p>
-                                                            </div>';
-                                                            
-                                                            echo '<br>
-                                                                <font href="#" data-toggle="collapse" data-target="#1'.$request['proj_usg_id'].'" onclick="find()">
-                                                                <span id="caret1" class="glyphicon glyphicon-chevron-down"></span> Keterangan Penggunaan
-                                                                    
-                                                                </font>
-                                                                <div id="1'.$request['proj_usg_id'].'" class="collapse">';
-                                                                echo DetailView::widget([
-                                                                    'model' => $request,
-                                                                    'attributes' => [
-                                                                        [
-                                                                            'attribute' => 'proj_usg_creator',
-                                                                            'label' => 'Direquest oleh'
-                                                                        ],
-                                                                        [
-                                                                            'attribute' => 'asg_creator',
-                                                                            'label' => 'Penerima Request'
-                                                                        ],
-                                                                        [
-                                                                            'label' => 'Tujuan Penggunaan',
-                                                                            'value' => function($model){
-    
-                                                                                return $this->context->getCategoryPenggunaan($model['cat_usg_id']);
-                                                                            }
-                                                                        ],
-                                                                        [
-                                                                            'attribute' => 'proj_usg_usage',
-                                                                            'label' => 'Keterangan Penggunaan',
-                                                                            'format' => 'raw',
-                                                                        ],
-                                                                    ]
-                                                                ]);
-                                                            echo '</div>';
-                                                            echo '</li>';
-                                                        echo '</ul>';
-                                                echo '  </td>
-                                                    </tr>';
-                                            
-                                        }   
-                                    }
-                                
-                                    foreach($modelRequest as $request){
-                                        $project = ProjectController::findModel($request['proj_id']);
-                                        $status = ProjectUsageController::getProjectRequestStatus($request->sts_proj_usg_id);
-                                        
-                                            $updated_at = $request["updated_at"];
-                                            $updated_at_timestamp = strtotime($updated_at);
-                                            $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);  
+                                    echo '<tr>';
+                                        echo '<td><b>'.$i.'</b></td>';
+                                        echo "<td> ".Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Proyek">'.$project->proj_title.'</font>', ['/project/view-project', 'proj_id' => $project->proj_id], ['class' => 'text-title-list-project', 'style'=>'font-size:14px'])." </td>";
+                                        echo '<td style="font-size: 12px;"> '.$riwayat->proj->asg->asg_creator.' </td>';
+                                        echo '<td style="font-size: 12px;"> '.$icon .''.$riwayat->stsProjUsg->sts_proj_usg_name.' </td>';
+                                        echo '<td> '.Html::a('Detail', ['project-usage/view', 'id' => $riwayat['proj_usg_id']], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 15px;font-size: 12px;']).' </td>';
+                                    echo '</tr>';
+                                    
+                                    $i++;
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
 
+                </div>
+                <div id="3" class="tabcontent">
+
+                    <table class="table " id="dataTable3" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th><b>Tanggapi Permohonan</b></th>
+                                <?php
+                                    if($modelRequestCount == 0){
+                                         echo '<th> </th>';
+                                    }?>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php
+                            if($modelRequestUsersCount == 0){
+                                echo '<td class="empty-data-table" colspan=2> <br> Tidak ada permohonan untuk di tanggapi.</td>';
+                            }else{
+                                if($session['role'] == "Dosen" || $session['role'] == "Asisten Dosen"){
+                                    foreach($modelRequestUsers as $request){
+                                        $status = ProjectUsageController::getProjectRequestStatus($request["sts_proj_usg_id"]);
                                             echo '<tr>
-                                                    <td>';
+                                                    <td style="border-top: 0px;">';
                                                     echo '<ul style="padding: 0px;">';
-                                                    echo '<li class="list-group-item d-flex justify-content-between align-items-center" style="border: 1px solid #FFF59D;">';
-                                                    echo '<h5> <b> Request Anda </b> </h5>';
-                                                    echo Html::a($project->proj_title, ['project-usage/view', 'id' => $request['proj_usg_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
+                                                        echo '<li class="list-group-item d-flex justify-content-between align-items-center" style="border: 1px solid #C5E1A5;">';
 
-                                                    echo '<span class="badge badge-primary badge-pill" style="background-color: #FFA726"> Status : 
-                                                            '.$request->stsProjUsg->sts_proj_usg_name.'
-                                                        </span>';
-                                                    echo '<br>
-                                                        <font style="color: #777777;">'.$updated_at.' </font>';
-                                                    echo '
-                                                    
-                                                    <div style="float: right;">
-                                                        <p>
-
-                                                    ';
-                                                    echo(
-                                                        Html::a(" Edit", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;']) .'&nbsp&nbsp' 
-                                                        . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;', "data" => [
-                                                            "confirm" => "Apakah anda yakin ingin  membatalkan permohonan penggunaan ini?",
-                                                            "method" => "post",
-                                                        ]]) 
-                                                    );
-
-                                                    echo '</p>
-                                                    </div>';
-                                                    
-                                                    echo '<br>
-                                                        <font href="#" data-toggle="collapse" data-target="#2'.$request['proj_usg_id'].'" onclick="find2()">
-                                                            <span id="caret2" class="glyphicon glyphicon-chevron-down"></span>
-                                                            Keterangan Penggunaan
-                                                        </font>
-                                                        <div id="2'.$request['proj_usg_id'].'" class="collapse">';
+                                                        echo '<h5> <b> Tanggapi Permohonan </b> </h5>';
+                                                        
+                                                        echo Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Proyek">'.$request['proj_title'].'</font>', ['/project/view-project', 'proj_id' =>$request['proj_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
+                                                        echo '<br>Tujuan Penggunaan : '.$this->context->getCategoryPenggunaan($request['cat_usg_id']).'';
+                                                        echo'
+                                                        <div style="float: right;">
+                                                            <p>
+                    
+                                                        ';
+                                                        echo(
+                                                            Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
+                                                            . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
+                                                                "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
+                                                                "method" => "post",
+                                                            ]])
+                                                        );
+                    
+                                                        echo '</p>
+                                                        </div>';
+                                                        
+                                                        echo '<br>
+                                                            <div href="#" data-toggle="collapse" data-target="#2'.$request['proj_usg_id'].'" onclick="find2()">
+                                                            <span id="caret1" class="glyphicon glyphicon-chevron-down"></span> Detail Permohonan
+                                                                
+                                                            </div>
+                                                            <div id="2'.$request['proj_usg_id'].'" class="collapse">';
                                                             echo DetailView::widget([
                                                                 'model' => $request,
                                                                 'attributes' => [
-                                                                    [
-                                                                        'attribute' => 'proj_usg_creator',
-                                                                        'label' => 'Direquest oleh'
-                                                                    ],
-                                                                    [
-                                                                        'attribute' => 'proj.asg.asg_creator',
-                                                                        'label' => 'Penerima Request'
-                                                                    ],
-                                                                    [
-                                                                        'label' => 'Tujuan Penggunaan',
-                                                                        'value' => function($model){
-
-                                                                            return $this->context->getCategoryPenggunaan($model['cat_usg_id']);
-                                                                        }
-                                                                    ],
                                                                     [
                                                                         'attribute' => 'proj_usg_usage',
                                                                         'label' => 'Keterangan Penggunaan',
                                                                         'format' => 'raw',
                                                                     ],
+                                                                    [
+                                                                        'attribute' => 'proj_usg_creator',
+                                                                        'label' => 'Direquest oleh'
+                                                                    ],
+                                                                    [
+                                                                        'label' => 'Tanggal Permohonan',
+                                                                        'value' => function($model){
+                                                                            $updated_at = $model["created_at"];
+                                                                            $updated_at_timestamp = strtotime($updated_at);
+                                                                            $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);
+
+                                                                            return $updated_at;
+                                                                        }
+                                                                    ],
                                                                 ]
                                                             ]);
                                                         echo '</div>';
-                                                    echo '</li>';
+                                                        echo '</li>';
                                                     echo '</ul>';
                                             echo '  </td>
                                                 </tr>';
-                                        
-                                    }
-                                    
+                                       
+                                    }   
                                 }
-                            ?>
+                            }
+                        ?>
 
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
 
-                    </div>
-
-                    <div class="tab-pane fade " id="2">
-                        <h4><b>Riwayat Request Anda</b></h4>
-                        <hr class="hr-custom">
-                        <table class="table table-hover" id="dataTable2" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>  
-                                    <th>#</th>
-                                    <th>Proyek</th>
-                                    <th>Koordinator</th>
-                                    <th>Status</th>
-                                    <th>Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                </div>
+                <div id="4" class="tabcontent" style="margin-top: 12px;">
+                    
+                    <b>Riwayat Tanggapan Permohonan</b>
+                    <hr class="hr-custom">
+                    <table class="table table-hover" id="dataTable4" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Proyek</th>
+                                <th>Direquest oleh</th>
+                                <th>Status</th>
+                                <th>Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
                                 $i = 1;
-                                if($modelRiwayatCount == 0){
-                                    echo '<td class="empty-data-table" colspan=5> <br> Tidak ada riwayat request anda.</td>';
+                                if($modelRiwayatRequestUsersCount == 0){
+                                    echo '<tr><td class="empty-data-table" colspan=5> <br> Tidak ada riwayat Permohonan anda.</td></tr>';
                                 }else{
-                                    foreach($modelRiwayat as $riwayat){
-                                        $project = ProjectController::findModel($riwayat['proj_id']);
-                                        $icon = $riwayat->stsProjUsg->sts_proj_usg_name == "Diterima" ? '<i class="fa fa-check-circle-o" aria-hidden="true" style="color: #03A9F4"></i>' : '<i class="fa fa-times-circle-o" aria-hidden="true" style="color: #FF7043"></i>';
-
-
-                                        echo '<tr>';
-                                            echo '<td><b>'.$i.'</b></td>';
-                                            echo "<td> ".Html::a($project->proj_title, ['/project/view-project', 'proj_id' => $project->proj_id], ['class' => 'text-title-list-project', 'style'=>'font-size:14px'])." </td>";
-                                            echo '<td style="font-size: 12px;"> '.$riwayat->proj->asg->asg_creator.' </td>';
-                                            echo '<td style="font-size: 12px;"> '.$icon .''.$riwayat->stsProjUsg->sts_proj_usg_name.' </td>';
-                                            echo '<td> '.Html::a('Detail', ['project-usage/view', 'id' => $riwayat['proj_usg_id']], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 15px;font-size: 12px;']).' </td>';
-                                        echo '</tr>';
-                                        
-                                        $i++;
-                                    }
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="tab-pane fade " id="4">
-                        <h4><b>Riwayat Request Sebagai Koordinator Proyek</b></h4>
-                        <hr class="hr-custom">
-                        <table class="table table-hover" id="dataTable3" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Proyek</th>
-                                    <th>Direquest oleh</th>
-                                    <th>Status</th>
-                                    <th>Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                    $i = 1;
-                                    foreach($modelRiwayatRequestOrangLain as $riwayat2){
+                                    foreach($modelRiwayatRequestUsers as $riwayat2){
                                         $status = ProjectUsageController::getProjectRequestStatus($riwayat2["sts_proj_usg_id"]);
                                         $icon = $status == "Diterima" ? '<i class="fa fa-check-circle-o" aria-hidden="true" style="color: #03A9F4"></i>' : '<i class="fa fa-times-circle-o" aria-hidden="true" style="color: #FF7043"></i>';
 
 
                                         echo '<tr>';
                                             echo '<td><b>'.$i.'</b></td>';
-                                            echo "<td> ".Html::a($riwayat2['proj_title'], ['/project/view-project', 'proj_id' => $riwayat2['proj_id']], ['class' => 'text-title-list-project', 'style'=>'font-size:14px'])." </td>";
+                                            echo "<td> ".Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Proyek">'.$riwayat2['proj_title'].'</font>', ['/project/view-project', 'proj_id' => $riwayat2['proj_id']], ['class' => 'text-title-list-project', 'style'=>'font-size:14px'])." </td>";
                                             echo '<td style="font-size: 12px;"> '.$riwayat2['proj_usg_creator'].' </td>';
                                             echo '<td style="font-size: 12px;"> '.$icon .' '.$status.' </td>';
                                             echo '<td> '.Html::a('Detail', ['project-usage/view', 'id' => $riwayat2['proj_usg_id']], ['class' => 'btn-xs btn-info btn-info-custom', 'style' => 'padding: 5px 15px;font-size: 12px;']).' </td>';
                                         echo '</tr>';
-                                    
+                                        $i++;
                                     }
-                                    
-                                ?>
-                            </tbody>
-                        </table>
-
-                    </div>
-
+                                }
+                                
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
+                
             </div>
-
         </div>
 
     </div>
@@ -365,7 +381,7 @@ $this->registerCssFile("././css/project.css");
      $this->registerJs('
         $(function () {
             $("#dataTable1").DataTable({
-            "pageLength": 3,
+            "pageLength": 5,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -387,6 +403,17 @@ $this->registerCssFile("././css/project.css");
         });
         $(function () {
             $("#dataTable3").DataTable({
+            "pageLength": 5,
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": true
+            });
+        });
+        $(function () {
+            $("#dataTable4").DataTable({
             "pageLength": 10,
             "paging": true,
             "lengthChange": true,
@@ -396,5 +423,22 @@ $this->registerCssFile("././css/project.css");
             "autoWidth": true
             });
         });
+
+        function openContent(evt, contentName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+              tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+              tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(contentName).style.display = "block";
+            evt.currentTarget.className += " active";
+          }
+          
+          // Get the element with id="defaultOpen" and click on it
+          document.getElementById("defaultOpen").click();
      ', $this::POS_END);
 ?>

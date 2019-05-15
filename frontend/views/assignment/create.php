@@ -7,30 +7,26 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 $this->title = 'Tambah Penugasan';
 $session = Yii::$app->session;
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
-
 <div class="body-content">
-    <div class=" container box-content">
+    <div class=" container box-content " style="width: 65%;">
 
-    <div class="row" style="float:right;">
-        <?php
-            echo Breadcrumbs::widget([
-                'itemTemplate' => "<li><i>{link}</i></li>\n",
-                'links' => [
-                    [
-                        'label' => 'Penugasan',
-                        'url' => ['assignment/assignment-dosen'],
+            <?php
+                echo Breadcrumbs::widget([
+                    'itemTemplate' => "<li>{link}</li>\n",
+                    'links' => [
+                        [
+                            'label' => 'Penugasan',
+                            'url' => ['assignment/assignment-dosen'],
+                        ],
+                        ['label' => 'Tambah Penugasan'],
                     ],
-                    'Tambah Penugasan',
-                ],
-            ]);
-        ?>
-    </div>
-    <h3 class=""> <b> Tambah Penugasan </b></h3>
-    <hr class="hr-custom">
-
+                ]);
+            ?>
+            <h3 class=""> <b> Tambah Penugasan </b></h3>
+            <hr class="hr-custom">
         <?= $this->render('_form-experiment', [
             'modelAsg' => $modelAsg,
         ]) ?>

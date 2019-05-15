@@ -2,17 +2,28 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Breadcrumbs;
+
 $this->title = 'List Proyek';
+$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
+
+$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 
-<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">      
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
-
+         <?php
+            echo Breadcrumbs::widget([
+                'itemTemplate' => "<li>{link}</li>\n",
+                'links' => [
+                    'Proyek '. $title .'',
+                ],
+            ]);
+        ?>
+        <br>
     <h4> <b>List Proyek "<?= $title ?>" </b> </h4>
     <hr class="hr-custom">
 
@@ -31,7 +42,14 @@ $this->title = 'List Proyek';
                     $description = $data['proj_description'];
                     $limit_words = 30;
                     $words = explode(' ',$description);
-                    $description = implode(" ",array_splice($words,0,$limit_words));
+                    $words = str_replace("<p>", "", $words);
+                    $words = str_replace("</p>", "", $words);
+                    
+                    if(count($words) > 30){
+                        $description = implode(" ",array_splice($words,0,$limit_words)).'...';
+                    }else{
+                        $description = implode(" ",array_splice($words,0,$limit_words));
+                    }
 
                     $author = $data['proj_author'];
                     $author_words = explode(';', $author);
@@ -48,7 +66,7 @@ $this->title = 'List Proyek';
                                 <?= $author ?> (<?= $created_at ?>)
                             </div>
 
-                            <?= $description ?>...
+                            <p><?= $description ?></p>
                         </td>
                     </tr>
             <?php
@@ -70,7 +88,7 @@ $this->title = 'List Proyek';
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "autoWidth": true
             });

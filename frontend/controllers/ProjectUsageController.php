@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\httpclient\Client;
+use common\controllers\NotificationController;
+use common\controllers\NotificationViewerController;
 use common\models\Assignment;
 use common\models\Project;
 use common\models\ProjectUsage;
@@ -41,7 +43,7 @@ class ProjectUsageController extends Controller
      * Lists all ProjectUsage models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($ntf_id = '')
     {
         $session = Yii::$app->session;
         
@@ -51,36 +53,51 @@ class ProjectUsageController extends Controller
             $modelRequestCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->count();
             $modelRiwayatCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->count();
 
-            $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->all();
-            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->all();
+            $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->orderBy('created_at DESC')->all();
+            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->orderBy('created_at DESC')->all();
 
-            $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1';
+            $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, PU.created_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1 AND PU.alternate != 1 ORDER BY PU.created_at DESC';
             $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
             $modelRequestUsersCount = count($modelRequestUsers);
 
-            $query2 = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND (PU.sts_proj_usg_id = 2 OR PU.sts_proj_usg_id = 3)';
-            $modelRiwayatRequestOrangLain = Yii::$app->db->createCommand($query2)->queryAll();
-            $modelRiwayatRequestOrangLainCount = count($modelRiwayatRequestOrangLain);
+            $query2 = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, PU.created_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND (PU.sts_proj_usg_id = 2 OR PU.sts_proj_usg_id = 3) AND PU.alternate != 1 ORDER BY PU.created_at DESC';
+            $modelRiwayatRequestUsers = Yii::$app->db->createCommand($query2)->queryAll();
+            $modelRiwayatRequestUsersCount = count($modelRiwayatRequestUsers);
+
+            if($ntf_id != ''){
+                NotificationViewerController::createNotificationViewer($ntf_id, $session['username']);
+            }
 
             return $this->render('index', [
                 'modelRequest' => $modelRequest,
                 'modelRequestUsers' => $modelRequestUsers,
                 'modelRiwayat' => $modelRiwayat,
-                'modelRiwayatRequestOrangLain' => $modelRiwayatRequestOrangLain,
+                'modelRiwayatRequestUsers' => $modelRiwayatRequestUsers,
                 'modelRequestCount' => $modelRequestCount,
                 'modelRequestUsersCount' => $modelRequestUsersCount,
                 'modelRiwayatCount' => $modelRiwayatCount,
-                'modelRiwayatRequestOrangLainCount' => $modelRiwayatRequestOrangLainCount,
+                'modelRiwayatRequestUsersCount' => $modelRiwayatRequestUsersCount,
             ]);
         }
     }
 
-    public function actionView($id)
+    public function actionView($id, $ntf_id = '')
     {   
-        $model = $this->findModel($id);
-        return $this->render('view', [
-            'model' => $model,
-        ]);
+        $session = Yii::$app->session;
+
+        if(!isset($session['role'])){
+            return $this->redirect(['site/login']);
+        }else{
+            if($ntf_id != ''){
+                NotificationViewerController::createNotificationViewer($ntf_id, $session['username']);
+            }
+
+            $model = $this->findModel($id);
+            
+            return $this->render('view', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionListProjectUsageRequest(){
@@ -145,15 +162,16 @@ class ProjectUsageController extends Controller
                 }
 
                 if($model->save()){
-                    if($coordinatorStat == "Aktif"){
-                        $this->sendRequestEmail($asgModel->asg_creator_email, $proj_id, $session['nama']);
+                    if($model->alternate == 1){
+                        NotificationController::sendProjectUsageRequestNotification('new_request_alternate', $model->proj_usg_id, 'admin');
                     }else{
-                        $this->sendRequestEmail($asgModel->asg_alternate_email, $proj_id, $session['nama']);
+                        NotificationController::sendProjectUsageRequestNotification('new_request', $model->proj_usg_id, $asgModel->created_by);
                     }
-                    Yii::$app->session->setFlash('success', '<center> Permohonan anda berhasil dikirim. Untuk tindak lanjut akan di kirim melalui email.</center>');
+                    
+                    Yii::$app->session->setFlash('success', '<center>Permohonan anda berhasil dikirim.</center>');
                     return $this->redirect(['view', 'id' => $model->proj_usg_id]);
                 }else{
-                    Yii::$app->session->setFlash('error', 'Maaf, terjadi kesalahan pada saat permohonan penggunaan proyek. Silahkan melakukan permohonan ulang atau menghubungi penyedia layanan.');
+                    Yii::$app->session->setFlash('error', 'Terjadi kesalahan pada saat permohonan penggunaan proyek. Silahkan melakukan permohonan ulang.');
 
                     return $this->redirect('create', [
                         'model' => $model,
@@ -187,7 +205,7 @@ class ProjectUsageController extends Controller
             $model = $this->findModel($proj_usg_id);
 
             if($model->created_by !== $session['username']){
-                Yii::$app->session->setFlash('error', 'Maaf, anda tidak mempunyai hak untuk memodifikasi permohonan penggunaan ini.'); 
+                Yii::$app->session->setFlash('error', 'Anda tidak mempunyai hak untuk memodifikasi permohonan penggunaan ini.'); 
 
                 return $this->redirect(['/']);
             }else{
@@ -220,7 +238,7 @@ class ProjectUsageController extends Controller
             $model = $this->findModel($proj_usg_id);
 
             if($model->created_by !== $session['username']){
-                Yii::$app->session->setFlash('error', 'Maaf, anda tidak mempunyai hak untuk memodifikasi permohonan penggunaan ini.'); 
+                Yii::$app->session->setFlash('error', 'Anda tidak mempunyai hak akses untuk memodifikasi permohonan penggunaan ini.'); 
 
                 return $this->redirect(['/']);
             }else{
@@ -237,7 +255,7 @@ class ProjectUsageController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role' == 'Mahasiswa']){
-            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini');
+            Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk mengakses halaman tersebut.');
             
             return $this->goHome();
         }else{
@@ -247,7 +265,8 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
+
+            NotificationController::sendProjectUsageRequestNotification('request_accepted', $request->proj_usg_id, $request->created_by);
 
             return $this->redirect(['index']);
         }
@@ -259,7 +278,7 @@ class ProjectUsageController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role' == 'Mahasiswa']){
-            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini');
+            Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk mengakses halaman tersebut.');
             
             return $this->goHome();
         }else{
@@ -269,40 +288,11 @@ class ProjectUsageController extends Controller
             $request->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
+
+            NotificationController::sendProjectUsageRequestNotification('request_rejected', $request->proj_usg_id, $request->created_by);
 
             return $this->redirect(['list-project-usage-request']);
         }
-    }
-
-    private function sendRequestEmail($to, $proj_id, $requester){
-        $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
-        $link = "/localhost/sippm-del/index.php?r=project-usage/list-project-usage-request";
-        $emailBody = "$requester telah melakukan permohonan penggunaan untuk proyek $project->proj_title. Silahkan klik link berikut untuk menindaklanjuti permohonan penggunaan ini.<br>". Html::a($project->proj_title, [$link]);
-
-        Yii::$app->mailer->compose()
-            ->setFrom('sippm.del@gmail.com')
-            ->setTo($to)
-            ->setSubject('[SIPPM] Permohonan Penggunaan Proyek')
-            ->setHtmlBody($emailBody)
-            ->send();
-    }
-
-    private function sendResponseEmail($to, $status, $proj_id){
-        $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
-        $link = "/localhost/sippm-del/index.php?r=project/view-project";
-
-        if($status == "Diterima")
-            $emailBody = "Request penggunaan anda untuk proyek $project->proj_title telah $status. Silahkan klik link berikut untuk melakukan pengunduhan file proyek.<br>". Html::a($project->proj_title, [$link, 'proj_id' => $project->proj_id]);
-        else
-            $emailBody = "Request penggunaan anda untuk proyek $project->proj_title telah $status. Silahkan klik link berikut untuk <i>request</i> ulang file proyek.<br>". Html::a($project->proj_title, [$link, 'proj_id' => $project->proj_id]);
-
-        Yii::$app->mailer->compose()
-            ->setFrom('sippm.del@gmail.com')
-            ->setTo($to)
-            ->setSubject('[SIPPM] Permohonan Penggunaan Proyek')
-            ->setHtmlBody($emailBody)
-            ->send();
     }
 
     public static function getProjectRequestStatus($sts_id){

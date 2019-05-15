@@ -76,13 +76,39 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->loginAdmin()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->username === "" && $model->password === ""){
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "username_password",
+                ]);
+            }
+            if($model->username === ""){
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "username",
+                ]);
+            }
+            if($model->password === ""){
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "password",
+                ]);
+            }
+            
+            if(!$model->loginAdmin()){
+                return $this->render('login', [
+                    'model' => $model,
+                    'error' => "data",
+                ]);
+            }else{
+                return $this->goBack();
+            }
+            
         } else {
-            $model->password = '';
-
             return $this->render('login', [
                 'model' => $model,
+                'error' => false,
             ]);
         }
     }
@@ -97,5 +123,28 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public static function tgl_indo($tanggal){
+        $bulan = array (
+        1 =>   'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember'
+        );
+        $pecahkan = explode('-', $tanggal);
+        // variabel pecahkan 0 = tanggal
+        // variabel pecahkan 1 = bulan
+        // variabel pecahkan 2 = tahun
+         
+        return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
 }

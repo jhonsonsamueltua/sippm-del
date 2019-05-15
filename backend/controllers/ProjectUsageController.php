@@ -42,25 +42,28 @@ class ProjectUsageController extends Controller
      */
     public function actionIndex()
     {
-        // $session = Yii::$app->session;
-        
-        // if(!isset($session['role'])){
-        //     return $this->redirect(['site/login']);
-        // }else{
-            $modelRequestCount = ProjectUsage::find()->Where('alternate=1')->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->count();
-            $pagination = new Pagination(['totalCount' => $modelRequestCount, 'pageSize' => 5]);
-            $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE PU.alternate = 1 AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1';
-            $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
-            $modelRequestUsersCount = count($modelRequestUsers);
+        $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.created_at, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE PU.alternate = 1 AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1 AND PU.alternate != 0 ORDER BY PU.created_at DESC';
+        $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
+        $modelRequestUsersCount = count($modelRequestUsers);
 
-            return $this->render('index', [
-                'modelRequestUsers' => $modelRequestUsers,
-                'modelRequestCount' => $modelRequestCount,
-                'modelRequestUsersCount' => $modelRequestUsersCount,
-                'pagination' => $pagination,
-            ]);
-        // }
+        return $this->render('index', [
+            'modelRequestUsers' => $modelRequestUsers,
+            'modelRequestUsersCount' => $modelRequestUsersCount,
+        ]);
     }
+
+    public function actionRiwayatRequestUsers()
+    {
+        $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.created_at, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE PU.alternate = 1 AND PU.deleted != 1 AND PU.sts_proj_usg_id != 1 AND PU.alternate != 0 ORDER BY PU.created_at DESC';
+        $modelRiwayatRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
+        $modelRiwayatRequestUsersCount = count($modelRiwayatRequestUsers);
+
+        return $this->render('riwayat-request-users', [
+            'modelRiwayatRequestUsers' => $modelRiwayatRequestUsers,
+            'modelRiwayatRequestUsersCount' => $modelRiwayatRequestUsersCount,
+        ]);
+    }
+    
 
     /**
      * Displays a single ProjectUsage model.
@@ -142,8 +145,8 @@ class ProjectUsageController extends Controller
             $request->sts_proj_usg_id = 2;
             $request->save();
 
-            $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
+            // $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
+            // $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
             return $this->redirect(['index']);
         // }
@@ -164,8 +167,8 @@ class ProjectUsageController extends Controller
             $request->sts_proj_usg_id = 3;
             $request->save();
 
-            $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
+            // $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
+            // $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
 
             return $this->redirect(['index']);
         // }

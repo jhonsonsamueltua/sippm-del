@@ -43,36 +43,25 @@ class ProjectController extends Controller
         return parent::beforeAction($action);
     }
 
-    /**
-     * Lists all SippmProject models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ProjectSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     public function actionViewProject($proj_id)
     {   
         $session = Yii::$app->session;
         
-        $project = $this->findModel($proj_id);
-        $assignmentModel = Assignment::find()->where(['asg_id' => $project->asg_id])->andWhere('deleted!=1')->one();
-        $usageModel = ProjectUsage::find()->where(['proj_id' => $proj_id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
-        $files = File::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->all();
+        if(!isset($session['role'])){
+            return $this->redirect(['site/login']);
+        }else{
+            $project = $this->findModel($proj_id);
+            $assignmentModel = Assignment::find()->where(['asg_id' => $project->asg_id])->andWhere('deleted!=1')->one();
+            $usageModel = ProjectUsage::find()->where(['proj_id' => $proj_id])->andWhere(['created_by' => $session['username']])->andWhere('deleted!=1')->one();
+            $files = File::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->all();
 
-        return $this->render('view-project', [
-            'model' => $project,
-            'assignmentModel' => $assignmentModel,
-            'usageModel' => $usageModel,
-            'files' => $files,
-        ]);
+            return $this->render('view-project', [
+                'model' => $project,
+                'assignmentModel' => $assignmentModel,
+                'usageModel' => $usageModel,
+                'files' => $files,
+            ]);
+        }
     }
 
     public function actionListProject()
@@ -82,7 +71,7 @@ class ProjectController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['/site/login']);
         }else{
-            $model = Project::find()->where(["created_by" => $session['username']])->all();
+            $model = Project::find()->where(["created_by" => $session['username']])->andWhere('deleted!=1')->all();
         
             return $this->render('list-project', [
                 'model' => $model,
@@ -91,28 +80,39 @@ class ProjectController extends Controller
     }
 
     public function actionProjectByCategory($cat){
-        $category = CategoryProject::find()->where(['cat_proj_id' => $cat])->one();
+        $session = Yii::$app->session;
 
-        $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
-        $model = Yii::$app->db->createCommand($query)->queryAll();
-        
-        return $this->render('project-by-category',[
-            'model' => $model,
-            'category' => $category->cat_proj_name,
-        ]);
+        if(!isset($session['role'])){
+            return $this->redirect(['/site/login']);
+        }else{
+            $category = CategoryProject::find()->where(['cat_proj_id' => $cat])->one();
+
+            $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
+            $model = Yii::$app->db->createCommand($query)->queryAll();
+            
+            return $this->render('project-by-category',[
+                'model' => $model,
+                'category' => $category->cat_proj_name,
+            ]);
+        }
     }
 
     public function actionProjectBySubCategory($sub_cat){
-        $sub_category = SubCategoryProject::find()->where(['sub_cat_proj_id' => $sub_cat])->one();
+        $session = Yii::$app->session;
 
-        $query = 'SELECT sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_downloaded, sippm_project.proj_author, sippm_project.updated_at FROM sippm_project JOIN sippm_assignment ON sippm_assignment.asg_id = sippm_project.asg_id JOIN sippm_sub_category_project ON sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id WHERE sippm_assignment.sub_cat_proj_id = '.$sub_cat.' GROUP BY sippm_project.proj_title ORDER BY sippm_project.proj_title ASC';
-        $model = Yii::$app->db->createCommand($query)->queryAll();
-        // echo '<pre>';
-        // die(var_dump($model));
-        return $this->render('project-by-sub-category',[
-            'model' => $model,
-            'sub_category' => $sub_category,
-        ]);
+        if(!isset($session['role'])){
+            return $this->redirect(['/site/login']);
+        }else{
+            $sub_category = SubCategoryProject::find()->where(['sub_cat_proj_id' => $sub_cat])->one();
+
+            $query = 'SELECT sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_downloaded, sippm_project.proj_author, sippm_project.updated_at FROM sippm_project JOIN sippm_assignment ON sippm_assignment.asg_id = sippm_project.asg_id JOIN sippm_sub_category_project ON sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id WHERE sippm_assignment.sub_cat_proj_id = '.$sub_cat.' GROUP BY sippm_project.proj_title ORDER BY sippm_project.proj_title ASC';
+            $model = Yii::$app->db->createCommand($query)->queryAll();
+         
+            return $this->render('project-by-sub-category',[
+                'model' => $model,
+                'sub_category' => $sub_category,
+            ]);
+        }
     }
 
     /**
@@ -153,7 +153,8 @@ class ProjectController extends Controller
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
                 $model->proj_downloaded = 0;
                 $model->proj_year = $year->format('Y');
-    
+                $model->proj_creator_class = $session['kelas_id'];
+
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
     
@@ -207,7 +208,7 @@ class ProjectController extends Controller
                     }
 
                     Yii::$app->session->setFlash('succes', 'Selamat, anda berhasil mengunggah proyek.');
-                    return $this->redirect(['update', 'id' => $model->proj_id]);
+                    return $this->redirect(['assignment/assignment-student']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
     
@@ -242,7 +243,7 @@ class ProjectController extends Controller
             $model = $this->findModel($id);
             
             if($model->created_by != $session['username']){
-                Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk memodifikasi proyek berikut.');
+                Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk memodifikasi proyek tersebut.');
 
                 return $this->redirect(['/']);
             }else{
@@ -286,10 +287,11 @@ class ProjectController extends Controller
                                     }
                                 }
                             }
-                            
-                            return $this->redirect(['update', 'id' => $id]);
+                            Yii::$app->session->setFlash('succes', 'Selamat, anda berhasil mengubah proyek.');
+                            // return $this->redirect(['update', 'id' => $id]);
+                            return $this->redirect(['assignment/assignment-student']);
                         }else{
-                            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
+                            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat mengubah proyek');
                             
                             return $this->goBack();
                         }
@@ -323,7 +325,7 @@ class ProjectController extends Controller
             $model = $this->findModel($id);
             
             if($model->created_by !== $session['username']){
-                Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk memodifikasi proyek berikut.');
+                Yii::$app->session->setFlash('error', 'Anda tidak memiliki hak untuk memodifikasi proyek terebut.');
 
                 return $this->redirect(['/']);
             }else{
