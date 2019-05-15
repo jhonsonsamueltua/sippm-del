@@ -135,7 +135,14 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                                 ],
                                                                 [
                                                                     'attribute' => 'proj.asg.asg_creator',
-                                                                    'label' => 'Penerima Permohonan'
+                                                                    'label' => 'Penerima Permohonan',
+                                                                    'value' => function($model){
+                                                                        if($model->alternate == 1){
+                                                                            return "Admin SIPPM Del (Dikarenakan koordinator proyek / ".$model->proj->asg->asg_creator." berstatus tidak aktif)";
+                                                                        }else{
+                                                                            return $model->proj->asg->asg_creator;
+                                                                        }
+                                                                    }
                                                                 ],
                                                                 [
                                                                     'label' => 'Tanggal Permohonan',
@@ -212,13 +219,17 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                         <thead>
                             <tr>
                                 <th><b>Tanggapi Permohonan</b></th>
+                                <?php
+                                    if($modelRequestCount == 0){
+                                         echo '<th> </th>';
+                                    }?>
                             </tr>
                         </thead>
                         <tbody>
 
                         <?php
                             if($modelRequestUsersCount == 0){
-                                echo '<td class="empty-data-table"> <br> Tidak ada permohonan untuk di tanggapi.</td>';
+                                echo '<td class="empty-data-table" colspan=2> <br> Tidak ada permohonan untuk di tanggapi.</td>';
                             }else{
                                 if($session['role'] == "Dosen" || $session['role'] == "Asisten Dosen"){
                                     foreach($modelRequestUsers as $request){

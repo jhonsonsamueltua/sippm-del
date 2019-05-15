@@ -29,9 +29,10 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 ],
             ]);
         ?>
-        <h3><b>Detail Penggunaan Proyek</b></h3>
+        <br>
+        <h4><b>Detail Penggunaan Proyek</b></h4>
         <hr class="hr-custom">
-
+        <br>
         <?= DetailView::widget([
             'model' => $model,
             // 'options' => ['class' => 'border-detail-view'],

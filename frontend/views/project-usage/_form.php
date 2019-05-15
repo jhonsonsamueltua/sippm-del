@@ -9,7 +9,7 @@ use common\models\CategoryUsage;
 /* @var $this yii\web\View */
 /* @var $model common\models\ProjectUsage */
 /* @var $form yii\widgets\ActiveForm */
-
+$this->registerCssFile("././css/project.css");
 ?>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
@@ -26,7 +26,8 @@ use common\models\CategoryUsage;
             <?= $form->field($model, 'proj_usg_usage')->widget(Redactor::className())  ?>
         
             <div class="form-btn" align="center">
-                <?= Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-primary btn-custom', 'style' => 'border: 0px;']) ?>
+                <?= Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-primary-edit btn-custom', 'style' => 'border: 0px;']) ?>
+                &nbsp;&nbsp; <?= Html::a("Kembali", ['project-usage/index'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']) ?>
             </div>
 
         <?php ActiveForm::end(); ?>

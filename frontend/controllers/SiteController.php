@@ -121,28 +121,25 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
-            // die($model->username.' '.$model->password);
             if($model->username === "" && $model->password === ""){
-                // die("1");
                 return $this->render('login', [
                     'model' => $model,
                     'error' => "username_password",
                 ]);
             }
             if($model->username === ""){
-                // die("2");
                 return $this->render('login', [
                     'model' => $model,
                     'error' => "username",
                 ]);
             }
             if($model->password === ""){
-                // die("3");
                 return $this->render('login', [
                     'model' => $model,
                     'error' => "password",
                 ]);
             }
+
             $client = new Client();
             $response = $client->createRequest()
                                 ->setMethod('POST')
@@ -207,7 +204,6 @@ class SiteController extends Controller
                     'error' => false,
                 ]);
             }
-
             return $this->goHome();
         } else {
 
