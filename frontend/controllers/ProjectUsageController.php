@@ -51,10 +51,10 @@ class ProjectUsageController extends Controller
             return $this->redirect(['site/login']);
         }else{
             $modelRequestCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->count();
-            $modelRiwayatCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->count();
+            $modelRiwayatCount = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3], ['sts_proj_usg_id' => 4]])->count();
 
             $modelRequest = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['sts_proj_usg_id' => 1])->andWhere('deleted!=1')->orderBy('created_at DESC')->all();
-            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3]])->andWhere('deleted!=1')->orderBy('created_at DESC')->all();
+            $modelRiwayat = ProjectUsage::find()->Where(['created_by' => $session['username']])->andWhere(['or',['sts_proj_usg_id' => 2], ['sts_proj_usg_id' => 3], ['sts_proj_usg_id' => 4]])->orderBy('created_at DESC')->all();
 
             $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, PU.created_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1 AND PU.alternate != 1 ORDER BY PU.created_at DESC';
             $modelRequestUsers = Yii::$app->db->createCommand($query)->queryAll();
@@ -210,7 +210,7 @@ class ProjectUsageController extends Controller
                 return $this->redirect(['/']);
             }else{
                 if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                    return $this->redirect(['index']);
+                    return $this->redirect(['view', 'id' => $model->proj_usg_id]);
                 }
                 
                 return $this->render('update', [
@@ -242,6 +242,8 @@ class ProjectUsageController extends Controller
 
                 return $this->redirect(['/']);
             }else{
+                $model->sts_proj_usg_id = 4;
+                $model->save(false);
                 $model->softDelete();
                 
                 return $this->redirect(['index']);
@@ -291,7 +293,7 @@ class ProjectUsageController extends Controller
 
             NotificationController::sendProjectUsageRequestNotification('request_rejected', $request->proj_usg_id, $request->created_by);
 
-            return $this->redirect(['list-project-usage-request']);
+            return $this->redirect(['index']);
         }
     }
 

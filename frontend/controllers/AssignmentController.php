@@ -102,9 +102,9 @@ class AssignmentController extends Controller
 
         $modelPenugasanSaatIni = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 1])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
         $modelPenugasanSaatIniCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 1])->andWhere('deleted != 1')->count();
-        // die($modelPenugasanSaatIniCount);
-        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
-        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 2])->andWhere('deleted != 1')->count();
+        
+        $modelRiwayatPenugasan = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or',['sts_asg_id' => 2], ['sts_asg_id' => 4]])->orderBy('created_at DESC')->all();
+        $modelRiwayatPenugasanCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['or',['sts_asg_id' => 2], ['sts_asg_id' => 4]])->count();
         
         $modelMenunggu = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 3])->andWhere('deleted != 1')->orderBy('created_at DESC')->all();
         $modelMenungguCount = Assignment::find()->where(['created_by' => $session['username']])->andWhere(['sts_asg_id' => 3])->andWhere('deleted != 1')->count();
@@ -287,18 +287,20 @@ class AssignmentController extends Controller
 
                                 $modelClass = new ClassAssignment();
 
-                                foreach($_POST['Class'] as $i => $class){
-                                    $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $modelAsg->asg_id])->andWhere('deleted != 1')->one();
-        
-                                    if($checkClass == null){
-                                        $modelClass->setIsNewRecord(true);
-                                        $modelClass->class = $class;
-                                        $modelClass->asg_id = $modelAsg->asg_id;
-                                        $modelClass->partial = 0;
-                                        $modelClass->save();
-                                        $modelClass->cls_asg_id++;
-
-                                        NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class['kelas_id']);
+                                if(isset($_POST['Class'])){
+                                    foreach($_POST['Class'] as $i => $class){
+                                        $checkClass = ClassAssignment::find()->where(["class" => $class])->andWhere(["asg_id" => $modelAsg->asg_id])->andWhere('deleted != 1')->one();
+            
+                                        if($checkClass == null){
+                                            $modelClass->setIsNewRecord(true);
+                                            $modelClass->class = $class;
+                                            $modelClass->asg_id = $modelAsg->asg_id;
+                                            $modelClass->partial = 0;
+                                            $modelClass->save();
+                                            $modelClass->cls_asg_id++;
+    
+                                            NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class);
+                                        }
                                     }
                                 }
                             }
@@ -339,7 +341,6 @@ class AssignmentController extends Controller
      */
     public function actionDelete($id){
         $session = Yii::$app->session;
-
         if(!isset($session['role'])){
             return $this->redirect(['site/login']);
         }else if($session['role'] == "Mahasiswa"){
@@ -365,6 +366,8 @@ class AssignmentController extends Controller
                     $project->softDelete();
                 }
 
+                $modelAsg->sts_asg_id = 4;
+                $modelAsg->save(false);
                 $modelAsg->softDelete();
 
                 return $this->redirect(['assignment-dosen']);

@@ -110,7 +110,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                 echo(
                                                     Html::a(" Ubah", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;']) .'&nbsp&nbsp' 
                                                     . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;', "data" => [
-                                                        "confirm" => "Apakah anda yakin ingin  membatalkan permohonan penggunaan ini?",
+                                                        "confirm" => "Apakah anda yakin membatalkan permohonan penggunaan ini?",
                                                         "method" => "post",
                                                     ]]) 
                                                 );
@@ -160,8 +160,6 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                 echo '</ul>';
                                         echo '  </td>
                                             </tr>';
-                                    
-                                  
                                 }
                                 
                             }
@@ -250,7 +248,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                         echo(
                                                             Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
                                                             . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
-                                                                "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
+                                                                "confirm" => "Apakah anda yakin menolak permohonan penggunaan ini?",
                                                                 "method" => "post",
                                                             ]])
                                                         );

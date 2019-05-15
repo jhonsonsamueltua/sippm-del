@@ -27,7 +27,7 @@ $this->registerCssFile("././css/project.css");
         
             <div class="form-btn" align="center">
                 <?= Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-primary-edit btn-custom', 'style' => 'border: 0px;']) ?>
-                &nbsp;&nbsp; <?= Html::a("Kembali", ['project-usage/index'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']) ?>
+                &nbsp;&nbsp; <?= Html::a("Batal", ['project-usage/index'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px; width: 150px;']) ?>
             </div>
 
         <?php ActiveForm::end(); ?>

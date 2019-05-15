@@ -18,7 +18,7 @@ $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
 $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
-$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 ?>
 
@@ -97,7 +97,14 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                                     <?= Html::a('Ubah', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                                    <?= Html::a('Batal', ['assignment/delete', 'id' => $key["asg_id"]], [
+                                                        'class' => 'btn-md btn-danger btn-info-custom', 
+                                                        'style' => 'padding: 5px 15px;',
+                                                        'data' => [
+                                                            'confirm' => 'Apakah anda yakin membatalkan penugasan ini?',
+                                                            'method' => 'post',
+                                                        ]
+                                                    ]) ?>
                                                 </div>
                                             </td>
                                         </tr>
@@ -157,7 +164,14 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                                     <?= Html::a('Ubah', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                                    <?= Html::a('Batal', ['assignment/delete', 'id' => $key["asg_id"]], [
+                                                        'class' => 'btn-md btn-danger btn-info-custom', 
+                                                        'style' => 'padding: 5px 15px;',
+                                                        'data' => [
+                                                            'confirm' => 'Apakah anda yakin membatalkan penugasan ini?',
+                                                            'method' => 'post',
+                                                        ]
+                                                    ]) ?>
                                                 </div>
                                             </td>
                                         </tr>
@@ -205,20 +219,27 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                 
                                                 <div style="float: right; margin-bottom: 0px;">
                                                     <?php
-                                                        // if($this->context->getStatusAssignment($key['asg_id']) == "Pending"){
-                                                        //     echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#FFA726;">
-                                                        //         Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
-                                                        //     </span>';
-                                                        // }else{
-                                                        //     echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#009688;">
-                                                        //         Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
-                                                        //     </span>';
-                                                        // }
+                                                        if($this->context->getStatusAssignment($key['asg_id']) == "Cancel"){
+                                                            echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#bb4441;">
+                                                                Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                            </span>';
+                                                        }else{
+                                                            echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#8a6d3b;">
+                                                                Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                            </span>';
+                                                        }
                                                     ?>
                                                     <!-- <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                                     <?= Html::a('Ubah', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp; -->
+                                                    <?= Html::a('Batal', ['assignment/delete', 'id' => $key["asg_id"]], [
+                                                        'class' => 'btn-md btn-danger btn-info-custom', 
+                                                        'style' => 'padding: 5px 15px;',
+                                                        'data' => [
+                                                            'confirm' => 'Apakah anda yakin ingin membatalkan penugasan berikut?',
+                                                            'method' => 'post',
+                                                        ]
+                                                    ]) ?> &nbsp; -->
                                                     
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;

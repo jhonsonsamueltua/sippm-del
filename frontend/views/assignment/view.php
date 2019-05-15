@@ -45,15 +45,15 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             
             if($model->sts_asg_id == 1 || $model->sts_asg_id == 3){
                 $button = '<p>'.Html::a("Ubah", ["update", "id" => $model->asg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 30px;']) .' &nbsp; &nbsp;'.
-                Html::a("Hapus", ["delete", "id" => $model->asg_id], [
+                Html::a("Batal", ["delete", "id" => $model->asg_id], [
                     'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 20px;',
                     "data" => [
-                        "confirm" => "Apakah anda yakin menghapus penugasan ini?",
+                        "confirm" => "Apakah anda yakin membatalkan penugasan ini?",
                         "method" => "post",
                     ],
                 ]).'</p>';
             }elseif($model->sts_asg_id == 2){
-                $button = '<p>'.Html::a('Open', ['assignment/view', 'id' => $model["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']).'</p>';
+                // $button = '<p>'.Html::a('Open', ['assignment/view', 'id' => $model["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']).'</p>';
             }
             echo $button.'';
         ?>

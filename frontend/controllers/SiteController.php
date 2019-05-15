@@ -176,7 +176,7 @@ class SiteController extends Controller
 
                 if($response->isOk){
                     
-                    if(isset($response->data['result'])){
+                    // if(isset($response->data['result'])){
                         
                         if($response->data['result'] == "true"){
                             $session = Yii::$app->session;
@@ -225,56 +225,56 @@ class SiteController extends Controller
                             ]);
                         }
 
-                    }else{
+                    // }else{
 
-                        if($response->data['resut'] == "true"){
-                            $session = Yii::$app->session;
-                            $session->open();
+                    //     if($response->data['resut'] == "true"){
+                    //         $session = Yii::$app->session;
+                    //         $session->open();
         
-                            $datas = $response->data['data'];
-                            $nama = $datas['nama'];
-                            $email = $datas['email'];
-                            $role = $datas['role'];
+                    //         $datas = $response->data['data'];
+                    //         $nama = $datas['nama'];
+                    //         $email = $datas['email'];
+                    //         $role = $datas['role'];
                             
-                            $session->set('username', $model->username);
-                            $session->set('nama', $nama);
-                            $session->set('email', $email);
+                    //         $session->set('username', $model->username);
+                    //         $session->set('nama', $nama);
+                    //         $session->set('email', $email);
         
-                            if($role == "Mahasiswa"){
-                                $dimId = $datas['dimId'];
-                                $nim = $datas['nim'];
-                                $kelas = $datas['kelas'];
-                                $kelas_id = $datas['kelas_id'];
+                    //         if($role == "Mahasiswa"){
+                    //             $dimId = $datas['dimId'];
+                    //             $nim = $datas['nim'];
+                    //             $kelas = $datas['kelas'];
+                    //             $kelas_id = $datas['kelas_id'];
         
-                                if($session['username'] == 'if416004'){
-                                    $role = "Dosen";
-                                    $session->set('pegawaiId', 1);    
-                                }
+                    //             if($session['username'] == 'if416004'){
+                    //                 $role = "Dosen";
+                    //                 $session->set('pegawaiId', 1);    
+                    //             }
         
-                                $session->set('dimId', $dimId);
-                                $session->set('nim', $nim);
-                                $session->set('kelas', $kelas);
-                                $session->set('kelas_id', $kelas_id);
-                            }else{
-                                $pegawaiId = $datas['pegawaiId'];
-                                $nip = $datas['nip'];
+                    //             $session->set('dimId', $dimId);
+                    //             $session->set('nim', $nim);
+                    //             $session->set('kelas', $kelas);
+                    //             $session->set('kelas_id', $kelas_id);
+                    //         }else{
+                    //             $pegawaiId = $datas['pegawaiId'];
+                    //             $nip = $datas['nip'];
         
-                                $session->set('pegawaiId', $pegawaiId);
-                                $session->set('nip', $nip);
-                            }
+                    //             $session->set('pegawaiId', $pegawaiId);
+                    //             $session->set('nip', $nip);
+                    //         }
         
-                            $session->set('role', $role);
-                            $session->close();
+                    //         $session->set('role', $role);
+                    //         $session->close();
         
-                            return $this->goBack();
-                        }else{
-                            return $this->render('login', [
-                                'model' => $model,
-                                'error' => "data",
-                            ]);
-                        }
+                    //         return $this->goBack();
+                    //     }else{
+                    //         return $this->render('login', [
+                    //             'model' => $model,
+                    //             'error' => "data",
+                    //         ]);
+                    //     }
 
-                    }
+                    // }
                     
                 }else{
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan dalam sistem');

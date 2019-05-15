@@ -184,7 +184,7 @@ class ProjectController extends Controller
                     }
 
                     Yii::$app->session->setFlash('succes', 'Selamat, anda berhasil mengunggah proyek.');
-                    return $this->redirect(['assignment/assignment-student']);
+                    return $this->redirect(['project/list-project']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
     
@@ -269,7 +269,7 @@ class ProjectController extends Controller
                             }
                             Yii::$app->session->setFlash('succes', 'Selamat, anda berhasil mengubah proyek.');
                             // return $this->redirect(['update', 'id' => $id]);
-                            return $this->redirect(['assignment/assignment-student']);
+                            return $this->redirect(['project/list-project']);
                         }else{
                             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat mengubah proyek');
                             

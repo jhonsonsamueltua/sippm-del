@@ -213,7 +213,7 @@ $session = Yii::$app->session;
 
     <div class="row">
         <center>
-            <?= Html::submitButton($modelAsg->isNewRecord ? 'Tambah' : 'Edit', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
+            <?= Html::submitButton($modelAsg->isNewRecord ? 'Tambah' : 'Ubah', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
         </center>   
     </div>
 
