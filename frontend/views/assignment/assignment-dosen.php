@@ -18,10 +18,9 @@ $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
 $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
-$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 ?>
-
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
@@ -97,7 +96,14 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                                     <?= Html::a('Ubah', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                                    <?= Html::a('Batal', ['assignment/delete', 'id' => $key["asg_id"]], [
+                                                        'class' => 'btn-md btn-danger btn-info-custom', 
+                                                        'style' => 'padding: 5px 15px;',
+                                                        'data' => [
+                                                            'confirm' => 'Apakah anda yakin membatalkan penugasan ini?',
+                                                            'method' => 'post',
+                                                        ]
+                                                    ]) ?>
                                                 </div>
                                             </td>
                                         </tr>
@@ -157,7 +163,14 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                                     <?= Html::a('Ubah', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
+                                                    <?= Html::a('Batal', ['assignment/delete', 'id' => $key["asg_id"]], [
+                                                        'class' => 'btn-md btn-danger btn-info-custom', 
+                                                        'style' => 'padding: 5px 15px;',
+                                                        'data' => [
+                                                            'confirm' => 'Apakah anda yakin membatalkan penugasan ini?',
+                                                            'method' => 'post',
+                                                        ]
+                                                    ]) ?>
                                                 </div>
                                             </td>
                                         </tr>
@@ -205,50 +218,60 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                 
                                                 <div style="float: right; margin-bottom: 0px;">
                                                     <?php
-                                                        // if($this->context->getStatusAssignment($key['asg_id']) == "Pending"){
-                                                        //     echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#FFA726;">
-                                                        //         Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
-                                                        //     </span>';
-                                                        // }else{
-                                                        //     echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#009688;">
-                                                        //         Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
-                                                        //     </span>';
-                                                        // }
+                                                        if($this->context->getStatusAssignment($key['asg_id']) == "Cancel"){
+                                                            echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#bb4441;">
+                                                                Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                            </span>';
+                                                        }else{
+                                                            echo '<span class="badge badge-primary badge-pill" style="float: ;background-color:#8a6d3b;">
+                                                                Status : '.$this->context->getStatusAssignment($key["asg_id"]).'
+                                                            </span>';
+                                                        }
                                                     ?>
                                                     <!-- <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
                                                     <?= Html::a('Ubah', ['assignment/update', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?= Html::a('Hapus', ['assignment/delete', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp; -->
+                                                    <?= Html::a('Batal', ['assignment/delete', 'id' => $key["asg_id"]], [
+                                                        'class' => 'btn-md btn-danger btn-info-custom', 
+                                                        'style' => 'padding: 5px 15px;',
+                                                        'data' => [
+                                                            'confirm' => 'Apakah anda yakin ingin membatalkan penugasan berikut?',
+                                                            'method' => 'post',
+                                                        ]
+                                                    ]) ?> &nbsp; -->
                                                     
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?php 
-                                                        Modal::begin([
-                                                            'header' => '<h3>Re-Open Penugasan</h3>',
-                                                            'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;border-radius: 0px!important;'],
-                                                        ]);
-                                                            
-                                                            $modelAsg = AssignmentController::findModel($key['asg_id']);    
-                                                            $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
+                                                    <font style="text-align: center">
+                                                        <?php 
+                                                            Modal::begin([
+                                                                'header' => '<h3>Re-Open Penugasan</h3>',
+                                                                'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;border-radius: 0px!important;'],
+                                                                'size' => 'modal-md',
+                                                            ]);
+                                                                
+                                                                $modelAsg = AssignmentController::findModel($key['asg_id']);    
+                                                                $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
 
-                                                            echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
-                                                                'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                                                                'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
-                                                                'removeButton' => false,
-                                                                'options' => ['placeholder' => 'Pilih batas akhir ...'],
-                                                                'pluginOptions' => [
-                                                                    'autoclose'=>true,
-                                                                    'format' => 'yyyy-mm-dd hh:ii:ss'
-                                                                ]
-                                                            ])->label('Batas Akhir &nbsp;&nbsp;');
-                                                            
-                                                            echo '<br><br>';
-                                                            echo Html::submitButton('Re-Open', ['class' => 'btn btn-sm btn-primary', 'style' => 'padding: 5px 25px;width: 120px;font-style: bold;font-size:14px']);
+                                                                echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
+                                                                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                                                    'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                                                                    'removeButton' => false,
+                                                                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                                                    'pluginOptions' => [
+                                                                        'autoclose'=>true,
+                                                                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                                                                    ]
+                                                                ])->label('Batas Akhir &nbsp;&nbsp;');
+                                                                
+                                                                echo '<br><br>';
+                                                                echo Html::submitButton('Re-Open', ['class' => 'btn btn-sm btn-primary', 'style' => 'padding: 5px 25px;width: 120px;font-style: bold;font-size:14px']);
 
-                                                            ActiveForm::end();
+                                                                ActiveForm::end();
 
-                                                        Modal::end();
-                                                    ?>
+                                                            Modal::end();
+                                                        ?>
+                                                    </font>
                                                 </div>
                                             </td>
                                         </tr>
@@ -267,6 +290,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 <?php
      $this->registerJs('
+     
         $(function () {
             $("#dataTables").DataTable({
             "pageLength": 10,

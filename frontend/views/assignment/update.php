@@ -15,7 +15,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 
 <div class="body-content">
-    <div class=" container box-content">
+    <div class=" container box-content" style="width: 65%;">
         
             <?php
                 echo Breadcrumbs::widget([

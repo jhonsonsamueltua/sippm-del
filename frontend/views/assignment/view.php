@@ -20,7 +20,6 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 ?>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
-
 <div class="body-content">
     <div class=" container box-content">
 
@@ -45,15 +44,15 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             
             if($model->sts_asg_id == 1 || $model->sts_asg_id == 3){
                 $button = '<p>'.Html::a("Ubah", ["update", "id" => $model->asg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 30px;']) .' &nbsp; &nbsp;'.
-                Html::a("Hapus", ["delete", "id" => $model->asg_id], [
+                Html::a("Batal", ["delete", "id" => $model->asg_id], [
                     'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 20px;',
                     "data" => [
-                        "confirm" => "Apakah anda yakin menghapus penugasan ini?",
+                        "confirm" => "Apakah anda yakin membatalkan penugasan ini?",
                         "method" => "post",
                     ],
                 ]).'</p>';
             }elseif($model->sts_asg_id == 2){
-                $button = '<p>'.Html::a('Open', ['assignment/view', 'id' => $model["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']).'</p>';
+                // $button = '<p>'.Html::a('Open', ['assignment/view', 'id' => $model["asg_id"]], ['class' => 'btn-xs btn-custom', 'style' => 'padding: 5px 20px;font-size: 13px']).'</p>';
             }
             echo $button.'';
         ?>
@@ -113,9 +112,9 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                             'attribute' => '',
                             'label' => 'Kelas Ditugaskan',
                             'value' => function($model){
-                                if($model->class == "All"){
-                                    return "Semua Kelas";
-                                }else{
+                                // if($model->class == "All"){
+                                //     return "Semua Kelas";
+                                // }else{
                                     $class = "";
                                     $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
 
@@ -129,7 +128,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                         }
                                     }
                                     return '<font style="font-size: px;">'.$class.'</font>';
-                                }
+                                // }
                             },
                             'format' => 'raw',
                         ],
@@ -190,25 +189,24 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 <?php
     $this->registerJs("
 
-    var change = true;
-    $(document).ready(function () {
-        $('[data-toggle=offcanvas]').click(function () {
-            $('.row-offcanvas').toggleClass('active');
+        var change = true;
+        $(document).ready(function () {
+            $('[data-toggle=offcanvas]').click(function () {
+                $('.row-offcanvas').toggleClass('active');
+            });
         });
-    });
 
-    function find() {
-        $('#caret1').toggleClass('glyphicon-chevron-up', change);
-        $('#caret1').toggleClass('glyphicon-chevron-down', !change);
-        change = !change
-    }
+        function find() {
+            $('#caret1').toggleClass('glyphicon-chevron-up', change);
+            $('#caret1').toggleClass('glyphicon-chevron-down', !change);
+            change = !change
+        }
 
-    function find2() {
-        $('#caret2').toggleClass('glyphicon-chevron-up', change);
-        $('#caret2').toggleClass('glyphicon-chevron-down', !change);
-        change = !change
-    }
-    
+        function find2() {
+            $('#caret2').toggleClass('glyphicon-chevron-up', change);
+            $('#caret2').toggleClass('glyphicon-chevron-down', !change);
+            change = !change
+        }
     
     ", $this::POS_END);
 ?>
@@ -227,5 +225,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             "autoWidth": true
             });
         });
+        
      ', $this::POS_END);
 ?>
+

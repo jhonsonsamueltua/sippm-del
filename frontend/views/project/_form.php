@@ -21,8 +21,8 @@ $this->registerCssFile("././css/project.css");
 <div class="row">
 
     <div class="col-md-6 form-project" style="padding: 0px 0px 0px 25px;">
-        <b style="font-size: 16px">Proyek</b>
-        <hr class="hr-custom">
+        <!-- <b style="font-size: 16px">Proyek</b>
+        <hr class="hr-custom"> -->
         <?php
             $status = AssignmentController::getProject($assignment["asg_id"]);
             if($assignment->stsAsg->sts_asg_name == "Pending"){
@@ -40,7 +40,7 @@ $this->registerCssFile("././css/project.css");
             }
         ?>
 
-        <?php $form = ActiveForm::begin([
+        <?php $form = ActiveForm::begin(['enableClientValidation' => true,
             'options' => ['enctype' => 'multipart/form-data']
         ]); ?>
 
@@ -97,7 +97,7 @@ $this->registerCssFile("././css/project.css");
                         <label>Upload Proyek</label>
                         <div class="row">
                             <div id="file_field" class="col-md-6">
-                                <input type="file" class="form-control" name="files[]">
+                                <input type="file" class="form-control" name="files[]" id="file">
                             </div>
                             <a href="#" onclick="addMoreFile()">Tambah File</a>
                         </div>
@@ -113,9 +113,8 @@ $this->registerCssFile("././css/project.css");
                     echo Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
                 }
                 
-                // if($assignment->sts_asg_id == 3 || $assignment->sts_asg_id == 2 || !$model->isNewRecord){
-                    echo '&nbsp;&nbsp;'.Html::a("Batal", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-primary-edit-kembali', 'style' => 'padding: 8px 25px;width: 150px;']);
-                // }
+                echo '&nbsp;&nbsp;'.Html::a("Batal", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-batal']);
+                
             ?>
         </div>
 
@@ -262,6 +261,16 @@ $this->registerCssFile("././css/project.css");
         function addMoreFile(){
             $('#file_field').append('<input type=file class=form-control name=files[]>');
         }
-    
+        
+        
+        var uploadField = document.getElementById('file');
+
+        uploadField.onchange = function() {
+            if(this.files[0].size > 1024 * 1024 * 512){
+            alert('File terlalu besar, maksimal ukuran file 500 MB.');
+            this.value = '';
+            };
+        };
+
     ", $this::POS_END);
 ?>

@@ -12,6 +12,9 @@ $this->title = $model->proj->proj_title;
 \yii\web\YiiAsset::register($this);
 $this->registerCssFile("././css/project.css");
 $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+
+$session = Yii::$app->session;
+
 ?>
 
 <div class="body-content">
@@ -80,26 +83,19 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     'attribute' => '',
                     'label' => 'Artefak Proyek',
                     'value' => function($model){
-                        $session = Yii::$app->session;
                         $artefak = "";
-
-                        if(!isset($session['role'])){
-                            $artefak = Html::a('Permohonan Penggunaan', ['/site/login', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                        }else{
-                            if($model == null || $model->sts_proj_usg_id == 3){
-                                // $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                                $artefak = '---';
+                        $session = Yii::$app->session;
+                        
+                        if($session['nama'] != $model->proj->asg->asg_creator){
+                            if($model->sts_proj_usg_id == 3 || $model->sts_proj_usg_id == 4){
+                                $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
                             }else if($model->sts_proj_usg_id == 1){
-                                // $artefak =  Html::a('Ubah Permohonan Penggunaan', ['/project-usage/update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn btn-primary']);
                                 $artefak = '---';
                             }else{
-                                if($session['nama'] != $model->proj->asg->asg_creator){
-                                    $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";
-                                }else{
-                                    // $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                                    $artefak = '---';
-                                }
+                                $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";    
                             }
+                        }else{
+                            $artefak = '---';
                         }
                         
                         return $artefak;
@@ -110,36 +106,18 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
             ],
         ]) ?>
 
-        
         <p>
-
             <?php
-                $session = Yii::$app->session;
-
-                if(!isset($session['role'])){
-                    // $artefak = Html::a('Permohonan Penggunaan', ['/site/login', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                }else{
-                    if($model == null || $model->sts_proj_usg_id == 3){
-                        // $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']);
-                        echo Html::a('Batal', ['delete', 'id' => $model->proj_usg_id], [
+                if($session['nama'] != $model->proj->asg->asg_creator){
+                    if($model->sts_proj_usg_id == 1){
+                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) . "&nbsp;&nbsp;";
+                        echo Html::a('Batal', ['cancel', 'proj_usg_id' => $model->proj_usg_id], [
                             'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;',
                             'data' => [
                                 'confirm' => 'Apakah anda yakin membatalkan permohonan penggunaan ini?',
                                 'method' => 'post',
                             ],
                         ]);
-                    }else if($model->sts_proj_usg_id == 1){
-                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']);
-                        echo Html::a('Batal', ['delete', 'id' => $model->proj_usg_id], [
-                            'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;',
-                            'data' => [
-                                'confirm' => 'Apakah anda yakin membatalkan permohonan penggunaan ini?',
-                                'method' => 'post',
-                            ],
-                        ]);
-                    }else{
-                        // $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";
                     }
                 }
             ?>

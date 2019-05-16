@@ -39,10 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     ?>
     <div class="form-group">
-        <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom_username.'', 'autofocus' => $autofocus_username, 'placeholder' => 'Pengguna'])->label(false) ?>
+        <?= $form->field($model, 'username', ['enableClientValidation' => true])->textInput(['id' => 'login', 'class' => 'fadeIn second', 'style' => 'border-bottom: '.$border_bottom_username.'', 'autofocus' => $autofocus_username, 'placeholder' => 'Nama Pengguna'])->label(false) ?>
         <?php 
             if($error == "username_password" || $error == "username"){
-                echo "<font class='text-error'> &nbsp;Pengguna tidak boleh kosong. </font>";
+                echo "<font class='text-error'> &nbsp;Nama Pengguna tidak boleh kosong. </font>";
             }
         ?>
     </div>
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?php
         if($error == "data"){
-            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Pengguna atau Kata Sandi anda salah. <br><br></font>";
+            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Nama Pengguna atau Kata Sandi anda salah. <br><br></font>";
         }
     ?>
     <div class="form-group" align="center">
