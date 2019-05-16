@@ -20,7 +20,6 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 ?>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
 
-
 <div class="body-content">
     <div class=" container box-content">
 
@@ -113,9 +112,9 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                             'attribute' => '',
                             'label' => 'Kelas Ditugaskan',
                             'value' => function($model){
-                                if($model->class == "All"){
-                                    return "Semua Kelas";
-                                }else{
+                                // if($model->class == "All"){
+                                //     return "Semua Kelas";
+                                // }else{
                                     $class = "";
                                     $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
 
@@ -129,7 +128,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                         }
                                     }
                                     return '<font style="font-size: px;">'.$class.'</font>';
-                                }
+                                // }
                             },
                             'format' => 'raw',
                         ],
@@ -190,25 +189,24 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 <?php
     $this->registerJs("
 
-    var change = true;
-    $(document).ready(function () {
-        $('[data-toggle=offcanvas]').click(function () {
-            $('.row-offcanvas').toggleClass('active');
+        var change = true;
+        $(document).ready(function () {
+            $('[data-toggle=offcanvas]').click(function () {
+                $('.row-offcanvas').toggleClass('active');
+            });
         });
-    });
 
-    function find() {
-        $('#caret1').toggleClass('glyphicon-chevron-up', change);
-        $('#caret1').toggleClass('glyphicon-chevron-down', !change);
-        change = !change
-    }
+        function find() {
+            $('#caret1').toggleClass('glyphicon-chevron-up', change);
+            $('#caret1').toggleClass('glyphicon-chevron-down', !change);
+            change = !change
+        }
 
-    function find2() {
-        $('#caret2').toggleClass('glyphicon-chevron-up', change);
-        $('#caret2').toggleClass('glyphicon-chevron-down', !change);
-        change = !change
-    }
-    
+        function find2() {
+            $('#caret2').toggleClass('glyphicon-chevron-up', change);
+            $('#caret2').toggleClass('glyphicon-chevron-down', !change);
+            change = !change
+        }
     
     ", $this::POS_END);
 ?>

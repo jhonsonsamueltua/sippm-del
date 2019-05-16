@@ -248,7 +248,8 @@ class ProjectController extends Controller
                 return $this->redirect(['/']);
             }else{
                 $assignmentModel = Assignment::find()->where(['asg_id' => $model->asg_id])->andWhere('deleted!=1')->one();
-                $fileModel = $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
+                $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
+                $oldProjName = $model->proj_title;
 
                 if ($model->load(Yii::$app->request->post())) {
                     // Validasi waktu submit
@@ -266,6 +267,19 @@ class ProjectController extends Controller
                         ]);
                     }else{
                         if($model->save()){
+                            if($oldProjName != $model->proj_title){
+                                $fileDefPath = Yii::getAlias('@uploadDirTemplate') . "/";
+                                
+                                rename($fileDefPath.$oldProjName, $fileDefPath.$model->proj_title);
+                            
+                                foreach($files as $file){
+                                    $oldFile = $this->findFile($file->file_id);
+                                    
+                                    $oldFile->file_path = $fileDefPath.$model->proj_title;
+                                    $oldFile->save();
+                                }
+                            }
+                            
                             $model->files = UploadedFile::getInstancesByName('files');
                         
                             if($model->files != null){
@@ -300,7 +314,7 @@ class ProjectController extends Controller
 
                 return $this->render('update', [
                     'model' => $model,
-                    'fileModel' => $fileModel,
+                    'fileModel' => $files,
                     'assignment' => $assignmentModel,
                     'late' => false,
                 ]);
@@ -345,10 +359,12 @@ class ProjectController extends Controller
             $zip = new ZipArchive;
             $project = Project::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->one();
             $files = File::find()->where(['proj_id' => $proj_id])->andWhere('deleted!=1')->all();
-
+            
             if($zip->open($project->proj_title, ZipArchive::CREATE) === TRUE){
                 foreach($files as $file){
-                    $zip->addFile($file->file_path, $file->file_name);
+                    $filePath = $file->file_path. "/" . $file->file_name;
+
+                    $zip->addFile($filePath, $file->file_name);
                 }
 
                 $zip->close();
@@ -416,6 +432,14 @@ class ProjectController extends Controller
         }
 
         throw new NotFoundHttpException('Penugasan tidak ditemukan atau telah dihapus.');
+    }
+
+    private function findFile($file_id){
+        if(($model = File::find()->where(['file_id' => $file_id])->andWhere('deleted!=1')->one()) !== null){
+            return $model;
+        }
+
+        throw new NotFoundHttpException('File tidak ditemukan atau telah dihapus.');
     }
 
     private function getCategory($cat_proj_id){

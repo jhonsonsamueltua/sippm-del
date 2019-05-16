@@ -21,7 +21,6 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 // $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 ?>
-
 <div class="body-content" style="font-size: 14px;">
     <div class=" container box-content">
 
@@ -288,6 +287,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <?php
      $this->registerJs('
+     
         $(function () {
             $("#dataTables").DataTable({
             "pageLength": 10,

@@ -8,6 +8,8 @@ use common\models\SippmNotification;
 
 $this->title = 'SIPPM Del';
 
+$session = Yii::$app->session;
+
 ?>
 
 <div class="site-index">
