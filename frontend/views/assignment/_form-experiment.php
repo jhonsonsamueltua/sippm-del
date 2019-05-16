@@ -50,13 +50,17 @@ $session = Yii::$app->session;
             <?php
                 $year = array();
                 $year_now = (int)date('Y');
-                for($i = $year_now; $i >= 2016; $i--){
-                    $year[$i] = $i;
+                for($i = $year_now + 1; $i >= 2016; $i--){
+                    if($i == $year_now + 1){
+                        $year[''] = 'Pilih Tahun...';
+                    }else{
+                        $year[$i] = $i;
+                    }
                 }
             ?>
 
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <?= $form->field($modelAsg, 'asg_year')->dropDownList($year)->label('Tahun Proyek') ?>  
                 </div>
             </div>
@@ -113,7 +117,9 @@ $session = Yii::$app->session;
                     ])->label(); ?>
                 </div>
             </div>
-            
+            <div hidden>
+                <?= $form->field($modelAsg, 'updated_end_time', ['enableClientValidation' => false])->textInput(['maxlength' => true, 'hidden' => true])->label() ?>
+            </div>
             <?= $form->field($modelAsg, 'asg_description')->widget(Redactor::classname(), [
                 'options' => [
                     'minHeight' => 500,
@@ -124,53 +130,32 @@ $session = Yii::$app->session;
             <br>
             <h4><b>Penerima Penugasan</b></h4>
             <!-- <hr class="hr-custom"> -->
-            <?php
-                if(!$modelAsg->isNewRecord){
-
-                    if($modelAsg->class == "All"){
-                        echo "<p><b>Kelas yang ditugaskan</b>: semua kelas ditugaskan</p>";
-                    }else{
-                        echo("<p>Kelas yang ditugaskan:</p> 
-                            <div class='col-md-6' style='overflow: scroll; max-height: 250px;'>
-                                <ul>");
-                                $i = 1;
-
-                                foreach($modelClass as $key => $cls){
-                                    
-                                    if(!$cls->partial){
-                                        $data_class = $this->context->getClassByClassId($cls->class);
-                                        $class = '';
-                                        if($i == 1){
-                                            $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.''."".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
-                                        }else{
-                                            $class = $class.''.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.''.''.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
-                                        }
-
-                                        echo '<div class="row">
-                                                <div class="col-md-1 col-sm-6 col-xs-6">'
-                                                    .Html::a('<span class="glyphicon glyphicon-minus">', ['remove-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $cls->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']).
-                                                '</div>
-                                                <div class="col-md-11 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
-                                                .$class.
-                                                '</div>
-                                            </div>';
-                                        $i++;
-                                    }
-                                }
-                            echo '</ul>';
-                        echo '</div>';
-                    }
-                } 
-            ?>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <?php
+                    
+                        if($modelAsg->class == "All"){
+                            echo '<input id="all_class" name="allClass" type="checkbox" value="all" disabled="true"> Semua Kelas';
+                        }else{
+                            echo '<input id="all_class" name="allClass" type="checkbox" value="all"> Semua Kelas';
+                        }
+                    
+                    ?>
+                    
+                </div>
+            </div><br>
 
             <div class="row">
+            
                 <div class="col-md-6">
+                    
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <td class='label-error' style="font-weight: 700;">
-                                    <div class="col-md-10">Kelas</div>
-                                    <div class="col-md-2" style="padding: 0px">
+                                    <div class="col-md-9">Kelas</div>
+                                    <div class="col-md-3" style="padding: 0px">
                                         <?php
                                             if($modelAsg->class == "All"){
                                                 echo('
@@ -195,25 +180,56 @@ $session = Yii::$app->session;
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-2">
-                    <?php
-                    
-                        if($modelAsg->class == "All"){
-                            echo '<input id="all_class" name="allClass" type="checkbox" value="all" disabled="true">Semua Kelas';
-                        }else{
-                            echo '<input id="all_class" name="allClass" type="checkbox" value="all">Semua Kelas';
-                        }
-                    
-                    ?>
-                    
-                </div>
+
+            <?php
+                if(!$modelAsg->isNewRecord){
+
+                    if($modelAsg->class == "All"){
+                        echo "<p><b>Kelas yang ditugaskan</b>: semua kelas ditugaskan</p>";
+                    }else{
+                        echo("<p>Kelas yang ditugaskan:</p> 
+                            <div class='col-md-6' style='overflow: scroll; max-height: 250px;'>
+                                <ul>");
+                                $i = 1;
+
+                                foreach($modelClass as $key => $cls){
+                                    
+                                    if(!$cls->partial){
+                                        $data_class = $this->context->getClassByClassId($cls->class);
+                                        $class = '';
+                                        if($i == 1){
+                                            $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.''."".$data_class[0]['nama'].'</font>';
+                                        }else{
+                                            $class = $class.''.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.''.''.$data_class[0]['nama'].'</font>';
+                                        }
+
+                                        echo '<div class="row">
+                                                <div class="col-md-2 col-sm-6 col-xs-6">'
+                                                    .Html::a('<span class="glyphicon glyphicon-minus">', ['remove-class', 'asg_id' => $modelAsg->asg_id, 'cls_asg_id' => $cls->cls_asg_id], ['class' => 'btn btn-danger-custom btn-xs']).
+                                                '</div>
+                                                <div class="col-md-10 col-sm-6 col-xs-6" style="padding: 4px 20px;">'
+                                                .$class.
+                                                '</div>
+                                            </div>';
+                                        $i++;
+                                    }
+                                }
+                            echo '</ul>';
+                        echo '</div>';
+                    }
+                } 
+            ?>
+                
             </div>
         </div>
 </div>
 
     <div class="row">
+    <br>
         <center>
             <?= Html::submitButton($modelAsg->isNewRecord ? 'Tambah' : 'Ubah', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
+            &nbsp;&nbsp; 
+            <?= Html::a("Batal", ['assignment/assignment-dosen'], ['class' => 'btn-md btn-custom btn-batal']) ?>
         </center>   
     </div>
 

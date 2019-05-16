@@ -92,6 +92,12 @@ p {font-size: 14px;}
     right: 0px;
 }
 
+.btn-batal {
+    background-color: #d9534f !important;
+    padding: 9px 25px !important;
+    width: 150px;
+}
+
 /* dropdown */
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
     color: #555;

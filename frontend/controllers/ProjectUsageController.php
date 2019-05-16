@@ -18,6 +18,7 @@ use common\models\search\ProjectUsageSearch;
 use common\models\StatusProjectUsage;
 use common\models\CategoryUsage;
 
+
 /**
  * ProjectUsageController implements the CRUD actions for ProjectUsage model.
  */
@@ -296,6 +297,11 @@ class ProjectUsageController extends Controller
             return $this->redirect(['index']);
         }
     }
+
+    // public function actionBatal(){
+    //     \yii\helpers\Url::remember();
+    //     return $this->redirect(Yii::$app->request->referrer);   
+    // }
 
     public static function getProjectRequestStatus($sts_id){
         $status = StatusProjectUsage::find()->where(['sts_proj_usg_id' => $sts_id])->andWhere('deleted!=1')->one();

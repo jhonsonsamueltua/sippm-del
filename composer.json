@@ -28,7 +28,8 @@
         "wbraganca/yii2-dynamicform": "dev-master",
         "yiidoc/yii2-redactor": "*",
         "kop/yii2-conditional-validator": "dev-master",
-        "yiisoft/yii2-sphinx": "^2.0@dev"
+        "yiisoft/yii2-sphinx": "^2.0@dev",
+        "edwinhaq/yii2-simple-loading": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
