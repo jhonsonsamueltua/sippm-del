@@ -242,33 +242,36 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                     
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <?php 
-                                                        Modal::begin([
-                                                            'header' => '<h3>Re-Open Penugasan</h3>',
-                                                            'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;border-radius: 0px!important;'],
-                                                        ]);
-                                                            
-                                                            $modelAsg = AssignmentController::findModel($key['asg_id']);    
-                                                            $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
+                                                    <font style="text-align: center">
+                                                        <?php 
+                                                            Modal::begin([
+                                                                'header' => '<h3>Re-Open Penugasan</h3>',
+                                                                'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;border-radius: 0px!important;'],
+                                                                'size' => 'modal-md',
+                                                            ]);
+                                                                
+                                                                $modelAsg = AssignmentController::findModel($key['asg_id']);    
+                                                                $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
 
-                                                            echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
-                                                                'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
-                                                                'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
-                                                                'removeButton' => false,
-                                                                'options' => ['placeholder' => 'Pilih batas akhir ...'],
-                                                                'pluginOptions' => [
-                                                                    'autoclose'=>true,
-                                                                    'format' => 'yyyy-mm-dd hh:ii:ss'
-                                                                ]
-                                                            ])->label('Batas Akhir &nbsp;&nbsp;');
-                                                            
-                                                            echo '<br><br>';
-                                                            echo Html::submitButton('Re-Open', ['class' => 'btn btn-sm btn-primary', 'style' => 'padding: 5px 25px;width: 120px;font-style: bold;font-size:14px']);
+                                                                echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
+                                                                    'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                                                                    'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                                                                    'removeButton' => false,
+                                                                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                                                    'pluginOptions' => [
+                                                                        'autoclose'=>true,
+                                                                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                                                                    ]
+                                                                ])->label('Batas Akhir &nbsp;&nbsp;');
+                                                                
+                                                                echo '<br><br>';
+                                                                echo Html::submitButton('Re-Open', ['class' => 'btn btn-sm btn-primary', 'style' => 'padding: 5px 25px;width: 120px;font-style: bold;font-size:14px']);
 
-                                                            ActiveForm::end();
+                                                                ActiveForm::end();
 
-                                                        Modal::end();
-                                                    ?>
+                                                            Modal::end();
+                                                        ?>
+                                                    </font>
                                                 </div>
                                             </td>
                                         </tr>

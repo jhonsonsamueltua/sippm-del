@@ -16,10 +16,11 @@ use common\models\ProjectUsage;
 AppAsset::register($this);
 $css = ['css/main.css'];
 $js = ['js/main.js'];
+$this->registerCssFile("././css/fontAwesome/font-awesome.min.css");
 
 $session = Yii::$app->session;
 
-$query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE snv.ntf_reader = '" . $session['username'] . "'";
+$query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE sn.ntf_recipient = '" . $session['username'] . "' OR sn.ntf_recipient = '" . $session['kelas_id'] ."'";
 $listSeenNotifId = Yii::$app->db->createCommand($query)->queryAll();
 
 $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_notification.asg_id = sippm_assignment.asg_id')
@@ -42,7 +43,7 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
     <title><?= Html::encode($this->title) ?></title>
     
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
     <style>
         .notification{
@@ -186,13 +187,13 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                             }
                                         }
                                     ?>
-                                    <span class="badge"><?= $countNotif ?></span>
+                                    <span class="badge" style="margin-top: 6px;margin-right: 10px;padding: 4px 6px;"><?= $countNotif ?></span>
                                 </a>
-                                <ul class="dropdown-menu" style="min-width: 250px;">
+                                <ul class="dropdown-menu" style="min-width: 300px;">
                                     <li class="header" style="border-bottom: 1px solid #ddd;">Notifikasi</li>
                                     <li>
                                         <div style="max-height: 200px; min=width: 300px; overflow: auto;">
-                                            <ul style="list-style: none; padding: 0px;">
+                                            <ul style="padding: 5px;">
                                                 <?php
                                                     foreach($modelNotif as $notif){
                                                         if($notif->ntf_type == "assignment"){
@@ -200,7 +201,7 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                                             
                                                             if($assignment->sts_asg_id == 1){
                                                                 echo(" 
-                                                                    <li class='notification-info'><a href=". \yii\helpers\Url::to(['/assignment/assignment-student', 'ntf_id' => $notif->ntf_id]) .">Penugasan $assignment->asg_title telah dibuka</a></li>
+                                                                    <li class='notification-info'><a href=". \yii\helpers\Url::to(['/assignment/assignment-student', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Penugasan $assignment->asg_title telah dibuka</a></li>
                                                                 ");
                                                             }
                                                         }else if($notif->ntf_type == "request_accepted"){
@@ -208,28 +209,28 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage/view', 'id' => $request->proj_usg_id, 'ntf_id' => $notif->ntf_id]) .">Permohonan $project->proj_title telah diterima</a></li>
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage/view', 'id' => $request->proj_usg_id, 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Permohonan $project->proj_title telah diterima</a></li>
                                                             ");
                                                         }else if($notif->ntf_type == "request_rejected"){
                                                             $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage/view', 'id' => $request->proj_usg_id, 'ntf_id' => $notif->ntf_id]) .">Permohonan $project->proj_title telah ditolak</a></li>
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage/view', 'id' => $request->proj_usg_id, 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Permohonan $project->proj_title telah ditolak</a></li>
                                                             ");
                                                         }else if($notif->ntf_type == "new_request"){
                                                             $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
+                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Permohonan $project->proj_title telah ditolak</a></li>
                                                             ");
                                                         }else if($notif->ntf_type == "new_request_alternate"){
                                                             $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
+                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Permohonan $project->proj_title telah ditolak</a></li>
                                                             ");
                                                         }
                                                     }

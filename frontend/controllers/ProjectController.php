@@ -153,13 +153,11 @@ class ProjectController extends Controller
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
                 $model->proj_downloaded = 0;
                 $model->proj_year = $year->format('Y');
-                $model->proj_creator_class = (string) $session['kelas_id'];
-
+                $model->proj_creator_class =(string)$session['kelas_id'];
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
     
                     if($model->files != null){
-                        // $idx = 0; For extracting Zip
     
                         foreach($model->files as $file){
                             $fileModel = new File();
@@ -169,25 +167,6 @@ class ProjectController extends Controller
                             if(!is_dir($fileDir)){
                                 mkdir($fileDir, 0777, true);
                             }
-    
-                            // if($file->extension == "zip"){ For extracting Zip
-                            //     $zip = new ZipArchive();
-                            //     $fileName = $_FILES['files']['tmp_name'][$idx];
-    
-                            //     if($zip->open($fileName)){
-                            //         for($i = 0; $i < $zip->numFiles; $i++){
-                            //             $stat = $zip->statIndex($i);
-                            //             $fileModelInZip = new File();
-                            //             $fileDir = Yii::getAlias('@uploadDirTemplate') . "/" . $model->proj_title . "/" . basename($stat['name']);
-                                        
-                            //             echo $fileDir . "<br>";
-                            //             die();
-                                        
-                            //             $fileModelInZip->file_name = "";
-                            //             $fileModelInZip->file_path = $fileDir;
-                            //         }
-                            //     }
-                            // }else{
                             
                             $fileDir .= $fileName;
                             $fileModel->file_name = $fileName;
@@ -201,9 +180,6 @@ class ProjectController extends Controller
                                 
                                 return $this->goBack();
                             }
-                            // } For extracting Zip
-                            
-                            // $idx++; For extracting Zip
                         }
                     }
 
@@ -212,7 +188,11 @@ class ProjectController extends Controller
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
     
-                    return $this->goBack();
+                    return $this->render('create', [
+                        'model' => $model,
+                        'assignment' => $assignmentModel,
+                        'late' => false,
+                    ]);
                 }
             }
 

@@ -225,5 +225,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             "autoWidth": true
             });
         });
+        
      ', $this::POS_END);
 ?>
+

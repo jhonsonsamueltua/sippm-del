@@ -32,7 +32,7 @@ $this->registerCssFile("././css/project.css");
 
         <?php ActiveForm::end(); ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" style="padding: 15px;border: 1px solid #a79c9c47;border-radius: 5px;">
         <b>Judul Proyek</b>
         <h4 style="margin: 4px 0px 10px 0px;"> <?= $project->proj_title ?> </h4>
 
@@ -41,11 +41,10 @@ $this->registerCssFile("././css/project.css");
 
         <b style="font-size: 14px">Koordinator Proyek</b>
         <p> <?= $project->asg->asg_creator ?> </p>
-        <br>
 
-        <div class="alert alert-info">
+        <!-- <div class="alert alert-info">
             <strong>Info!</strong> <br> Permohonan Penggunaan akan dikirim kepada <i> <?= $project->asg->asg_creator ?>  </i>selaku koordinator proyek.
-        </div>
+        </div> -->
 
     </div>
 </div>

@@ -69,7 +69,7 @@ class Project extends \yii\db\ActiveRecord
             [['proj_author'], 'string', 'max' => 500],
             [['proj_creator_class'], 'string', 'max' => 100],
             ['proj_author', 'match', 'pattern'=> '/^[A-Za-z; ]+$/u', 'message'=> 'Penulis hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
-            [['files'], 'file', 'maxFiles' => 0],
+            // [['files'], 'file','extensions' => 'pdf, jpg, zip', 'maxSize' => 1024 * 1024 * 512, 'tooBig' => 'Ukuran Maksimal 500 MB.'],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
     }

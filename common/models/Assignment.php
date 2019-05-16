@@ -65,7 +65,7 @@ class Assignment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cat_proj_id', 'sub_cat_proj_id', 'asg_title', 'asg_start_time', 'asg_end_time', 'asg_description'], 'required', 'message' => "{attribute} tidak boleh kosong."],
+            [['cat_proj_id', 'sub_cat_proj_id', 'asg_title', 'asg_start_time', 'asg_end_time', 'asg_description', 'asg_year', 'updated_end_time'], 'required', 'message' => "{attribute} tidak boleh kosong."],
             [['asg_start_time', 'asg_end_time', 'updated_end_time', 'deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['sub_cat_proj_id', 'cat_proj_id', 'sts_asg_id', 'deleted'], 'integer'],
             ['asg_start_time', 'date', 'format' => 'php:Y-m-d H:i:s', 'skipOnEmpty' => false],
@@ -94,7 +94,7 @@ class Assignment extends \yii\db\ActiveRecord
             'asg_start_time' => 'Batas Awal',
             'asg_end_time' => 'Batas Akhir',
             'updated_end_time' => 'Batas Akhir',
-            'asg_year' => 'Asg Year',
+            'asg_year' => 'Tahun Proyek',
             'class' => 'Kelas',
             'asg_creator' => 'Penugas',
             'sub_cat_proj_id' => 'Sub Kategori',
