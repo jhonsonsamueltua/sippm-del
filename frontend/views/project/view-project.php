@@ -47,7 +47,10 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 </div>
 
                 
-                        <div >
+                        
+            </div>
+            <div class = "col-md-3">
+                <div >
                             <font class = "project-sub-content">Kategori Proyek</font><br>
                             <p><?= $assignmentModel->catProj->cat_proj_name ?> [ <?= $assignmentModel->subCatProj->sub_cat_proj_name ?> ]</p>
                         </div>
@@ -58,7 +61,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                         </div>
                   
                         <div class = "">
-                            <font class = "project-sub-content">Artefak Proyek</font><br>
+                            <font class = "project-sub-content" style="display:block">Artefak Proyek</font>
                             <?php
                                 $session = Yii::$app->session;
 
@@ -75,11 +78,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                 }
                             ?>
                       
-                </div>
-            </div>
-            <div class = "col-md-3">
-                <h4>Rekomendasi Lainnya</h4>
-                <hr style="border-top: 2px solid #B2EBF2;">
+                    </div>
             </div>
 
         </div>

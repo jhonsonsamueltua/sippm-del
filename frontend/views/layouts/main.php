@@ -20,7 +20,7 @@ $this->registerCssFile("././css/fontAwesome/font-awesome.min.css");
 
 $session = Yii::$app->session;
 
-$query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE sn.ntf_recipient = '" . $session['username'] . "' OR sn.ntf_recipient = '" . $session['kelas_id'] ."'";
+$query = "SELECT sn.ntf_id FROM sippm_notification sn JOIN sippm_notification_viewer snv ON sn.ntf_id = snv.ntf_id WHERE snv.ntf_reader = '" . $session['username'] ."'";
 $listSeenNotifId = Yii::$app->db->createCommand($query)->queryAll();
 
 $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_notification.asg_id = sippm_assignment.asg_id')
@@ -223,14 +223,14 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                                <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Permohonan $project->proj_title telah ditolak</a></li>
+                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
                                                             ");
                                                         }else if($notif->ntf_type == "new_request_alternate"){
                                                             $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Permohonan $project->proj_title telah ditolak</a></li>
+                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
                                                             ");
                                                         }
                                                     }

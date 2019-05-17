@@ -10,7 +10,8 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 $this->registerCssFile("././css/login.css");
-
+$this->registerCssFile("././css/fontAwesome/font-awesome.min.css");
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 $session = Yii::$app->session;
 ?>
@@ -26,7 +27,7 @@ $session = Yii::$app->session;
     <?php $this->head() ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script> 
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>

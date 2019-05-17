@@ -158,6 +158,7 @@ class AssignmentController extends Controller
 
                     try{
                         if(isset($_POST['allClass'])){
+                            // die("jgvhbj");
                             $modelAsg->class = "All";
                             $modelAsg->save();
 

@@ -110,7 +110,7 @@ $this->registerCssFile("././css/project.css");
             <?php
                 echo '<br>';
                 if($assignment->sts_asg_id == 1){
-                    echo Html::submitButton($model->isNewRecord ? 'Kirim' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
+                    echo Html::submitButton($model->isNewRecord ? 'Simpan' : 'Ubah', ['class' => $model->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 25px;width: 150px;']).'&nbsp;&nbsp;';
                 }
                 
                 echo '&nbsp;&nbsp;'.Html::a("Batal", ['assignment/assignment-student'], ['class' => 'btn-md btn-custom btn-batal']);

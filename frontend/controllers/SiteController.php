@@ -207,20 +207,20 @@ class SiteController extends Controller
     
                         $session->set('role', $role);
 
-                        $classClient = new Client();
-                        $responseClassClient = $classClient->createRequest()
-                                                           ->setMethod('GET')
-                                                           ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
-                                                           ->send();
+                        // $classClient = new Client();
+                        // $responseClassClient = $classClient->createRequest()
+                        //                                    ->setMethod('GET')
+                        //                                    ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
+                        //                                    ->send();
 
-                        if($responseClassClient->isOk){
-                            if($responseClassClient->data['result'] == "OK"){
-                                foreach($responseClassClient->data['data'] as $class){
-                                    $classStoreId = "'" . $class['kelas_id'] . "'";
-                                    $session->set($classStoreId, $class['nama']);
-                                }
-                            }
-                        }
+                        // if($responseClassClient->isOk){
+                        //     if($responseClassClient->data['result'] == "OK"){
+                        //         foreach($responseClassClient->data['data'] as $class){
+                        //             $classStoreId = "'" . $class['kelas_id'] . "'";
+                        //             $session->set($classStoreId, $class['nama']);
+                        //         }
+                        //     }
+                        // }
 
                         $session->close();
     

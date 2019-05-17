@@ -87,6 +87,7 @@ class ProjectController extends Controller
         }else{
             $category = CategoryProject::find()->where(['cat_proj_id' => $cat])->one();
 
+            // $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' AND sippm_project.deleted != 1 GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
             $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
             $model = Yii::$app->db->createCommand($query)->queryAll();
             
@@ -255,7 +256,7 @@ class ProjectController extends Controller
                                 foreach($files as $file){
                                     $oldFile = $this->findFile($file->file_id);
                                     
-                                    $oldFile->file_path = $fileDefPath.$model->proj_title;
+                                    $oldFile->file_path = $fileDefPath.$model->proj_title."/".$oldFile->file_name;
                                     $oldFile->save();
                                 }
                             }
@@ -342,7 +343,7 @@ class ProjectController extends Controller
             
             if($zip->open($project->proj_title, ZipArchive::CREATE) === TRUE){
                 foreach($files as $file){
-                    $filePath = $file->file_path. "/" . $file->file_name;
+                    $filePath = $file->file_path;
 
                     $zip->addFile($filePath, $file->file_name);
                 }

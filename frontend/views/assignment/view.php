@@ -112,9 +112,9 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                             'attribute' => '',
                             'label' => 'Kelas Ditugaskan',
                             'value' => function($model){
-                                // if($model->class == "All"){
-                                //     return "Semua Kelas";
-                                // }else{
+                                if($model->class == "All"){
+                                    return "Semua Kelas";
+                                }else{
                                     $class = "";
                                     $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
 
@@ -128,7 +128,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                         }
                                     }
                                     return '<font style="font-size: px;">'.$class.'</font>';
-                                // }
+                                }
                             },
                             'format' => 'raw',
                         ],
