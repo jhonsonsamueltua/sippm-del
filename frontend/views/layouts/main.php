@@ -51,11 +51,6 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
             border: 0px; 
             /* margin-top: 16px; */
         }
-    
-        .notification:hover{
-            color: #68c6c3;
-        }
-
         .notification .badge{
             position: absolute;
             top: -5px;
@@ -72,8 +67,21 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
             background: #fff;
         }
 
+        .notification-info{
+            line-height: 1.3em;
+            font-size: 13px;
+        }
+        
+        .notification-info a{
+            color : #03A9F4;
+        }
+
+        .notification-info a:hover{
+            color :white;
+        }
+
         .notification-info:hover{
-            background-color: #ddd;
+            color :white !important;
         }
 
     </style>
@@ -165,7 +173,7 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                 }
                             ?>
                             <li>
-                                <a class="notification fa fa-bell fa-lg dropdown-toggle" data-toggle="dropdown" href="#">
+                                <a class="notification fa fa-bell-o fa-lg dropdown-toggle" data-toggle="dropdown" href="#">
                                     <?php
                                         $countNotif = 0;
                                         
@@ -189,7 +197,7 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                     ?>
                                     <span class="badge" style="margin-top: 6px;margin-right: 10px;padding: 4px 6px;"><?= $countNotif ?></span>
                                 </a>
-                                <ul class="dropdown-menu" style="min-width: 300px;">
+                                <ul class="dropdown-menu" style="min-width: 350px;">
                                     <li class="header" style="border-bottom: 1px solid #ddd;">Notifikasi</li>
                                     <li>
                                         <div style="max-height: 200px; min=width: 300px; overflow: auto;">
@@ -223,14 +231,14 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
+                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
                                                             ");
                                                         }else if($notif->ntf_type == "new_request_alternate"){
                                                             $request = ProjectUsage::find()->where(['proj_usg_id' => $notif->proj_usg_id])->one();
                                                             $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
                                                             echo(" 
-                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) .">Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
+                                                            <li class='notification-info'><a href=". \yii\helpers\Url::to(['/project-usage', 'ntf_id' => $notif->ntf_id]) ."><i class='fa fa-circle' style='font-size: 10px;'></i> Tanggapi permohonan penggunaan proyek $project->proj_title.</a></li>
                                                             ");
                                                         }
                                                     }

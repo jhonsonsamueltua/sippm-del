@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\Project;
 
 /**
  * Site controller
@@ -26,7 +27,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'all-project'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -59,8 +60,25 @@ class SiteController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-        return $this->render('index');
+    {   
+        $projectCount = Project::find()->where('deleted!=1')->count();
+
+        $modelTop = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->limit(10)->all();
+        return $this->render('index',[
+            'projectCount' => $projectCount,
+            'modelTop' => $modelTop,
+        ]);
+    }
+
+    public function actionAllProject()
+    {   
+        $project = Project::find()->where('deleted!=1')->all();
+        $projectCount = Project::find()->where('deleted!=1')->count();
+
+        return $this->render('all-project',[
+            'projectCount' => $projectCount,
+            'project' => $project,
+        ]);
     }
 
     /**
@@ -77,19 +95,19 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
-            if($model->username === "" && $model->password === ""){
+            if($model->username == "" && $model->password == ""){
                 return $this->render('login', [
                     'model' => $model,
                     'error' => "username_password",
                 ]);
             }
-            if($model->username === ""){
+            if($model->username == ""){
                 return $this->render('login', [
                     'model' => $model,
                     'error' => "username",
                 ]);
             }
-            if($model->password === ""){
+            if($model->password == ""){
                 return $this->render('login', [
                     'model' => $model,
                     'error' => "password",

@@ -35,7 +35,7 @@ $session = Yii::$app->session;
                                 ]); ?>
 
                                     <div class="col-lg-5 col-md-5 col-sm-12" style="padding:0px;" data-toggle="tooltip" data-placement="top" title="Cari berdasarkan Judul, Deskripsi, dan Author">
-                                        <input name="searchWords" type="text" placeholder="Cari proyek ..." class="form-control-custom search-slt">
+                                        <input name="searchWords" type="text" placeholder="Cari proyek ..." class="form-control-custom search-slt" autocomplete="off">
                                     </div>
 
                                     <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">

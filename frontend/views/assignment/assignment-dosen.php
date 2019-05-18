@@ -246,7 +246,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                         <?php 
                                                             Modal::begin([
                                                                 'header' => '<h3>Re-Open Penugasan</h3>',
-                                                                'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;border-radius: 0px!important;'],
+                                                                'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;'],
                                                                 'size' => 'modal-md',
                                                             ]);
                                                                 
@@ -257,7 +257,8 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                                     'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                                                                     'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
                                                                     'removeButton' => false,
-                                                                    'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                                                                    'options' => ['placeholder' => 'Pilih batas akhir...',
+                                                                    'autocomplete'=>'off'],
                                                                     'pluginOptions' => [
                                                                         'autoclose'=>true,
                                                                         'format' => 'yyyy-mm-dd hh:ii:ss'
@@ -265,7 +266,8 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                                 ])->label('Batas Akhir &nbsp;&nbsp;');
                                                                 
                                                                 echo '<br><br>';
-                                                                echo Html::submitButton('Re-Open', ['class' => 'btn btn-sm btn-primary', 'style' => 'padding: 5px 25px;width: 120px;font-style: bold;font-size:14px']);
+                                                                echo Html::submitButton('Re-Open', ['class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;border: 0px;']).'&nbsp;&nbsp;';
+                                                                echo '&nbsp;&nbsp;'.Html::a("Batal", [''], ['data-dismiss' => 'modal', 'class' => 'btn btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;border: 0px;']);
 
                                                                 ActiveForm::end();
 

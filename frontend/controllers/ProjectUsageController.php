@@ -271,6 +271,7 @@ class ProjectUsageController extends Controller
 
             NotificationController::sendProjectUsageRequestNotification('request_accepted', $request->proj_usg_id, $request->created_by);
 
+            // Yii::$app->session->setFlash('success', '<center>Permohonan berhasil disetujui.</center>');
             return $this->redirect(['index']);
         }
     }
