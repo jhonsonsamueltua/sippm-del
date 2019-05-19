@@ -271,8 +271,7 @@ class ProjectUsageController extends Controller
 
             NotificationController::sendProjectUsageRequestNotification('request_accepted', $request->proj_usg_id, $request->created_by);
 
-            // Yii::$app->session->setFlash('success', '<center>Permohonan berhasil disetujui.</center>');
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $proj_usg_id]);
         }
     }
 
@@ -288,6 +287,7 @@ class ProjectUsageController extends Controller
         }else{
             $request = ProjectUsage::find()->where(['proj_usg_id' => $proj_usg_id])->andWhere('deleted!=1')->one();
 
+            $request->proj_usg_reject_message = $_POST['proj_usg_reject_message'];
             $request->sts_proj_usg_id = 3;
             $request->save();
 
@@ -295,7 +295,7 @@ class ProjectUsageController extends Controller
 
             NotificationController::sendProjectUsageRequestNotification('request_rejected', $request->proj_usg_id, $request->created_by);
 
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $proj_usg_id]);
         }
     }
 

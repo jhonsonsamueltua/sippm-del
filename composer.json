@@ -30,6 +30,7 @@
         "kop/yii2-conditional-validator": "dev-master",
         "yiisoft/yii2-sphinx": "^2.0@dev",
         "edwinhaq/yii2-simple-loading": "*",
+        "phpoffice/phpexcel": "*",
         "thyseus/yii2-word-validator": "dev-master"
     },
     "require-dev": {

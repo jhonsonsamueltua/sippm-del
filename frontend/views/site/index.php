@@ -13,7 +13,7 @@ $session = Yii::$app->session;
 ?>
 
 <div class="site-index">
-
+    <div class="loader"></div>
     <div class="body-content" style="padding-top: 0px">
         <!-- First Container -->
         <div class="container-fluid bg-1 text-center">
@@ -120,6 +120,7 @@ $session = Yii::$app->session;
                                             <input type='checkbox' name='title' value='Judul'><label style='color: #000; margin: 5px;'>Judul</label><br>
                                             <input type='checkbox' name='description' value='Deskripsi'><label style='color: #000; margin: 5px;'>Deskripsi</label><br>
                                             <input type='checkbox' name='author' value='Penulis'><label style='color: #000; margin: 5px;'>Penulis</label><br>
+                                            <input type='checkbox' name='keyword' value='KataKunci'><label style='color: #000; margin: 5px;'>Kata Kunci</label><br>
                                         </fieldset>
                                     ");
 
@@ -325,6 +326,15 @@ $session = Yii::$app->session;
         $this->registerJs("
 
             var value = '';
+            var spinner = $('.loader');
+
+            $('#w0').submit(function(event){
+                spinner.show();
+            });
+
+            $('#w2').submit(function(event){
+                spinner.show();
+            });
 
             $('#adv-category').change(function(){
                 value = ($('#adv-category').val() == '') ? 'Sub Kategori' : $('#adv-category').val();

@@ -38,11 +38,17 @@ class CategoryProjectController extends Controller
         $searchModel = new CategoryProjectSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $categories = CategoryProject::find()->where('deleted!=1')->all();
+        $modelImport = new \yii\base\DynamicModel([
+            'fileImport' => 'File',
+        ]);
+        
+        $modelImport->addRule(['fileImport'], 'file', ['extensions' => 'xls, xlsx'], ['maxSize' => 1024*1024]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'categories' => $categories,
+            'modelImport' => $modelImport,
         ]);
     }
 

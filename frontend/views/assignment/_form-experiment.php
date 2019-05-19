@@ -34,7 +34,7 @@ $session = Yii::$app->session;
 </style>
 
 <div class="row">
-        
+    <div class="loader"></div>
     <?php $form = ActiveForm::begin(['options' => [
         'enctype' => 'multipart/form-data',],
         'id' => 'dynamic-form',
@@ -114,7 +114,8 @@ $session = Yii::$app->session;
                         'pluginOptions' => [
                             'autoclose'=>true,
                             'format' => 'yyyy-mm-dd hh:ii:ss'
-                        ]
+                        ],
+                        'class' => 'form-control'
                     ])->label(); ?>
                 </div>
             </div>
@@ -242,6 +243,7 @@ $session = Yii::$app->session;
         var url = window.location.href;
         var allCond = false;
         var classCond = '". $modelAsg->class ."';
+        var spinner = $('.loader');
 
         $(document).ready(function(){
 
@@ -290,6 +292,10 @@ $session = Yii::$app->session;
                 $('select[name=\"Class[0]\"]').attr('disabled', 'true');
             }
 
+        });
+
+        $('#dynamic-form').submit(function(event){
+            spinner.show();
         });
 
         function show(select_item) {

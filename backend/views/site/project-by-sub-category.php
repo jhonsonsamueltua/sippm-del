@@ -4,7 +4,7 @@
 use yiister\gentelella\widgets\Panel;
 $this->title = 'My Yii Application';
 use yii\widgets\DetailView;
-use common\models\project;
+use common\models\Project;
 use backend\controllers\SiteController;
 
 $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");

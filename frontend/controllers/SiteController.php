@@ -271,7 +271,7 @@ class SiteController extends Controller
      * Search Engine
      */
 
-    public function actionSearchProject($searchWords, $searchCategory, $filterCategory = ''){
+    public function actionSearchProject($searchWords, $searchCategory = '', $filterCategory = ''){
         $categories = CategoryProject::find()->where('deleted!=1')->all();
         $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
 
@@ -282,8 +282,9 @@ class SiteController extends Controller
         $query = new Query();
         $rows = $query->select('*')->from('sippm_project')->match(
             (new MatchExpression)->match(['proj_title' => $keywords])
-                ->orMatch(['proj_author' => $keywords])
-                ->orMatch(['proj_description' => $keywords])
+                ->orFilterMatch(['proj_author' => $keywords])
+                ->orFilterMatch(['proj_description' => $keywords])
+                ->orFilterMatch(['proj_keyword' => $keywords])
                 ->andFilterMatch(['proj_cat_name' => $searchCategory])
                 ->andFilterMatch(['sub_cat_proj_name' => $filterCategory])
         )->all();
@@ -304,14 +305,63 @@ class SiteController extends Controller
         $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
         $keywords = explode(' ', $preprocessed); 
 
-        if(isset($_GET['title']) && isset($_GET['description']) && isset($_GET['author'])){
-            //If title, description and author checked
+        if(isset($_GET['title']) && isset($_GET['description']) && isset($_GET['author']) && isset($_GET['keyword']) ){
+            //If title, description, keyword and author checked
             
             $query = new Query();
             $rows = $query->select('*')->from('sippm_project')->match(
                 (new MatchExpression)->match(['proj_title' => $keywords])
                     ->orFilterMatch(['proj_description' => $keywords])
                     ->orFilterMatch(['proj_author' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
+        }else if(isset($_GET['title']) && isset($_GET['description']) && isset($_GET['author'])){
+            //If title, description, and author checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_title' => $keywords])
+                    ->orFilterMatch(['proj_description' => $keywords])
+                    ->orFilterMatch(['proj_author' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
+        }else if(isset($_GET['title']) && isset($_GET['description']) && isset($_GET['keyword'])){
+            //If title, description, and keyword checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_title' => $keywords])
+                    ->orFilterMatch(['proj_description' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
+        }else if(isset($_GET['title']) && isset($_GET['author']) && isset($_GET['keyword'])){
+            //If title, author, and keyword checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_title' => $keywords])
+                    ->orFilterMatch(['proj_author' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
+        }else if(isset($_GET['description']) && isset($_GET['author']) && isset($_GET['keyword'])){
+            //If description, author, and keyword checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_description' => $keywords])
+                    ->orFilterMatch(['proj_author' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
                     ->andFilterMatch(['proj_year' => $advYear])
@@ -338,6 +388,17 @@ class SiteController extends Controller
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
                     ->andFilterMatch(['proj_year' => $advYear])
             )->all();
+        }else if(isset($_GET['title']) && isset($_GET['keyword'])){
+            //If title and keyword checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_title' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
         }else if(isset($_GET['description']) && isset($_GET['author'])){
             //If description and author checked
 
@@ -345,6 +406,28 @@ class SiteController extends Controller
             $rows = $query->select('*')->from('sippm_project')->match(
                 (new MatchExpression)->match(['proj_description' => $keywords])
                     ->orFilterMatch(['proj_author' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
+        }else if(isset($_GET['description']) && isset($_GET['keyword'])){
+            //If description and keyword checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_description' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
+        }else if(isset($_GET['author']) && isset($_GET['keyword'])){
+            //If author and keyword checked
+
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_author' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
                     ->andFilterMatch(['proj_year' => $advYear])
@@ -379,6 +462,16 @@ class SiteController extends Controller
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
                     ->andFilterMatch(['proj_year' => $advYear])
             )->all();
+        }else if(isset($_GET['keyword'])){
+            //If keyword checked
+            
+            $query = new Query();
+            $rows = $query->select('*')->from('sippm_project')->match(
+                (new MatchExpression)->match(['proj_keyword' => $keywords])
+                    ->andFilterMatch(['proj_cat_name' => $advCategory])
+                    ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
+                    ->andFilterMatch(['proj_year' => $advYear])
+            )->all();
         }else{
             //If nothing checked
 
@@ -387,6 +480,7 @@ class SiteController extends Controller
                 (new MatchExpression)->match(['proj_title' => $keywords])
                     ->orFilterMatch(['proj_description' => $keywords])
                     ->orFilterMatch(['proj_author' => $keywords])
+                    ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
                     ->andFilterMatch(['proj_year' => $advYear])

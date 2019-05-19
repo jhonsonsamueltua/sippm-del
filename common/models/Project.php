@@ -62,7 +62,7 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['proj_title', 'proj_description', 'proj_author'], 'required', 'message' => "{attribute} tidak boleh kosong."],
+            [['proj_title', 'proj_description', 'proj_author', 'proj_keyword'], 'required', 'message' => "{attribute} tidak boleh kosong."],
             [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_cat_name', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
@@ -85,6 +85,7 @@ class Project extends \yii\db\ActiveRecord
             ['proj_author', 'string','min' => 5, 'max' => 500, 'tooShort' => '{attribute} tidak boleh kurang dari 5 karakter.', 'tooLong' => '{attribute} tidak boleh lebih dari 500 karakter.'],
             [['proj_creator_class'], 'string', 'max' => 100],  
             ['proj_author', 'match', 'pattern'=> '/^[A-Za-z; ]+$/u', 'message'=> 'Penulis hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
+            ['proj_keyword', 'match', 'pattern'=> '/^[A-Z0-9a-z; ]+$/u', 'message'=> 'Kata Kuncti hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
     }
@@ -102,6 +103,7 @@ class Project extends \yii\db\ActiveRecord
             'proj_downloaded' => 'Jumlah Diunduh',
             'proj_cat_name' => 'Kategori proyek',
             'proj_author' => 'Penulis',
+            'proj_keyword' => 'Keyword',
             'proj_year' => 'Tahun',
             'sts_win_id' => 'Status Menang',
             'files' => 'Unggah Proyek',

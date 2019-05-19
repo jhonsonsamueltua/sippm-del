@@ -10,7 +10,25 @@ $this->title = 'Masuk';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
+<style>
+
+    .loader{
+        display: none;  
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.75) url(images/double-ring.svg) no-repeat center center;
+        z-index: 10000;
+    }
+
+</style>
+
 <div class="wrapper fadeInDown">
+  <div class="loader"></div>
   <div id="formContent">
     <div class="fadeIn first">
         <img src="images/logo.jpg" id="icon" alt="Del Logo" />
@@ -21,12 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
         $form = ActiveForm::begin([
             'id' => 'login-form',
             'options' => ['class' => 'form'],
-            ]);
+        ]);
 
         $border_bottom_username = " ";
         $border_bottom_password = "";
         $autofocus_username = true;
         $autofocus_password = false;
+
         if($error == "data" || $error == "username_password"){
             $border_bottom_username = " 2px solid #FF5722";
             $border_bottom_password = " 2px solid #FF5722";
@@ -78,14 +97,23 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $this->endPage() ?>
 
 <?php
-     $this->registerJs('
-     $(".glyphicon-eye-open").on("click", function() {
-        $(this).toggleClass("glyphicon-eye-close");
-          var type = $("#password").attr("type");
-        if (type == "text"){ 
-          $("#password").prop("type","password");}
-        else{ 
-          $("#password").prop("type","text"); }
+    $this->registerJs('
+        var type = $("#password").attr("type");
+        var spinner = $(".loader");
+        
+        $("#login-form").submit(function(){
+            spinner.show();
         });
-     ', $this::POS_END);
+
+        $(".glyphicon-eye-open").on("click", function() {
+            $(this).toggleClass("glyphicon-eye-close");
+            
+            if (type == "text"){ 
+                $("#password").prop("type","password");
+            }else{ 
+                $("#password").prop("type","text"); 
+            }
+        });
+    
+        ', $this::POS_END);
 ?>

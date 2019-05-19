@@ -15,6 +15,24 @@ $css = ['css/category-project.css'];
 $this->title = 'Category Projects';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<style>
+    
+    .subcat-error {
+        font-size: 14px;
+        color: #A94442;
+    }
+
+    .error-border {
+        border-color: #A94442;
+    }
+
+    .label-error.active{
+        color: #A94442;
+    }
+
+</style>
+
 <div style="width: 80%">
     <div style="padding: 5px;">
         <h3>Kategori</h3>
@@ -89,7 +107,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div style='display: flex; justify-content: center;'>
                             <div id='1$categoryName' class='col-md-12 collapse' style='padding-left: 20px;'>
                     ");
-                    echo '<hr>';
+
+                            echo '<hr>';
+                     
                                 Modal::begin([
                                     'header' => 'Tambah Sub Kategori',
                                     'toggleButton' => ['label' => 'Tambah '. $category->cat_proj_name .'', 'class' => ['btn btn-sm btn-success modal-btn']],
@@ -100,9 +120,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'action' => \yii\helpers\Url::to(['/sub-category-project/create', 'cat_proj_id' => $categoryId]),
                                     ]);
 
-                                        echo $formSubCat->field($newSubCategory, 'sub_cat_proj_name')->textInput();
+                                        echo("
+                                            <input type='radio' name='form-type' value='dynamic' checked>Form Dinamis
+                                            <input type='radio' name='form-type' value='file'>Import File
+                                        ");
+
+                                        echo("
+                                            <br>
+                                            <div id='dynamic-form'>
+                                                <label class='label-error'>Nama Sub Kategori</label>
+                                                <button onclick='addMoreSubKategori()' style='float: right;'>Tambah Field</button>
+                                                <div id='dynamic-field' class='form-group'>    
+                                                    <input class='form-control' type='text' name='SubKategori[0]'>
+                                                    <p class='subcat-error'></p>
+                                                </div>
+                                            </div>
+                                        ");
+
+                                        echo $formSubCat->field($modelImport, 'fileImport')->fileInput();
 
                                         echo Html::submitButton('Tambah', ['class' => 'btn btn-success']);
+                                        echo "<button class='btn btn-danger' data-dismiss='modal'>Batal</button>";
 
                                     ActiveForm::end();
 
@@ -110,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 
                                 echo("<br>");
                                 
-                                $subCategories = SubCategoryProject::find()->where(['cat_proj_id' => $categoryId])->andWhere('deleted!=1')->all();
+                                $subCategories = SubCategoryProject::find()->where(['cat_proj_id' => $categoryId])->andWhere('deleted!=1')->orderBy('sub_cat_proj_name ASC')->all();
                                 foreach($subCategories as $subCategory){
                                     $subCategoryId = $subCategory->sub_cat_proj_id;
                                     $subCategoryName = $subCategory->sub_cat_proj_name;
@@ -161,6 +199,74 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
         $this->registerJs("
+            var formType = $('input[name=\"form-type\"]');
+            var dynamicForm = $('#dynamic-form');
+            var dynamicField = $('#dynamic-field');
+            var fileForm = $('.field-dynamicmodel-fileimport');
+            var subCatField = $('input[name=\"SubKategori[0]\"]');
+            var fileField = $('#dynamicmodel-fileimport');
+            var value = 'dynamic';
+            var idx = 1;
+
+            $(document).ready(function(){
+                fileForm.hide();
+            });
+
+            formType.click(function(){
+                value = $('input[name=\"form-type\"]:checked').val();
+
+                if(value == 'dynamic'){
+                    dynamicForm.show();
+                    fileForm.hide();
+                }else if(value == 'file'){
+                    dynamicForm.hide();
+                    fileForm.show();
+                }
+            });
+
+            subCatField.focusout(function(){
+                if(subCatField.val() == ''){
+                    $('.label-error').addClass('active');
+                    subCatField.addClass('border-error');
+                    $('.subcat-error').html('Kata Kunci tidak boleh kosong');
+                }else{
+                    $('.label-error').removeClass('active');
+                    subCatField.removeClass('border-error');
+                    $('.subcat-error').html('');
+                }
+            });
+
+            $('#w5').submit(function(event){
+                if(value == 'dynamic'){
+                    if(subCatField.val() == ''){
+                        event.preventDefault();
+                        dynamicForm.addClass('has-error');
+                        dynamicForm.removeClass('has-success');
+                        subCatField.attr('aria-invalid', 'true');
+                        dynamicForm.find($('.help-block')).html('Nama Sub Kategori tidak boleh kosong');
+                    }
+                }else if(value == 'file'){
+                    if(fileField.val() == ''){
+                        event.preventDefault();
+                        fileForm.addClass('has-error');
+                        fileForm.removeClass('has-success');
+                        fileField.attr('aria-invalid', 'true');
+                        fileForm.find($('.help-block')).html('File tidak boleh kosong');
+                    }
+                }
+            }); 
+
+            function addMoreSubKategori(){
+                var style = '';
+                
+                if(idx != 1){
+                    style = 'margin-top: 10px;';
+                }
+
+                dynamicField.append(\"<input class='form-control' type='text' name='SubKategori[\"+idx+\"]' style='\"+style+\"'>\");
+                idx++;
+            }
+
             function changeIcon(caretName){
                 var cond = $('#caret1'+caretName+'[aria-expanded]').attr('aria-expanded');
                 

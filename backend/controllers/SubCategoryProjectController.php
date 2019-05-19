@@ -65,17 +65,55 @@ class SubCategoryProjectController extends Controller
     public function actionCreate($cat_proj_id)
     {
         $model = new SubCategoryProject();
+        $modelImport = new \yii\base\DynamicModel([
+            'fileImport' => 'File',
+        ]);
+        
+        $modelImport->addRule(['fileImport'], 'required');
+        $modelImport->addRule(['fileImport'], 'file', ['extensions' => 'xls, xlsx'], ['maxSize' => 1024*1024]);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->cat_proj_id = $cat_proj_id;
+        if (Yii::$app->request->post()) {
+            if($_POST['form-type'] == 'dynamic'){
+                //try catch here
+                foreach($_POST['SubKategori'] as $subKategori){
+                    $exists = SubCategoryProject::find()->where(['sub_cat_proj_name' => $subKategori])->andWhere('deleted!=1')->one();
+                    
+                    if($exists == null && $subKategori != ''){
+                        $model->sub_cat_proj_name = $subKategori;
+                        $model->cat_proj_id = $cat_proj_id;
+                        $model->save();
+                    }
+                }
 
-            if(!$model->save()){
-                Yii::$app->session->setFlash('error', 'Gagal menambahkan sub kategori.');
+                return $this->redirect(['/category-project']);
             }else{
-                Yii::$app->session->setFlash('success', 'Sub kategori berhasil ditambahkan.');
+                //try catch here
+                $modelImport->fileImport = \yii\web\UploadedFile::getInstance($modelImport, 'fileImport');
+
+                if($modelImport->fileImport && $modelImport->validate()){
+                    $inputFileType = \PHPExcel_IOFactory::identify($modelImport->fileImport->tempName);
+                    $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+                    $objPHPExcel = $objReader->load($modelImport->fileImport->tempName);
+                    $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+                    $baseRow = 2;
+
+                    while(!empty($sheetData[$baseRow]['A'])){
+                        $exists = SubCategoryProject::find()->where(['sub_cat_proj_name' => $sheetData[$baseRow]['A']])->andWhere('deleted!=1')->one();
+
+                        if($exists == null){
+                            $model->setIsNewRecord(true);
+                            $model->sub_cat_proj_name = $sheetData[$baseRow]['A'];
+                            $model->cat_proj_id = $cat_proj_id;
+                            $model->save();
+                            $model->sub_cat_proj_id++;
+                        }
+
+                        $baseRow++;
+                    }
+                }
+
+                return $this->redirect(['/category-project']);
             }
-             
-            return $this->redirect(['/category-project']);
         }
 
         return $this->redirect(['/category-project']);
