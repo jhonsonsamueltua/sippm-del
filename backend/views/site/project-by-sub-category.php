@@ -24,7 +24,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
         Panel::begin(
             [
                 'header' => $title,
-                'icon' => $title == "Semua Proyek" ? 'cubes' : 'trophy',
+                'icon' => 'list-alt',
             ]
         )
     ?>
@@ -41,16 +41,19 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 <tbody>
                     <?php
                         $i = 1;
-                        foreach ($project as $data) {?>
+                        foreach ($project as $data) {
+                            $modelProject = Project::find()->andwhere(['proj_id' => $data['proj_id']])->one();
+                            ?>
+
                             <tr>
                                 <td>
-                                    <a href="#" data-toggle="collapse" data-target="#<?= $data->proj_id ?>" onclick="find()" data-toggle="tooltip" data-placement="top" title="Lihat Detail Proyek">
-                                        <span id="caret1" class="glyphicon glyphicon-chevron-down" style="color: blue;"></span> <?= $data->proj_title ?>
+                                    <a href="#" data-toggle="collapse" data-target="#<?= $modelProject->proj_id ?>" onclick="find()" data-toggle="tooltip" data-placement="top" title="Lihat Detail Proyek">
+                                        <span id="caret1" class="glyphicon glyphicon-chevron-down" style="color: blue;"></span> <?= $modelProject->proj_title ?>
                                     </a>
-                                    <div id=<?= $data->proj_id ?> class="collapse">
+                                    <div id=<?= $modelProject->proj_id ?> class="collapse">
                                         <?php
                                             echo DetailView::widget([
-                                                'model' => $data,
+                                                'model' => $modelProject,
                                                 'attributes' => [
                                                     [
                                                         'attribute' => 'proj_title',
@@ -108,7 +111,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                         ?>
                                     </div>
                                 </td>
-                                <td><?= $data->proj_author ?></td>
+                                <td><?= $modelProject->proj_author ?></td>
                             </tr>
 
                     <?php

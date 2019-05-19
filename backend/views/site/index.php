@@ -20,7 +20,7 @@ $this->title = 'My Yii Application';
                     <?=
                     \yiister\gentelella\widgets\StatsTile::widget(
                         [
-                            'icon' => 'file-o',
+                            'icon' => 'cubes',
                             'header' => 'Proyek',
                             'text' => 'Semua proyek mahasiswa',
                             'number' => '&nbsp;'.$projectCount,
@@ -29,29 +29,29 @@ $this->title = 'My Yii Application';
                     ?>
                 </a>
             </div>
-            <div class="col-xs-12 col-md-4">
-                <a href="<?= Yii::$app->urlManager->createUrl(['site/konten1']) ?>">
+            <div class="col-xs-12 col-md-4" data-toggle="tooltip" data-placement="top" title="Lihat Proyek Menang Kompetisi">
+                <a href="<?= Yii::$app->urlManager->createUrl(['site/all-project', 'type' => 'winComp']) ?>">
                     <?=
                     \yiister\gentelella\widgets\StatsTile::widget(
                         [
-                            'icon' => 'users',
-                            'header' => 'Mahasiswa',
-                            'text' => "Mahasiswa yang terdaftar",
-                            'number' => '&nbsp;'.'1807',
+                            'icon' => 'trophy',
+                            'header' => 'Menang Kompetisi',
+                            'text' => "Proyek menang kompetisi",
+                            'number' => '&nbsp;'.$projectWinCompetitionCount,
                         ]
                     )
                     ?>
                 </a>
             </div>
-            <div class="col-xs-12 col-md-4">
-                <a href="<?= Yii::$app->urlManager->createUrl(['site/konten2']) ?>">
+            <div class="col-xs-12 col-md-4" data-toggle="tooltip" data-placement="top" title="Lihat Proyek Per Sub Kategori">
+                <a href="<?= Yii::$app->urlManager->createUrl(['site/category-project']) ?>">
                     <?=
                     \yiister\gentelella\widgets\StatsTile::widget(
                         [
-                            'icon' => 'user',
-                            'header' => 'Pengajar',
-                            'text' => 'Dosen dan asisten akademik yang terdaftar',
-                            'number' => '&nbsp;'.'150',
+                            'icon' => 'list-alt',
+                            'header' => 'Sub Kategori',
+                            'text' => 'Sub Kategori Proyek',
+                            'number' => '&nbsp;'.$subCategoryCount,
                         ]
                     )
                     ?>
@@ -68,6 +68,14 @@ $this->title = 'My Yii Application';
                         ]
                     )
                 ?>
+                <?php
+                    $tahun = array();
+                    $jumlah = array();
+                    foreach ($modelGrafik as $key => $value) {
+                        array_push($tahun, $value["asg_year"]);
+                        array_push($jumlah, (int)$value["count(sp.proj_id)"]);
+                    }
+                ?>
                 <?=
                     \dosamigos\highcharts\HighCharts::widget([
                     'clientOptions' => [
@@ -78,13 +86,7 @@ $this->title = 'My Yii Application';
                             'text' => 'Jumlah Proyek Tiap Tahun'
                         ],
                         'xAxis' => [
-                            'categories' => [
-                                '2019',
-                                '2018',
-                                '2017',
-                                '2016',
-
-                            ]
+                            'categories' => $tahun
                         ],
                         'yAxis' => [
                             'title' => [
@@ -92,7 +94,7 @@ $this->title = 'My Yii Application';
                             ]
                         ],
                         'series' => [
-                            ['name' => 'Jumlah Proyek', 'data' => [1, 6, 4, 10]],
+                            ['name' => 'Tahun', 'data' => $jumlah],
                         ]
                     ]
                     ]);
