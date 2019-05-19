@@ -101,7 +101,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                         '.$request->stsProjUsg->sts_proj_usg_name.'
                                                     </span>';
                                                 echo '<br>';
-                                                echo Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Proyek">'.$project->proj_title.'</font>', ['project-usage/view', 'id' => $request['proj_usg_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
+                                                echo Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Detail">'.$project->proj_title.'</font>', ['project-usage/view', 'id' => $request['proj_usg_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
                                                 echo '<br>Tujuan Penggunaan : '.$this->context->getCategoryPenggunaan($request['cat_usg_id']).'';
                                                 
                                                 echo '
@@ -111,8 +111,8 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
                                                 ';
                                                 echo(
-                                                    Html::a(" Ubah", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;']) .'&nbsp&nbsp' 
-                                                    . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;border-radius: 3px;', "data" => [
+                                                    Html::a(" Ubah", ["update", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 3px 10px;']) .'&nbsp&nbsp' 
+                                                    . Html::a('Batal', ["cancel", "proj_usg_id" => $request["proj_usg_id"]], ['class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 3px 10px;', "data" => [
                                                         "confirm" => "Apakah anda yakin membatalkan permohonan penggunaan ini?",
                                                         "method" => "post",
                                                     ]]) 
@@ -241,19 +241,15 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
                                                         echo '<h5> <b> Tanggapi Permohonan </b> </h5>';
                                                         
-                                                        echo Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Proyek">'.$request['proj_title'].'</font>', ['/project/view-project', 'proj_id' =>$request['proj_id']], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
+                                                        echo Html::a('<font data-toggle="tooltip" data-placement="top" title="Lihat Detail">'.$request['proj_title'].'</font>', ['/project-usage/view', 'id' =>$request["proj_usg_id"]], ['class' => 'text-title-project', 'style' => 'font-size: 16px;']);
                                                         echo '<br>Tujuan Penggunaan : '.$this->context->getCategoryPenggunaan($request['cat_usg_id']).'';
                                                         echo'
-                                                        <div style="float: right;">
+                                                        <div style="float: right;padding-top: 9px;">
                                                             <p>
                     
                                                         ';
                                                         echo(
                                                             Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
-                                                            // . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
-                                                            //     "confirm" => "Apakah anda yakin menolak permohonan penggunaan ini?",
-                                                            //     "method" => "post",
-                                                            // ]])
                                                         );
 
                                                         Modal::begin([

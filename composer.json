@@ -30,8 +30,8 @@
         "kop/yii2-conditional-validator": "dev-master",
         "yiisoft/yii2-sphinx": "^2.0@dev",
         "edwinhaq/yii2-simple-loading": "*",
-        "hscstudio/yii2-export": "1.0.0",
-        "phpoffice/phpexcel": "*"
+        "phpoffice/phpexcel": "*",
+        "thyseus/yii2-word-validator": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -7,6 +7,7 @@ use frontend\controllers\ProjectUsageController;
 use frontend\controllers\ProjectController;
 use frontend\controllers\SiteController;
 use yii\widgets\DetailView;
+use yiister\gentelella\widgets\Panel;
 $this->title = 'SIPPM Del';
 $session = Yii::$app->session;
 ?>
@@ -18,10 +19,16 @@ $session = Yii::$app->session;
 
 <div class="body-content">
     <div class="box-content">
-        <h3><b>Penggunaan Proyek</b></h3>
-        <hr class="hr-custom">
+    <?php
+        Panel::begin(
+            [
+                'header' => 'Penggunaan Proyek',
+                'icon' => 'files-o',
+            ]
+        )
+    ?>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12 col-sm-12">
                 <table class="table " id="dataTable1" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -117,6 +124,7 @@ $session = Yii::$app->session;
                     </table>
             </div>
         </div>
+        <?php Panel::end() ?>
     </div>
 </div>
 

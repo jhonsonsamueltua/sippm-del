@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\behaviors\TimestampBehavior;
+use thyseus\validators\WordValidator;
 use common\behaviors\BlameableBehavior;
 use common\behaviors\DeleteBehavior;
 
@@ -65,16 +66,30 @@ class Project extends \yii\db\ActiveRecord
             [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['proj_cat_name', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
-            [['proj_keyword'], 'string', 'max' => 1000],
-            [['proj_description', 'proj_title'], 'string'],
-            [['proj_author'], 'string', 'max' => 500],
-            [['proj_creator_class'], 'string', 'max' => 100],
+            [['proj_title'], WordValidator::className(),
+                'min' => 3,
+                'max' => 20,
+                'messages'  => array(
+                    'max' => 'Judul Proyek tidak boleh lebih dari 20 kata.',
+                    'min' => 'Judul Proyek tidak boleh kurang dari 3 kata.',
+                    ),
+                ],
+            [['proj_description'], WordValidator::className(),
+            'min' => 50,
+            'max' => 200,
+            'messages'  => array(
+                'max' => 'Deskripsi Proyek tidak boleh lebih dari 200 kata.',
+                'min' => 'Deskripsi Proyek tidak boleh kurang dari 50 kata.',
+                ),
+            ],
+            ['proj_author', 'string','min' => 5, 'max' => 500, 'tooShort' => '{attribute} tidak boleh kurang dari 5 karakter.', 'tooLong' => '{attribute} tidak boleh lebih dari 500 karakter.'],
+            [['proj_creator_class'], 'string', 'max' => 100],  
             ['proj_author', 'match', 'pattern'=> '/^[A-Za-z; ]+$/u', 'message'=> 'Penulis hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
             ['proj_keyword', 'match', 'pattern'=> '/^[A-Z0-9a-z; ]+$/u', 'message'=> 'Kata Kuncti hanya dapat terdiri dari karakter [ a-z A-Z ; ].'],
-            // [['files'], 'file','extensions' => 'pdf, jpg, zip', 'maxSize' => 1024 * 1024 * 512, 'tooBig' => 'Ukuran Maksimal 500 MB.'],
             [['sts_win_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusWin::className(), 'targetAttribute' => ['sts_win_id' => 'sts_win_id']],
         ];
     }
+
 
     /**
      * {@inheritdoc}

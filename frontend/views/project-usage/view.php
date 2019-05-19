@@ -35,10 +35,32 @@ $session = Yii::$app->session;
         <br>
         <h4><b>Detail Penggunaan Proyek</b></h4>
         <hr class="hr-custom">
+        <p>
+            <?php
+                if($session['username'] == $model->created_by){
+                    if($model->sts_proj_usg_id == 1){
+                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) . "&nbsp;&nbsp;";
+                        echo Html::a('Batal', ['cancel', 'proj_usg_id' => $model->proj_usg_id], [
+                            'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;',
+                            'data' => [
+                                'confirm' => 'Apakah anda yakin membatalkan permohonan penggunaan ini?',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    }
+                }
+                echo '&nbsp;&nbsp;';
+                if($session['role'] == "Mahasiswa"){
+                    echo Html::a('Kembali', ['project-usage/index'], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;background-color:#607d8be3']);
+                }else{
+                    echo Html::a('Kembali', ['project-usage/index'], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;background-color:#607d8be3']);
+                }
+            ?>
+        
+        </p>
         <br>
         <?= DetailView::widget([
             'model' => $model,
-            // 'options' => ['class' => 'border-detail-view'],
             'attributes' => [
                 [
                     'attribute' => 'proj_id',
@@ -86,7 +108,7 @@ $session = Yii::$app->session;
                         $artefak = "";
                         $session = Yii::$app->session;
                         
-                        if($session['nama'] != $model->proj->asg->asg_creator){
+                        if($session['username'] == $model->created_by){
                             if($model->sts_proj_usg_id == 3 || $model->sts_proj_usg_id == 4){
                                 $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
                             }else if($model->sts_proj_usg_id == 1){
@@ -105,24 +127,6 @@ $session = Yii::$app->session;
                 
             ],
         ]) ?>
-
-        <p>
-            <?php
-                if($session['nama'] != $model->proj->asg->asg_creator){
-                    if($model->sts_proj_usg_id == 1){
-                        echo Html::a('Ubah', ['update', 'proj_usg_id' => $model->proj_usg_id], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;']) . "&nbsp;&nbsp;";
-                        echo Html::a('Batal', ['cancel', 'proj_usg_id' => $model->proj_usg_id], [
-                            'class' => 'btn-md btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;',
-                            'data' => [
-                                'confirm' => 'Apakah anda yakin membatalkan permohonan penggunaan ini?',
-                                'method' => 'post',
-                            ],
-                        ]);
-                    }
-                }
-            ?>
-        
-        </p>
 
     </div>
 </div>

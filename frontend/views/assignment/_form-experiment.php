@@ -32,7 +32,6 @@ $session = Yii::$app->session;
     }
 
 </style>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 <div class="row">
     <div class="loader"></div>
@@ -83,7 +82,7 @@ $session = Yii::$app->session;
                         if(!$modelAsg->isNewRecord){
                             echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where(['cat_proj_id' => $modelAsg->cat_proj_id])->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
                         }else{
-                            echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList(ArrayHelper::map(SubCategoryProject::find()->where('0')->all(), 'sub_cat_proj_id', 'sub_cat_proj_name'), ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
+                            echo $form->field($modelAsg, 'sub_cat_proj_id')->dropDownList([], ["prompt" => "Pilih Sub Kategori...", 'id' => 'sub_cat_proj_id'])->label();
                         }
                     ?>
                 </div>
@@ -96,12 +95,13 @@ $session = Yii::$app->session;
                         'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                         'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
                         'removeButton' => false,
-                        'options' => ['placeholder' => 'Pilih batas awal ...'],
+                        'options' => ['placeholder' => 'Pilih batas awal...', 
+                        'autocomplete'=>'off'],
                         'pluginOptions' => [
                             'autoclose'=>true,
                             'format' => 'yyyy-mm-dd hh:ii:ss'
                         ],
-                        'class' => 'form-control'
+                        'class' => 'form-control',
                     ])->label(); ?>
                 </div>
                 <div class="col-md-6">
@@ -109,7 +109,8 @@ $session = Yii::$app->session;
                         'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                         'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
                         'removeButton' => false,
-                        'options' => ['placeholder' => 'Pilih batas akhir ...'],
+                        'options' => ['placeholder' => 'Pilih batas akhir...',
+                        'autocomplete'=>'off'],
                         'pluginOptions' => [
                             'autoclose'=>true,
                             'format' => 'yyyy-mm-dd hh:ii:ss'
@@ -227,11 +228,11 @@ $session = Yii::$app->session;
 
     <div class="row">
     <br>
-        <center>
+        <div style="text-align: center">
             <?= Html::submitButton($modelAsg->isNewRecord ? 'Tambah' : 'Ubah', ['class' => $modelAsg->isNewRecord ? 'btn-md btn-custom' : 'btn-md btn-custom btn-primary-edit', 'style' => 'padding: 8px 30px;width: 150px;']) ?>
-            &nbsp;&nbsp; 
+            &nbsp;&nbsp; &nbsp; 
             <?= Html::a("Batal", ['assignment/assignment-dosen'], ['class' => 'btn-md btn-custom btn-batal']) ?>
-        </center>   
+            </div>   
     </div>
 
     <?php ActiveForm::end(); ?>
