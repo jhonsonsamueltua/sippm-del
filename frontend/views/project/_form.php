@@ -289,7 +289,7 @@ $this->registerCssFile("././css/project.css");
                     $('#field-keyword').addClass('border-error');
                     $('.keywords-error').html('Kata Kunci tidak boleh kosong');
 
-                    event.preventDefault();    
+                    event.preventDefault();
                 }else{
                     spinner.show();
                 }
@@ -318,6 +318,10 @@ $this->registerCssFile("././css/project.css");
         });
 
         function checkWords(keywords){
+            if(keywords[keywords.length - 1] != ';'){
+                keywords += ';';
+            }
+            
             var keyword = keywords.split(';');
             
             return ((keyword.length <= 7) ? true : false);

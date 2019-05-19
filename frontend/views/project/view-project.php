@@ -59,7 +59,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                 <div class = "">
                     <font class = "project-sub-content">Kata Kunci</font><br>
                     <p>
-                        Masih Kosong
+                        <?= $model->proj_keyword ?>
                     </p>
                 </div>
 

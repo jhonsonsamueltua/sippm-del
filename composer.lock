@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8c370861581fc63262999f12d611b15",
+    "content-hash": "23f0c359d974eae79d2f010fa6e9d12a",
     "packages": [
         {
             "name": "2amigos/yii2-file-upload-widget",
@@ -197,8 +197,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/9f3deb2e710d39c72a988559609d9dc9a319de0b",
-                "reference": "9f3deb2e710d39c72a988559609d9dc9a319de0b",
-                "shasum": null
+                "reference": "9f3deb2e710d39c72a988559609d9dc9a319de0b"
             },
             "type": "bower-asset",
             "time": "2017-08-27T22:53:19+00:00"
@@ -238,8 +237,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/Gallery/zipball/8336bb5934cb623608808601129db3fbf9201a09",
-                "reference": "8336bb5934cb623608808601129db3fbf9201a09",
-                "shasum": null
+                "reference": "8336bb5934cb623608808601129db3fbf9201a09"
             },
             "type": "bower-asset"
         },
@@ -254,8 +252,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/e9a4fc2f0e8019ded69178c5b74d090cc6d8051c",
-                "reference": "e9a4fc2f0e8019ded69178c5b74d090cc6d8051c",
-                "shasum": null
+                "reference": "e9a4fc2f0e8019ded69178c5b74d090cc6d8051c"
             },
             "type": "bower-asset",
             "time": "2019-04-05T16:05:32+00:00"
@@ -271,8 +268,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/da7647cb93fff2030e73a701db22c66de76a9919",
-                "reference": "da7647cb93fff2030e73a701db22c66de76a9919",
-                "shasum": null
+                "reference": "da7647cb93fff2030e73a701db22c66de76a9919"
             },
             "type": "bower-asset",
             "time": "2017-08-27T22:51:02+00:00"
@@ -288,8 +284,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/twbs/bootstrap/zipball/68b0d231a13201eb14acd3dc84e51543d16e5f7e",
-                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e",
-                "shasum": null
+                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "require": {
                 "bower-asset/jquery": ">=1.9.1,<4.0"
@@ -329,8 +324,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/highcharts/highcharts-dist/zipball/4f89cf3f98a557a9512f7ba63f727998d21f3b79",
-                "reference": "4f89cf3f98a557a9512f7ba63f727998d21f3b79",
-                "shasum": null
+                "reference": "4f89cf3f98a557a9512f7ba63f727998d21f3b79"
             },
             "type": "bower-asset"
         },
@@ -345,8 +339,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/RobinHerbots/Inputmask/zipball/5e670ad62f50c738388d4dcec78d2888505ad77b",
-                "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b",
-                "shasum": null
+                "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -367,8 +360,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/9e8ec3d10fad04748176144f108d7355662ae75e",
-                "reference": "9e8ec3d10fad04748176144f108d7355662ae75e",
-                "shasum": null
+                "reference": "9e8ec3d10fad04748176144f108d7355662ae75e"
             },
             "type": "bower-asset",
             "license": [
@@ -386,8 +378,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "shasum": null
+                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "type": "bower-asset"
         },
@@ -402,8 +393,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/aef7b953107264f00234902a3880eb50dafc48be",
-                "reference": "aef7b953107264f00234902a3880eb50dafc48be",
-                "shasum": null
+                "reference": "aef7b953107264f00234902a3880eb50dafc48be"
             },
             "require": {
                 "bower-asset/jquery": ">=1.8"
@@ -728,52 +718,6 @@
             "time": "2016-10-24T15:52:54+00:00"
         },
         {
-            "name": "hscstudio/yii2-export",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hscstudio/yii2-export.git",
-                "reference": "0dbb0430123ebae6bfefc194e9a7f2ba2fededdf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hscstudio/yii2-export/zipball/0dbb0430123ebae6bfefc194e9a7f2ba2fededdf",
-                "reference": "0dbb0430123ebae6bfefc194e9a7f2ba2fededdf",
-                "shasum": ""
-            },
-            "require": {
-                "phpoffice/phpexcel": "1.8.0",
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "hscstudio\\export\\": ""
-                },
-                "files": [
-                    "libraries/tbs/tbs_class.php",
-                    "libraries/tbs/plugins/tbs_plugin_opentbs.php",
-                    "libraries/mpdf60/mpdf.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Hafid Mukhlasin",
-                    "email": "hafidmukhlasin@gmail.com"
-                }
-            ],
-            "description": "Excel, Word, PDF",
-            "keywords": [
-                "extension",
-                "yii2"
-            ],
-            "time": "2015-06-07T07:27:43+00:00"
-        },
-        {
             "name": "kartik-v/yii2-krajee-base",
             "version": "dev-master",
             "source": {
@@ -970,22 +914,26 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b"
+                "reference": "1441011fb7ecdd8cc689878f54f8b58a6805f870"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
-                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/1441011fb7ecdd8cc689878f54f8b58a6805f870",
+                "reference": "1441011fb7ecdd8cc689878f54f8b58a6805f870",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "php": ">=5.2.0"
+                "php": "^5.2|^7.0"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "2.*"
             },
             "type": "library",
             "autoload": {
@@ -995,7 +943,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL"
+                "LGPL-2.1"
             ],
             "authors": [
                 {
@@ -1003,18 +951,19 @@
                     "homepage": "http://blog.maartenballiauw.be"
                 },
                 {
-                    "name": "Mark Baker"
+                    "name": "Erik Tilt"
                 },
                 {
                     "name": "Franck Lefevre",
-                    "homepage": "http://blog.rootslabs.net"
+                    "homepage": "http://rootslabs.net"
                 },
                 {
-                    "name": "Erik Tilt"
+                    "name": "Mark Baker",
+                    "homepage": "http://markbakeruk.net"
                 }
             ],
             "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
-            "homepage": "http://phpexcel.codeplex.com",
+            "homepage": "https://github.com/PHPOffice/PHPExcel",
             "keywords": [
                 "OpenXML",
                 "excel",
@@ -1024,7 +973,7 @@
                 "xlsx"
             ],
             "abandoned": "phpoffice/phpspreadsheet",
-            "time": "2014-03-02T15:22:49+00:00"
+            "time": "2018-11-22T23:07:24+00:00"
         },
         {
             "name": "ramosisw/yii2-material-dashboard",
@@ -1959,12 +1908,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-httpclient.git",
-                "reference": "a1a2e480e3f987161c32b936c51a719ea9bb328c"
+                "reference": "b062358a630c2191692073c4ccb46f35bc07e838"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/a1a2e480e3f987161c32b936c51a719ea9bb328c",
-                "reference": "a1a2e480e3f987161c32b936c51a719ea9bb328c",
+                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/b062358a630c2191692073c4ccb46f35bc07e838",
+                "reference": "b062358a630c2191692073c4ccb46f35bc07e838",
                 "shasum": ""
             },
             "require": {
@@ -2001,7 +1950,7 @@
                 "httpclient",
                 "yii2"
             ],
-            "time": "2019-05-14T13:34:00+00:00"
+            "time": "2019-05-19T02:14:45+00:00"
         },
         {
             "name": "yiisoft/yii2-sphinx",

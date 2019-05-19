@@ -74,12 +74,15 @@ class SubCategoryProjectController extends Controller
 
         if (Yii::$app->request->post()) {
             if($_POST['form-type'] == 'dynamic'){
-                $exists = SubCategoryProject::find()->where(['sub_cat_proj_name' => $_POST['SubCategoryProject']['sub_cat_proj_name']])->andWhere('deleted!=1')->one();
-                
-                if($exists == null){
-                    $model->sub_cat_proj_name = $_POST['SubCategoryProject']['sub_cat_proj_name'];
-                    $model->cat_proj_id = $cat_proj_id;
-                    $model->save();
+                //try catch here
+                foreach($_POST['SubKategori'] as $subKategori){
+                    $exists = SubCategoryProject::find()->where(['sub_cat_proj_name' => $subKategori])->andWhere('deleted!=1')->one();
+                    
+                    if($exists == null && $subKategori != ''){
+                        $model->sub_cat_proj_name = $subKategori;
+                        $model->cat_proj_id = $cat_proj_id;
+                        $model->save();
+                    }
                 }
 
                 return $this->redirect(['/category-project']);

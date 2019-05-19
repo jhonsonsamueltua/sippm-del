@@ -120,6 +120,7 @@ $session = Yii::$app->session;
                                             <input type='checkbox' name='title' value='Judul'><label style='color: #000; margin: 5px;'>Judul</label><br>
                                             <input type='checkbox' name='description' value='Deskripsi'><label style='color: #000; margin: 5px;'>Deskripsi</label><br>
                                             <input type='checkbox' name='author' value='Penulis'><label style='color: #000; margin: 5px;'>Penulis</label><br>
+                                            <input type='checkbox' name='keyword' value='KataKunci'><label style='color: #000; margin: 5px;'>Kata Kunci</label><br>
                                         </fieldset>
                                     ");
 

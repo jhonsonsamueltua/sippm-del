@@ -304,6 +304,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             "autoWidth": true
             });
         });
+        
         $(function () {
             $("#dataTable").DataTable({
             "pageLength": 10,
@@ -315,6 +316,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             "autoWidth": true
             });
         });
+
         $(function () {
             $("#dataTable3").DataTable({
             "pageLength": 10,
@@ -325,6 +327,17 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             "info": true,
             "autoWidth": true
             });
+        });
+
+        $("form").submit(function(event){
+            var value = $("#assignment-updated_end_time").val();
+            
+            if(value == ""){
+                event.preventDefault();
+                $(".field-assignment-updated_end_time").addClass("has-error");
+                $(".field-assignment-updated_end_time").removeClass("has-success");
+                $(".field-assignment-updated_end_time").find($(".help-block")).html("Batas Akhir tidak boleh kosong");
+            }
         });
 
         function openContent(evt, contentName) {
