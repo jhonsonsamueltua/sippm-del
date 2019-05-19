@@ -60,9 +60,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     
     <?php
-        if($error == "data"){
-            echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Nama Pengguna atau Kata Sandi anda salah. <br><br></font>";
-        }
+        // if($error == "data"){
+        //     echo "<font class='text-error'> <i class='fa fa-warning' style='font-size:16px;color:red'></i> &nbsp;Nama Pengguna atau Kata Sandi anda salah. <br><br></font>";
+        // }
     ?>
     <div class="form-group" align="center">
     <br>
