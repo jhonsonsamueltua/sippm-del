@@ -53,7 +53,6 @@ class SubCategoryProject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sub_cat_proj_name'], 'required', 'message' => '{attribute} tidak boleh kosong.'],
             [['sub_cat_proj_id', 'cat_proj_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
             [['sub_cat_proj_name', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
@@ -69,6 +68,7 @@ class SubCategoryProject extends \yii\db\ActiveRecord
         return [
             'sub_cat_proj_id' => 'Sub Category ID',
             'sub_cat_proj_name' => 'Nama Sub Kategori',
+            // 'fileImport' => 'File',
             'deleted' => 'Deleted',
             'deleted_at' => 'Deleted At',
             'deleted_by' => 'Deleted By',

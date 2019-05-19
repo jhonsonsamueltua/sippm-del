@@ -1,23 +1,26 @@
 <?php
 
-  
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
-use frontend\controllers\ProjectUsageController;
-use frontend\controllers\ProjectController;
 use yii\widgets\DetailView;
 use yii\widgets\Breadcrumbs;
+use yii\widgets\ActiveForm;
+use yii\bootstrap\Modal;
+use frontend\controllers\ProjectUsageController;
+use frontend\controllers\ProjectController;
 use frontend\controllers\SiteController;
-$this->registerCssFile("././css/assignment.css");
 
 $this->title = 'SIPPM Del';
 $session = Yii::$app->session;
+
+$this->registerCssFile("././css/assignment.css");
 $this->registerCssFile("././css/project.css");
 $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
 $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
-$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+
 ?>
 
 <div class="body-content">
@@ -247,11 +250,36 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                                                         ';
                                                         echo(
                                                             Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
-                                                            . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
-                                                                "confirm" => "Apakah anda yakin menolak permohonan penggunaan ini?",
-                                                                "method" => "post",
-                                                            ]])
+                                                            // . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
+                                                            //     "confirm" => "Apakah anda yakin menolak permohonan penggunaan ini?",
+                                                            //     "method" => "post",
+                                                            // ]])
                                                         );
+
+                                                        Modal::begin([
+                                                            'header' => 'Tolak Permohonan Penggunaan',
+                                                            'toggleButton' => ['label' => 'Tolak', 'class' => 'btn btn-danger btn-sm'],
+                                                        ]);
+                    
+                                                            $form = ActiveForm::begin([
+                                                                'action' => \yii\helpers\Url::to(['reject-request', 'proj_usg_id' => $request['proj_usg_id']]),
+                                                            ]);
+
+                                                                echo("
+                                                                    <label class=''>Alasan</label>
+                                                                    <div class='form-group'>
+                                                                        <textarea rows='3' class='form-control' name='proj_usg_reject_message'></textarea>
+                                                                    </div>
+                                                                ");
+
+                                                                echo Html::submitButton('Tolak', [
+                                                                    'class' => 'btn btn-warning',
+                                                                ]) . "&nbsp;&nbsp;";
+                                                                echo "<button class='btn btn-danger' data-dismiss='modal'>Batal</button>";
+
+                                                            ActiveForm::end();
+
+                                                        Modal::end();
                     
                                                         echo '</p>
                                                         </div>';

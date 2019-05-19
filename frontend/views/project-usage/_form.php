@@ -15,6 +15,7 @@ $this->registerCssFile("././css/project.css");
 
 
 <div class="row">
+    <div class="loader"></div>
     <div class="col-md-6">
         <?php $form = ActiveForm::begin([
                 'options' => ['enctype' => 'multipart/form-data']
@@ -47,6 +48,16 @@ $this->registerCssFile("././css/project.css");
         </div> -->
 
     </div>
-</div>
-                 
 
+    <?php
+        $this->registerJs("
+            var spinner = $('.loader');        
+
+            $('#w0').submit(function(event){
+                spinner.show();
+            });        
+
+        ", $this::POS_END);
+    ?>
+
+</div>

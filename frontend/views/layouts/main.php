@@ -29,6 +29,7 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
                                        ->andWhere(['not in', 'ntf_id', $listSeenNotifId])
                                        ->orderBy('sippm_notification.created_at DESC')
                                        ->all();
+
 ?>
 
 <?php $this->beginPage() ?>
@@ -76,6 +77,17 @@ $modelNotif = SippmNotification::find()->leftJoin('sippm_assignment', 'sippm_not
             background-color: #ddd;
         }
 
+        .loader{
+            display: none;  
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.75) url(images/double-ring.svg) no-repeat center center;
+            z-index: 10000;
+        }
     </style>
 
 </head>

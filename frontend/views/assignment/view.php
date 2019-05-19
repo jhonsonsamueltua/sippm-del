@@ -22,19 +22,18 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <div class="body-content">
     <div class=" container box-content">
-
-            <?php
-                echo Breadcrumbs::widget([
-                    'itemTemplate' => "<li>{link}</li>\n",
-                    'links' => [
-                        [
-                            'label' => 'Penugasan',
-                            'url' => ['assignment/assignment-dosen'],
-                        ],
-                        'Detail Penugasan',
+        <?php
+            echo Breadcrumbs::widget([
+                'itemTemplate' => "<li>{link}</li>\n",
+                'links' => [
+                    [
+                        'label' => 'Penugasan',
+                        'url' => ['assignment/assignment-dosen'],
                     ],
-                ]);
-            ?>
+                    'Detail Penugasan',
+                ],
+            ]);
+        ?>
         <br>
         <h4> <b>Detail Penugasan</b> </h4>
         <hr class="hr-custom">
@@ -112,9 +111,9 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                             'attribute' => '',
                             'label' => 'Kelas Ditugaskan',
                             'value' => function($model){
-                                if($model->class == "All"){
-                                    return "Semua Kelas";
-                                }else{
+                                // if($model->class == "All"){
+                                //     return "Semua Kelas";
+                                // }else{
                                     $class = "";
                                     $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
 
@@ -128,7 +127,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                         }
                                     }
                                     return '<font style="font-size: px;">'.$class.'</font>';
-                                }
+                                // }
                             },
                             'format' => 'raw',
                         ],
@@ -188,8 +187,8 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <?php
     $this->registerJs("
-
         var change = true;
+
         $(document).ready(function () {
             $('[data-toggle=offcanvas]').click(function () {
                 $('.row-offcanvas').toggleClass('active');
@@ -207,6 +206,18 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             $('#caret2').toggleClass('glyphicon-chevron-down', !change);
             change = !change
         }
+
+        $(function () {
+            $('#dataTables').DataTable({
+            'pageLength': 10,
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true
+            });
+        });
     
     ", $this::POS_END);
 ?>
@@ -214,17 +225,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <?php
      $this->registerJs('
-        $(function () {
-            $("#dataTables").DataTable({
-            "pageLength": 10,
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true
-            });
-        });
+        
         
      ', $this::POS_END);
 ?>

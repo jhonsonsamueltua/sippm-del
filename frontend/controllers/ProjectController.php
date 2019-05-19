@@ -155,6 +155,8 @@ class ProjectController extends Controller
                 $model->proj_downloaded = 0;
                 $model->proj_year = $year->format('Y');
                 $model->proj_creator_class =(string)$session['kelas_id'];
+                $model->proj_keyword = $_POST['proj_keyword'];
+
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
     
@@ -189,6 +191,11 @@ class ProjectController extends Controller
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
     
+                    // echo "<pre>";
+                    // var_dump($model->errors);
+                    // echo "</pre>";
+                    // die;
+                    
                     return $this->render('create', [
                         'model' => $model,
                         'assignment' => $assignmentModel,
@@ -247,6 +254,8 @@ class ProjectController extends Controller
                             'late' => true,
                         ]);
                     }else{
+                        $model->proj_keyword = $_POST['proj_keyword'];
+
                         if($model->save()){
                             if($oldProjName != $model->proj_title){
                                 $fileDefPath = Yii::getAlias('@uploadDirTemplate') . "/";
@@ -256,7 +265,7 @@ class ProjectController extends Controller
                                 foreach($files as $file){
                                     $oldFile = $this->findFile($file->file_id);
                                     
-                                    $oldFile->file_path = $fileDefPath.$model->proj_title."/".$oldFile->file_name;
+                                    $oldFile->file_path = $fileDefPath.$model->proj_title . "/" . $oldFile->file_name;
                                     $oldFile->save();
                                 }
                             }

@@ -89,7 +89,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div style='display: flex; justify-content: center;'>
                             <div id='1$categoryName' class='col-md-12 collapse' style='padding-left: 20px;'>
                     ");
-                    echo '<hr>';
+
+                            echo '<hr>';
+                     
                                 Modal::begin([
                                     'header' => 'Tambah Sub Kategori',
                                     'toggleButton' => ['label' => 'Tambah '. $category->cat_proj_name .'', 'class' => ['btn btn-sm btn-success modal-btn']],
@@ -100,9 +102,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'action' => \yii\helpers\Url::to(['/sub-category-project/create', 'cat_proj_id' => $categoryId]),
                                     ]);
 
+                                        echo("
+                                            <input type='radio' name='form-type' value='dynamic' checked>Form Dinamis
+                                            <input type='radio' name='form-type' value='file'>Import File
+                                        ");
+
                                         echo $formSubCat->field($newSubCategory, 'sub_cat_proj_name')->textInput();
 
-                                        echo Html::submitButton('Tambah', ['class' => 'btn btn-success']);
+                                        echo $formSubCat->field($modelImport, 'fileImport')->fileInput();
+
+                                        echo Html::submitButton('Tambah', ['class' => 'btn btn-success', ]);
 
                                     ActiveForm::end();
 
@@ -110,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 
                                 echo("<br>");
                                 
-                                $subCategories = SubCategoryProject::find()->where(['cat_proj_id' => $categoryId])->andWhere('deleted!=1')->all();
+                                $subCategories = SubCategoryProject::find()->where(['cat_proj_id' => $categoryId])->andWhere('deleted!=1')->orderBy('sub_cat_proj_name ASC')->all();
                                 foreach($subCategories as $subCategory){
                                     $subCategoryId = $subCategory->sub_cat_proj_id;
                                     $subCategoryName = $subCategory->sub_cat_proj_name;
@@ -161,6 +170,61 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
         $this->registerJs("
+            var formType = $('input[name=\"form-type\"]');
+            var dynamicForm = $('.field-subcategoryproject-sub_cat_proj_name');
+            var fileForm = $('.field-dynamicmodel-fileimport');
+            var subCatField = $('#subcategoryproject-sub_cat_proj_name');
+            var fileField = $('#dynamicmodel-fileimport');
+            var value = 'dynamic';
+
+            $(document).ready(function(){
+                fileForm.hide();
+            });
+
+            formType.click(function(){
+                value = $('input[name=\"form-type\"]:checked').val();
+
+                if(value == 'dynamic'){
+                    dynamicForm.show();
+                    fileForm.hide();
+                }else if(value == 'file'){
+                    dynamicForm.hide();
+                    fileForm.show();
+                }
+            });
+
+            dynamicForm.focusout(function(){
+                if(subCatField.val() == ''){
+                    dynamicForm.removeClass('has-success').addClass('has-error');
+                    subCatField.attr('aria-invalid', 'true');
+                    dynamicForm.find($('.help-block')).html('Nama Sub Kategori tidak boleh kosong');
+                }else{
+                    dynamicForm.addClass('has-success').removeClass('has-error');
+                    subCatField.attr('aria-invalid', 'false');
+                    dynamicForm.find($('.help-block')).html('');
+                }
+            });
+
+            $('#w5').submit(function(event){
+                if(value == 'dynamic'){
+                    if(subCatField.val() == ''){
+                        event.preventDefault();
+                        dynamicForm.addClass('has-error');
+                        dynamicForm.removeClass('has-success');
+                        subCatField.attr('aria-invalid', 'true');
+                        dynamicForm.find($('.help-block')).html('Nama Sub Kategori tidak boleh kosong');
+                    }
+                }else if(value == 'file'){
+                    if(fileField.val() == ''){
+                        event.preventDefault();
+                        fileForm.addClass('has-error');
+                        fileForm.removeClass('has-success');
+                        fileField.attr('aria-invalid', 'true');
+                        fileForm.find($('.help-block')).html('File tidak boleh kosong');
+                    }
+                }
+            }); 
+
             function changeIcon(caretName){
                 var cond = $('#caret1'+caretName+'[aria-expanded]').attr('aria-expanded');
                 

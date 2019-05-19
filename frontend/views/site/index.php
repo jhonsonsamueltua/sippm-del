@@ -13,7 +13,7 @@ $session = Yii::$app->session;
 ?>
 
 <div class="site-index">
-
+    <div class="loader"></div>
     <div class="body-content" style="padding-top: 0px">
         <!-- First Container -->
         <div class="container-fluid bg-1 text-center">
@@ -325,6 +325,15 @@ $session = Yii::$app->session;
         $this->registerJs("
 
             var value = '';
+            var spinner = $('.loader');
+
+            $('#w0').submit(function(event){
+                spinner.show();
+            });
+
+            $('#w2').submit(function(event){
+                spinner.show();
+            });
 
             $('#adv-category').change(function(){
                 value = ($('#adv-category').val() == '') ? 'Sub Kategori' : $('#adv-category').val();

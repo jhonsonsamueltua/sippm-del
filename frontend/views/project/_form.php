@@ -18,11 +18,27 @@ $this->registerCssFile("././css/project.css");
 ?>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
-<div class="row">
+<style>
 
+    .keywords-error {
+        font-size: 14px;
+        color: #A94442;
+    }
+
+    .error-border {
+        border-color: #A94442;
+    }
+
+    .label-error.active{
+        color: #A94442;
+    }
+
+</style>
+
+<div class="row">
+    <div class="loader"></div>
     <div class="col-md-6 form-project" style="padding: 0px 0px 0px 25px;">
-        <!-- <b style="font-size: 16px">Proyek</b>
-        <hr class="hr-custom"> -->
+        
         <?php
             $status = AssignmentController::getProject($assignment["asg_id"]);
             if($assignment->stsAsg->sts_asg_name == "Pending"){
@@ -44,8 +60,6 @@ $this->registerCssFile("././css/project.css");
             'options' => ['enctype' => 'multipart/form-data']
         ]); ?>
 
-        <!-- <?= $form->field($model, 'proj_title')->textInput(['readOnly' => false, 'maxlength' => true, 'style' => 'font-weight: 700']) ?> -->
-
         <?= $form->field($model, 'proj_title')->textArea(['rows' => '3', 'maxLength' => true, 'style' => 'font-weight: 700']) ?>
         
         <?= $form->field($model, 'proj_description')->widget(Redactor::classname(), [
@@ -54,7 +68,21 @@ $this->registerCssFile("././css/project.css");
             ],
         ]) ?>
         
-        <?= $form->field($model, 'proj_author')->textArea(['rows' => '3', 'maxLength' => true, 'placeholder' => 'Contoh : Nama Anda; Nama Teman Anda'])->hint('Max 500 karakter.')->label("Penulis (Pisahkan Penulis dengan tanda titik koma [ ; ] )")?>
+        <?= $form->field($model, 'proj_author')->textArea(['rows' => '3', 'maxLength' => true, 'placeholder' => 'Contoh : Nama Anda; Nama Teman Anda'])->hint('Maksimal 500 karakter.')->label("Penulis (Pisahkan Penulis dengan tanda titik koma [ ; ] )") ?>
+
+        <!-- <?= $form->field($model, 'proj_keyword')->textInput(['maxLength' => true, 'placeholder' => 'Contoh : Artifical Intelligence; Machine Learning'])->hint('Maksimal 6 kata kunci.')->label("Kata Kunci (Pisahkan Kata Kunci dengan tanda titik koma [ ; ] )") ?> -->
+
+        <label class="label-error">Kata Kunci (Pisahkan Kata Kunci dengan tanda titik koma [ ; ] )</label>
+        <div class="form-group">
+            <?php
+                $keywords = "";
+                if(isset($model->proj_keyword)){
+                    $keywords = $model->proj_keyword;
+                }
+                echo '<input id="field-keyword" class="form-control" type="text" name="proj_keyword" value="'. $keywords .'">';
+            ?>
+        </div>
+        <p class="keywords-error"></p>
 
         <div id="sts_win">
             <?= $form->field($model, 'sts_win_id')->dropDownList(ArrayHelper::map(StatusWin::find()->all(), 'sts_win_id', 'sts_win_name'), [
@@ -233,7 +261,6 @@ $this->registerCssFile("././css/project.css");
                             $date_timestamp = strtotime($updated_at);
                             $res = SiteController::tgl_indo(date('Y-m-d', $date_timestamp)).', '.date('H:i:s', $date_timestamp);
                         }
-                        
 
                         return $res;
                     }
@@ -246,24 +273,60 @@ $this->registerCssFile("././css/project.css");
     
 
 </div>
-                             
-                        
-
-
                         
 <?php
     $this->registerJs("
+        var spinner = $('.loader');
+        var uploadField = document.getElementById('file');
 
         $(document).ready(function(){
             if($assignment->cat_proj_id == 1) $('#sts_win').hide();
+        
+            $('#w0').submit(function(event){
+                var keywordValue = $('#field-keyword').val();
+
+                if(keywordValue == ''){
+                    $('.label-error').addClass('active');
+                    $('#field-keyword').addClass('border-error');
+                    $('.keywords-error').html('Kata Kunci tidak boleh kosong');
+
+                    event.preventDefault();    
+                }else{
+                    spinner.show();
+                }
+            });
+
+            $('#field-keyword').change(function(){
+                var value = $('#field-keyword').val();
+
+                if(value === ''){
+                    $('.label-error').addClass('active');
+                    $('#field-keyword').addClass('border-error');
+                    $('.keywords-error').html('Kata Kunci tidak boleh kosong');
+                }else{
+                    if(checkWords(value)){
+                        $('.label-error').removeClass('active');
+                        $('#field-keyword').removeClass('border-error');
+                        $('.keywords-error').html('');
+                    }else{
+                        $('.label-error').addClass('active');
+                        $('#field-keyword').addClass('border-error');
+                        $('.keywords-error').html('Kata Kunci tidak boleh lebih dari 6');
+                    }
+                }
+            });
+
         });
+
+        function checkWords(keywords){
+            var keyword = keywords.split(';');
+            
+            return ((keyword.length <= 7) ? true : false);
+        }
 
         function addMoreFile(){
             $('#file_field').append('<input type=file class=form-control name=files[]>');
         }
-        
-        
-        var uploadField = document.getElementById('file');
 
         uploadField.onchange = function() {
             if(this.files[0].size > 1024 * 1024 * 512){

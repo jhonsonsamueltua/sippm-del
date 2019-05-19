@@ -58,11 +58,19 @@ $css = ['css/site.css'];
                                     ';
                                     echo(
                                         Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
-                                        . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
-                                            "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
-                                            "method" => "post",
-                                        ]])
                                     );
+
+                                    Modal::begin([
+                                        'header' => 'Tolak Permohonan Penggunaan',
+                                        'toggleButton' => ['Tolak', ['class' => 'btn btn-danger btn-sm']],
+                                    ]);
+
+                                    Modal::end();
+                                    //     . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
+                                    //         "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
+                                    //         "method" => "post",
+                                    //     ]])
+                                    // );
 
                                     echo '</p>
                                     </div>';

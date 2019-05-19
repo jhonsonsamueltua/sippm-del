@@ -23,11 +23,9 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 // $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 
-
 <div class="body-content" style="font-size: 14px;">
-
+    <div class="loader"></div>
     <div class=" container box-content">
-        
             <?php
                 echo Breadcrumbs::widget([
                     'itemTemplate' => "<li>{link}</li>\n",
@@ -214,8 +212,16 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
      ', $this::POS_END);
 
     $this->registerJs("
-
         var value = '';
+        var spinner = $('.loader');
+
+        $('#w0').submit(function(event){
+            spinner.show();
+        });
+
+        $('#w2').submit(function(event){
+            spinner.show();
+        });
 
         $('#adv-category').change(function(){
             value = ($('#adv-category').val() == '') ? 'Sub Kategori' : $('#adv-category').val();
