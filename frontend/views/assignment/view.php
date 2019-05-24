@@ -4,12 +4,15 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
+use kartik\datetime\DateTimePicker;
 use common\models\ClassAssignment;
 use common\models\StudentAssignment;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use yii\widgets\Breadcrumbs;
 use frontend\controllers\SiteController;
+use frontend\controllers\AssignmentController;
 
 $this->title = $model->asg_title;
 $this->registerCssFile("././css/assignment.css");
@@ -17,8 +20,18 @@ $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
 $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+
 ?>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script> -->
+
+<style>
+
+    p < #asdf{
+        display: none;
+    }
+
+</style>
 
 <div class="body-content">
     <div class=" container box-content">
@@ -53,8 +66,46 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                 ]).'&nbsp; &nbsp;';
             }
             echo $button;
-            echo Html::a('Kembali', ['assignment/assignment-dosen'], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;background-color:#607d8be3']);
+            
         ?>
+        
+        <?php 
+            if($model->sts_asg_id == 2){
+                Modal::begin([
+                    'header' => '<h3>Re-Open Penugasan</h3>',
+                    'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;', 'id' => 'asdf'],
+                    'size' => 'modal-md',
+                ]);
+                    
+                    $modelAsg = AssignmentController::findModel($model->asg_id);
+                    $form = ActiveForm::begin([
+                        'action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])
+                    ]);
+    
+                    echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
+                        'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                        'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                        'removeButton' => false,
+                        'options' => ['placeholder' => 'Pilih batas akhir...',
+                        'autocomplete'=>'off'],
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd hh:ii:ss'
+                        ]
+                    ])->label('Batas Akhir &nbsp;&nbsp;');
+                    
+                    echo '<br><br>';
+                    echo Html::submitButton('Re-Open', ['class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;border: 0px;']).'&nbsp;&nbsp;';
+                    echo '&nbsp;&nbsp;'.Html::a("Batal", [''], ['data-dismiss' => 'modal', 'class' => 'btn btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;border: 0px;']);
+    
+                    ActiveForm::end();
+    
+                Modal::end();
+            }
+        ?>
+
+        <?= Html::a('Kembali', ['assignment/assignment-dosen'], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px; background-color:#607d8be3']) ?>
+
         </p>
 
         <div class="">

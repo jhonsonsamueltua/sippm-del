@@ -9,6 +9,7 @@ use common\models\ProjectUsage;
 use common\models\search\ProjectUsageSearch;
 use common\models\StatusProjectUsage;
 use common\models\CategoryUsage;
+use common\controllers\NotificationController;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -131,47 +132,30 @@ class ProjectUsageController extends Controller
     }
 
     public function actionAcceptRequest($proj_usg_id){
-        // $session = Yii::$app->session;
+        $request = ProjectUsage::find()->where(['proj_usg_id' => $proj_usg_id])->andWhere('deleted!=1')->one();
 
-        // if(!isset($session['role'])){
-            // return $this->redirect(['site/login']);
-        // }else if($session['role' == 'Mahasiswa']){
-        //     Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini');
-            
-        //     return $this->goHome();
-        // }else{
-            $request = ProjectUsage::find()->where(['proj_usg_id' => $proj_usg_id])->andWhere('deleted!=1')->one();
+        $request->sts_proj_usg_id = 2;
+        $request->save();
 
-            $request->sts_proj_usg_id = 2;
-            $request->save();
+        $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
 
-            // $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            // $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
+        NotificationController::sendProjectUsageRequestNotification('request_accepted', $request->proj_usg_id, $request->created_by);
 
-            return $this->redirect(['index']);
-        // }
+        return $this->redirect(['index']);
     }    
     
     public function actionRejectRequest($proj_usg_id){
-        // $session = Yii::$app->session;
+        $request = ProjectUsage::find()->where(['proj_usg_id' => $proj_usg_id])->andWhere('deleted!=1')->one();
 
-        // if(!isset($session['role'])){
-        //     return $this->redirect(['site/login']);
-        // }else if($session['role' == 'Mahasiswa']){
-        //     Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman ini');
-            
-        //     return $this->goHome();
-        // }else{
-            $request = ProjectUsage::find()->where(['proj_usg_id' => $proj_usg_id])->andWhere('deleted!=1')->one();
+        $request->proj_usg_reject_message = $_POST['proj_usg_reject_message'];
+        $request->sts_proj_usg_id = 3;
+        $request->save();
 
-            $request->sts_proj_usg_id = 3;
-            $request->save();
+        $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
 
-            // $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
-            // $this->sendResponseEmail($request->user_email, $status, $request->proj_id);
+        NotificationController::sendProjectUsageRequestNotification('request_rejected', $request->proj_usg_id, $request->created_by);
 
-            return $this->redirect(['index']);
-        // }
+        return $this->redirect(['index']);
     }
 
     private function sendResponseEmail($to, $status, $proj_id){

@@ -8,6 +8,9 @@ use frontend\controllers\ProjectController;
 use frontend\controllers\SiteController;
 use yii\widgets\DetailView;
 use yiister\gentelella\widgets\Panel;
+use yii\bootstrap\Modal;
+use yii\widgets\ActiveForm;
+
 $this->title = 'SIPPM Del';
 $session = Yii::$app->session;
 ?>
@@ -63,12 +66,37 @@ $session = Yii::$app->session;
                                                         ';
                                                         echo(
                                                             Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
-                                                            . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
-                                                                "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
-                                                                "method" => "post",
-                                                            ]])
+                                                            // . Html::a('Tolak', ["reject-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-danger btn-sm", "data" => [
+                                                            //     "confirm" => "Yakin untuk menolak permohonan penggunaan proyek berikut?",
+                                                            //     "method" => "post",
+                                                            // ]])
                                                         );
                     
+                                                        Modal::begin([
+                                                            'header' => 'Tolak Permohonan Penggunaan',
+                                                            'toggleButton' => ['label' => 'Tolak', 'class' => 'btn btn-danger btn-sm'],
+                                                        ]);
+                    
+                                                            $form = ActiveForm::begin([
+                                                                'action' => \yii\helpers\Url::to(['reject-request', 'proj_usg_id' => $request['proj_usg_id']]),
+                                                            ]);
+
+                                                                echo("
+                                                                    <label class=''>Alasan</label>
+                                                                    <div class='form-group'>
+                                                                        <textarea rows='3' class='form-control' name='proj_usg_reject_message'></textarea>
+                                                                    </div>
+                                                                ");
+
+                                                                echo Html::submitButton('Tolak', [
+                                                                    'class' => 'btn btn-warning',
+                                                                ]) . "&nbsp;&nbsp;";
+                                                                echo "<button class='btn btn-danger' data-dismiss='modal'>Batal</button>";
+
+                                                            ActiveForm::end();
+
+                                                        Modal::end();
+
                                                         echo '</p>
                                                         </div>';
                                                         
