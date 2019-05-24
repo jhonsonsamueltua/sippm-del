@@ -24,6 +24,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 ?>
 
 <div class="body-content">
+<div class="loader"></div>
     <div class=" container box-content">
 
             <?php
@@ -249,33 +250,36 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                     
                                                         ';
                                                         echo(
-                                                            Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "btn btn-success btn-sm"]) .'&nbsp&nbsp'
+                                                            Html::a("Terima", ["accept-request", "proj_usg_id" => $request["proj_usg_id"]], ["class" => "terima btn btn-success btn-sm"]) .'&nbsp&nbsp'
                                                         );
-
-                                                        Modal::begin([
-                                                            'header' => 'Tolak Permohonan Penggunaan',
-                                                            'toggleButton' => ['label' => 'Tolak', 'class' => 'btn btn-danger btn-sm'],
-                                                        ]);
-                    
-                                                            $form = ActiveForm::begin([
-                                                                'action' => \yii\helpers\Url::to(['reject-request', 'proj_usg_id' => $request['proj_usg_id']]),
+                                                        // echo '<div style="text-align: center">';
+                                                            Modal::begin([
+                                                                'header' => '<b>Tolak Permohonan Penggunaan</b>',
+                                                                'toggleButton' => ['label' => 'Tolak', 'class' => 'btn btn-danger btn-sm'],
                                                             ]);
+                        
+                                                                $form = ActiveForm::begin([
+                                                                    'action' => \yii\helpers\Url::to(['reject-request', 'proj_usg_id' => $request['proj_usg_id']]),
+                                                                ]);
 
-                                                                echo("
-                                                                    <label class=''>Alasan</label>
-                                                                    <div class='form-group'>
-                                                                        <textarea rows='3' class='form-control' name='proj_usg_reject_message'></textarea>
-                                                                    </div>
-                                                                ");
+                                                                    echo("
+                                                                        <label class=''>Alasan &nbsp;&nbsp;</label>
+                                                                        <div class='form-group'>
+                                                                            <textarea rows='3' style='width: 500px;' class='form-control' name='proj_usg_reject_message'></textarea>
+                                                                        </div>
+                                                                    ");
+                                                                    echo '<br><br>';
+                                                                    echo '<div style="text-align: center">';
+                                                                    echo Html::submitButton('Tolak', [
+                                                                        'class' => 'btn btn-warning',
+                                                                    ]) . "&nbsp;&nbsp;";
+                                                                    echo "<button class='btn btn-danger' data-dismiss='modal'>Batal</button>";
+                                                                    echo '</div>';
 
-                                                                echo Html::submitButton('Tolak', [
-                                                                    'class' => 'btn btn-warning',
-                                                                ]) . "&nbsp;&nbsp;";
-                                                                echo "<button class='btn btn-danger' data-dismiss='modal'>Batal</button>";
+                                                                ActiveForm::end();
 
-                                                            ActiveForm::end();
-
-                                                        Modal::end();
+                                                            Modal::end();
+                                                        // echo '</div>';
                     
                                                         echo '</p>
                                                         </div>';
@@ -375,7 +379,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <?php
     $this->registerJs("
-
+    
     var change = true;
     $(document).ready(function () {
         $('[data-toggle=offcanvas]').click(function () {
@@ -401,6 +405,17 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <?php
      $this->registerJs('
+
+        var spinner = $(".loader");
+        
+        $("form").submit(function(){
+            spinner.show();
+        });
+
+        $(".terima").click(function(){
+            spinner.show();
+        });
+
         $(function () {
             $("#dataTable1").DataTable({
             "pageLength": 5,

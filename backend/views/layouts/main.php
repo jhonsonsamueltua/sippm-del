@@ -30,6 +30,25 @@ AppAsset::register($this);
             font-size: 25px;
             font-weight: 400;
         }
+        .x_panel {
+            padding: 5px 5px;
+        }
+        .nav-md .container.body .right_col {
+            padding: 10px 10px 0;
+            margin-left: 230px;
+        }
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            z-index: 3;
+            color: #8f8888;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+        footer {
+            background: #F7F7F7;
+            padding: 15px 20px;
+            display: block;
+        }
     </style>
 
 </head>
@@ -90,17 +109,18 @@ AppAsset::register($this);
                                             ],
                                         ],
                                     ],
-                                    [
-                                        "label" => "Manajemen Konten",
-                                        "icon" => "th",
-                                        "url" => "#",
-                                        "items" => [
-                                            [
-                                                'label' => 'Kategori',
-                                                'url' => \yii\helpers\Url::to(['/category-project'])
-                                            ],
-                                        ],
-                                    ],
+                                    ["label" => "Manajemen Konten", "url" => \yii\helpers\Url::to(['/category-project']), "icon" => "cog"],
+                                    // [
+                                    //     "label" => "Manajemen Konten",
+                                    //     "icon" => "cog",
+                                    //     "url" => "#",
+                                    //     "items" => [
+                                    //         [
+                                    //             'label' => 'Kategori',
+                                    //             'url' => \yii\helpers\Url::to(['/category-project'])
+                                    //         ],
+                                    //     ],
+                                    // ],
                                 ],
                             ]
                         )
@@ -111,7 +131,7 @@ AppAsset::register($this);
                 <!-- /sidebar menu -->
 
                 <!-- /menu footer buttons -->
-                <div class="sidebar-footer hidden-small">
+                <!-- <div class="sidebar-footer hidden-small">
                     <a data-toggle="tooltip" data-placement="top" title="Settings">
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                     </a>
@@ -124,7 +144,7 @@ AppAsset::register($this);
                     <a data-toggle="tooltip" data-placement="top" title="Logout">
                         <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                     </a>
-                </div>
+                </div> -->
                 <!-- /menu footer buttons -->
             </div>
         </div>
@@ -140,12 +160,12 @@ AppAsset::register($this);
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
-                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <!-- <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <img src="http://placehold.it/128x128" alt=""><?= Yii::$app->user->identity->username ?>
                                 <span class=" fa fa-angle-down"></span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                <li><a href="javascript:;">  Profile</a>
+                            </a> -->
+                            <!-- <ul class="dropdown-menu dropdown-usermenu pull-right"> -->
+                                <!-- <li><a href="javascript:;">  Profile</a>
                                 </li>
                                 <li>
                                     <a href="javascript:;">
@@ -155,85 +175,14 @@ AppAsset::register($this);
                                 </li>
                                 <li>
                                     <a href="javascript:;">Help</a>
-                                </li>
+                                </li> -->
                                 <li>
-                                <?= Html::a('Log Out', Url::to(['site/logout']), ['data-method' => 'POST']) ?>
+                                <?= Html::a('<span class="glyphicon glyphicon-off" aria-hidden="true"> </span> Keluar ('.Yii::$app->user->identity->username.')', Url::to(['site/logout']), ['data-method' => 'POST']) ?>
                                 </li>
-                            </ul>
+                            </ul?>
                         </li>
 
-                        <li role="presentation" class="dropdown">
-                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-envelope-o"></i>
-                                <span class="badge bg-green">6</span>
-                            </a>
-                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                <li>
-                                    <a>
-                      <span class="image">
-                                        <img src="http://placehold.it/128x128" alt="Profile Image" />
-                                    </span>
-                      <span>
-                                        <span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a>
-                      <span class="image">
-                                        <img src="http://placehold.it/128x128" alt="Profile Image" />
-                                    </span>
-                      <span>
-                                        <span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a>
-                      <span class="image">
-                                        <img src="http://placehold.it/128x128" alt="Profile Image" />
-                                    </span>
-                      <span>
-                                        <span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a>
-                      <span class="image">
-                                        <img src="http://placehold.it/128x128" alt="Profile Image" />
-                                    </span>
-                      <span>
-                                        <span>John Smith</span>
-                      <span class="time">3 mins ago</span>
-                      </span>
-                      <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where...
-                                    </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <div class="text-center">
-                                        <a href="/">
-                                            <strong>See All Alerts</strong>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                        
 
                     </ul>
                 </nav>
@@ -243,7 +192,7 @@ AppAsset::register($this);
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" >
             <?php if (isset($this->params['h1'])): ?>
                 <div class="page-title">
                     <div class="title_left">

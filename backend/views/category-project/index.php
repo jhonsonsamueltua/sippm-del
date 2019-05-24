@@ -32,7 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
 </style>
+    <!-- <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">           -->
 
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js" defer></script>
 <div style="width: 80%">
     <div style="padding: 5px;">
         <h3>Kategori</h3>
@@ -59,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
 
         <?php
+            $i = 1;
             foreach($categories as $category){
                 $categoryId = $category->cat_proj_id;
                 $categoryName = str_replace(' ', '', $category->cat_proj_name);
@@ -129,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <br>
                                             <div id='dynamic-form'>
                                                 <label class='label-error'>Nama Sub Kategori</label>
-                                                <button onclick='addMoreSubKategori()' style='float: right;'>Tambah Field</button>
+                                                <button type='button' onclick='addMoreSubKategori()' style='float: right;'>Tambah Field</button>
                                                 <div id='dynamic-field' class='form-group'>    
                                                     <input class='form-control' type='text' name='SubKategori[0]'>
                                                     <p class='subcat-error'></p>
@@ -146,56 +151,87 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 Modal::end();
                                 
-                                echo("<br>");
+                                echo("<br>");?>
+                                <table class="table table-borderless" id="dataTable<?= $i ?>" width="100%" cellspacing="0" >
+                                    <thead>
+                                    <tr>
+                                        <th><?= $category->cat_proj_name ?></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                <?php
                                 
                                 $subCategories = SubCategoryProject::find()->where(['cat_proj_id' => $categoryId])->andWhere('deleted!=1')->orderBy('sub_cat_proj_name ASC')->all();
                                 foreach($subCategories as $subCategory){
                                     $subCategoryId = $subCategory->sub_cat_proj_id;
                                     $subCategoryName = $subCategory->sub_cat_proj_name;
-                                    
-                                    echo("
-                                        <div class='col-md-9'>    
-                                            <h4>$subCategoryName</h4>
-                                        </div>
-                                        <div class='col-md-3'>
-                                    ");
+                                        echo'    <tr>
+                                                <td>';
+                                                    echo("
+                                                        <div class='col-md-9'>    
+                                                            <h4>$subCategoryName</h4>
+                                                        </div>
+                                                        <div class='col-md-3'>
+                                                    ");
 
-                                        Modal::begin([
-                                            'header' => 'Ubah Sub Kategori '. $subCategoryName .'',
-                                            'toggleButton' => ['label' => 'Ubah', 'class' => ['btn btn-sm btn-primary']],
-                                        ]);
+                                                        Modal::begin([
+                                                            'header' => 'Ubah Sub Kategori '. $subCategoryName .'',
+                                                            'toggleButton' => ['label' => 'Ubah', 'class' => ['btn btn-sm btn-primary']],
+                                                        ]);
 
-                                            $updatedSubCategory = SubCategoryProject::find()->where(['sub_cat_proj_id' => $subCategoryId])->one();
-                                            $formUpdateSubCategory = ActiveForm::begin([
-                                                'action' => \yii\helpers\Url::to(['/sub-category-project/update', 'sub_cat_proj_id' => $subCategoryId]),
-                                            ]);
+                                                            $updatedSubCategory = SubCategoryProject::find()->where(['sub_cat_proj_id' => $subCategoryId])->one();
+                                                            $formUpdateSubCategory = ActiveForm::begin([
+                                                                'action' => \yii\helpers\Url::to(['/sub-category-project/update', 'sub_cat_proj_id' => $subCategoryId]),
+                                                            ]);
 
-                                                echo $form->field($updatedSubCategory, 'sub_cat_proj_name')->textInput();
+                                                                echo $form->field($updatedSubCategory, 'sub_cat_proj_name')->textInput();
 
-                                                echo Html::submitButton('Ubah', ['class' => 'btn btn-primary']);
+                                                                echo Html::submitButton('Ubah', ['class' => 'btn btn-primary']);
 
-                                            ActiveForm::end();
+                                                            ActiveForm::end();
 
-                                        Modal::end();
+                                                        Modal::end();
 
-                                    echo("". Html::a('Hapus', ['/sub-category-project/delete', 'sub_cat_proj_id' => $subCategoryId], [
-                                                'class' => 'btn btn-sm btn-danger',
-                                                'data' => [
-                                                    'confirm' => 'Hapus sub kategori '. $subCategoryName . '?',
-                                                    'method' => 'POST'
-                                                ]
-                                            ]) ."
-                                        </div>
-                                    ");
-                                }
+                                                    echo("". Html::a('Hapus', ['/sub-category-project/delete', 'sub_cat_proj_id' => $subCategoryId], [
+                                                                'class' => 'btn btn-sm btn-danger',
+                                                                'data' => [
+                                                                    'confirm' => 'Hapus sub kategori '. $subCategoryName . '?',
+                                                                    'method' => 'POST'
+                                                                ]
+                                                            ]) ."
+                                                        </div>
+                                                    ");
+                                        echo'       </td>
+                                            </tr>';
+                                }?>
+
+                                </tbody>
+                                    </table>
+                <?php
                 echo("
                             </div>
                         </div>
                     </div>
                 ");
+
+                    $this->registerJs('
+                            $(function () {
+                                $("#dataTable'.$i.'").DataTable({
+                                "pageLength": 10,
+                                "paging": true,
+                                "lengthChange": true,
+                                "searching": true,
+                                "ordering": false,
+                                "info": true,
+                                "autoWidth": true
+                                });
+                            });
+                        ', $this::POS_END);
+                $i++;
             }
         ?>
     </div>
+</div>
 
     <?php
         $this->registerJs("
@@ -277,5 +313,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ", $this::POS_END);
     ?>
-
-</div>

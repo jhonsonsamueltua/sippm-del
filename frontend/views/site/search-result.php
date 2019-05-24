@@ -63,7 +63,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-12" style="padding: 0px;">
-                        <button type="submit" class="btn form-control" style="background: #6bc5c2; border: 0px; color: #fff;">Telusuri</button>
+                        <button type="submit" class="btn form-control" style="background-image: linear-gradient(to right, #4f8cf3 0%, #6a11cb 100%); border: 0px; color: #fff;">Telusuri</button>
                     </div>
                     <?php ActiveForm::end() ?>
             </div>
@@ -116,7 +116,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                     ");
                         
                     foreach($yearList as $year){
-                        echo "<option value='$year->proj_year'>$year->proj_year</option>";
+                        echo "<option value='$year->asg_year'>$year->asg_year</option>";
                     }
 
                     echo("

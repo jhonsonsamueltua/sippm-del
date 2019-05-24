@@ -250,7 +250,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                                 'size' => 'modal-md',
                                                             ]);
                                                                 
-                                                                $modelAsg = AssignmentController::findModel($key['asg_id']);
+                                                                $modelAsg = AssignmentController::findModel($key['asg_id']);    
                                                                 $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
 
                                                                 echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [

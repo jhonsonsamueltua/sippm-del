@@ -79,7 +79,7 @@ class SiteController extends Controller
     }
 
     public function actionCategoryProject(){
-        $query = "SELECT ss.sub_cat_proj_id, ss.sub_cat_proj_name, count(sp.proj_id), sc.cat_proj_name FROM sippm_sub_category_project ss LEFT JOIN sippm_assignment sa ON sa.sub_cat_proj_id = ss.sub_cat_proj_id LEFT JOIN sippm_project sp ON sa.asg_id = sp.asg_id AND sp.deleted != 1 JOIN sippm_category_project sc ON sa.cat_proj_id = sc.cat_proj_id GROUP BY ss.sub_cat_proj_name ORDER BY count(sp.proj_id) DESC";
+        $query = "SELECT ss.sub_cat_proj_id, ss.sub_cat_proj_name, count(sp.proj_id), sc.cat_proj_name FROM sippm_sub_category_project ss LEFT JOIN sippm_assignment sa ON sa.sub_cat_proj_id = ss.sub_cat_proj_id LEFT JOIN sippm_project sp ON sp.asg_id = sa.asg_id AND sp.deleted != 1 JOIN sippm_category_project sc ON sc.cat_proj_id = ss.cat_proj_id GROUP BY ss.sub_cat_proj_name, ss.sub_cat_proj_id ORDER BY count(sp.proj_id) DESC";
         $modelCategory = Yii::$app->db->createCommand($query)->queryAll();
         // echo '<pre>';
         // die(var_dump($modelCategory));

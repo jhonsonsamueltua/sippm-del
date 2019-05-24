@@ -59,74 +59,151 @@ $session = Yii::$app->session;
         
         </p>
         <br>
-        <?= DetailView::widget([
-            'model' => $model,
-            'attributes' => [
-                [
-                    'attribute' => 'proj_id',
-                    'label' => 'Judul Proyek',
-                    'format' => 'raw',
-                    'value' => function($model){
-                            return Html::a($model->proj->proj_title, ['/project/view-project', 'proj_id' => $model->proj->proj_id], ['class' => 'text-title-project']);
-                    },
-                ],
-                [
-                    'attribute' => 'proj_usg_creator',
-                    'label' => 'Direquest oleh'
-                ],
-                [
-                    'attribute' => 'updated_at',
-                    'label' => 'Tanggal request',
-                    'value' => function($model){
-                        $date = $model["updated_at"];
-                        $date_timestamp = strtotime($date);
-
-                        return SiteController::tgl_indo(date('Y-m-d', $date_timestamp)).', '.date('H:i', $date_timestamp);
-                    },
-                ],
-                [
-                    'attribute' => 'proj.asg.asg_creator',
-                    'label' => 'Koordinator Proyek'
-                ],
-                [
-                    'attribute' => 'catUsg.cat_usg_name',
-                    'label' => 'Kategori Penggunaan'
-                ],
-                [
-                    'attribute' => 'proj_usg_usage',
-                    'label' => 'Keterangan Penggunaan',
-                    'format' => 'raw',
-                ],
-                [
-                    'attribute' => 'stsProjUsg.sts_proj_usg_name',
-                    'label' => 'Status permohonan'
-                ],
-                [
-                    'attribute' => '',
-                    'label' => 'Artefak Proyek',
-                    'value' => function($model){
-                        $artefak = "";
-                        $session = Yii::$app->session;
+        <?php
+            if($model->sts_proj_usg_id == 3){
+                echo DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        [
+                            'attribute' => 'proj_id',
+                            'label' => 'Judul Proyek',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                    return Html::a($model->proj->proj_title, ['/project/view-project', 'proj_id' => $model->proj->proj_id], ['class' => 'text-title-project']);
+                            },
+                        ],
+                        [
+                            'attribute' => 'proj_usg_creator',
+                            'label' => 'Direquest oleh'
+                        ],
+                        [
+                            'attribute' => 'updated_at',
+                            'label' => 'Tanggal request',
+                            'value' => function($model){
+                                $date = $model["updated_at"];
+                                $date_timestamp = strtotime($date);
+        
+                                return SiteController::tgl_indo(date('Y-m-d', $date_timestamp)).', '.date('H:i', $date_timestamp);
+                            },
+                        ],
+                        [
+                            'attribute' => 'proj.asg.asg_creator',
+                            'label' => 'Koordinator Proyek'
+                        ],
+                        [
+                            'attribute' => 'catUsg.cat_usg_name',
+                            'label' => 'Kategori Penggunaan'
+                        ],
+                        [
+                            'attribute' => 'proj_usg_usage',
+                            'label' => 'Keterangan Penggunaan',
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'stsProjUsg.sts_proj_usg_name',
+                            'label' => 'Status permohonan'
+                        ],
+                        [
+                            'attribute' => 'proj_usg_reject_message',
+                            'label' => 'Alasan Penolakan'
+                        ],
+                        [
+                            'attribute' => '',
+                            'label' => 'Artefak Proyek',
+                            'value' => function($model){
+                                $artefak = "";
+                                $session = Yii::$app->session;
+                                
+                                if($session['username'] == $model->created_by){
+                                    if($model->sts_proj_usg_id == 3 || $model->sts_proj_usg_id == 4){
+                                        $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
+                                    }else if($model->sts_proj_usg_id == 1){
+                                        $artefak = '---';
+                                    }else{
+                                        $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";    
+                                    }
+                                }else{
+                                    $artefak = '---';
+                                }
+                                
+                                return $artefak;
+                            },
+                            'format' => 'raw',
+                        ],
                         
-                        if($session['username'] == $model->created_by){
-                            if($model->sts_proj_usg_id == 3 || $model->sts_proj_usg_id == 4){
-                                $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
-                            }else if($model->sts_proj_usg_id == 1){
-                                $artefak = '---';
-                            }else{
-                                $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";    
-                            }
-                        }else{
-                            $artefak = '---';
-                        }
+                    ],
+                ]);
+            }else{
+                echo DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        [
+                            'attribute' => 'proj_id',
+                            'label' => 'Judul Proyek',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                    return Html::a($model->proj->proj_title, ['/project/view-project', 'proj_id' => $model->proj->proj_id], ['class' => 'text-title-project']);
+                            },
+                        ],
+                        [
+                            'attribute' => 'proj_usg_creator',
+                            'label' => 'Direquest oleh'
+                        ],
+                        [
+                            'attribute' => 'updated_at',
+                            'label' => 'Tanggal request',
+                            'value' => function($model){
+                                $date = $model["updated_at"];
+                                $date_timestamp = strtotime($date);
+        
+                                return SiteController::tgl_indo(date('Y-m-d', $date_timestamp)).', '.date('H:i', $date_timestamp);
+                            },
+                        ],
+                        [
+                            'attribute' => 'proj.asg.asg_creator',
+                            'label' => 'Koordinator Proyek'
+                        ],
+                        [
+                            'attribute' => 'catUsg.cat_usg_name',
+                            'label' => 'Kategori Penggunaan'
+                        ],
+                        [
+                            'attribute' => 'proj_usg_usage',
+                            'label' => 'Keterangan Penggunaan',
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'stsProjUsg.sts_proj_usg_name',
+                            'label' => 'Status permohonan'
+                        ],
+                        [
+                            'attribute' => '',
+                            'label' => 'Artefak Proyek',
+                            'value' => function($model){
+                                $artefak = "";
+                                $session = Yii::$app->session;
+                                
+                                if($session['username'] == $model->created_by){
+                                    if($model->sts_proj_usg_id == 3 || $model->sts_proj_usg_id == 4){
+                                        $artefak =  Html::a('Permohonan Penggunaan', ['/project-usage/create', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-success']);
+                                    }else if($model->sts_proj_usg_id == 1){
+                                        $artefak = '---';
+                                    }else{
+                                        $artefak =  Html::a("Unduh semua file proyek", ['project/download-project', 'proj_id' => $model->proj->proj_id], ['class' => 'btn btn-info']) . "<br>";    
+                                    }
+                                }else{
+                                    $artefak = '---';
+                                }
+                                
+                                return $artefak;
+                            },
+                            'format' => 'raw',
+                        ],
                         
-                        return $artefak;
-                    },
-                    'format' => 'raw',
-                ],
-                
-            ],
-        ]) ?>
+                    ],
+                ]);
+            }
+        ?>
 
     </div>
 </div>

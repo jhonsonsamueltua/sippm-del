@@ -271,7 +271,7 @@ class ProjectUsageController extends Controller
 
             NotificationController::sendProjectUsageRequestNotification('request_accepted', $request->proj_usg_id, $request->created_by);
 
-            return $this->redirect(['view', 'id' => $proj_usg_id]);
+            return $this->redirect(['index']);
         }
     }
 
@@ -295,7 +295,7 @@ class ProjectUsageController extends Controller
 
             NotificationController::sendProjectUsageRequestNotification('request_rejected', $request->proj_usg_id, $request->created_by);
 
-            return $this->redirect(['view', 'id' => $proj_usg_id]);
+            return $this->redirect(['index']);
         }
     }
 
