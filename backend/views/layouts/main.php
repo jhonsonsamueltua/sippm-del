@@ -37,6 +37,18 @@ AppAsset::register($this);
             padding: 10px 10px 0;
             margin-left: 230px;
         }
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            z-index: 3;
+            color: #8f8888;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+        footer {
+            background: #F7F7F7;
+            padding: 15px 20px;
+            display: block;
+        }
     </style>
 
 </head>
@@ -97,17 +109,18 @@ AppAsset::register($this);
                                             ],
                                         ],
                                     ],
-                                    [
-                                        "label" => "Manajemen Konten",
-                                        "icon" => "th",
-                                        "url" => "#",
-                                        "items" => [
-                                            [
-                                                'label' => 'Kategori',
-                                                'url' => \yii\helpers\Url::to(['/category-project'])
-                                            ],
-                                        ],
-                                    ],
+                                    ["label" => "Manajemen Konten", "url" => \yii\helpers\Url::to(['/category-project']), "icon" => "cog"],
+                                    // [
+                                    //     "label" => "Manajemen Konten",
+                                    //     "icon" => "cog",
+                                    //     "url" => "#",
+                                    //     "items" => [
+                                    //         [
+                                    //             'label' => 'Kategori',
+                                    //             'url' => \yii\helpers\Url::to(['/category-project'])
+                                    //         ],
+                                    //     ],
+                                    // ],
                                 ],
                             ]
                         )
@@ -179,7 +192,7 @@ AppAsset::register($this);
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" >
             <?php if (isset($this->params['h1'])): ?>
                 <div class="page-title">
                     <div class="title_left">

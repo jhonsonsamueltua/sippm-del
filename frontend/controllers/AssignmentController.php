@@ -52,6 +52,7 @@ class AssignmentController extends Controller
      */
     public function actionView($id)
     {   
+        $this->openCloseAssignment();
         $model = $this->findModel($id);
         $projects = Project::find()->where(['asg_id' => $id])->andWhere('deleted' != 1)->all();
 

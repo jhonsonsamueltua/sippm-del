@@ -8,11 +8,11 @@ use yii\widgets\DetailView;
 use common\models\project;
 use backend\controllers\SiteController;
 
-$this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
+// $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
-$this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
-$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
-$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 <div class="site-index">
     <!-- <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">           -->

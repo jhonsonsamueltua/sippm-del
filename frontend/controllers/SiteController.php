@@ -18,6 +18,7 @@ use frontend\models\SignupForm;
 use common\models\User;
 use frontend\models\ContactForm;
 use common\models\Project;
+use common\models\Assignment;
 use common\models\search\ProjectSearch;
 use common\models\CategoryProject;
 use common\models\SubCategoryProject;
@@ -73,7 +74,7 @@ class SiteController extends Controller
             $modelCompCount = Project::find()->where("deleted!=1")->andWhere(['not',['proj_cat_name' => "Matakuliah"]])->andWhere(['sts_win_id' => 1])->orderBy(['created_at' => SORT_DESC])->count();
 
             $categories = CategoryProject::find()->where("deleted!=1")->all();
-            $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
+            $yearList = Assignment::find()->select('asg_year')->distinct()->where('deleted!=1')->orderBy('asg_year DESC')->all();
 
             return $this->render('index', [
                 'model' => $model,
@@ -273,7 +274,7 @@ class SiteController extends Controller
 
     public function actionSearchProject($searchWords, $searchCategory = '', $filterCategory = ''){
         $categories = CategoryProject::find()->where('deleted!=1')->all();
-        $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
+        $yearList = Assignment::find()->select('asg_year')->distinct()->where('deleted!=1')->orderBy('asg_year DESC')->all();
 
         $stopWordsRemoved = $this->removeStopWords(strtolower($searchWords));
         $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
@@ -299,7 +300,7 @@ class SiteController extends Controller
 
     public function actionAdvancedSearch($advKeywords = '', $advCategory = '', $advSubCategory = '', $advYear = '', $title = '', $description = '', $author = ''){
         $categories = CategoryProject::find()->where('deleted!=1')->all();
-        $yearList = Project::find()->select('proj_year')->distinct()->where('deleted!=1')->orderBy('proj_year ASC')->all();
+        $yearList = Assignment::find()->select('asg_year')->distinct()->where('deleted!=1')->orderBy('asg_year DESC')->all();
 
         $stopWordsRemoved = $this->removeStopWords(strtolower($advKeywords));
         $preprocessed = trim(preg_replace('/\s+/', ' ', $stopWordsRemoved));
@@ -316,7 +317,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title']) && isset($_GET['description']) && isset($_GET['author'])){
             //If title, description, and author checked
@@ -328,7 +329,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_author' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title']) && isset($_GET['description']) && isset($_GET['keyword'])){
             //If title, description, and keyword checked
@@ -340,7 +341,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title']) && isset($_GET['author']) && isset($_GET['keyword'])){
             //If title, author, and keyword checked
@@ -352,7 +353,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['description']) && isset($_GET['author']) && isset($_GET['keyword'])){
             //If description, author, and keyword checked
@@ -364,7 +365,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title']) && isset($_GET['description'])){
             //If title and description checked
@@ -375,7 +376,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_description' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title']) && isset($_GET['author'])){
             //If title and author checked
@@ -386,7 +387,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_author' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title']) && isset($_GET['keyword'])){
             //If title and keyword checked
@@ -397,7 +398,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['description']) && isset($_GET['author'])){
             //If description and author checked
@@ -408,7 +409,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_author' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['description']) && isset($_GET['keyword'])){
             //If description and keyword checked
@@ -419,7 +420,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['author']) && isset($_GET['keyword'])){
             //If author and keyword checked
@@ -430,7 +431,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['title'])){
             //If title checked
@@ -440,7 +441,7 @@ class SiteController extends Controller
                 (new MatchExpression)->match(['proj_title' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['description'])){
             //If description checked
@@ -450,7 +451,7 @@ class SiteController extends Controller
                 (new MatchExpression)->match(['proj_description' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['author'])){
             //If author checked
@@ -460,7 +461,7 @@ class SiteController extends Controller
                 (new MatchExpression)->match(['proj_author' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else if(isset($_GET['keyword'])){
             //If keyword checked
@@ -470,7 +471,7 @@ class SiteController extends Controller
                 (new MatchExpression)->match(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }else{
             //If nothing checked
@@ -483,7 +484,7 @@ class SiteController extends Controller
                     ->orFilterMatch(['proj_keyword' => $keywords])
                     ->andFilterMatch(['proj_cat_name' => $advCategory])
                     ->andFilterMatch(['sub_cat_proj_name' => $advSubCategory])
-                    ->andFilterMatch(['proj_year' => $advYear])
+                    ->andFilterMatch(['asg_year' => $advYear])
             )->all();
         }
 

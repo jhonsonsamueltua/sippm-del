@@ -10,18 +10,25 @@ use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use yii\widgets\Breadcrumbs;
 use frontend\controllers\SiteController;
+use frontend\controllers\AssignmentController;
+use yii\bootstrap\ActiveForm;
+use kartik\datetime\DateTimePicker;
 
 $this->title = $model->asg_title;
 $this->registerCssFile("././css/assignment.css");
 $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
-$this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
 ?>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script>
-
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer></script> -->
+<style>
+    .unblock{
+        display: -webkit-inline-box;
+    }
+</style>
 <div class="body-content">
-    <div class=" container box-content">
+    <div class=" container box-content ">
         <?php
             echo Breadcrumbs::widget([
                 'itemTemplate' => "<li>{link}</li>\n",
@@ -53,6 +60,41 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                 ]).'&nbsp; &nbsp;';
             }
             echo $button;
+            
+            if($model->sts_asg_id == 2){
+                echo '<div class="unblock">';
+                Modal::begin([
+                    'header' => '<h3>Re-Open Penugasan</h3>',
+                    'toggleButton' => ['label' => 'Re-Open', 'class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 4px 15px; margin-bottom: 1px;border: 0px;'],
+                    'size' => 'modal-md',
+                ]);
+                    
+                    $modelAsg = AssignmentController::findModel($model->asg_id);    
+                    $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['open-assignment', 'asg_id' => $modelAsg->asg_id])]);
+
+                    echo $form->field($modelAsg, 'updated_end_time')->widget(DateTimePicker::class, [
+                        'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
+                        'pickerIcon' => '<i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 19px;color: #64B5F6"></i>',
+                        'removeButton' => false,
+                        'options' => ['placeholder' => 'Pilih batas akhir...',
+                        'autocomplete'=>'off'],
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd hh:ii:ss'
+                        ]
+                    ])->label('Batas Akhir &nbsp;&nbsp;');
+                    echo '<div style="text-align:center">';
+                    echo '<br>';
+                    echo Html::submitButton('Re-Open', ['class' => 'btn btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;border: 0px;']).'&nbsp;&nbsp;';
+                    echo '&nbsp;&nbsp;'.Html::a("Batal", [''], ['data-dismiss' => 'modal', 'class' => 'btn btn-danger btn-info-custom', 'style' => 'padding: 5px 15px;border: 0px;']);
+                    echo '</div>';
+
+                    ActiveForm::end();
+
+                Modal::end();
+                echo '</div>&nbsp;&nbsp;&nbsp;';
+            }
+            
             echo Html::a('Kembali', ['assignment/assignment-dosen'], ['class' => 'btn-md btn-primary btn-info-custom', 'style' => 'padding: 5px 15px;background-color:#607d8be3']);
         ?>
         </p>
@@ -72,8 +114,6 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
             <div style="padding: 15px 0px;">
                 <?= $model->asg_description ?>
             </div>
-
-            <!-- <font>Status Penugasan : <?= $model->stsAsg->sts_asg_name ?></font> -->
             <?= DetailView::widget([
                     'model' => $model,
                     'attributes' => [
@@ -112,23 +152,27 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                             'attribute' => '',
                             'label' => 'Kelas Ditugaskan',
                             'value' => function($model){
-                                // if($model->class == "All"){
-                                //     return "Semua Kelas";
-                                // }else{
-                                    $class = "";
-                                    $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
+                                try{
+                                    if($model->class == "All"){
+                                        return "Semua Kelas";
+                                    }else{
+                                        $class = "";
+                                        $modelClass = ClassAssignment::find()->where(['asg_id' => $model->asg_id])->andWhere(['partial' => 0])->andWhere('deleted != 1')->all();
 
-                                    foreach($modelClass as $key => $data){
-                                        $data_class = $this->context->getClassByClassId($data->class);
+                                        foreach($modelClass as $key => $data){
+                                            $data_class = $this->context->getClassByClassId($data->class);
 
-                                        if($key == 0){
-                                            $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.($key+1).". &nbsp;".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
-                                        }else{
-                                            $class = $class.'<br>'.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.($key+1).'. &nbsp;'.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                            if($key == 0){
+                                                $class = '<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">&nbsp;'.($key+1).". &nbsp;".$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                            }else{
+                                                $class = $class.'<br>'.'<font data-toggle="tooltip" data-placement="top" title="'.$data_class[0]['ket'].'">'.($key+1).'. &nbsp;'.$data_class[0]['nama'].'</font> [ '.$data_class[0]['ket'].' ]';
+                                            }
                                         }
+                                        return '<font style="font-size: px;">'.$class.'</font>';
                                     }
-                                    return '<font style="font-size: px;">'.$class.'</font>';
-                                // }
+                                }catch(Exception $e){
+                                    throw $e;
+                                }
                             },
                             'format' => 'raw',
                         ],
@@ -226,7 +270,16 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
 <?php
      $this->registerJs('
+     $("form").submit(function(event){
+        var value = $("#assignment-updated_end_time").val();
         
+        if(value == ""){
+            event.preventDefault();
+            $(".field-assignment-updated_end_time").addClass("has-error");
+            $(".field-assignment-updated_end_time").removeClass("has-success");
+            $(".field-assignment-updated_end_time").find($(".help-block")).html("Batas Akhir tidak boleh kosong");
+        }
+    });
         
      ', $this::POS_END);
 ?>

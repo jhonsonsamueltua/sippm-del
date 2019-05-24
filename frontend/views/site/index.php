@@ -35,7 +35,7 @@ $session = Yii::$app->session;
                                 ]); ?>
 
                                     <div class="col-lg-5 col-md-5 col-sm-12" style="padding:0px;" data-toggle="tooltip" data-placement="top" title="Cari berdasarkan Judul, Deskripsi, dan Author">
-                                        <input name="searchWords" type="text" placeholder="Cari proyek ..." class="form-control-custom search-slt" autocomplete="off">
+                                        <input name="searchWords" type="text" placeholder="Cari proyek..." class="form-control-custom search-slt" autocomplete="off">
                                     </div>
 
                                     <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
@@ -50,7 +50,7 @@ $session = Yii::$app->session;
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 " style="padding:0px;">
-                                        <button type="submit" class="btn-search" >Telusuri</button>
+                                        <button type="submit" class="btn-search" >Search</button>
                                     </div>
 
                                 <?php ActiveForm::end(); ?>
@@ -61,9 +61,9 @@ $session = Yii::$app->session;
                     <div class="row">
                         <?php
                             Modal::begin([
-                                'header' => '<h3>Penelusuran Lanjutan</h3>',
+                                'header' => '<h3>Advanced Search</h3>',
                                 'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
-                                'toggleButton' => ['label' => 'Penelusuran Lanjutan >>', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;color: #1f36c8;'],
+                                'toggleButton' => ['label' => 'Advanced Search >>', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); border: 0px; font-size: 18px;color: #1f36c8;'],
                             ]);
 
                                 $advancedForm = ActiveForm::begin([
@@ -105,7 +105,7 @@ $session = Yii::$app->session;
                                     ");
                                         
                                     foreach($yearList as $year){
-                                        echo "<option value='$year->proj_year'>$year->proj_year</option>";
+                                        echo "<option value='$year->asg_year'>$year->asg_year</option>";
                                     }
 
                                     echo("
@@ -124,7 +124,7 @@ $session = Yii::$app->session;
                                         </fieldset>
                                     ");
 
-                                echo Html::submitButton('Telusuri', ['class' => 'btn-search', 'style' => 'min-height: 40px;padding: 10px 20px;border-radius: 3px;margin-top: 20px;margin-bottom: 10px;']);
+                                echo Html::submitButton('Search', ['class' => 'btn-search', 'style' => 'min-height: 40px;padding: 10px 20px;border-radius: 3px;margin-top: 20px;margin-bottom: 10px;']);
 
                                 ActiveForm::end();
 
@@ -137,10 +137,10 @@ $session = Yii::$app->session;
 					<div class="courses pt-20 wow fadeIn second" data-wow-duration="10s">
                         <a href="#top-5" class="btn-md button btn-filter" transparent mr-10 mb-10>Top 5 Sering Digunakan</a>
                         <a href="#menang-kompetisi" class="btn-md button btn-filter" transparent mr-10 mb-10>Menang Kompetisi</a>
-                        <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
                         <br>
-                        <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
-                        <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?>
+                        <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
+                        <!-- <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
+                        <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?> -->
                         <!-- <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?> -->
 					</div>
                 </div>
@@ -162,7 +162,7 @@ $session = Yii::$app->session;
                         <?php
                             foreach($model as $data){
                                 $description = $data->proj_description;
-                                $limit_words = 30;
+                                $limit_words = 35;
                                 $words = explode(' ',$description);
                                 $description = implode(" ",array_splice($words,0,$limit_words));
 
@@ -183,7 +183,7 @@ $session = Yii::$app->session;
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;color:#641a3e;font-size: 1.3em;"><font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="fa fa-recycle"></span> <?= $data->proj_downloaded    ?></font></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -237,7 +237,8 @@ $session = Yii::$app->session;
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?><font style="float: right;color:#494c5d"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project', 'style' => 'color: rgb(255, 255, 255)']) ?>
+                                        <font style="float: right;color:#494c5d"><badge class="badge badge-comp"><?= $data->asg->subCatProj->sub_cat_proj_name ?></badge></font>
                                         <div class="text-author" style="color: #e9eaea;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>
@@ -276,7 +277,7 @@ $session = Yii::$app->session;
                         <?php
                             foreach($modelNews as $data){
                                 $description = $data->proj_description;
-                                $limit_words = 30;
+                                $limit_words = 40;
                                 $words = explode(' ',$description);
                                 $description = implode(" ",array_splice($words,0,$limit_words));
 
@@ -296,7 +297,7 @@ $session = Yii::$app->session;
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;"><font data-toggle="tooltip" data-placement="top" title="Jumlah View"> <span class="glyphicon glyphicon-eye-open"></span> <?= $data->proj_downloaded?></font> &nbsp; <font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="glyphicon glyphicon-download"></span> <?= $data->proj_downloaded    ?></font></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>

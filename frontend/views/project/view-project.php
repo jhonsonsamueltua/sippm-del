@@ -14,6 +14,12 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
     $author = implode(", ", $author_words);
 ?>
 
+<?php
+    $keyword = $model->proj_keyword;
+    $keyword_words = explode(';', $keyword);
+    $keyword = implode(",<br>", $keyword_words);
+?>
+
 <div class="body-content">
     <div class=" container box-content" >
                 <?php
@@ -55,13 +61,6 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                         ?>
                     </p>
                 </div>
-                
-                <div class = "">
-                    <font class = "project-sub-content">Kata Kunci</font><br>
-                    <p>
-                        <?= $model->proj_keyword ?>
-                    </p>
-                </div>
 
                 <div >
                     <font class = "project-sub-content">Kategori Proyek</font><br>
@@ -74,6 +73,13 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     <font class = "project-sub-content">Koordinator Proyek</font><br>
                     <p>
                         <?= $assignmentModel->asg_creator ?>
+                    </p>
+                </div>
+
+                <div class = "">
+                    <font class = "project-sub-content">Kata Kunci</font><br>
+                    <p>
+                        <?= $keyword ?>
                     </p>
                 </div>
             </div>
