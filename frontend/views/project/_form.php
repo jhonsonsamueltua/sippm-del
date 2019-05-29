@@ -88,6 +88,32 @@ $this->registerCssFile("././css/project.css");
             ]) ?>
         </div>
 
+        <?= $form->field($model, 'proj_win_rank')->textInput() ?>
+
+        <?= $form->field($model, 'winProof')->fileInput(['class' => 'form-control'])->label('Sertifikat Kemenangan') ?>
+
+        <?php
+            if($model->proj_win_proof != null){
+                $certificateName = str_replace("/", "", strrchr($model->proj_win_proof, "/"));
+
+                echo("
+                    <label>Sertifikat Kemenangan</label>
+                    <div class='form-group'>
+                        <div class='row'>
+                            <p class='col-sm-1'>" . Html::a('-', ['remove-certificate', 'proj_id' => $model->proj_id], [
+                                'class' => 'btn btn-danger-custom btn-sm', 'style' => 'padding: 0px 10px 5px; font-size:20px; display: unset', 
+                                "data" => [
+                                    'confirm' => 'Apakah anda yakin menghapus file ini?',
+                                    'method' => 'post',
+                                ]
+                            ]) . "</p>
+                            <p class='col-sm-11' style='margin: 0px;padding: 10px;'>" . $certificateName . "</p>
+                        </div>
+                    </div>
+                ");
+            }
+        ?>
+
         <?php
             if(!$model->isNewRecord){
                 if(count($files) != 0){
@@ -276,22 +302,84 @@ $this->registerCssFile("././css/project.css");
 <?php
     $this->registerJs("
         var spinner = $('.loader');
+
         var uploadField = document.getElementById('file');
+        
+        var winProofDiv = $('.field-project-winproof');
+        var winProofField = $('#project-winproof');
+
+        var winRankDiv = $('.field-project-proj_win_rank');
+        var winRankField = $('#project-proj_win_rank');
+
+        var winStat = $('#project-sts_win_id');
 
         $(document).ready(function(){
+            var certificate = '$model->proj_win_proof';
+            
             if($assignment->cat_proj_id == 1) $('#sts_win').hide();
-        
+            winProofDiv.hide();
+            if(winStat.val() == 'empty' || winStat.val() != '1') winRankDiv.hide();
+            if(certificate != '') winStat.attr('disabled', 'true');
+
             $('#w0').submit(function(event){
                 var keywordValue = $('#field-keyword').val();
+                var error = false;
 
                 if(keywordValue == ''){
                     $('.label-error').addClass('active');
                     $('#field-keyword').addClass('border-error');
                     $('.keywords-error').html('Kata Kunci tidak boleh kosong');
 
-                    event.preventDefault();
-                }else{
+                    error = true;
+                }
+                
+                if(winStat.val() == 1){
+                    var certificate = '$model->proj_win_proof';
+
+                    if(certificate == ''){
+                        if(winProofField.val() == ''){
+                            winProofDiv.addClass('has-error');
+                            winProofDiv.find('.help-block').html('Sertifikat Kemenangan tidak boleh kosong');
+                        
+                            error = true;
+                        }
+                    }
+                }
+
+                if(!error){
                     spinner.show();
+                }else{
+                    event.preventDefault();
+                }
+            });
+
+            if(winStat.val() == 1){
+                var certificate = '$model->proj_win_proof';
+
+                if(certificate == ''){
+                    winProofDiv.show();   
+                }
+            }
+
+            winProofField.focusout(function(){
+                if(winProofField.val() == ''){
+                    winProofDiv.addClass('has-error');
+                    winProofDiv.removeClass('has-success');
+                    winProofDiv.find('.help-block').html('Sertifikat Kemenangan tidak boleh kosong');
+                }else{
+                    winProofDiv.removeClass('has-error');
+                    winProofDiv.addClass('has-success');
+                    winProofDiv.find('.help-block').html('');
+                }
+            });
+
+            winStat.change(function(){
+                if(winStat.val() == 1){
+                    winRankDiv.show();
+                    winProofDiv.show();
+                }else{
+                    winRankDiv.hide();
+                    winProofDiv.hide();
                 }
             });
 

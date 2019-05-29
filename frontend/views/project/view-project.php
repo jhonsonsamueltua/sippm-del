@@ -2,10 +2,11 @@
 use yii\helpers\Html;
 use frontend\controllers\SiteController;
 use yii\widgets\Breadcrumbs;
+use yii\bootstrap\Modal;
 
 $this->title = 'SIPPM Del';
 $this->registerCssFile("././css/project.css");
-$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 ?>
 
 <?php
@@ -62,6 +63,33 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     </p>
                 </div>
 
+                <?php 
+                    if($assignmentModel->cat_proj_id == 2){
+                        if($model->sts_win_id == 1){
+                            echo('
+                                <div class = "">
+                                    <font class = "project-sub-content">Sertifikat Kemenangan</font><br>
+                                    <p>
+                            ');
+
+                            Modal::begin([
+                                'header' => 'Sertifikat Kemenangan',
+                                'toggleButton' => ['label' => 'Lihat Sertifikat', 'class' => 'btn btn-primary'],
+                                'size' => 'modal-lg',
+                            ]);
+
+                                echo Html::img($model->proj_win_proof, ['class' => 'img-responsive']);
+
+                            Modal::end();
+
+                            echo('  
+                                    </p>
+                                </div>
+                            ');
+                        }
+                    }   
+                ?>
+
                 <div >
                     <font class = "project-sub-content">Kategori Proyek</font><br>
                     <p>
@@ -82,6 +110,20 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                         <?= $keyword ?>
                     </p>
                 </div>
+                
+                <?php 
+                    if($assignmentModel->cat_proj_id == 2){
+                        echo('
+                            <div class = "">
+                                <font class = "project-sub-content">Status</font><br>
+                                <p>
+                                    ' . $model->sts_win_id . '
+                                </p>
+                            </div>
+                        ');
+                    }   
+                ?>
+
             </div>
 
             <div class ="col-md-9">

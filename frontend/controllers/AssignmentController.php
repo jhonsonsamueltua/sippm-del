@@ -145,6 +145,10 @@ class AssignmentController extends Controller
                     $modelAsg->asg_creator = $session['nama'];
                     $modelAsg->asg_creator_email = $session['email'];
 
+                    if(isset($_POST['asg_level'])){
+                        $modelAsg->asg_level = $_POST['asg_level'];
+                    }
+
                     // open or pending assignment
                     date_default_timezone_set("Asia/Bangkok");
                     $now = new \DateTime();
@@ -159,7 +163,6 @@ class AssignmentController extends Controller
 
                     try{
                         if(isset($_POST['allClass'])){
-                            // die("jgvhbj");
                             $modelAsg->class = "All";
                             $modelAsg->save();
 
@@ -175,13 +178,13 @@ class AssignmentController extends Controller
 
                                     foreach($response->data['data'] as $class){
                                         $modelClass->setIsNewRecord(true);
-                                        $modelClass->class = (string) $class['kelas_id'];
+                                        $modelClass->class = (string) $class[0];
                                         $modelClass->asg_id = $modelAsg->asg_id;
                                         $modelClass->partial = 0;
                                         $modelClass->save();
                                         $modelClass->cls_asg_id++;
 
-                                        NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class['kelas_id']);
+                                        NotificationController::sendAssignmentNotification('assignment', $modelAsg->asg_id, $class[0]);
                                     }
                                 }
                             }
@@ -251,6 +254,10 @@ class AssignmentController extends Controller
                     $transaction = Yii::$app->db->beginTransaction();
                     
                     try{
+                        if(isset($_POST['asg_level'])){
+                            $modelAsg->asg_level = $_POST['asg_level'];
+                        }
+                        
                         $innerTransaction = Yii::$app->db->beginTransaction();
 
                         try{
@@ -474,12 +481,13 @@ class AssignmentController extends Controller
                             ->setUrl('https://cis.del.ac.id/api/sippm-api/get-all-class')
                             ->send();
 
+        
         if($response->isOk){
             if($response->data['result'] == "OK"){
                 $listKelas = array();
 
                 foreach($response->data['data'] as $kelas){
-                    array_push($listKelas, array('kelas_id' => $kelas['kelas_id'], 'nama' => $kelas['nama']));
+                    array_push($listKelas, array('kelas_id' => $kelas[0], 'nama' => $kelas[1]));
                 }
             }
         }

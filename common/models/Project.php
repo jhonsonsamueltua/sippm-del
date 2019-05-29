@@ -32,7 +32,7 @@ use common\behaviors\DeleteBehavior;
  */
 class Project extends \yii\db\ActiveRecord
 {
-    public $files;
+    public $files, $winProof;
 
     public function behaviors(){
         return [
@@ -63,9 +63,15 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['proj_title', 'proj_description', 'proj_author', 'proj_keyword'], 'required', 'message' => "{attribute} tidak boleh kosong."],
+            ['proj_win_rank', 'required', 'when' => function($model){
+                return $model->sts_win_id == '1';
+            }, 'whenClient' => "function(attribute, value){
+                return $('#project-sts_win_id').val() == '1';
+            }", 'message' => '{attribute} tidak boleh kosong'],
             [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['proj_cat_name', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_cat_name', 'proj_win_rank', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_win_proof'], 'string', 'max' => 1000],
             [['proj_title'], WordValidator::className(),
                 'min' => 3,
                 'max' => 20,
@@ -75,11 +81,11 @@ class Project extends \yii\db\ActiveRecord
                     ),
                 ],
             [['proj_description'], WordValidator::className(),
-            'min' => 50,
-            'max' => 200,
-            'messages'  => array(
-                'max' => 'Deskripsi Proyek tidak boleh lebih dari 200 kata.',
-                'min' => 'Deskripsi Proyek tidak boleh kurang dari 50 kata.',
+                'min' => 50,
+                'max' => 200,
+                'messages'  => array(
+                    'max' => 'Deskripsi Proyek tidak boleh lebih dari 200 kata.',
+                    'min' => 'Deskripsi Proyek tidak boleh kurang dari 50 kata.',
                 ),
             ],
             ['proj_author', 'string','min' => 5, 'max' => 500, 'tooShort' => '{attribute} tidak boleh kurang dari 5 karakter.', 'tooLong' => '{attribute} tidak boleh lebih dari 500 karakter.'],
@@ -105,6 +111,7 @@ class Project extends \yii\db\ActiveRecord
             'proj_author' => 'Penulis',
             'proj_keyword' => 'Keyword',
             'proj_year' => 'Tahun',
+            'proj_win_rank' => 'Peringkat',
             'sts_win_id' => 'Status Menang',
             'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',

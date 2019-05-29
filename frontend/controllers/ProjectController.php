@@ -135,7 +135,6 @@ class ProjectController extends Controller
             $assignmentModel = Assignment::find()->where(['asg_id' => $asg_id])->andWhere('deleted!=1')->one();
             
             if ($model->load(Yii::$app->request->post())) {
-
                 // Validasi waktu submit
                 date_default_timezone_set("Asia/Bangkok");
                 $now = new \DateTime();
@@ -149,13 +148,31 @@ class ProjectController extends Controller
                         'late' => true,
                     ]);
                 }
+
+                $winProof = UploadedFile::getInstanceByName('Project[winProof]');
+
                 $model->asg_id = $asg_id;
                 $model->proj_creator = $session['nama'];
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
                 $model->proj_downloaded = 0;
                 $model->proj_year = $year->format('Y');
-                $model->proj_creator_class =(string)$session['kelas_id'];
+                $model->proj_creator_class = (string) $session['kelas_id'];
                 $model->proj_keyword = $_POST['proj_keyword'];
+
+                if($winProof != null){
+                    $winProofPath = '/sippm-del/files/certificates/' . $model->proj_title;
+                    $winFileName = $winProof->baseName . '.' . $winProof->extension;
+
+                    $winProofDir = Yii::getAlias('@uploadCertDir') . "/" . $model->proj_title;
+                    $winProofSaveName = $winProofDir . '/' . $winFileName;
+
+                    if(!is_dir($winProofDir)){
+                        mkdir($winProofDir, 0750);
+                    }
+
+                    $model->proj_win_proof = $winProofPath . '/' . $winFileName;
+                    $winProof->saveAs($winProofSaveName);
+                }
 
                 if($model->save()){
                     $model->files = UploadedFile::getInstancesByName('files');
@@ -168,7 +185,7 @@ class ProjectController extends Controller
                             $fileDir = Yii::getAlias('@uploadDirTemplate') . "/" . $model->proj_title . "/";
     
                             if(!is_dir($fileDir)){
-                                mkdir($fileDir, 0777, true);
+                                mkdir($fileDir, 0750, true);
                             }
                             
                             $fileDir .= $fileName;
@@ -190,12 +207,7 @@ class ProjectController extends Controller
                     return $this->redirect(['project/list-project']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat membuat proyek');
-    
-                    // echo "<pre>";
-                    // var_dump($model->errors);
-                    // echo "</pre>";
-                    // die;
-                    
+
                     return $this->render('create', [
                         'model' => $model,
                         'assignment' => $assignmentModel,
@@ -238,6 +250,8 @@ class ProjectController extends Controller
                 $assignmentModel = Assignment::find()->where(['asg_id' => $model->asg_id])->andWhere('deleted!=1')->one();
                 $files = File::find()->where(['proj_id' => $model->proj_id])->andWhere('deleted!=1')->all();
                 $oldProjName = $model->proj_title;
+                $oldCertificate = $model->proj_win_proof;
+                $oldCertificateName = str_replace("/", "", strrchr($oldCertificate, "/"));
 
                 if ($model->load(Yii::$app->request->post())) {
                     // Validasi waktu submit
@@ -254,7 +268,37 @@ class ProjectController extends Controller
                             'late' => true,
                         ]);
                     }else{
+                        $winProof = UploadedFile::getInstanceByName('Project[winProof]');
+
                         $model->proj_keyword = $_POST['proj_keyword'];
+
+                        if($oldCertificate == null){
+                            if($winProof != null){
+                                //Variable for save to DB
+                                $winProofPath = '/sippm-del/files/certificates/' . $model->proj_title;
+                                $certFileName = $winProof->baseName . '.' . $winProof->extension;
+            
+                                //Variable for save to folder
+                                $winProofDir = Yii::getAlias('@uploadCertDir') . "/" . $model->proj_title;
+                                $winProofFileName = $winProofDir . '/' . $certFileName;
+            
+                                if(!is_dir($winProofDir)){
+                                    mkdir($winProofDir, 0750);
+                                }
+
+                                $model->proj_win_proof = $winProofPath . '/' . $certFileName;
+                                $winProof->saveAs($winProofFileName);
+                            }
+                        }else{
+                            if($oldProjName != $model->proj_title){  //Project Name change, file not change
+                                $fileDefPath = Yii::getAlias('@uploadCertDir') . "/";
+                                $winProofPath = '/sippm-del/files/certificates/' . $model->proj_title;
+    
+                                rename($fileDefPath.$oldProjName, $fileDefPath.$model->proj_title);
+                                
+                                $model->proj_win_proof = $winProofPath . "/" . $oldCertificateName;
+                            }
+                        }
 
                         if($model->save()){
                             if($oldProjName != $model->proj_title){
@@ -399,6 +443,22 @@ class ProjectController extends Controller
         return $this->redirect(['update', 'id' => $projectId]);
     }
 
+    public function actionRemoveCertificate($proj_id){
+        $project = $this->findModel($proj_id);
+        $file = '/opt/lampp/htdocs';
+        $file .= $project->proj_win_proof;
+
+        if(file_exists($file)){
+            unlink($file);
+
+            $project->proj_win_proof = '';
+            $project->save();
+        }else{
+            Yii::$app->session->setFlash('error', 'Gagal menghapus file');
+        }
+
+        return $this->redirect(['update', 'id' => $project->proj_id]);
+    }
 
     /**
      * Finds the SippmProject model based on its primary key value.

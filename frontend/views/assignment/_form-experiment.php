@@ -87,7 +87,23 @@ $session = Yii::$app->session;
                     ?>
                 </div>
             </div>
-
+            <div id='level_kompetisi_field' class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Level Kompetisi</label>
+                        <div>
+                            <select class="form-control" name="asg_level" placeholder="Level Kompetisi">
+                                <option value="empty" selected>Pilih Level Kompetisi</option>
+                                <option value="Regional">Regional</option>
+                                <option value="Nasional">Nasional</option>
+                                <option value="Internasional">Internasional</option>
+                            </select>
+                            <p class="help-block help-block-error"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class="row">
                 <div class="col-md-6">
@@ -161,17 +177,15 @@ $session = Yii::$app->session;
                                         <?php
                                             if($modelAsg->class == "All"){
                                                 echo('
-                                                    <button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" disabled="true"><span class="glyphicon glyphicon-plus"></span></button>
-                                                    <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()" disabled="true"><span class="glyphicon glyphicon-minus"></span></button>
+                                                    <button type="button" id="addClassBtn" class="btn btn-success-custom btn-xs" onclick="addMoreClass()" disabled="true"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    <button type="button" id="removeClassBtn" class="btn btn-danger-custom btn-xs" onclick="removeClass()" disabled="true"><span class="glyphicon glyphicon-minus"></span></button>
                                                 ');
                                             }else{
                                                 echo('
-                                                    <button type="button" class="btn btn-success-custom btn-xs" onclick="addMoreClass()"><span class="glyphicon glyphicon-plus"></span></button>
-                                                    <button type="button" class="btn btn-danger-custom btn-xs" onclick="removeClass()"><span class="glyphicon glyphicon-minus"></span></button>
+                                                    <button type="button" id="addClassBtn" class="btn btn-success-custom btn-xs" onclick="addMoreClass()"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    <button type="button" id="removeClassBtn" class="btn btn-danger-custom btn-xs" onclick="removeClass()"><span class="glyphicon glyphicon-minus"></span></button>
                                                 ');
                                             }
-                                            
-
                                         ?>
                                     </div>
                                 </td>
@@ -246,9 +260,9 @@ $session = Yii::$app->session;
         var spinner = $('.loader');
 
         $(document).ready(function(){
-
             initDynamicForm();
             $('.class-error').hide();
+            if($('#assignment-cat_proj_id').val() != '2') $('#level_kompetisi_field').hide();
 
             $('select[name=\"Class[0]\"]').change(function(){
                 var classVal = $('select[name=\"Class[0]\"]').val();
@@ -268,6 +282,36 @@ $session = Yii::$app->session;
 
             $('#all_class').click(function(){
                 allCond = !allCond;
+                
+                if(allCond){
+                    $('select[name=\"Class[0]\"]').attr('disabled', true);
+                    $('#addClassBtn').attr('disabled', true);
+                    $('#removeClassBtn').attr('disabled', true);
+                }else{
+                    $('select[name=\"Class[0]\"]').attr('disabled', false);
+                    $('#addClassBtn').attr('disabled', false);
+                    $('#removeClassBtn').attr('disabled', false);
+                }   
+            });
+
+            $('#assignment-cat_proj_id').change(function(){
+                if($('#assignment-cat_proj_id').val() == '2'){
+                    $('#level_kompetisi_field').show();
+                }else{
+                    $('#level_kompetisi_field').hide();
+                }
+            });
+
+            $('select[name=\"asg_level\"]').change(function(){
+                if($('select[name=\"asg_level\"]').val() == 'empty'){
+                    $('#level_kompetisi_field').find('.col-md-6').removeClass('has-success');
+                    $('#level_kompetisi_field').find('.col-md-6').addClass('has-error');
+                    $('#level_kompetisi_field').find('.help-block').html('Level Kompetisi tidak boleh kosong');
+                }else{
+                    $('#level_kompetisi_field').find('.col-md-6').removeClass('has-error');
+                    $('#level_kompetisi_field').find('.col-md-6').addClass('has-success');
+                    $('#level_kompetisi_field').find('.help-block').html('');
+                }
             });
 
             if(url.search('create') != -1){
@@ -295,7 +339,36 @@ $session = Yii::$app->session;
         });
 
         $('#dynamic-form').submit(function(event){
-            spinner.show();
+            var error = false;
+            
+            if( 
+                $('#assignment-asg_year').val() == ''       ||
+                $('#assignment-asg_title').val() == ''      ||
+                $('#assignment-cat_proj_id').val() == ''    ||
+                $('#sub_cat_proj_id').val() == ''           ||
+                $('#assignment-asg_start_time').val() == '' ||
+                $('#assignment-asg_end_time').val() == ''   ||
+                $('#assignment-asg_description').val() == '' 
+            ){
+                error = true;
+            }else{
+                if($('#assignment-cat_proj_id').val() == '2'){
+                    if($('select[name=\"asg_level\"]').val() == 'empty'){
+                        $('#level_kompetisi_field').find('.col-md-6').removeClass('has-success');
+                        $('#level_kompetisi_field').find('.col-md-6').addClass('has-error');
+                        $('#level_kompetisi_field').find('.help-block').html('Level Kompetisi tidak boleh kosong');
+                        error = true;
+                    }else{
+                        error = false;
+                    }
+                }
+            }
+
+            if(!error){
+                spinner.show();
+            }else{
+                event.preventDefault();
+            }
         });
 
         function show(select_item) {

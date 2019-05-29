@@ -188,6 +188,7 @@ class SiteController extends Controller
                             $nim = $datas['nim'];
                             $kelas = $datas['kelas'];
                             $kelas_id = $datas['kelas_id'];
+                            $kelas_ket = $datas['kelas_ket'];
     
                             if($session['username'] == 'if416004'){
                                 $role = "Dosen";
@@ -198,6 +199,7 @@ class SiteController extends Controller
                             $session->set('nim', $nim);
                             $session->set('kelas', $kelas);
                             $session->set('kelas_id', $kelas_id);
+                            $session->set('kelas_ket', $kelas_ket);
                         }else{
                             $pegawaiId = $datas['pegawaiId'];
                             $nip = $datas['nip'];

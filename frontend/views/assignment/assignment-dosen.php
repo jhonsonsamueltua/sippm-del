@@ -242,7 +242,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                                                     
                                                     <br><br>
                                                     <?= Html::a('Detail', ['assignment/view', 'id' => $key["asg_id"]], ['class' => 'btn-md btn-info btn-info-custom', 'style' => 'padding: 5px 15px;']) ?> &nbsp;
-                                                    <font style="text-align: center">
+                                                    <!-- <font style="text-align: center">
                                                         <?php 
                                                             Modal::begin([
                                                                 'header' => '<h3>Re-Open Penugasan</h3>',
@@ -273,7 +273,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
                                                             Modal::end();
                                                         ?>
-                                                    </font>
+                                                    </font> -->
                                                 </div>
                                             </td>
                                         </tr>
