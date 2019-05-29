@@ -18,7 +18,7 @@ $this->registerCssFile("././css/dataTables/dataTables.bootstrap.min.css");
 
 $this->registerJsFile("././js/dataTables/jquery.dataTables.min.js", ['defer' => true]);
 $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' => true]);
-// $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
+$this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 
 ?>
 <div class="body-content" style="font-size: 14px;">

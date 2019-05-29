@@ -64,8 +64,8 @@ class SiteController extends Controller
         if(!isset($session['role'])){
             return $this->redirect(['login']);
         }else{
-            $model = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->limit(5)->all();
-            $modelCount = Project::find()->where("deleted!=1")->orderBy(['proj_downloaded' => SORT_DESC])->count();
+            $model = Project::find()->where("deleted!=1")->orderBy(['proj_used' => SORT_DESC])->limit(5)->all();
+            $modelCount = Project::find()->where("deleted!=1")->orderBy(['proj_used' => SORT_DESC])->count();
             
             $modelNews = Project::find()->where("deleted!=1")->orderBy(['created_at' => SORT_DESC])->limit(5)->all();
             $modelNewsCount = Project::find()->where("deleted!=1")->orderBy(['created_at' => SORT_DESC])->count();
@@ -103,14 +103,6 @@ class SiteController extends Controller
             }elseif($type == 'recently_added'){
                 $model = Project::find()->where('deleted != 1')->orderBy('created_at DESC')->all();
                 $title = "Baru Ditambahkan";
-            }elseif($type == 'comp'){
-                $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 2 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
-                $model = Yii::$app->db->createCommand($query)->queryAll();
-                $title = "Kompetisi";
-            }elseif($type == 'matkul'){
-                $query = "SELECT p.proj_title, p.proj_description, p.proj_author, p.proj_id, p.updated_at FROM sippm_project p JOIN sippm_assignment sa ON sa.asg_id = p.asg_id WHERE sa.cat_proj_id = 1 AND p.deleted != 1 GROUP BY p.proj_id ORDER BY p.proj_title ASC";
-                $model = Yii::$app->db->createCommand($query)->queryAll();
-                $title = "Matakuliah";
             }
 
             return $this->render('lihat-lainnya', [
@@ -521,9 +513,6 @@ class SiteController extends Controller
                 'Desember'
         );
         $pecahkan = explode('-', $tanggal);
-        // variabel pecahkan 0 = tanggal
-        // variabel pecahkan 1 = bulan
-        // variabel pecahkan 2 = tahun
          
         return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
@@ -534,74 +523,4 @@ class SiteController extends Controller
 
         echo Json::encode($filterCategories);
     }
-
-    /**
-     * Signs user up.
-     *
-     * @return mixed
-     */
-    // public function actionSignup()
-    // {
-    //     $model = new SignupForm();
-    //     if ($model->load(Yii::$app->request->post())) {
-    //         if ($user = $model->signup()) {
-    //             if (Yii::$app->getUser()->login($user)) {
-    //                 return $this->goHome();
-    //             }
-    //         }
-    //     }
-
-    //     return $this->render('signup', [
-    //         'model' => $model,
-    //     ]);
-    // }
-
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
-    // public function actionRequestPasswordReset()
-    // {
-    //     $model = new PasswordResetRequestForm();
-    //     if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-    //         if ($model->sendEmail()) {
-    //             Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-    //             return $this->goHome();
-    //         } else {
-    //             Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
-    //         }
-    //     }
-
-    //     return $this->render('requestPasswordResetToken', [
-    //         'model' => $model,
-    //     ]);
-    // }
-
-    /**
-     * Resets password.
-     *
-     * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
-     */
-    // public function actionResetPassword($token)
-    // {
-    //     try {
-    //         $model = new ResetPasswordForm($token);
-    //     } catch (InvalidArgumentException $e) {
-    //         throw new BadRequestHttpException($e->getMessage());
-    //     }
-
-    //     if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-    //         Yii::$app->session->setFlash('success', 'New password saved.');
-
-    //         return $this->goHome();
-    //     }
-
-    //     return $this->render('resetPassword', [
-    //         'model' => $model,
-    //     ]);
-    // }
 }

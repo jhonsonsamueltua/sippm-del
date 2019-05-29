@@ -6,6 +6,7 @@ use Yii;
 use yii\data\Pagination;
 use yii\httpclient\Client;
 use common\controllers\NotificationController;
+use yii\db\Query;
 use common\models\Assignment;
 use common\models\CategoryProject;
 use common\models\SubCategoryProject;
@@ -73,26 +74,46 @@ class AssignmentController extends Controller
             NotificationViewerController::createNotificationViewer($ntf_id, $session['username']);
         }
 
-        $saatIni = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE sca.class = '$class' AND sa.sts_asg_id = 1 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
-        $modelPenugasanSaatIni = Yii::$app->db->createCommand($saatIni)->queryAll();
-        $modelPenugasanSaatIniCount = count($modelPenugasanSaatIni);
+        $modelPenugasanSaatIni =  (new Query())
+                ->select('*')
+                ->from('sippm_assignment sa')
+                ->innerJoin('sippm_class_assignment sca', 'sa.asg_id = sca.asg_id')
+                ->innerJoin('sippm_category_project scp', 'sa.cat_proj_id = scp.cat_proj_id')
+                ->innerJoin('sippm_sub_category_project sscp', 'sa.sub_cat_proj_id = sscp.sub_cat_proj_id')
+                ->where('sca.class = '.$class.' AND sa.sts_asg_id = 1')
+                ->groupBy('sa.asg_title')
+                ->orderBy('sa.asg_start_time ASC')
+                ->all();
 
-        $menunggu = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE sca.class = '$class' AND sa.sts_asg_id = 3 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
-        $modelMenunggu = Yii::$app->db->createCommand($menunggu)->queryAll();
-        $modelMenungguCount = count($modelMenunggu);
+        $modelMenunggu =  (new Query())
+                ->select('*')
+                ->from('sippm_assignment sa')
+                ->innerJoin('sippm_class_assignment sca', 'sa.asg_id = sca.asg_id')
+                ->innerJoin('sippm_category_project scp', 'sa.cat_proj_id = scp.cat_proj_id')
+                ->innerJoin('sippm_sub_category_project sscp', 'sa.sub_cat_proj_id = sscp.sub_cat_proj_id')
+                ->where('sca.class = '.$class.' AND sa.sts_asg_id = 3')
+                ->groupBy('sa.asg_title')
+                ->orderBy('sa.asg_start_time ASC')
+                ->all();
 
-        
-        $riwayat = "SELECT * FROM sippm_assignment as sa JOIN sippm_class_assignment as sca ON sa.asg_id = sca.asg_id JOIN sippm_category_project as scp ON sa.cat_proj_id = scp.cat_proj_id JOIN sippm_sub_category_project as sscp ON sa.sub_cat_proj_id = sscp.sub_cat_proj_id WHERE sca.class = '$class' AND sa.sts_asg_id = 2 GROUP BY sa.asg_title ORDER BY sa.asg_start_time ASC";
-        $modelRiwayatPenugasan = Yii::$app->db->createCommand($riwayat)->queryAll();
-        $modelRiwayatPenugasanCount = count($modelRiwayatPenugasan);
+        $modelRiwayatPenugasan =  (new Query())
+                ->select('*')
+                ->from('sippm_assignment sa')
+                ->innerJoin('sippm_class_assignment sca', 'sa.asg_id = sca.asg_id')
+                ->innerJoin('sippm_category_project scp', 'sa.cat_proj_id = scp.cat_proj_id')
+                ->innerJoin('sippm_sub_category_project sscp', 'sa.sub_cat_proj_id = sscp.sub_cat_proj_id')
+                ->where('sca.class = '.$class.' AND sa.sts_asg_id = 2')
+                ->groupBy('sa.asg_title')
+                ->orderBy('sa.asg_start_time ASC')
+                ->all();
         
         return $this->render('assignment-student',[
             'modelPenugasanSaatIni' => $modelPenugasanSaatIni,
             'modelRiwayatPenugasan' => $modelRiwayatPenugasan,
             'modelMenunggu' => $modelMenunggu,
-            'modelPenugasanSaatIniCount' => $modelPenugasanSaatIniCount,
-            'modelRiwayatPenugasanCount' => $modelRiwayatPenugasanCount,
-            'modelMenungguCount' => $modelMenungguCount,
+            'modelPenugasanSaatIniCount' => count($modelPenugasanSaatIni),
+            'modelRiwayatPenugasanCount' => count($modelRiwayatPenugasan),
+            'modelMenungguCount' => count($modelMenunggu),
         ]);
     }
 

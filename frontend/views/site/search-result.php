@@ -38,7 +38,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
         
         <h4><b>Hasil Pencarian Proyek</b></h4>
         <hr class="hr-custom">
-
+        
         <h4>Search</h4>
         
         <div class="row" style="margin-bottom: 20px;">
@@ -48,7 +48,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                     'method' => 'get',
                 ]); ?>
                     <div class="col-lg-5 col-md-5 col-sm-12 " style="padding: 0px;">
-                        <?= "<input name='searchWords' type='text' placeholder='Keywords' class='form-control' value='$searchKey'>" ?>
+                        <?= "<input name='searchWords' type='text' placeholder='Keywords...' class='form-control' value='$searchKey'>" ?>
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-12 p-0">
@@ -63,7 +63,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-12" style="padding: 0px;">
-                        <button type="submit" class="btn form-control" style="background-image: linear-gradient(to right, #4f8cf3 0%, #6a11cb 100%); border: 0px; color: #fff;">Telusuri</button>
+                        <button type="submit" class="btn form-control" style="background-image: linear-gradient(to right, #4f8cf3 0%, #6a11cb 100%); border: 0px; color: #fff;">Search</button>
                     </div>
                     <?php ActiveForm::end() ?>
             </div>
@@ -72,9 +72,9 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
         <div class="row">
             <?php
                 Modal::begin([
-                    'header' => '<h3>Penelusuran Lanjutan</h3>',
+                    'header' => '<h3>Advanced Search</h3>',
                     'headerOptions' => ['style' => 'color: #000; text-align: left;'], 
-                    'toggleButton' => ['label' => 'Penelusuran Lanjutan >>', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); color: #3949AB; border: 0px; font-size: 18px; padding-right: 18px;'],
+                    'toggleButton' => ['label' => 'Advanced Search >>', 'style' => 'float: right; background-color: rgba(0, 0, 0, 0); color: #3949AB; border: 0px; font-size: 18px; padding-right: 18px;'],
                 ]);
 
                 $advancedForm = ActiveForm::begin([
@@ -84,7 +84,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                 
                     echo("
                         <div class='form-group'>
-                            <input name='advKeywords' class='form-control' placeholder='Kata Kunci' value='$searchKey'>
+                            <input name='advKeywords' class='form-control' placeholder='Keywords...' value='$searchKey'>
                         </div>
                     ");
                     
@@ -135,7 +135,7 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
                         </fieldset>
                     ");
 
-                    echo Html::submitButton('Search', ['class' => 'btn']);
+                    echo Html::submitButton('Search', ['class' => 'btn-search', 'style' => 'color: white;min-height: 40px;padding: 10px 20px;border-radius: 3px;margin-top: 20px;margin-bottom: 10px;']);
 
                 ActiveForm::end();
 
@@ -177,7 +177,8 @@ $this->registerJsFile("././js/dataTables/dataTables.bootstrap.min.js", ['defer' 
 
                         <tr>
                             <td style="border: 0px;padding: 0px 8px;">
-                                <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['id']], ['class' => 'text-title-project']) ?><font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= 1?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= 1    ?></font>
+                                <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['id']], ['class' => 'text-title-project']) ?>
+                                <font style="float: right;color:#641a3e;font-size: 1.3em;"><font data-toggle="tooltip" data-placement="top" title="Jumlah Penggunaan"><span class="fa fa-recycle"></span> <?= $data['proj_used']    ?></font></font>
                                 <div class="text-author">
                                     <?= $author ?> (<?= $created_at ?>)
                                 </div>

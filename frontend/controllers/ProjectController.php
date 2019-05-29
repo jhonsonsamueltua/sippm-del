@@ -16,6 +16,7 @@ use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use ZipArchive;
+use yii\db\Query;
 
 /**
  * ProjectController implements the CRUD actions for SippmProject model.
@@ -79,35 +80,75 @@ class ProjectController extends Controller
         }
     }
 
-    public function actionProjectByCategory($cat){
+    public function actionProjectByCategory($cat, $year=""){
         $session = Yii::$app->session;
 
         if(!isset($session['role'])){
             return $this->redirect(['/site/login']);
         }else{
             $category = CategoryProject::find()->where(['cat_proj_id' => $cat])->one();
+            $yearSearch = new Project();
 
-            // $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' AND sippm_project.deleted != 1 GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
-            $query = 'SELECT sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj FROM sippm_sub_category_project LEFT JOIN sippm_assignment ON sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id LEFT JOIN sippm_project ON sippm_project.asg_id = sippm_assignment.asg_id AND sippm_project.deleted != 1 WHERE sippm_sub_category_project.cat_proj_id = '.$cat.' GROUP BY sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id ORDER BY count_proj DESC';
-            $model = Yii::$app->db->createCommand($query)->queryAll();
+            if($year != ""){
+                $model = (new query())
+                        ->select('sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj')
+                        ->from('sippm_sub_category_project')
+                        ->leftJoin('sippm_assignment', 'sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id AND sippm_assignment.asg_year = '.$year.'')
+                        ->leftJoin('sippm_project', 'sippm_project.asg_id = sippm_assignment.asg_id AND sippm_project.deleted != 1')
+                        ->where('sippm_sub_category_project.cat_proj_id = '.$cat.'')
+                        ->groupBy('sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id')
+                        ->orderBy(' count_proj DESC')
+                        ->all();
+            }else{
+                $model = (new query())
+                        ->select('sippm_sub_category_project.sub_cat_proj_id, sippm_sub_category_project.sub_cat_proj_name, count(sippm_project.proj_id) as count_proj')
+                        ->from('sippm_sub_category_project')
+                        ->leftJoin('sippm_assignment', 'sippm_assignment.sub_cat_proj_id = sippm_sub_category_project.sub_cat_proj_id')
+                        ->leftJoin('sippm_project', 'sippm_project.asg_id = sippm_assignment.asg_id AND sippm_project.deleted != 1')
+                        ->where('sippm_sub_category_project.cat_proj_id = '.$cat.'')
+                        ->groupBy('sippm_sub_category_project.sub_cat_proj_name, sippm_sub_category_project.sub_cat_proj_id')
+                        ->orderBy(' count_proj DESC')
+                        ->all();
+            }
             
             return $this->render('project-by-category',[
                 'model' => $model,
                 'category' => $category->cat_proj_name,
+                'cat' => $cat,
+                'yearSearch' => $yearSearch,
+                'year' => $year,
             ]);
         }
     }
 
-    public function actionProjectBySubCategory($sub_cat){
+    public function actionProjectBySubCategory($sub_cat, $year){
         $session = Yii::$app->session;
 
         if(!isset($session['role'])){
             return $this->redirect(['/site/login']);
         }else{
             $sub_category = SubCategoryProject::find()->where(['sub_cat_proj_id' => $sub_cat])->one();
-
-            $query = 'SELECT sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_downloaded, sippm_project.proj_author, sippm_project.updated_at FROM sippm_project JOIN sippm_assignment ON sippm_assignment.asg_id = sippm_project.asg_id JOIN sippm_sub_category_project ON sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id WHERE sippm_assignment.sub_cat_proj_id = '.$sub_cat.' GROUP BY sippm_project.proj_title ORDER BY sippm_project.proj_title ASC';
-            $model = Yii::$app->db->createCommand($query)->queryAll();
+            if($year != ""){
+                $model = (new Query())
+                        ->select('sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_used, sippm_project.proj_author, sippm_project.updated_at')
+                        ->from('sippm_project')
+                        ->innerJoin('sippm_assignment', 'sippm_assignment.asg_id = sippm_project.asg_id AND sippm_assignment.asg_year = '.$year.'')
+                        ->innerJoin('sippm_sub_category_project', 'sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id')
+                        ->where('sippm_assignment.sub_cat_proj_id = '.$sub_cat.'')
+                        ->groupBy('sippm_project.proj_title')
+                        ->orderBy('sippm_project.proj_title ASC')
+                        ->all();
+            }else{
+                $model = (new Query())
+                        ->select('sippm_project.proj_id, sippm_project.proj_title, sippm_project.proj_description, sippm_project.proj_used, sippm_project.proj_author, sippm_project.updated_at')
+                        ->from('sippm_project')
+                        ->innerJoin('sippm_assignment', 'sippm_assignment.asg_id = sippm_project.asg_id')
+                        ->innerJoin('sippm_sub_category_project', 'sippm_sub_category_project.sub_cat_proj_id = sippm_assignment.sub_cat_proj_id')
+                        ->where('sippm_assignment.sub_cat_proj_id = '.$sub_cat.'')
+                        ->groupBy('sippm_project.proj_title')
+                        ->orderBy('sippm_project.proj_title ASC')
+                        ->all();
+            }
          
             return $this->render('project-by-sub-category',[
                 'model' => $model,
@@ -154,7 +195,7 @@ class ProjectController extends Controller
                 $model->asg_id = $asg_id;
                 $model->proj_creator = $session['nama'];
                 $model->proj_cat_name = $this->getCategory($assignmentModel->cat_proj_id);
-                $model->proj_downloaded = 0;
+                $model->proj_used = 0;
                 $model->proj_year = $year->format('Y');
                 $model->proj_creator_class = (string) $session['kelas_id'];
                 $model->proj_keyword = $_POST['proj_keyword'];
@@ -410,8 +451,6 @@ class ProjectController extends Controller
                 header('Expires: 0');
                 readfile($project->proj_title);
                 unlink($project->proj_title);
-                
-                $project->proj_downloaded += 1;
                 $project->save();
             }
         }

@@ -32,7 +32,7 @@ use common\behaviors\DeleteBehavior;
  */
 class Project extends \yii\db\ActiveRecord
 {
-    public $files, $winProof;
+    public $files, $winProof, $asg_year;
 
     public function behaviors(){
         return [
@@ -68,9 +68,9 @@ class Project extends \yii\db\ActiveRecord
             }, 'whenClient' => "function(attribute, value){
                 return $('#project-sts_win_id').val() == '1';
             }", 'message' => '{attribute} tidak boleh kosong'],
-            [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['proj_cat_name', 'proj_win_rank', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_used', 'sts_win_id', 'deleted'], 'integer'],
+            [['proj_cat_name' ,'proj_win_rank', 'asg_year', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_win_proof'], 'string', 'max' => 1000],
             [['proj_title'], WordValidator::className(),
                 'min' => 3,
@@ -106,12 +106,13 @@ class Project extends \yii\db\ActiveRecord
             'proj_id' => 'ID Proyek',
             'proj_title' => 'Judul Proyek',
             'proj_description' => 'Deskripsi Proyek',
-            'proj_downloaded' => 'Jumlah Diunduh',
+            'proj_used' => 'Jumlah Penggunaan',
             'proj_cat_name' => 'Kategori proyek',
             'proj_author' => 'Penulis',
             'proj_keyword' => 'Keyword',
             'proj_year' => 'Tahun',
             'proj_win_rank' => 'Peringkat',
+            'asg_year' => 'Tahun',
             'sts_win_id' => 'Status Menang',
             'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',

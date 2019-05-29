@@ -101,33 +101,6 @@ class ProjectUsageController extends Controller
         }
     }
 
-    public function actionListProjectUsageRequest(){
-        $session = Yii::$app->session;
-
-        if(!isset($session['role'])){
-            return $this->redirect(['site/login']);
-        }else if($session['role'] == 'Mahasiswa'){
-            Yii::$app->session->setFlash('error', 'Maaf, anda tidak memiliki hak untuk mengakses halaman tersebut.');
-            
-            return $this->goHome();
-        }else{
-            $query = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND PU.sts_proj_usg_id = 1';
-            $modelRequest = Yii::$app->db->createCommand($query)->queryAll();
-            $modelRequestCount = count($modelRequest);
-
-            $query2 = 'SELECT PU.proj_usg_id, PU.proj_usg_creator, PU.proj_usg_usage, PU.sts_proj_usg_id, PU.cat_usg_id, PU.proj_id, PU.created_by, PU.updated_at, P.proj_title, A.asg_creator FROM sippm_project_usage PU JOIN sippm_project P ON PU.proj_id = P.proj_id JOIN sippm_assignment A ON A.asg_id = P.asg_id WHERE A.created_by = "'. $session["username"] .'" AND PU.deleted != 1 AND (PU.sts_proj_usg_id = 2 OR PU.sts_proj_usg_id = 3)';
-            $modelRiwayat = Yii::$app->db->createCommand($query2)->queryAll();
-            $modelRiwayatCount = count($modelRiwayat);
-
-            return $this->render('list-project-usage-request', [
-                'modelRequest' => $modelRequest,
-                'modelRiwayat' => $modelRiwayat,
-                'modelRequestCount' => $modelRequestCount,
-                'modelRiwayatCount' => $modelRiwayatCount,
-            ]);
-        }
-    }
-
     public function getCategoryPenggunaan($id){
         $model = CategoryUsage::find()->where(['cat_usg_id' => $id])->one();
         $category = $model->cat_usg_name;
@@ -263,9 +236,14 @@ class ProjectUsageController extends Controller
             return $this->goHome();
         }else{
             $request = ProjectUsage::find()->where(['proj_usg_id' => $proj_usg_id])->andWhere('deleted!=1')->one();
+            
+            $project = Project::find()->where(['proj_id' => $request->proj_id])->one();
 
             $request->sts_proj_usg_id = 2;
+            $project->proj_used += 1;
+
             $request->save();
+            $project->save();
 
             $status = $this->getProjectRequestStatus($request->sts_proj_usg_id);
 

@@ -1,3 +1,11 @@
+/* @font-face {
+    font-family: 'Montserrat-Regular';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../font/Montserrat-Regular.ttf');
+    src: url('../font/Montserrat-Regular.ttf') format('truetype'), url('../font/Montserrat-Regular.ttf') format('ttf');
+   } */
+
 body {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
@@ -73,8 +81,8 @@ p {font-size: 14px;}
     border: 0.5px solid #ffffff8f;
     padding: 10px 40px;
     border-radius: 3px;
-    margin: 10px 10px;
-    width: 270px;
+    margin: 5px;
+    /* width: 270px; */
 }
 
 .btn-filter:hover {
@@ -145,7 +153,7 @@ input[type=text]:focus, input[type=password]:focus {
     box-shadow: 0 0 5px #888;
     padding-top: 20px; 
     padding-bottom: 20px;
-    min-height: 430px;
+    min-height: 440px;
     border-top: 5px solid #6ac7c1;
     background-color: #FFFFFF;
     margin-bottom: 20px;
