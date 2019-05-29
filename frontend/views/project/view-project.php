@@ -116,20 +116,6 @@ $this->registerCssFile("././css/project.css");
                         <?= $keyword ?>
                     </p>
                 </div>
-                
-                <?php 
-                    if($assignmentModel->cat_proj_id == 2){
-                        echo('
-                            <div class = "">
-                                <font class = "project-sub-content">Status</font><br>
-                                <p>
-                                    ' . $model->sts_win_id . '
-                                </p>
-                            </div>
-                        ');
-                    }   
-                ?>
-
             </div>
 
             <div class ="col-md-9">
