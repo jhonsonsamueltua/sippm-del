@@ -33,6 +33,8 @@ use common\behaviors\DeleteBehavior;
 class Project extends \yii\db\ActiveRecord
 {
     public $files;
+    
+    public $asg_year;
 
     public function behaviors(){
         return [
@@ -63,9 +65,9 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['proj_title', 'proj_description', 'proj_author', 'proj_keyword'], 'required', 'message' => "{attribute} tidak boleh kosong."],
-            [['proj_downloaded', 'sts_win_id', 'deleted'], 'integer'],
+            [['proj_used', 'sts_win_id', 'deleted'], 'integer'],
             [['deleted_at', 'created_at', 'updated_at'], 'safe'],
-            [['proj_cat_name', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
+            [['proj_cat_name','asg_year', 'proj_year', 'deleted_by', 'created_by', 'updated_by'], 'string', 'max' => 100],
             [['proj_title'], WordValidator::className(),
                 'min' => 3,
                 'max' => 20,
@@ -100,11 +102,12 @@ class Project extends \yii\db\ActiveRecord
             'proj_id' => 'ID Proyek',
             'proj_title' => 'Judul Proyek',
             'proj_description' => 'Deskripsi Proyek',
-            'proj_downloaded' => 'Jumlah Diunduh',
+            'proj_used' => 'Jumlah Penggunaan',
             'proj_cat_name' => 'Kategori proyek',
             'proj_author' => 'Penulis',
             'proj_keyword' => 'Keyword',
             'proj_year' => 'Tahun',
+            'asg_year' => 'Tahun',
             'sts_win_id' => 'Status Menang',
             'files' => 'Unggah Proyek',
             'deleted' => 'Deleted',

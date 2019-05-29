@@ -67,7 +67,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                             
                             <?= Html::a($data['proj_title'], ['project/view-project', 'proj_id' => $data['proj_id']], ['class' => 'text-title-project']) ?>
                             
-                            <font style="float: right;"><span class="glyphicon glyphicon-eye-open"></span> <?= $data['proj_downloaded']?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $data['proj_downloaded']    ?></font>
+                            <font style="float: right;color:#641a3e;font-size: 1.2em;"><font data-toggle="tooltip" data-placement="top" title="Jumlah Penggunaan"><span class="fa fa-recycle"></span> <?= $data['proj_used']    ?></font></font>
                             
                             <div class="text-author">
                                 <?= $author ?> (<?= $created_at ?>)

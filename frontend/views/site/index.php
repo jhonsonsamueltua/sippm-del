@@ -35,7 +35,7 @@ $session = Yii::$app->session;
                                 ]); ?>
 
                                     <div class="col-lg-5 col-md-5 col-sm-12" style="padding:0px;" data-toggle="tooltip" data-placement="top" title="Cari berdasarkan Judul, Deskripsi, dan Author">
-                                        <input name="searchWords" type="text" placeholder="Cari proyek..." class="form-control-custom search-slt" autocomplete="off">
+                                        <input name="searchWords" type="text" placeholder="Keywords..." class="form-control-custom search-slt" autocomplete="off">
                                     </div>
 
                                     <div class="col-lg-4 col-md-4 col-sm-12 p-0" style="padding:0px;">
@@ -73,7 +73,7 @@ $session = Yii::$app->session;
                                 
                                     echo("
                                         <div class='form-group'>
-                                            <input name='advKeywords' class='form-control' placeholder='Kata Kunci'>
+                                            <input name='advKeywords' class='form-control' placeholder='Keywords...'>
                                         </div>
                                     ");
                                     
@@ -139,6 +139,7 @@ $session = Yii::$app->session;
                         <a href="#menang-kompetisi" class="btn-md button btn-filter" transparent mr-10 mb-10>Menang Kompetisi</a>
                         <br>
                         <a href="#baru-ditambahkan" class="btn-md button btn-filter" transparent mr-10 mb-10>Baru Ditambahkan</a>
+                        <br><br>
                         <!-- <?= Html::a('Kompetisi', ['project/project-by-category', 'cat' => '2'], ['class' => 'btn-md button btn-filter']) ?>
                         <?= Html::a('Matakuliah', ['project/project-by-category', 'cat' => '1'], ['class' => 'btn-md button btn-filter']) ?> -->
                         <!-- <?= Html::a('Tugas Akhir', ['site/lihat-lainnya', 'type' => 'tugas_akhir'], ['class' => 'btn-md button btn-filter']) ?> -->
@@ -183,7 +184,7 @@ $session = Yii::$app->session;
                                 ?>
                                 <li>
                                     <!-- <div> -->
-                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;color:#641a3e;font-size: 1.3em;"><font data-toggle="tooltip" data-placement="top" title="Jumlah Unduh"><span class="fa fa-recycle"></span> <?= $data->proj_downloaded    ?></font></font>
+                                        <?= Html::a($title, ['project/view-project', 'proj_id' => $data->proj_id], ['class' => 'text-title-project']) ?><font style="float: right;color:#641a3e;font-size: 1.3em;"><font data-toggle="tooltip" data-placement="top" title="Jumlah Penggunaan"><span class="fa fa-recycle"></span> <?= $data->proj_used    ?></font></font>
                                         <div class="text-author">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?= $author ?> (<?= $created_at ?>)
                                         </div>

@@ -17,7 +17,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
 <?php
     $keyword = $model->proj_keyword;
     $keyword_words = explode(';', $keyword);
-    $keyword = implode(",<br>", $keyword_words);
+    $keyword = implode(", ", $keyword_words);
 ?>
 
 <div class="body-content">
@@ -66,6 +66,12 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                     <font class = "project-sub-content">Kategori Proyek</font><br>
                     <p>
                         <?= $assignmentModel->catProj->cat_proj_name ?> &nbsp;-&nbsp; <?= $assignmentModel->subCatProj->sub_cat_proj_name ?>, <?= $assignmentModel->asg_year ?> 
+                    <br>
+                        <?php
+                            if($model->sts_win_id != null){
+                                echo ' <badge class="badge"> '.$model->stsWin->sts_win_name.' </badge> ';
+                            }
+                        ?>
                     </p>
                 </div>
             
@@ -91,7 +97,7 @@ $this->registerJsFile("././js/bootstrap.min.js", ['defer' => true]);
                         $updated_at_timestamp = strtotime($updated_at);
                         $updated_at = SiteController::tgl_indo(date('Y-m-d', $updated_at_timestamp)).', '.date('H:i', $updated_at_timestamp);
                     ?>
-                    <font style="float: right;font-size: 15px;"><span class="glyphicon glyphicon-eye-open"></span> <?= $model->proj_downloaded?> &nbsp; <span class="glyphicon glyphicon-download"></span> <?= $model->proj_downloaded    ?></font> 
+                    <font style="float: right;color:#641a3e;font-size: 1.3em;"><font data-toggle="tooltip" data-placement="top" title="Jumlah Penggunaan"><span class="fa fa-recycle"></span> <?= $model->proj_used    ?></font></font>
                     <font style='color:#9E9E9E'> <?= $updated_at ?>, diunggah oleh <?= $model->proj_creator ?> </font><br><br>
                     <?= $model->proj_description ?>
                 </div>       
